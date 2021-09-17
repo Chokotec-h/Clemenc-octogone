@@ -2,7 +2,7 @@ import pygame
 
 class Stage():
     def __init__(self) -> None:
-        self.sprite = pygame.image.load("./Best Stage Ever.png")
+        self.sprite = pygame.image.load("./Stages/Best Stage Ever.png")
         
     def draw(self,window,cam):
         pos = [400,850]
