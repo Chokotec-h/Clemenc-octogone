@@ -43,6 +43,8 @@ def main():
     try :
         
         run = True
+        holding_up1 = False
+        holding_up2 = False
         while run :  # Boucle du programme
 
             window.fill((200,220,250))
@@ -66,8 +68,13 @@ def main():
             else :
                 left = False
             if key[pygame.K_UP]:
-                up = True
+                if not holding_up1 :
+                    holding_up1 = True
+                    up = True
+                else :
+                    up = False
             else :
+                holding_up1 = False
                 up = False
             if key[pygame.K_DOWN]:
                 down = True
@@ -88,8 +95,13 @@ def main():
             else :
                 left = False
             if key[pygame.K_z]:
-                up = True
+                if not holding_up2 :
+                    holding_up2 = True
+                    up = True
+                else :
+                    up = False
             else :
+                holding_up2 = False
                 up = False
             if key[pygame.K_s]:
                 down = True
