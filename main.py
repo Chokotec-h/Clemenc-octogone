@@ -47,7 +47,7 @@ def main():
 
             window.fill((200,220,250))
 
-            camera = [(Balan.Rect.x+Balan2.Rect.x)/2,(Balan.Rect.y+Balan2.Rect.y)/2]
+            camera = [(Balan.Rect.x+Balan2.Rect.x)/10,(Balan.Rect.y+Balan2.Rect.y)/2]
 
             # Récupération des events
             for e in pygame.event.get():
