@@ -47,7 +47,7 @@ def main():
 
             window.fill((200,220,250))
 
-            camera = [(Balan.Rect.x+Balan2.Rect.x)/10,(Balan.Rect.y+Balan2.Rect.y)/2]
+            camera = [(Balan.rect.x+Balan2.rect.x)/10,(Balan.rect.y+Balan2.rect.y)/2]
 
             # Récupération des events
             for e in pygame.event.get():
@@ -75,7 +75,7 @@ def main():
                 down = False
             
 
-            Balan.move([right,left,up,down])
+            Balan.move([right,left,up,down],stage)
             Balan.draw(window,camera,0)
             
             ####### Test
@@ -95,11 +95,11 @@ def main():
                 down = True
             else :
                 down = False
-            Balan2.move([right,left,up,down])
+            Balan2.move([right,left,up,down],stage)
             Balan2.draw(window,camera,0)
             stage.draw(window,camera)
             ########
-            Balan3.move([False,False,False,False])
+            Balan3.move([False,False,False,False],stage)
             Balan3.draw(window,camera,0)
             Balan.collide(Balan2)
             Balan.collide(Balan3)
