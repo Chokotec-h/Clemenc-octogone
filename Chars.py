@@ -113,7 +113,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1, airspeed=0.7, deceleration=0.8, fallspeed=0.5, fastfallspeed=0.8, jumpheight=15,
+        super().__init__(speed=1, airspeed=0.7, deceleration=0.8, fallspeed=0.2, fastfallspeed=0.8, jumpheight=10,
                          doublejumpheight=10)
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png")]  # dictionnaire ?
         self.image = pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png").convert_alpha()
@@ -124,7 +124,7 @@ class Balan(Char):
 
 class Balan2(Char):
     def __init__(self) -> None:
-        super().__init__(speed=0.5, airspeed=0.8, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.5, jumpheight=15,
+        super().__init__(speed=0.5, airspeed=0.8, deceleration=0.7, fallspeed=0.5, fastfallspeed=1.5, jumpheight=15,
                          doublejumpheight=8)
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan2_idle.png")]  # dictionnaire ?
         self.image = pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png").convert_alpha()
