@@ -25,7 +25,7 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
 
 
     def move(self,inputs,stage):
-        right,left,up,down = inputs
+        right,left,up,down,jump = inputs
 
         if right: # Right Movement
             if self.grounded : # Grounded
@@ -41,7 +41,7 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
             else :
                 self.vel[0] -= self.airspeed
 
-        if up:
+        if jump:
             if self.grounded:
                 self.vel[1] = self.jumpheight
             else : # Multiple jumps
@@ -65,6 +65,9 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
             while self.rect.y + self.rect.h > stage.rect.y + 1:
                 self.rect.move_ip(0,-1)
             self.vel[1] = 0
+        # Permet au personnage de toucher le sol, après les instructions précédentes
+        self.rect.move_ip(0,1)
+        if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
             self.grounded = True
             self.fastfall = False
             for dj in range(len(self.doublejump)):
@@ -73,6 +76,7 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
         else :
             self.vel[1] -= self.fastfallspeed if self.fastfall else self.fallspeed
             self.grounded = False
+        self.rect.move_ip(0,-1)
 
 
     def draw(self,window,camera,frame):

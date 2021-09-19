@@ -59,14 +59,6 @@ def main():
             
             # Recuperation des touches
             key = pygame.key.get_pressed()
-            if key[pygame.K_RIGHT]:
-                right = True
-            else :
-                right = False
-            if key[pygame.K_LEFT]:
-                left = True
-            else :
-                left = False
             if key[pygame.K_UP]:
                 if not holding_up1 :
                     holding_up1 = True
@@ -76,24 +68,12 @@ def main():
             else :
                 holding_up1 = False
                 up = False
-            if key[pygame.K_DOWN]:
-                down = True
-            else :
-                down = False
             
 
-            Balan.move([right,left,up,down],stage)
+            Balan.move([key[pygame.K_RIGHT],key[pygame.K_LEFT],key[pygame.K_UP],key[pygame.K_DOWN],up],stage)
             Balan.draw(window,camera,0)
             
             ####### Test
-            if key[pygame.K_d]:
-                right = True
-            else :
-                right = False
-            if key[pygame.K_q]:
-                left = True
-            else :
-                left = False
             if key[pygame.K_z]:
                 if not holding_up2 :
                     holding_up2 = True
@@ -103,15 +83,11 @@ def main():
             else :
                 holding_up2 = False
                 up = False
-            if key[pygame.K_s]:
-                down = True
-            else :
-                down = False
-            Balan2.move([right,left,up,down],stage)
+            Balan2.move([key[pygame.K_d],key[pygame.K_q],key[pygame.K_z],key[pygame.K_s],up],stage)
             Balan2.draw(window,camera,0)
             stage.draw(window,camera)
             ########
-            Balan3.move([False,False,False,False],stage)
+            Balan3.move([False,False,False,False,False],stage)
             Balan3.draw(window,camera,0)
             Balan.collide(Balan2)
             Balan.collide(Balan3)
