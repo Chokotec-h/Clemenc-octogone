@@ -60,22 +60,34 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
         self.rect = self.rect.move(self.vel[0],-self.vel[1])
         self.vel[0] *= self.deceleration
 
-        # Grounded
+        # Collisions avec le stage
         if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
-            while self.rect.y + self.rect.h > stage.rect.y + 1:
-                self.rect.move_ip(0,-1)
-            self.vel[1] = 0
-        # Permet au personnage de toucher le sol, après les instructions précédentes
-        self.rect.move_ip(0,1)
-        if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
-            self.grounded = True
-            self.fastfall = False
-            for dj in range(len(self.doublejump)):
-                self.doublejump[dj] = False
-        # Fall
+            # Personnage sur le stage
+            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//4:
+                while self.rect.y + self.rect.h > stage.rect.y +1:
+                    self.rect.move_ip(0,-1)
+                self.vel[1] = 0
+                self.grounded = True
+                self.fastfall = False
+                for dj in range(len(self.doublejump)):
+                    self.doublejump[dj] = False
+            # Personnage sous le stage
+            elif self.rect.y > stage.rect.y + stage.rect.h//2:
+                while self.rect.y < stage.rect.y+stage.rect.h-1:
+                    self.rect.move_ip(0,1)
+                self.vel[1] = -1
+            # Personnage à côté du stage
+            elif self.rect.x > stage.rect.x + stage.rect.w//2:
+                self.vel[0] = 5
+            elif self.rect.x < stage.rect.x + stage.rect.w//2:
+                self.vel[0] = -5
         else :
             self.vel[1] -= self.fastfallspeed if self.fastfall else self.fallspeed
             self.grounded = False
+        # Permet au personnage de toucher le sol, après les instructions précédentes
+        self.rect.move_ip(0,1)
+        #if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
+        # Fall
         self.rect.move_ip(0,-1)
 
 
@@ -109,7 +121,7 @@ class Balan(Char):
         self.sprite = [pygame.image.load("./Sprites/M_Balan_idle.png")] # dictionnaire ?
         self.image = pygame.image.load("./Sprites/M_Balan_idle.png").convert_alpha()
         self.mask  = pygame.mask.from_surface( self.image )
-        self.rect  = self.image.get_rect( center=( 0, 0 ) )
+        self.rect  = self.image.get_rect( center=( 0, -100 ) )
 
 ##### Test
 
@@ -119,7 +131,7 @@ class Balan2(Char):
         self.sprite = [pygame.image.load("./Sprites/M_Balan2_idle.png")] # dictionnaire ?
         self.image = pygame.image.load("./Sprites/M_Balan_idle.png").convert_alpha()
         self.mask  = pygame.mask.from_surface( self.image )
-        self.rect  = self.image.get_rect( center=( 100, 0 ) )
+        self.rect  = self.image.get_rect( center=( 100, -100 ) )
         self.doublejump.append(False)
 
 
