@@ -41,7 +41,6 @@ def main():
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")
     pygame.mixer.music.play()
-    testSound = pygame.mixer.Sound("DATA/Musics/jump.wav")
     soundReady = True
 
     try:
@@ -64,17 +63,12 @@ def main():
             # Recuperation des touches
             key = pygame.key.get_pressed()
             if key[pygame.K_UP]:
-                if soundReady:  # test de bruitage
-                    testSound.play()
-                    soundReady = False
-
                 if not holding_up1:
                     holding_up1 = True
                     up = True
                 else:
                     up = False
             else:
-                soundReady = True  # ici aussi (iwan)
                 holding_up1 = False
                 up = False
 

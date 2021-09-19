@@ -21,6 +21,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle()
         self.collidegroup.add(self)
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav")
 
     def move(self, inputs, stage):
         right, left, up, down, jump = inputs
@@ -42,9 +43,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if jump:
             if self.grounded:
                 self.vel[1] = self.jumpheight
+                self.jumpsound.play()
             else:  # Multiple jumps
                 self.fastfall = False
                 if not self.doublejump[-1]:
+                    self.jumpsound.play()
                     self.vel[1] = self.doublejumpheight
                     i = 0
                     while self.doublejump[i]:
@@ -69,7 +72,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Collisions avec le stage
         if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
             # Personnage sur le stage
-            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//4:
+            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//2:
                 while self.rect.y + self.rect.h > stage.rect.y +1:
                     self.rect.move_ip(0,-1)
                 self.vel[1] = 0
