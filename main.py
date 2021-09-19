@@ -71,8 +71,8 @@ def main():
                 holding_up1 = False
                 up = False
 
-            Balan.move([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up], stage)
-            Balan.draw(window, camera, 0)
+            Balan.move([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up, key[pygame.K_x]], stage)
+            Balan.draw(window, camera, Balan.sprite_frame)
 
             # ---- Test -------
             if key[pygame.K_z]:
@@ -84,11 +84,11 @@ def main():
             else:
                 holding_up2 = False
                 up = False
-            Balan2.move([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up], stage)
+            Balan2.move([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up, False], stage)
             Balan2.draw(window, camera, 0)
             stage.draw(window, camera)
             ########
-            Balan3.move([False, False, False, False, False], stage)
+            Balan3.move([False, False, False, False, False, False], stage)
             Balan3.draw(window, camera, 0)
             Balan.collide(Balan2)
             Balan.collide(Balan3)

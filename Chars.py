@@ -23,41 +23,59 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.collidegroup.add(self)
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav")
 
+        self.frame = 0
+        self.attack = None
+        self.sprite_frame = 0 # numéro de l'aimage à afficher
+        self.up_b = False
+
+    def inputattack(self,attack):
+        pass
+
     def move(self, inputs, stage):
-        right, left, up, down, jump = inputs
+        right, left, up, down, jump, special = inputs
+        if self.attack is None :
+            if right:  # Right Movement
+                if self.grounded:  # Grounded
+                    self.direction = 90
+                    self.vel[0] += self.speed
+                else:  # Aerial
+                    self.vel[0] += self.airspeed
 
-        if right:  # Right Movement
-            if self.grounded:  # Grounded
-                self.direction = 90
-                self.vel[0] += self.speed
-            else:  # Aerial
-                self.vel[0] += self.airspeed
-
-        if left:
-            if self.grounded:
-                self.direction = -90
-                self.vel[0] -= self.speed
-            else:
-                self.vel[0] -= self.airspeed
-
-        if jump:
-            if self.grounded:
-                self.vel[1] = self.jumpheight
-                self.jumpsound.play()
-            else:  # Multiple jumps
-                self.fastfall = False
-                if not self.doublejump[-1]:
+            if left:
+                if self.grounded:
+                    self.direction = -90
+                    self.vel[0] -= self.speed
+                else:
+                    self.vel[0] -= self.airspeed
+            if up :
+                if special and not self.up_b:
+                    self.up_b = True
+                    self.frame = 0
+                    self.attack = "UpB"
+                    jump = False
+            if jump:
+                if self.grounded:
+                    self.vel[1] = self.jumpheight
                     self.jumpsound.play()
-                    self.vel[1] = self.doublejumpheight
-                    i = 0
-                    while self.doublejump[i]:
-                        i += 1
-                    self.doublejump[i] = True
-        if down and not self.grounded and self.vel[1] < 5:
-            if not self.fastfall:
-                self.vel[1] = self.vel[1] - self.fastfallspeed * 5
-            self.fastfall = True
+                else:  # Multiple jumps
+                    self.fastfall = False
+                    if not self.doublejump[-1]:
+                        self.jumpsound.play()
+                        self.vel[1] = self.doublejumpheight
+                        i = 0
+                        while self.doublejump[i]:
+                            i += 1
+                        self.doublejump[i] = True
+            if down and not self.grounded and self.vel[1] < 5:
+                if not self.fastfall:
+                    self.vel[1] = self.vel[1] - self.fastfallspeed * 5
+                self.fastfall = True
+        else :
+            self.inputattack(self.attack)
+        self.frame += 1
 
+
+        # Mouvements
         self.rect = self.rect.move(self.vel[0], -self.vel[1])
         self.vel[0] *= self.deceleration
         self.rect.move_ip(0,5) # Augmente la fenêtre réinitialisant les sauts
@@ -66,6 +84,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//4:
                 self.grounded = True
                 self.fastfall = False
+                self.up_b = False
                 for dj in range(len(self.doublejump)):
                     self.doublejump[dj] = False
         self.rect.move_ip(0,-4)
@@ -118,16 +137,27 @@ class Balan(Char):
     def __init__(self) -> None:
         super().__init__(speed=1, airspeed=0.7, deceleration=0.8, fallspeed=0.2, fastfallspeed=0.8, jumpheight=10,
                          doublejumpheight=10)
-        self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png")]  # dictionnaire ?
+        self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]  # dictionnaire ?
         self.image = pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png").convert_alpha()
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect(center=(0, -100))
+    
+    def inputattack(self,attack):
+        if attack == "UpB":
+            if self.frame > 6 :
+                self.sprite_frame = 0
+                self.vel[1] = 15
+                self.attack = None
+                self.doublejump = [True for _ in self.doublejump]
+            else :
+                self.rect.move_ip(0,-6)
+                self.sprite_frame = 1
 
 ##### Test
 
 class Balan2(Char):
     def __init__(self) -> None:
-        super().__init__(speed=0.5, airspeed=0.8, deceleration=0.7, fallspeed=0.5, fastfallspeed=1.5, jumpheight=15,
+        super().__init__(speed=0.5, airspeed=0.8, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.5, jumpheight=15,
                          doublejumpheight=8)
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan2_idle.png")]  # dictionnaire ?
         self.image = pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png").convert_alpha()
