@@ -69,7 +69,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Collisions avec le stage
         if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
             # Personnage sur le stage
-            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//4:
+            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//2:
                 while self.rect.y + self.rect.h > stage.rect.y +1:
                     self.rect.move_ip(0,-1)
                 self.vel[1] = 0
