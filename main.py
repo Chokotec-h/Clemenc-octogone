@@ -58,7 +58,6 @@ def main():
             for e in pygame.event.get():
                 if e.type == pygame.QUIT:
                     run = False
-                right = False
 
             # Recuperation des touches
             key = pygame.key.get_pressed()
