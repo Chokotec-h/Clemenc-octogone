@@ -118,8 +118,8 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
 class Balan(Char):
     def __init__(self) -> None:
         super().__init__(speed=1,airspeed=0.7,deceleration=0.8,fallspeed=0.5,fastfallspeed=0.8,jumpheight=15,doublejumpheight=10)
-        self.sprite = [pygame.image.load("./Sprites/M_Balan_idle.png")] # dictionnaire ?
-        self.image = pygame.image.load("./Sprites/M_Balan_idle.png").convert_alpha()
+        self.sprite = [pygame.image.load("./Sprites/har_Balan/M_Balan_idle.png")] # dictionnaire ?
+        self.image = pygame.image.load("./Sprites/har_Balan/M_Balan_idle.png").convert_alpha()
         self.mask  = pygame.mask.from_surface( self.image )
         self.rect  = self.image.get_rect( center=( 0, -100 ) )
 
@@ -128,8 +128,8 @@ class Balan(Char):
 class Balan2(Char):
     def __init__(self) -> None:
         super().__init__(speed=0.5,airspeed=0.8,deceleration=0.7,fallspeed=0.8,fastfallspeed=1.5,jumpheight=15,doublejumpheight=8)
-        self.sprite = [pygame.image.load("./Sprites/M_Balan2_idle.png")] # dictionnaire ?
-        self.image = pygame.image.load("./Sprites/M_Balan_idle.png").convert_alpha()
+        self.sprite = [pygame.image.load("./Sprites/Char_Balan/M_Balan2_idle.png")] # dictionnaire ?
+        self.image = pygame.image.load("./Sprites/har_Balan/M_Balan2_idle.png").convert_alpha()
         self.mask  = pygame.mask.from_surface( self.image )
         self.rect  = self.image.get_rect( center=( 100, -100 ) )
         self.doublejump.append(False)
