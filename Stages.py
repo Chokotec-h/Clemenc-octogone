@@ -2,7 +2,7 @@ import pygame
 
 class Stage():
     def __init__(self) -> None:
-        self.sprite = pygame.image.load("./Best Stage Ever.png").convert_alpha()
+        self.sprite = pygame.image.load("./Stages/Best Stage Ever.png").convert_alpha()
         self.mask  = pygame.mask.from_surface(self.sprite)
         self.rect = self.sprite.get_rect()
         
