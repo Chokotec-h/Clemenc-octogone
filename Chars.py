@@ -60,6 +60,15 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
         self.rect = self.rect.move(self.vel[0],-self.vel[1])
         self.vel[0] *= self.deceleration
 
+        self.rect.move_ip(0,5) # Augmente la fenêtre réinitialisant les sauts
+        # Test grounded
+        if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
+            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//4:
+                self.grounded = True
+                self.fastfall = False
+                for dj in range(len(self.doublejump)):
+                    self.doublejump[dj] = False
+        self.rect.move_ip(0,-4)
         # Collisions avec le stage
         if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
             # Personnage sur le stage
@@ -67,10 +76,6 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
                 while self.rect.y + self.rect.h > stage.rect.y +1:
                     self.rect.move_ip(0,-1)
                 self.vel[1] = 0
-                self.grounded = True
-                self.fastfall = False
-                for dj in range(len(self.doublejump)):
-                    self.doublejump[dj] = False
             # Personnage sous le stage
             elif self.rect.y > stage.rect.y + stage.rect.h//2:
                 while self.rect.y < stage.rect.y+stage.rect.h-1:
@@ -84,11 +89,6 @@ class Char(pygame.sprite.Sprite): # Personnage de base, possédant les caractér
         else :
             self.vel[1] -= self.fastfallspeed if self.fastfall else self.fallspeed
             self.grounded = False
-        # Permet au personnage de toucher le sol, après les instructions précédentes
-        self.rect.move_ip(0,1)
-        #if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
-        # Fall
-        self.rect.move_ip(0,-1)
 
 
     def draw(self,window,camera,frame):
