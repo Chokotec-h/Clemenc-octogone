@@ -146,11 +146,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         window.blit(sprite, pos) # on dessine le sprite
 
     def collide(self, other):
+        # Si les sprites se touchent
         if self.rect.colliderect(other.rect):
+            # Si le personnage est à gauche de l'autre, il est poussé à gauche
             if self.rect.x < other.rect.x:
                 self.vel[0] = -1
+            # Si le personnage est à droite de l'autre, il est poussé à droite
             if self.rect.x > other.rect.x:
                 self.vel[0] = 1
+            # Si le personnage est sur l'autre, il est envoyé en haut
             if self.rect.y < (other.rect.y - 2 * other.rect.h // 3):
                 self.vel[1] = self.doublejumpheight
 

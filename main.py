@@ -91,7 +91,7 @@ def main():
             stage.draw(window, camera)
             ########
             
-            Balan.collide(Balan2)
+            Balan.collide(Balan2) # Collisions
             Balan2.collide(Balan)
 
             pygame.display.flip()
