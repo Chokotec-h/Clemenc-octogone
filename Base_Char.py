@@ -26,12 +26,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.frame = 0              # Frames écoulées depuis le début de la précédente action
         self.attack = None          # Attaque en cours
         self.sprite_frame = 0       # numéro de l'image à afficher
-        self.up_b = False           # Le personnage a-t-il up b ?
         self.can_act = True         # Le personnage peut-il agir ?
 
     def inputattack(self,attack):
         if attack == "UpB": # si on input un up B
-            self.up_b = True  # le up b a été utilisé
             self.frame = 0  # on démarre à la frame 0
             self.attack = "UpB"  # l'action en cours est le up B
             self.can_act = False # Ne peut pas attaquer après le up B
@@ -56,7 +54,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 else:
                     self.vel[0] -= self.airspeed
             if up and self.can_act:         # si on input vers le haut
-                if special and not self.up_b: # si la touche spécial est pressée, et que le up b n'a pas été utilisé
+                if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                     self.inputattack("UpB")  # on input un upB
                     jump = False  # On input pas un saut en plus
 

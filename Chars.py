@@ -17,14 +17,15 @@ class Balan(Char):
     
     def animation_attack(self,attack):
         if attack == "UpB":
-            if self.frame > 6 and self.frame < 10:
+            if self.frame > 10 and self.frame < 12: # Saute frame 11
                 self.sprite_frame = 0
                 self.vel[1] = 20
                 self.attack = None
-                self.doublejump = [True for _ in self.doublejump]
-            else :
+                self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
+            elif self.frame > 6 : # Sort frame 6
                 self.rect.move_ip(0,-6)
                 self.sprite_frame = 1
+                
 
 ##### Test
 
