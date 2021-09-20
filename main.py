@@ -35,7 +35,6 @@ def main():
     # Déclaration des variables
     Balan = Chars.Balan()
     Balan2 = Chars.Balan2()
-    Balan3 = Chars.Balan2()  # Test
     stage = Stages.Stage()
 
     # test de music et de bruitages
@@ -46,22 +45,23 @@ def main():
     try:
 
         run = True
-        holding_up1 = False
+        holding_up1 = False # Gestion du maintien de la touche saut
         holding_up2 = False
         while run:  # Boucle du programme
 
-            window.fill((200, 220, 250))
+            window.fill((200, 220, 250)) # Réinitialisation de l'écran à chaque frame
 
-            camera = [(Balan.rect.x + Balan2.rect.x) / 10, (Balan.rect.y + Balan2.rect.y) / 2]
+            camera = [(Balan.rect.x + Balan2.rect.x) / 10, (Balan.rect.y + Balan2.rect.y) / 2] # gestion de la caméra
+            # (moyenne des abscisses/5 pour moins bouger, moyenne des ordonnées)
 
             # Récupération des events
             for e in pygame.event.get():
-                if e.type == pygame.QUIT:
+                if e.type == pygame.QUIT: # Bouton croix en haut à droite de l'écran
                     run = False
 
             # Recuperation des touches
             key = pygame.key.get_pressed()
-            if key[pygame.K_UP]:
+            if key[pygame.K_UP]: # Gestion du saut
                 if not holding_up1:
                     holding_up1 = True
                     up = True
@@ -71,10 +71,12 @@ def main():
                 holding_up1 = False
                 up = False
 
+            # Transmission des inputs à l'objet Balan
             Balan.move([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up, key[pygame.K_x]], stage)
-            Balan.draw(window, camera, Balan.sprite_frame)
+            # dessin de Balan
+            Balan.draw(window, camera)
 
-            # ---- Test -------
+            # ---- Test P2 -------
             if key[pygame.K_z]:
                 if not holding_up2:
                     holding_up2 = True
@@ -85,17 +87,12 @@ def main():
                 holding_up2 = False
                 up = False
             Balan2.move([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up, False], stage)
-            Balan2.draw(window, camera, 0)
+            Balan2.draw(window, camera)
             stage.draw(window, camera)
             ########
-            Balan3.move([False, False, False, False, False, False], stage)
-            Balan3.draw(window, camera, 0)
+            
             Balan.collide(Balan2)
-            Balan.collide(Balan3)
             Balan2.collide(Balan)
-            Balan2.collide(Balan3)
-            Balan3.collide(Balan2)
-            Balan3.collide(Balan)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
