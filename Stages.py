@@ -5,16 +5,13 @@ class Stage:
     def __init__(self) -> None:
         # Sprite
         self.sprite = pygame.image.load("DATA/Images/Stages/Best Stage Ever.png").convert_alpha()
-        # Masque, permet de détecter le sprite pour les collisions
-        self.mask = pygame.mask.from_surface(self.sprite)
         # Rectangle
-        self.rect = self.sprite.get_rect(topleft=(-100,0))
+        self.rect = self.sprite.get_rect(center=(0,650))
 
-    def draw(self, window, cam):
+    def draw(self, window):
         # Position réelle
-        pos = [300, 300]
-        pos[0] = pos[0] - cam[0]
-        pos[1] = pos[1] - cam[1]
+        pos = [self.rect.x+800, self.rect.y+449]
+
         # Affichage du stage
-        self.rect.move(self.rect.x - pos[0], self.rect.y - pos[1])
+        #self.rect.move(self.rect)
         window.blit(self.sprite, pos)

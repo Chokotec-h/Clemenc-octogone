@@ -1,11 +1,42 @@
 import pygame
+from copy import deepcopy
+from math import cos,sin
 
+def signe(val):
+    if val == 0:
+        return 0
+    else :
+        return val/abs(val)
+
+class Hitbox():
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,stun,duration,own) -> None:
+        self.relativex = x # Position relative 
+        self.relativey = y
+        self.sizex = sizex
+        self.sizey = sizey
+        self.angle = angle
+        self.knockback = knockback
+        self.damages = damages
+        self.stun = stun
+        self.duration = duration
+        self.own = own
+        self.update()
+
+    def update(self):
+        self.x = self.relativex + self.own.rect.x
+        self.y = self.relativey + self.own.rect.y
+        self.hit = pygame.Rect(self.x,self.y,self.sizex,self.sizey)
+        self.duration -= 1
+    
+    def draw(self,window): # debug
+        pygame.draw.rect(window,(255,0,0),(self.x+800,self.y+450,self.sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
     def __init__(self, speed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
-        self.vel = [0, 0]           # vitesse (x,y)
+        self.vx = 0           # vitesse (x,y)
+        self.vy = 0
         self.grounded = False       # Le personnage touche-t-il le sol ?
         self.fastfall = False       # Le personnage fastfall-t-il ?
         self.doublejump = [False]   # Liste des double sauts, ainsi que de leur utilisation
@@ -28,6 +59,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.sprite_frame = 0       # numéro de l'image à afficher
         self.can_act = True         # Le personnage peut-il agir ?
 
+        self.hitstun = 0            # Frames de hitstun
+        self.active_hitboxes = list() # Liste des hitbox actives
+
     def inputattack(self,attack):
         if attack == "UpB": # si on input un up B
             self.frame = 0  # on démarre à la frame 0
@@ -37,101 +71,118 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def animation_attack(self,attack):
         pass # à modifier pour chaque personnage dans Chars.py
 
-    def move(self, inputs, stage):
+    def act(self, inputs,stage):
+        self.get_inputs(inputs)
+        self.move(stage)
+        for i,hitbox in enumerate(self.active_hitboxes) :
+            hitbox.update()
+            if hitbox.duration <= 0:
+                del self.active_hitboxes[i]
+
+
+    def get_inputs(self, inputs):
+        self.hitstun = max(0, self.hitstun-1)
         right, left, up, down, jump, special = inputs # dissociation des inputs
-        if self.attack is None : # Si aucune attaque n'est en cours d'exécution
-            if right:            # Si on input à droite
-                if self.grounded: # Si le personnage est au sol
-                    self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
-                    self.vel[0] += self.speed
-                else:             # Sinon, se déplace de la vitesse aérienne
-                    self.vel[0] += self.airspeed
+        if self.hitstun:
+            if right:
+                self.vx += self.airspeed/10
+            if left:
+                self.vx -= self.airspeed/10
+            if up:
+                self.vy += self.airspeed/10
+            if down:
+                self.vy -= self.airspeed/10
+        else :
+            if self.attack is None : # Si aucune attaque n'est en cours d'exécution
+                if right:            # Si on input à droite
+                    if self.grounded: # Si le personnage est au sol
+                        self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
+                        self.vx += self.speed
+                    else:             # Sinon, se déplace de la vitesse aérienne
+                        self.vx += self.airspeed
 
-            if left:            # Si on input à gauche
-                if self.grounded: # la même, mais vers la gauche
-                    self.direction = -90
-                    self.vel[0] -= self.speed
-                else:
-                    self.vel[0] -= self.airspeed
-            if up and self.can_act:         # si on input vers le haut
-                if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
-                    self.inputattack("UpB")  # on input un upB
-                    jump = False  # On input pas un saut en plus
+                if left:            # Si on input à gauche
+                    if self.grounded: # la même, mais vers la gauche
+                        self.direction = -90
+                        self.vx -= self.speed
+                    else:
+                        self.vx -= self.airspeed
+                if up and self.can_act:         # si on input vers le haut
+                    if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
+                        self.inputattack("UpB")  # on input un upB
+                        jump = False  # On input pas un saut en plus
 
-            if jump:        # si on input un saut
-                if self.grounded:  # Si le personnage est au sol
-                    self.vel[1] = self.jumpheight # il utilise son premier saut
-                    self.jumpsound.play() # joli son
+                if jump:        # si on input un saut
+                    if self.grounded:  # Si le personnage est au sol
+                        self.vy = -self.jumpheight # il utilise son premier saut
+                        self.jumpsound.play() # joli son
 
-                else:  # Si le personnage est en l'air
-                    self.fastfall = False  # il cesse de fastfall
-                    if not self.doublejump[-1]:  # Si il possède un double saut
-                        self.jumpsound.play()  # joli son
-                        self.vel[1] = self.doublejumpheight # il saute
+                    else:  # Si le personnage est en l'air
+                        self.fastfall = False  # il cesse de fastfall
+                        if not self.doublejump[-1]:  # Si il possède un double saut
+                            self.jumpsound.play()  # joli son
+                            self.vy = -self.doublejumpheight # il saute
 
-                        i = 0   # il montre qu'il utilise le premier saut disponible dans la liste
-                        while self.doublejump[i]:  # cette boucle a une fin, qui est testée ligne 70
-                            i += 1
-                        self.doublejump[i] = True
+                            i = 0   # il montre qu'il utilise le premier saut disponible dans la liste
+                            while self.doublejump[i]:  # cette boucle a une fin, qui est testée ligne 70
+                                i += 1
+                            self.doublejump[i] = True
 
-            if down : # Si on input vers le bas
-                if not self.grounded and self.vel[1] < 5: # si le personnage est en fin de saut
-                    if not self.fastfall:  # on fastfall
-                        self.vel[1] = self.vel[1] - self.fastfallspeed * 5
-                    self.fastfall = True
-        else : # si une attaque est exécutée, on anime la frame suivante
-            self.animation_attack(self.attack)
-        self.frame += 1
+                if down : # Si on input vers le bas
+                    if not self.grounded and self.vy < 5: # si le personnage est en fin de saut
+                        if not self.fastfall:  # on fastfall
+                            self.vy = self.vy + self.fastfallspeed * 5
+                        self.fastfall = True
+            else : # si une attaque est exécutée, on anime la frame suivante
+                self.animation_attack(self.attack)
+            self.frame += 1
 
 
-        # Mouvements
-        self.rect = self.rect.move(self.vel[0], -self.vel[1]) # Déplace le personnage
+    def move(self, stage):
+        if self.fastfall :
+            self.vy = self.vy + self.fastfallspeed
+        else :
+            self.vy = self.vy + self.fallspeed
+        
+        nextframe = self.rect.move(self.vx,-signe(self.vy))
+        if nextframe.colliderect(stage.rect):
+            while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.rect):
+                self.rect.x += signe(self.vx)
+            self.rect.x -= signe(self.vx)
+            self.vx = 0
+        nextframe = self.rect.move(0,self.vy)
+        if nextframe.colliderect(stage.rect):
+            while not self.rect.move(0,signe(self.vy)).colliderect(stage.rect):
+                self.rect.y += signe(self.vy)
+            self.vy = 0
 
-        self.vel[0] *= self.deceleration # décélération
-        self.rect.move_ip(0,5) # Le personnage est considéré comme au sol 5 pixel plus haut (permet d'éviter les bugs de double sauts)
-        # si le personnage touche le stage
-        if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ):
-            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//3: # si le personnage est sur le stage
-                if self.vel[1] < -1 : # si une attaque aérienne a été input (ex : up B/ nair), et que le personnage touche le sol
-                    self.can_act = True # l'attaque est cancel
-                    self.attack = None
-                    """On peut rajouter du lag ici en ajoutant un self.lag"""
-                    
-                self.grounded = True # Le personnage est considéré au sol
-                self.fastfall = False # reset des stats liées aux sauts
-                self.up_b = False
-                for dj in range(len(self.doublejump)):
-                    self.doublejump[dj] = False
+        self.rect.y += self.vy
+        self.rect.x += round(self.vx)
+        if not self.hitstun :
+            self.vx *= self.deceleration
+            if abs(self.vx) < 0.01 :
+                self.vx = 0
 
-        self.rect.move_ip(0,-4) # on remonte le carré de 4 (permet d'éviter les bugs dûs au test juste en-dessous
+        if self.rect.move(0,1).colliderect(stage.rect):
+            if self.hitstun :
+                self.vx = 0
+            if not self.can_act :
+                self.can_act = True
+            self.grounded = True
+            self.fastfall = False
+            for dj in range(len(self.doublejump)):
+                self.doublejump[dj] = False
+        else :
+            self.grounded = False
 
-        """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-        """""""""""""""   Collisions avec le stage   """""""""""""""
-        """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+        # debug
+        if self.rect.y > 800 :
+            self.rect.y = -200
+            self.rect.x = 0
+            self.vy = 0
 
-        if ( pygame.sprite.spritecollide( stage, self.collidegroup, False, collided=pygame.sprite.collide_mask ) ): # Si le personnage touche le stage
-            # Personnage sur le stage
-            if self.rect.y+self.rect.h-5 < stage.rect.y + stage.rect.h//2 :
-                while self.rect.y + self.rect.h > stage.rect.y +1: # on place le personnage sur le stage
-                    self.rect.move_ip(0,-1)
-                self.vel[1] = 0 # on annule se vitesse verticale
 
-            # Personnage sous le stage
-            elif self.rect.y > stage.rect.y + stage.rect.h//2:
-                while self.rect.y < stage.rect.y+stage.rect.h//2-1: # on descend le personnage bien sous le stage
-                    self.rect.move_ip(0,1)
-                self.vel[1] = -1 # on met sa vitesse verticale à -1
-
-            # Personnage à côté du stage
-            elif self.rect.x > stage.rect.x + stage.rect.w//2: # si il est à droite du stage
-                self.vel[0] = 5 # on le décale à droite
-            elif self.rect.x < stage.rect.x + stage.rect.w//2: # si il est à gauche du stage
-                self.vel[0] = -5 # on le décale à gauche
-        else :  # Si le personnage ne touche pas le stage
-            self.vel[1] -= self.fastfallspeed if self.fastfall else self.fallspeed # il est soumis à la gravité
-            self.grounded = False # il est considéré dans les airs
-
-    def draw(self, window, camera):
+    def draw(self, window):
 
         ### à supprimer, provisoire pour le retournement
         if self.direction < 0:
@@ -140,19 +191,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             sprite = self.sprite[self.sprite_frame]
         ####
 
-        pos = [self.rect.x - camera[0] + 400, self.rect.y - camera[1] + 300] # Position réelle du sprite
+        pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
         window.blit(sprite, pos) # on dessine le sprite
 
-    def collide(self, other):
-        # Si les sprites se touchent
-        if self.rect.colliderect(other.rect):
-            # Si le personnage est à gauche de l'autre, il est poussé à gauche
-            if self.rect.x < other.rect.x:
-                self.vel[0] = -1
-            # Si le personnage est à droite de l'autre, il est poussé à droite
-            if self.rect.x > other.rect.x:
-                self.vel[0] = 1
-            # Si le personnage est sur l'autre, il est envoyé en haut
-            if self.rect.y < (other.rect.y - 2 * other.rect.h // 3):
-                self.vel[1] = self.doublejumpheight
-
+    def collide(self,other):
+        for hitbox in other.active_hitboxes:
+            if self.rect.colliderect(hitbox.hit):
+                self.vx = hitbox.knockback*cos(hitbox.angle)
+                self.vy = -hitbox.knockback*sin(hitbox.angle)
+                self.hitstun = hitbox.stun
+                self.rect.y -= 1

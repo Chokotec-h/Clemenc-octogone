@@ -28,8 +28,8 @@ def main():
     """"""""""""""""""""""""""""""""""""
 
     # initialisation de la fenêtre
-    height = 600
-    width = 800
+    height = 900
+    width = 1600
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
@@ -51,8 +51,6 @@ def main():
 
             window.fill((200, 220, 250)) # Réinitialisation de l'écran à chaque frame
 
-            camera = [(Balan.rect.x + Balan2.rect.x) / 10, (Balan.rect.y + Balan2.rect.y) / 2] # gestion de la caméra
-            # (moyenne des abscisses/5 pour moins bouger, moyenne des ordonnées)
 
             # Récupération des events
             for e in pygame.event.get():
@@ -72,9 +70,9 @@ def main():
                 up = False
 
             # Transmission des inputs à l'objet Balan
-            Balan.move([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up, key[pygame.K_x]], stage)
+            Balan.act([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up, key[pygame.K_x]], stage)
             # dessin de Balan
-            Balan.draw(window, camera)
+            Balan.draw(window)
 
             # ---- Test P2 -------
             if key[pygame.K_z]:
@@ -86,13 +84,16 @@ def main():
             else:
                 holding_up2 = False
                 up = False
-            Balan2.move([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up, False], stage)
-            Balan2.draw(window, camera)
-            stage.draw(window, camera)
+            Balan2.act([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up, False], stage)
+            Balan2.draw(window)
+            stage.draw(window)
             ########
-            
-            Balan.collide(Balan2) # Collisions
+
             Balan2.collide(Balan)
+
+            ### Debug
+            for h in Balan.active_hitboxes:
+                h.draw(window)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
