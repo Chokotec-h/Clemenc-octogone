@@ -16,7 +16,7 @@ class Balan(Char):
         self.charge = 0
 
     def animation_attack(self,attack,inputs,stage):
-        right, left, up, down, jump, special = inputs # dissociation des inputs
+        right, left, up, down, attack_button, special, shield = inputs # dissociation des inputs
         if attack == "UpB":
             if self.frame > 10 and self.frame < 12: # Saute frame 11
                 self.sprite_frame = 0

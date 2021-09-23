@@ -21,9 +21,41 @@ for j in joysticks:
 
 ####################################
 ####################################
-def setup_controls(window,joysticks):
-    P1_controls = []
-    P2_controls = []
+def setup_controls(window,width,height,joysticks):
+    controls = [[],[]]
+    player = 0
+    run = True
+    actions = ("Left","Right","Up","Down","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down")
+    while run :
+        window.fill((200,200,200))
+        for e in pygame.event.get():
+            if e.type == pygame.QUIT:
+                run = False
+            if e.type == pygame.KEYDOWN:
+                if e.key == pygame.K_ESCAPE:
+                    if len(controls[player]) > 0:
+                        controls[player].pop()
+                    else :
+                        player = 0
+                elif e.key not in controls[player]:
+                    controls[player].append(e.key)
+        for i,action in enumerate(actions):
+            Texte(action,("Arial",18,False,False),(0,0,0),width//3,(i+1)*height//20,800).draw(window)
+            if len(controls[0]) > i :
+                Texte(str(controls[0][i]),("Arial",18,False,False),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
+            elif len(controls[0]) == i :
+                Texte("<input>",("Arial",18,False,True),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
+            if len(controls[1]) > i :
+                Texte(str(controls[1][i]),("Arial",18,False,False),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
+            elif len(controls[1]) == i and player == 1:
+                Texte("<input>",("Arial",18,False,True),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
+        if len(controls[0]) >= len(actions):
+            player = 1
+        if len(controls[1]) >= len(actions):
+            return run, controls
+        pygame.display.flip()
+    return run, controls
+
 
 
 def main():
@@ -43,12 +75,12 @@ def main():
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")
-    pygame.mixer.music.play()
+    #pygame.mixer.music.play()
     soundReady = True
 
     try:
 
-        run = True
+        run,controls = setup_controls(window,width,height,joysticks)
         holding_up1 = False # Gestion du maintien de la touche saut
         holding_up2 = False
         while run:  # Boucle du programme
@@ -74,7 +106,7 @@ def main():
                 up = False
 
             # Transmission des inputs à l'objet Balan
-            Balan.act([key[pygame.K_RIGHT], key[pygame.K_LEFT], key[pygame.K_UP], key[pygame.K_DOWN], up, key[pygame.K_x]], stage)
+            Balan.act([key[controls[0][i]] for i in range(7)],up, stage)
             # dessin de Balan
             Balan.draw(window)
 
@@ -88,7 +120,7 @@ def main():
             else:
                 holding_up2 = False
                 up = False
-            Balan2.act([key[pygame.K_d], key[pygame.K_q], key[pygame.K_z], key[pygame.K_s], up, False], stage)
+            Balan2.act([key[controls[1][i]] for i in range(7)], up, stage)
             Balan2.draw(window)
             stage.draw(window)
             ########

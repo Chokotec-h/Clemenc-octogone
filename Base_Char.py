@@ -77,9 +77,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def animation_attack(self,attack,inputs,stage):
         pass # à modifier pour chaque personnage dans Chars.py
 
-    def act(self, inputs,stage):
+    def act(self, inputs,jump,stage):
         self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage)
+        self.get_inputs(inputs,jump,stage)
         self.move(stage)
         for i,hitbox in enumerate(self.active_hitboxes) :
             hitbox.update()
@@ -92,9 +92,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.damages = min(999,self.damages)
 
 
-    def get_inputs(self, inputs, stage):
+    def get_inputs(self, inputs,jump, stage):
         self.hitstun = max(0, self.hitstun-1)
-        right, left, up, down, jump, special = inputs # dissociation des inputs
+        left, right, up, down, attack, special, shield = inputs # dissociation des inputs
         if self.hitstun:
             if right:
                 self.vx += self.airspeed/10
