@@ -84,6 +84,7 @@ def main():
 
         #run,controls = setup_controls(window,width,height,joysticks)
         run = True
+        # permettra de modifier les contrôles
         controls = [[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN,pygame.K_SPACE,pygame.K_x,pygame.K_c],[pygame.K_q,pygame.K_d,pygame.K_z,pygame.K_s,0,0,0]]
         holding_up1 = False # Gestion du maintien de la touche saut
         holding_up2 = False
@@ -136,8 +137,10 @@ def main():
             for h in Balan.active_hitboxes:
                 h.draw(window)
 
-            Texte(f"{Balan.damages}%",("Arial",60,False,False),(255-(Balan.damages/5),max(255-Balan.damages,0),max(255-Balan.damages*2,0)),width//3,height-20,800).draw(window)
-            Texte(f"{Balan2.damages}%",("Arial",60,False,False),(255-(Balan2.damages/5),max(255-Balan2.damages,0),max(255-Balan2.damages*2,0)),2*width//3,height-20,800).draw(window)
+            Texte(f"{round(Balan.damages)} %",("Arial",60,False,False),(255-(Balan.damages/5),max(255-Balan.damages,0),max(255-Balan.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
+            Texte(f".{str(round(Balan.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Balan.damages/5),max(255-Balan.damages,0),max(255-Balan.damages*2,0)),width//3+len(str(round(Balan.damages)))*25,height-30,800,format_="left").draw(window)
+            Texte(f"{round(Balan2.damages)} %",("Arial",60,False,False),(255-(Balan.damages/5),max(255-Balan2.damages,0),max(255-Balan2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
+            Texte(f".{str(round(Balan2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Balan2.damages/5),max(255-Balan2.damages,0),max(255-Balan2.damages*2,0)),2*width//3+len(str(round(Balan2.damages)))*25,height-30,800,format_="left").draw(window)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)

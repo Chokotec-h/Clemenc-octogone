@@ -31,12 +31,12 @@ class Balan(Char):
                     angle = pi/3
                 else:
                     angle = 2*pi/3
-                self.active_hitboxes.append(Hitbox(-1,59,34,32,angle,18,40,1/100,40,4,self))
+                self.active_hitboxes.append(Hitbox(-1,59,34,32,angle,18,32,1/150,40,4,self))
         if attack == "NeutralB":
             #self.can_act = False
-            if self.frame < 5 and special and self.charge < 100:
+            if self.frame < 5 and special :
                 self.frame = 0
-                self.charge += 1
+                self.charge = min(100,self.charge+1)
             elif self.frame == 5 :
                     for i in range(0,(self.charge-1)//20+1):
                         self.projectiles.append(Projo_Craie(i,self,stage))
@@ -51,7 +51,7 @@ class Projo_Craie():
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
-        self.vx = 15*signe(own.direction)+self.id
+        self.vx = 10*signe(own.direction)
         self.vy = -3*(self.id)
         self.duration = 10
         self.stage = stage
@@ -61,7 +61,7 @@ class Projo_Craie():
         else :
             self.angle = pi/4
         self.knockback = 3
-        self.damages = 3
+        self.damages = 1.2
         self.stun = 4
 
     def update(self):
@@ -73,7 +73,7 @@ class Projo_Craie():
             self.vy = 0
         self.x += round(self.vx)
         self.y += self.vy
-        self.vy += 0.5
+        self.vy += 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         if self.y > 800 :
             self.duration = 0

@@ -36,7 +36,7 @@ class Hitbox():
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
     def __init__(self, speed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
-        self.damages = 0
+        self.damages = 0.0
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
         self.vx = 0           # vitesse (x,y)
         self.vy = 0
@@ -101,9 +101,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if left:
                 self.vx -= self.airspeed/10
             if up:
-                self.vy += self.airspeed/10
+                self.vy -= self.fallspeed/10
             if down:
-                self.vy -= self.airspeed/10
+                self.vy += self.fallspeed/10
         else :
             if self.attack is None : # Si aucune attaque n'est en cours d'exécution
                 if right:            # Si on input à droite
@@ -194,7 +194,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if self.rect.y > 800 :
             self.rect.y = -200
             self.rect.x = 0
-            self.damages = 0
+            self.damages = 0.
             self.vy = 0
 
 
