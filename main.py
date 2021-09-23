@@ -21,40 +21,42 @@ for j in joysticks:
 
 ####################################
 ####################################
-def setup_controls(window,width,height,joysticks):
-    controls = [[],[]]
-    player = 0
-    run = True
-    actions = ("Left","Right","Up","Down","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down")
-    while run :
-        window.fill((200,200,200))
-        for e in pygame.event.get():
-            if e.type == pygame.QUIT:
-                run = False
-            if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_ESCAPE:
-                    if len(controls[player]) > 0:
-                        controls[player].pop()
-                    else :
-                        player = 0
-                elif e.key not in controls[player]:
-                    controls[player].append(e.key)
-        for i,action in enumerate(actions):
-            Texte(action,("Arial",18,False,False),(0,0,0),width//3,(i+1)*height//20,800).draw(window)
-            if len(controls[0]) > i :
-                Texte(str(controls[0][i]),("Arial",18,False,False),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
-            elif len(controls[0]) == i :
-                Texte("<input>",("Arial",18,False,True),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
-            if len(controls[1]) > i :
-                Texte(str(controls[1][i]),("Arial",18,False,False),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
-            elif len(controls[1]) == i and player == 1:
-                Texte("<input>",("Arial",18,False,True),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
-        if len(controls[0]) >= len(actions):
-            player = 1
-        if len(controls[1]) >= len(actions):
-            return run, controls
-        pygame.display.flip()
-    return run, controls
+
+"""Tests controls, à modifier"""
+# def setup_controls(window,width,height,joysticks):
+#     controls = [[],[]]
+#     player = 0
+#     run = True
+#     actions = ("Left","Right","Up","Down","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down")
+#     while run :
+#         window.fill((200,200,200))
+#         for e in pygame.event.get():
+#             if e.type == pygame.QUIT:
+#                 run = False
+#             if e.type == pygame.KEYDOWN:
+#                 if e.key == pygame.K_ESCAPE:
+#                     if len(controls[player]) > 0:
+#                         controls[player].pop()
+#                     else :
+#                         player = 0
+#                 elif e.key not in controls[player]:
+#                     controls[player].append(e.key)
+#         for i,action in enumerate(actions):
+#             Texte(action,("Arial",18,False,False),(0,0,0),width//3,(i+1)*height//20,800).draw(window)
+#             if len(controls[0]) > i :
+#                 Texte(str(controls[0][i]),("Arial",18,False,False),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
+#             elif len(controls[0]) == i :
+#                 Texte("<input>",("Arial",18,False,True),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
+#             if len(controls[1]) > i :
+#                 Texte(str(controls[1][i]),("Arial",18,False,False),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
+#             elif len(controls[1]) == i and player == 1:
+#                 Texte("<input>",("Arial",18,False,True),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
+#         if len(controls[0]) >= len(actions):
+#             player = 1
+#         if len(controls[1]) >= len(actions):
+#             return run, controls
+#         pygame.display.flip()
+#     return run, controls
 
 
 
@@ -80,7 +82,9 @@ def main():
 
     try:
 
-        run,controls = setup_controls(window,width,height,joysticks)
+        #run,controls = setup_controls(window,width,height,joysticks)
+        run = True
+        controls = [[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN,pygame.K_SPACE,pygame.K_x,pygame.K_c],[pygame.K_q,pygame.K_d,pygame.K_z,pygame.K_s,0,0,0]]
         holding_up1 = False # Gestion du maintien de la touche saut
         holding_up2 = False
         while run:  # Boucle du programme
