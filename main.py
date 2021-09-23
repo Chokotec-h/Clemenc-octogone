@@ -3,6 +3,7 @@ import traceback
 import spritesLoader
 import Chars
 import Stages
+from Interface import *
 
 ####################################
 ########## Initialisation ##########
@@ -20,6 +21,9 @@ for j in joysticks:
 
 ####################################
 ####################################
+def setup_controls(window,joysticks):
+    P1_controls = []
+    P2_controls = []
 
 
 def main():
@@ -90,13 +94,18 @@ def main():
             ########
 
             Balan2.collide(Balan)
+            Balan.collide(Balan2)
 
             ### Debug
             for h in Balan.active_hitboxes:
                 h.draw(window)
 
+            Texte(f"{Balan.damages}%",("Arial",60,False,False),(255-(Balan.damages/5),max(255-Balan.damages,0),max(255-Balan.damages*2,0)),width//3,height-20,800).draw(window)
+            Texte(f"{Balan2.damages}%",("Arial",60,False,False),(255-(Balan2.damages/5),max(255-Balan2.damages,0),max(255-Balan2.damages*2,0)),2*width//3,height-20,800).draw(window)
+
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
+            
 
     except:
         traceback.print_exc()

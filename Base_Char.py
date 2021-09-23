@@ -1,3 +1,4 @@
+from Stages import Stage
 import pygame
 from copy import deepcopy
 from math import cos,sin
@@ -9,7 +10,7 @@ def signe(val):
         return val/abs(val)
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,stun,duration,own) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -17,6 +18,7 @@ class Hitbox():
         self.angle = angle
         self.knockback = knockback
         self.damages = damages
+        self.damages_stacking = damage_stacking
         self.stun = stun
         self.duration = duration
         self.own = own
@@ -34,6 +36,7 @@ class Hitbox():
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
     def __init__(self, speed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
+        self.damages = 0
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
         self.vx = 0           # vitesse (x,y)
         self.vy = 0
@@ -61,26 +64,35 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.hitstun = 0            # Frames de hitstun
         self.active_hitboxes = list() # Liste des hitbox actives
+        self.projectiles = list()
+        self.last_hit = 0
 
     def inputattack(self,attack):
-        if attack == "UpB": # si on input un up B
+        if self.can_act:
             self.frame = 0  # on démarre à la frame 0
-            self.attack = "UpB"  # l'action en cours est le up B
-            self.can_act = False # Ne peut pas attaquer après le up B
+            self.attack = attack  # on update l'action en cours
+            if attack == "UpB":
+                self.can_act = False # Ne peut pas attaquer après le up B
     
-    def animation_attack(self,attack):
+    def animation_attack(self,attack,inputs,stage):
         pass # à modifier pour chaque personnage dans Chars.py
 
     def act(self, inputs,stage):
-        self.get_inputs(inputs)
+        self.last_hit = max(self.last_hit-1,0)
+        self.get_inputs(inputs,stage)
         self.move(stage)
         for i,hitbox in enumerate(self.active_hitboxes) :
             hitbox.update()
             if hitbox.duration <= 0:
                 del self.active_hitboxes[i]
+        for i,projectile in enumerate(self.projectiles) :
+            self.projectiles[i].update()
+            if projectile.duration <= 0:
+                del self.projectiles[i]
+        self.damages = min(999,self.damages)
 
 
-    def get_inputs(self, inputs):
+    def get_inputs(self, inputs, stage):
         self.hitstun = max(0, self.hitstun-1)
         right, left, up, down, jump, special = inputs # dissociation des inputs
         if self.hitstun:
@@ -133,8 +145,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if not self.fastfall:  # on fastfall
                             self.vy = self.vy + self.fastfallspeed * 5
                         self.fastfall = True
+                if not (left or right or up or down):
+                    if special :
+                        self.inputattack("NeutralB")
             else : # si une attaque est exécutée, on anime la frame suivante
-                self.animation_attack(self.attack)
+                self.animation_attack(self.attack,inputs,stage)
             self.frame += 1
 
 
@@ -179,6 +194,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if self.rect.y > 800 :
             self.rect.y = -200
             self.rect.x = 0
+            self.damages = 0
             self.vy = 0
 
 
@@ -193,11 +209,26 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
         window.blit(sprite, pos) # on dessine le sprite
+        self.rect = self.sprite[self.sprite_frame].get_rect(topleft=(self.rect.x,self.rect.y))
+        for p in self.projectiles :
+            p.draw(window)
 
     def collide(self,other):
-        for hitbox in other.active_hitboxes:
-            if self.rect.colliderect(hitbox.hit):
-                self.vx = hitbox.knockback*cos(hitbox.angle)
-                self.vy = -hitbox.knockback*sin(hitbox.angle)
-                self.hitstun = hitbox.stun
-                self.rect.y -= 1
+        if not self.last_hit :
+            self.last_hit = 5
+            for hitbox in other.active_hitboxes: # Détection des hitboxes
+                if self.rect.colliderect(hitbox.hit):
+                    self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
+                    self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
+                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
+                    self.damages += hitbox.damages
+                    self.rect.y -= 1
+                    return
+            for projectile in other.projectiles: # Détection des projectiles
+                if self.rect.colliderect(projectile.rect):
+                    self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
+                    self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
+                    self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
+                    self.damages += projectile.damages
+                    self.rect.y -= 1
+                    return
