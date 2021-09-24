@@ -12,13 +12,13 @@ class Balan(Char):
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
 
         self.rect = self.sprite[0].get_rect(center=(0, -100)) # Crée le rectangle de perso
-        self.rect.w *= 1.5
-        self.rect.h *= 1.5
+        self.rect.w *= 1.5 # Rescale
+        self.rect.h *= 1.5 # Rescale
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.charge = 0
 
 
-    def act(self, inputs,stage):
+    def act(self, inputs,stage): # Spécial à Balan, pour son upB et son neutral B
         self.last_hit = max(self.last_hit-1,0)
         self.get_inputs(inputs,stage)
         self.move(stage)
@@ -31,8 +31,10 @@ class Balan(Char):
             if projectile.duration <= 0:
                 del self.projectiles[i]
         self.damages = min(999,self.damages)
-        if self.upB:
+        if self.upB: # Vitesse de merde après upB
             self.vx *= 0.1
+        if self.hitstun: # Arrête la charge du neutral B en hitstun
+            self.charge = 0
     def animation_attack(self,attack,inputs,stage):
         left, right, up, down,jump, attack_button, special, shield = inputs # dissociation des inputs
         if attack == "UpB":
@@ -42,53 +44,55 @@ class Balan(Char):
                 self.vy = -25
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-            elif self.frame > 6 : # Sort frame 6
-                if left :
+            elif self.frame > 6 : # Sort frame 7
+                if left : # peut reverse netre les frames 7 et 10
                     self.direction = -90
                 if right :
                     self.direction = 90
                 self.rect.move_ip(0,-6)
                 self.sprite_frame = 1
-            if self.frame == 6:
+            if self.frame == 6: # Hitbox frame 6
                 if self.direction < 0 :
                     angle = pi/3
                 else:
                     angle = 2*pi/3
                 self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self))
+
         if attack == "NeutralB":
             #self.can_act = False
-            if self.frame < 5 and special :
+            if self.frame < 5 and special : # Chargement jusqu'à 100 frames
                 self.frame = 0
                 self.charge = min(100,self.charge+1)
-                if left :
+                if left : # peut changer de direction
                     self.direction = -90
                 if right :
                     self.direction = 90
-            elif self.frame == 5 :
+            elif self.frame == 5 : # 5 frames après relache
                     for i in range(0,(self.charge-1)//20+1):
                         self.projectiles.append(Projo_Craie(i,self,stage))
-            if self.frame > 15:
+            if self.frame > 15: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
+
         if attack == "Jab":
-            if self.frame == 5 :
+            if self.frame == 5 : # 1er hit frame 5
                 self.active_hitboxes.append(Hitbox(64*signe(self.direction),64,24,10,signe(self.direction),2,1.3,0,5,5,self))
-            if self.frame == 10 :
+            if self.frame == 10 : # 2e hit frame 10
                 if self.direction < 0:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(64*signe(self.direction)+7,52,10,24,angle,5,2.5,1/250,8,5,self))
-            if self.frame > 20:
+                self.active_hitboxes.append(Hitbox(64*signe(self.direction)+7,52,10,24,angle,4.5,2.5,1/1000,8,5,self))
+
+            if self.frame > 20: # 10 frames de lag
                 self.attack = None
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
+        # Craies de M Balan
         self.id = id+1
         self.sprite = pygame.image.load("./DATA/Images/Sprites/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png")
         self.rect = self.sprite.get_rect()
-        self.rect.w *= 1.5
-        self.rect.h *= 1.5
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
         self.vx = 10*signe(own.direction)
@@ -115,8 +119,8 @@ class Projo_Craie():
         self.y += self.vy
         self.vy += 0.3
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.rect.w *= 1.5
-        self.rect.h *= 1.5
+        self.rect.w *= 1.5 # Rescale
+        self.rect.h *= 1.5 # Rescale
         if self.y > 800 :
             self.duration = 0
     
@@ -124,7 +128,7 @@ class Projo_Craie():
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
         
 
-##### Test
+##### Autres skins
 
 class Balan2(Balan):
     def __init__(self) -> None:

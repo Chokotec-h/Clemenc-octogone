@@ -97,7 +97,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def get_inputs(self, inputs, stage):
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down,jump, attack, special, shield = inputs # dissociation des inputs
-        if self.hitstun:
+        if self.hitstun: # Directional Influence
             if right:
                 self.vx += self.airspeed/10
             if left:
@@ -122,7 +122,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     else:
                         self.vx -= self.airspeed
                 if up and self.can_act:         # si on input vers le haut
-                    if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
+                    if special and not self.upB : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
                         jump = False  # On input pas un saut en plus
 
@@ -158,11 +158,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 
     def move(self, stage):
-        if self.fastfall :
+        if self.fastfall : # gravité
             self.vy = self.vy + self.fastfallspeed
         else :
             self.vy = self.vy + self.fallspeed
         
+        # détection de collisions à la frame suivante
         nextframe = self.rect.move(self.vx,-signe(self.vy))
         if nextframe.colliderect(stage.rect):
             while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.rect):
@@ -175,9 +176,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.rect.y += signe(self.vy)
             self.vy = 0
 
+        # Déplacement
         self.rect.y += self.vy
         self.rect.x += round(self.vx)
         if not self.hitstun :
+            # déceleration et vitesse max
             if self.grounded :
                 self.vx *= self.deceleration
             elif self.vx < -5*self.airspeed:
@@ -187,12 +190,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if abs(self.vx) < 0.01 :
                 self.vx = 0
 
+        # Détection de si le personnage est au sol
         if self.rect.move(0,1).colliderect(stage.rect):
-            if self.hitstun :
+            if self.hitstun : # annule la vitesse de hitstun
                 self.vx = 0
-            if not self.can_act :
+            if not self.can_act : # permet de jouer après un upb
                 self.can_act = True
-            if self.upB:
+            if self.upB: # reset le upb
                 self.upB = False
             self.grounded = True
             self.fastfall = False
@@ -201,12 +205,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         else :
             self.grounded = False
 
-        # debug
-        if self.rect.y > 800 :
+        # respawn
+        if self.rect.y > 800 or self.rect.y < -800 or self.rect.x < -900 or self.rect.x > 900 :
             self.rect.y = -200
             self.rect.x = 0
             self.damages = 0.
             self.vy = 0
+            self.vx = 0
 
 
     def draw(self, window):
@@ -217,12 +222,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         else:
             sprite = self.sprite[self.sprite_frame]
         ####
-        sprite = pygame.transform.scale(sprite,(round(sprite.get_size()[0]*1.5),round(sprite.get_size()[1]*1.5)))
+        sprite = pygame.transform.scale(sprite,(round(sprite.get_size()[0]*1.5),round(sprite.get_size()[1]*1.5))) # Rescale
         pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
         window.blit(sprite, pos) # on dessine le sprite
         self.rect = self.sprite[self.sprite_frame].get_rect(topleft=(self.rect.x,self.rect.y))
-        self.rect.w *= 1.5
-        self.rect.h *= 1.5
+        self.rect.w *= 1.5 # Rescale
+        self.rect.h *= 1.5 # Rescale
+        # draw projectiles
         for p in self.projectiles :
             p.draw(window)
 
@@ -233,18 +239,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                     self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                     self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
-                    self.damages += hitbox.damages
+                    self.damages += hitbox.damages # dommages
                     self.rect.y -= 1
-                    self.attack = None
-                    del other.active_hitboxes[i]
+                    self.attack = None # cancel l'attacue en cours
+                    del other.active_hitboxes[i] # Supprime la hitbox
                     return
             for projectile in other.projectiles: # Détection des projectiles
                 if self.rect.colliderect(projectile.rect):
-                    self.last_hit = 8
+                    self.last_hit = 8 # invincibilité de 8 frames
                     self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                     self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                     self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
-                    self.damages += projectile.damages
+                    self.damages += projectile.damages # dommages
                     self.rect.y -= 1
                     self.attack = None
                     return
