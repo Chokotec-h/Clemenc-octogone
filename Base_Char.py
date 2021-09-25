@@ -1,7 +1,5 @@
-from Stages import Stage
 import pygame
-from copy import deepcopy
-from math import cos,sin
+from math import cos,sin,pi
 
 def signe(val):
     if val == 0:
@@ -10,7 +8,7 @@ def signe(val):
         return val/abs(val)
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -22,6 +20,7 @@ class Hitbox():
         self.stun = stun
         self.duration = duration
         self.own = own
+        self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
         self.update()
 
     def update(self):
@@ -67,9 +66,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.active_hitboxes = list() # Liste des hitbox actives
         self.projectiles = list()
         self.last_hit = 0
+        self.lag = 0
 
     def inputattack(self,attack):
-        if self.can_act:
+        if self.can_act :
             self.frame = 0  # on démarre à la frame 0
             self.attack = attack  # on update l'action en cours
             if attack == "UpB":
@@ -95,6 +95,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 
     def get_inputs(self, inputs, stage):
+        self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down,jump, attack, special, shield = inputs # dissociation des inputs
         if self.hitstun: # Directional Influence
@@ -107,7 +108,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if down:
                 self.vy += self.fallspeed/10
         else :
-            if self.attack is None : # Si aucune attaque n'est en cours d'exécution
+            if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if right:            # Si on input à droite
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
@@ -125,6 +126,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if special and not self.upB : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
                         jump = False  # On input pas un saut en plus
+                    if attack :
+                        if self.grounded:
+                            pass
+                        else :
+                            self.inputattack("UpAir")
 
                 if jump:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
@@ -242,12 +248,19 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if not self.last_hit :
             for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
                 if self.rect.colliderect(hitbox.hit):
+                    if hitbox.position_relative : # Reverse hit
+                        if self.rect.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
+                            hitbox.angle = pi - hitbox.angle
+                        if self.rect.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
+                            hitbox.angle = pi - hitbox.angle
+                        
                     self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                     self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                     self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
                     self.damages += hitbox.damages # dommages
                     self.rect.y -= 1
                     self.attack = None # cancel l'attacue en cours
+
                     del other.active_hitboxes[i] # Supprime la hitbox
                     return
             for projectile in other.projectiles: # Détection des projectiles

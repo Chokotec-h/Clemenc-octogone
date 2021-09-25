@@ -32,7 +32,7 @@ class Balan(Char):
                 del self.projectiles[i]
         self.damages = min(999,self.damages)
         if self.upB: # Vitesse de merde après upB
-            self.vx *= 0.2
+            self.vx *= 0.3
         if self.hitstun: # Arrête la charge du neutral B en hitstun
             self.charge = 0
 
@@ -58,7 +58,7 @@ class Balan(Char):
                     angle = pi/3
                 else:
                     angle = 2*pi/3
-                self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self))
+                self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
             #self.can_act = False
@@ -88,7 +88,7 @@ class Balan(Char):
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self))
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self,False))
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -99,10 +99,28 @@ class Balan(Char):
                     angle = 2*pi/3
                 else:
                     angle = pi/3
-                self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,90,24,10,angle,3,3.8,1/500,10,5,self))
+                self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,90,24,10,angle,3,3.8,1/500,10,5,self,False))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
+
+        if attack == "UpAir":
+            if self.frame == 5 : # Frame 5-10
+                angle = pi/2
+                self.active_hitboxes.append(Hitbox(-1,-10,50,10,angle,1,2.5,1/1000,4,5,self))
+            if self.frame == 10 : # Frame 10-15
+                if self.direction < 0:
+                    angle = 4*pi/6
+                else:
+                    angle = 2*pi/6
+                self.active_hitboxes.append(Hitbox(15,-10,26,10,angle,3,5,1/200,18,5,self))
+
+            if self.frame > 25: # 10 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                self.lag = 15-self.frame # Auto cancel frame 15
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
@@ -114,7 +132,7 @@ class Projo_Craie():
         self.y = own.rect.y + own.rect.h//2
         self.vx = 10*signe(own.direction)
         self.vy = -3*(self.id)
-        self.duration = 10
+        self.duration = 5
         self.stage = stage
         self.damages_stacking=0
         if own.direction < 0 :
@@ -132,6 +150,9 @@ class Projo_Craie():
             self.duration -= 1
             self.vx = 0
             self.vy = 0
+            self.damages = 2.5
+            self.stun = 12
+            self.knockback = 5
         self.x += round(self.vx)
         self.y += self.vy
         self.vy += 0.3
