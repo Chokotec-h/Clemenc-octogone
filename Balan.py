@@ -6,8 +6,8 @@ from math import pi
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, airspeed=1.2, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.3, jumpheight=15,
-                         doublejumpheight=10)
+        super().__init__(speed=2, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
+                         doublejumpheight=15)
         # Liste des frames
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
 
@@ -15,10 +15,9 @@ class Balan(Char):
         self.rect.w *= 1.5 # Rescale
         self.rect.h *= 1.5 # Rescale
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
-        self.charge = 0
 
 
-    def act(self, inputs,stage): # Spécial à Balan, pour son upB et son neutral B
+    def act(self, inputs,stage): # Spécial à Balan, pour son upB
         self.last_hit = max(self.last_hit-1,0)
         self.get_inputs(inputs,stage)
         self.move(stage)
@@ -33,7 +32,7 @@ class Balan(Char):
         self.damages = min(999,self.damages)
         if self.upB: # Vitesse de merde après upB
             self.vx *= 0.3
-        if self.hitstun: # Arrête la charge du neutral B en hitstun
+        if self.hitstun: # Arrête la charge du neutral B et des smashs en hitstun
             self.charge = 0
 
     def animation_attack(self,attack,inputs,stage):
@@ -42,7 +41,7 @@ class Balan(Char):
             if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
                 self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -25
+                self.vy = -20
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             elif self.frame > 6 : # Sort frame 7
@@ -121,20 +120,103 @@ class Balan(Char):
         if attack == "UpAir":
             if self.frame == 5 : # Frame 5-10
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-1,-10,50,10,angle,1,2.5,1/1000,4,5,self))
+                self.active_hitboxes.append(Hitbox(-1,-10,50,10,angle,2,2.5,1/1000,4,5,self))
             if self.frame == 10 : # Frame 10-15
                 if self.direction < 0:
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
-                self.active_hitboxes.append(Hitbox(15,-10,26,10,angle,3,5,1/200,18,5,self))
+                self.active_hitboxes.append(Hitbox(15,-10,26,10,angle,5,5,1/200,18,5,self))
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                self.lag = 15-self.frame # Auto cancel frame 15
+                if self.frame < 15 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+
+        if attack == "ForwardAir":
+            if self.frame == 15 : # Frame 15-16
+                if self.direction < 0:
+                    angle = -3*pi/4
+                else:
+                    angle = -pi/4
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,16,32,angle,10,14,1/150,18,6,self,False))
+            if self.frame == 17 : # Frame 17-21
+                if self.direction < 0:
+                    angle = 4*pi/6
+                else:
+                    angle = 2*pi/6
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].angle = angle
+                    self.active_hitboxes[-1].knockback = 3
+                    self.active_hitboxes[-1].damages = 10
+                    self.active_hitboxes[-1].damage_stacking = 1/250
+                    self.active_hitboxes[-1].stun = 10
+
+
+            if self.frame > 50: # 29 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 40 :
+                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+
+        if attack == "BackAir":
+            if self.frame == 6 : # Frame 6-8
+                if self.direction < 0:
+                    angle = 0
+                else:
+                    angle = pi
+                self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,32,16,16,angle,10,12,1/150,15,6,self,False))
+            if self.frame == 9 : # Frame 9-11
+                if self.direction < 0:
+                    angle = 0.1
+                else:
+                    angle = pi-0.1
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].angle = angle
+                    self.active_hitboxes[-1].knockback = 3
+                    self.active_hitboxes[-1].damages = 8
+                    self.active_hitboxes[-1].damage_stacking = 1/250
+                    self.active_hitboxes[-1].stun = 10
+
+            if self.frame > 25: # 14 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 20 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+
+        if attack == "DownAir":
+            if self.frame == 10 : # Frame 10
+                if self.direction < 0:
+                    angle = -pi/3
+                else:
+                    angle = -2*pi/3
+                self.active_hitboxes.append(Hitbox(16,90,24,32,angle,2,12,1/20,5,5,self,False))
+            if self.frame == 11 : # Frame 11-15
+                if self.direction < 0:
+                    angle = 4*pi/6
+                else:
+                    angle = 2*pi/6
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].angle = angle
+                    self.active_hitboxes[-1].knockback = 3
+                    self.active_hitboxes[-1].damages = 7
+                    self.active_hitboxes[-1].damage_stacking = 1/1000
+                    self.active_hitboxes[-1].stun = 10
+
+            if self.frame > 25: # 10 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 20 :
+                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
 class Projo_Craie():
     def __init__(self,id,own,stage):

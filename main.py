@@ -109,6 +109,8 @@ def main():
         #controls = [[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN,pygame.K_SPACE,pygame.K_x,pygame.K_c],[pygame.K_q,pygame.K_d,pygame.K_z,pygame.K_s,0,0,0]]
         holding_up1 = False # Gestion du maintien de la touche saut
         holding_up2 = False
+        parry1 = 0
+        parry2 = 0
         pause = False
         hold_pose = False
         while run:  # Boucle du programme
@@ -131,13 +133,20 @@ def main():
             
             if not pause:
                 inputs_1 = convert_inputs(controls[0])[0:8]
-                if inputs_1[4]: # Met en pause une seule fois
+                if inputs_1[4]: # Jump
                     if not holding_up1:
                         holding_up1 = True
                     else:
                         inputs_1[4] = False
                 else:
                     holding_up1 = False
+
+                if inputs_1[7] and Char_P1.grounded and not Char_P1.parrying: # Parry
+                    parry1 += 1
+                    if parry1 > 4: # Fenêtre de 4 frames
+                        inputs_1[7] = False
+                else:
+                    parry1 = 0
 
                 # Transmission des inputs à l'objet Palyer 1
                 Char_P1.act(inputs_1, stage)
@@ -151,6 +160,13 @@ def main():
                         inputs_2[4] = False
                 else:
                     holding_up2 = False
+
+                if inputs_2[7] and Char_P2.grounded and not Char_P2.parrying: # Parry
+                    parry2 += 1
+                    if parry2 > 4: # Fenêtre de 4 frames
+                        inputs_2[7] = False
+                else:
+                    parry2 = 0
                 Char_P2.act(inputs_2, stage)
                 ########
 
