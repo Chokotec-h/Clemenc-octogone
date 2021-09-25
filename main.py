@@ -168,6 +168,11 @@ def main():
 
             """ Affichage des éléments """
 
+            ### Debug
+            for h in Char_P1.active_hitboxes:
+                h.draw(window)
+            for h in Char_P2.active_hitboxes:
+                h.draw(window)
             # Smoke
             if Char_P1.hitstun :
                 smoke.append(Smoke(Char_P1.rect.x+Char_P1.rect.w/2,Char_P1.rect.y+Char_P1.rect.h/2))
@@ -180,11 +185,6 @@ def main():
             # Chars
             Char_P1.draw(window)
             Char_P2.draw(window)
-            ### Debug
-            for h in Char_P1.active_hitboxes:
-                h.draw(window)
-            for h in Char_P2.active_hitboxes:
-                h.draw(window)
             # Stage
             stage.draw(window)
             # Damages
