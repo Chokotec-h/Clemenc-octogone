@@ -35,6 +35,7 @@ class Balan(Char):
             self.vx *= 0.1
         if self.hitstun: # Arrête la charge du neutral B en hitstun
             self.charge = 0
+
     def animation_attack(self,attack,inputs,stage):
         left, right, up, down,jump, attack_button, special, shield = inputs # dissociation des inputs
         if attack == "UpB":

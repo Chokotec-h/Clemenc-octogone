@@ -172,9 +172,9 @@ def main():
             # Stage
             stage.draw(window)
             # Damages
-            Texte(f"{round(Char_P1.damages)} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
+            Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
             Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages)))*30,height-30,800,format_="left").draw(window)
-            Texte(f"{round(Char_P2.damages)} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
+            Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
             Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages)))*30,height-30,800,format_="left").draw(window)
 
             pygame.display.flip()
