@@ -110,12 +110,10 @@ def main():
         #run = True
         # permettra de modifier les contrôles
         #controls = [[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN,pygame.K_SPACE,pygame.K_x,pygame.K_c],[pygame.K_q,pygame.K_d,pygame.K_z,pygame.K_s,0,0,0]]
-        holding_up1 = False # Gestion du maintien de la touche saut
-        holding_up2 = False
         parry1 = 0
         parry2 = 0
         pause = False
-        hold_pose = False
+        hold_pause = False
         while run:  # Boucle du programme
 
             window.fill((200, 220, 250)) # Réinitialisation de l'écran à chaque frame
@@ -128,21 +126,16 @@ def main():
 
             # Recuperation des touches
             if (convert_inputs(controls[0])[-1] or convert_inputs(controls[1])[-1]):
-                if not hold_pose:
+                if not hold_pause:
                     pause = not pause
-                    hold_pose  = True
+                    hold_pause  = True
             else :
-                hold_pose = False
+                hold_pause = False
             
             if not pause:
                 inputs_1 = convert_inputs(controls[0])[0:8]
-                if inputs_1[4]: # Jump
-                    if not holding_up1:
-                        holding_up1 = True
-                    else:
-                        inputs_1[4] = False
-                else:
-                    holding_up1 = False
+                if not inputs_1[4]: # Jump
+                    Char_P1.jumping = False
 
                 if inputs_1[7] and Char_P1.grounded and not Char_P1.parrying: # Parry
                     parry1 += 1
@@ -156,13 +149,8 @@ def main():
 
                 # P2
                 inputs_2 = convert_inputs(controls[1])[0:8]
-                if inputs_2[4]:
-                    if not holding_up2:
-                        holding_up2 = True
-                    else:
-                        inputs_2[4] = False
-                else:
-                    holding_up2 = False
+                if not inputs_2[4]: # Jump
+                    Char_P2.jumping = False
 
                 if inputs_2[7] and Char_P2.grounded and not Char_P2.parrying: # Parry
                     parry2 += 1
