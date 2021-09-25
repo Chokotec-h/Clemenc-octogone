@@ -148,7 +148,7 @@ class Balan(Char):
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
-                if self.active_hitboxes :
+                if self.active_hitboxes : # late hitbox
                     self.active_hitboxes[-1].angle = angle
                     self.active_hitboxes[-1].knockback = 3
                     self.active_hitboxes[-1].damages = 10
@@ -176,7 +176,7 @@ class Balan(Char):
                     angle = 0
                 else:
                     angle = pi
-                if self.active_hitboxes :
+                if self.active_hitboxes : # Late hitbox
                     self.active_hitboxes[-1].angle = angle
                     self.active_hitboxes[-1].knockback = 3
                     self.active_hitboxes[-1].damages = 8
@@ -203,7 +203,7 @@ class Balan(Char):
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
-                if self.active_hitboxes :
+                if self.active_hitboxes : # late hitbox
                     self.active_hitboxes[-1].angle = angle
                     self.active_hitboxes[-1].knockback = 3
                     self.active_hitboxes[-1].damages = 7
@@ -227,7 +227,7 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,angle,10,2,0,8,20,self))
                 self.active_hitboxes.append(Hitbox(8,32,32,32,pi/2,12,8,1/200,10,20,self,False))
             if self.frame == 7 : # Frame 7-23
-                if self.active_hitboxes :
+                if self.active_hitboxes : # late hitbox
                     if self.active_hitboxes[-1].angle == pi/2:
                         self.active_hitboxes[-1].knockback = 3
                         self.active_hitboxes[-1].damages = 3

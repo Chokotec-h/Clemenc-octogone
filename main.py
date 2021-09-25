@@ -1,8 +1,10 @@
+from Misc import Smoke
 import pygame
 import traceback
 import spritesLoader
 import Chars
 import Stages
+from Misc import *
 from Interface import *
 from Gamepad_gestion import *
 
@@ -95,6 +97,7 @@ def main():
     Char_P1 = Chars.Balan()
     Char_P2 = Chars.Balan2()
     stage = Stages.Stage()
+    smoke = list()
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")
@@ -182,6 +185,15 @@ def main():
             for h in Char_P2.active_hitboxes:
                 h.draw(window)
 
+            # Smoke
+            if Char_P1.hitstun :
+                smoke.append(Smoke(Char_P1.rect.x+Char_P1.rect.w/2,Char_P1.rect.y+Char_P1.rect.h/2))
+            if Char_P2.hitstun :
+                smoke.append(Smoke(Char_P2.rect.x+Char_P2.rect.w/2,Char_P2.rect.y+Char_P2.rect.h/2))
+            for i,s in enumerate(smoke):
+                s.draw(window)
+                if s.duration <= 0:
+                    del smoke[i]
             # Chars
             Char_P1.draw(window)
             Char_P2.draw(window)
