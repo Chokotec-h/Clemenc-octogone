@@ -74,7 +74,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.attack = attack  # on update l'action en cours
             if attack == "UpB":
                 self.can_act = False # Ne peut pas attaquer après le up B
-                self.upB = True # Ne peut pas attaquer après le up B
+                self.upB = True # Effets spéciaux après upB (uniquement grounded)
     
     def animation_attack(self,attack,inputs,stage):
         pass # à modifier pour chaque personnage dans Chars.py
@@ -91,7 +91,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.projectiles[i].update()
             if projectile.duration <= 0:
                 del self.projectiles[i]
-        self.damages = min(999,self.damages)
+        self.damages = min(999.,self.damages)
 
 
     def get_inputs(self, inputs, stage):

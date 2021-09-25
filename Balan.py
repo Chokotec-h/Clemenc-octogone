@@ -32,26 +32,27 @@ class Balan(Char):
                 del self.projectiles[i]
         self.damages = min(999,self.damages)
         if self.upB: # Vitesse de merde après upB
-            self.vx *= 0.1
+            self.vx *= 0.2
         if self.hitstun: # Arrête la charge du neutral B en hitstun
             self.charge = 0
 
     def animation_attack(self,attack,inputs,stage):
         left, right, up, down,jump, attack_button, special, shield = inputs # dissociation des inputs
         if attack == "UpB":
-            if self.frame > 10 and self.frame < 12: # Saute frame 11
+            if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
-                self.can_act = False
+                self.can_act = False # ne peut pas agir après un grounded up B
                 self.vy = -25
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             elif self.frame > 6 : # Sort frame 7
-                if left : # peut reverse netre les frames 7 et 10
+                self.rect.move_ip(0,-6)
+                self.sprite_frame = 1
+            if self.frame < 6 :
+                if left : # peut reverse netre les frames 1 et 5
                     self.direction = -90
                 if right :
                     self.direction = 90
-                self.rect.move_ip(0,-6)
-                self.sprite_frame = 1
             if self.frame == 6: # Hitbox frame 6-11
                 if self.direction < 0 :
                     angle = pi/3
@@ -139,7 +140,7 @@ class Projo_Craie():
         self.rect.h *= 1.5 # Rescale
         if self.y > 800 :
             self.duration = 0
-    
+
     def draw(self,window):
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
         
