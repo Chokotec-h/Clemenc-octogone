@@ -31,7 +31,7 @@ def setup_controls(window,width,height,joysticks):
     player = 0
     run = True
     # liste des action
-    actions = ("Left","Right","Up","Down","Jump","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
+    actions = ("Left","Right","Up","Down","Jump","Attack","Special","Shield","Smash modifier","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
         window.fill((200,200,200))
         for e in pygame.event.get():
@@ -133,7 +133,7 @@ def main():
                 hold_pause = False
             
             if not pause:
-                inputs_1 = convert_inputs(controls[0])[0:8]
+                inputs_1 = convert_inputs(controls[0])[0:9]
                 if not inputs_1[4]: # Jump
                     Char_P1.jumping = False
 
@@ -148,7 +148,7 @@ def main():
                 Char_P1.act(inputs_1, stage)
 
                 # P2
-                inputs_2 = convert_inputs(controls[1])[0:8]
+                inputs_2 = convert_inputs(controls[1])[0:9]
                 if not inputs_2[4]: # Jump
                     Char_P2.jumping = False
 

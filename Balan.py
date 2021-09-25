@@ -36,7 +36,7 @@ class Balan(Char):
             self.charge = 0
 
     def animation_attack(self,attack,inputs,stage):
-        left, right, up, down,jump, attack_button, special, shield = inputs # dissociation des inputs
+        left, right, up, down,jump, attack_button, special, shield, smash = inputs # dissociation des inputs
         if attack == "UpB":
             if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
@@ -74,6 +74,30 @@ class Balan(Char):
             if self.frame > 15: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
+
+        if attack == "SideB":
+            if self.frame < 8 :
+                if left : # peut reverse netre les frames 1 et 7
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame == 8 :
+                if self.direction < 0:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(16,30,32,32,angle,30,10,0,12,3,self))
+            if self.frame == 10 : # Active on 10-70
+                if self.direction < 0:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(8,94,32,10,angle,3,4,1/250,3,60,self))
+            if self.frame > 9 and self.frame < 71: # Déplacement
+                self.vx = 15*signe(self.direction)/(self.frame/10)
+                self.vy = 1
+            if self.frame > 95 : # 25 frames de lag
+                self.attack = None
 
         if attack == "Jab":
             if self.frame == 5 : # 1er hit frame 5-10
@@ -115,6 +139,23 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,58,24,24,angle,6,8,1/250,12,6,self,False))
 
             if self.frame > 35: # 13 frames de lag
+                self.attack = None
+
+        if attack == "UpTilt":
+            if self.frame == 6 : # Frame 6-14
+                angle = pi/2
+                self.active_hitboxes.append(Hitbox(-20*signe(self.direction)+12,8,16,16,angle,9,8.2,1/250,10,8,self,False))
+            # Dessin du cercle
+            if self.active_hitboxes :
+                if self.frame < 9 : # Frames 7-8
+                    self.active_hitboxes[-1].y -= 8
+                    self.active_hitboxes[-1].sizey += 8
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 11 : # Frames 9-10
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 13 : # Frames 11-12
+                    self.active_hitboxes[-1].sizey += 8
+            if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
@@ -241,23 +282,6 @@ class Balan(Char):
                 self.attack = None
                 if self.frame < 30 :
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
-
-        if attack == "UpTilt":
-            if self.frame == 6 : # Frame 6-14
-                angle = pi/2
-                self.active_hitboxes.append(Hitbox(-20*signe(self.direction)+12,8,16,16,angle,9,8.2,1/250,10,8,self,False))
-            # Dessin du cercle
-            if self.active_hitboxes :
-                if self.frame < 9 : # Frames 7-8
-                    self.active_hitboxes[-1].y -= 8
-                    self.active_hitboxes[-1].sizey += 8
-                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
-                if self.frame < 11 : # Frames 9-10
-                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
-                if self.frame < 13 : # Frames 11-12
-                    self.active_hitboxes[-1].sizey += 8
-            if self.frame > 25: # 11 Frames de lag
-                self.attack = None
                 
 
 class Projo_Craie():
@@ -299,6 +323,10 @@ class Projo_Craie():
         self.rect.h *= 1.5 # Rescale
         if self.y > 800 :
             self.duration = 0
+
+    def deflect(self,modifier):
+        self.vy = -(self.id)
+        self.vx = -self.vx*modifier
 
     def draw(self,window):
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite

@@ -8,7 +8,7 @@ def signe(val):
         return val/abs(val)
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True,deflect=False,modifier=1) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -21,6 +21,8 @@ class Hitbox():
         self.duration = duration
         self.own = own
         self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
+        self.deflecter = deflect
+        self.modifier = modifier
         self.update()
 
     def update(self):
@@ -105,7 +107,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def get_inputs(self, inputs, stage):
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
-        left, right, up, down,jump, attack, special, shield = inputs # dissociation des inputs
+        left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
         if self.hitstun: # Directional Influence
             if right:
                 self.vx += self.airspeed/10
@@ -125,6 +127,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 
                 if right:            # Si on input à droite
+                    if special :
+                        self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
@@ -136,10 +140,14 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.speed
+                        if smash :
+                            self.inputattack("ForwardSmash")
                     else:             # Sinon, se déplace de la vitesse aérienne
                         self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
+                    if special :
+                        self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
@@ -317,7 +325,14 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
-        for projectile in other.projectiles: # Détection des projectiles
+        for i,projectile in enumerate(other.projectiles): # Détection des projectiles
+            for h in self.active_hitboxes :
+                if h.deflect and h.hit.colliderect(projectile.rect):
+                    projectile.deflect(h.modifier)
+                    self.projectiles.append(projectile)
+                    del other.projectiles[i] # Supprime la hitbox
+                    return
+
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
                 if not self.parry : # Parry
