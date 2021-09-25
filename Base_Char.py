@@ -71,6 +71,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.parry = False
         self.parrying = False
 
+        self.jumping = False
         self.dash = False # Unused
 
     def inputattack(self,attack):
@@ -160,14 +161,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         else :
                             self.inputattack("UpAir")
 
-                if jump:        # si on input un saut
+                if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
+                        self.jumping = True
                         self.vy = -self.jumpheight # il utilise son premier saut
                         self.jumpsound.play() # joli son
 
                     else:  # Si le personnage est en l'air
                         self.fastfall = False  # il cesse de fastfall
                         if not self.doublejump[-1]:  # Si il possède un double saut
+                            self.jumping = True
                             self.jumpsound.play()  # joli son
                             self.vy = -self.doublejumpheight # il saute
 
