@@ -2,11 +2,13 @@ from Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
+exposant_sprite = [pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png") for i in range(5)]
+
 ##### M Balan
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
                          doublejumpheight=15)
         # Liste des frames
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
@@ -17,9 +19,9 @@ class Balan(Char):
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
 
 
-    def act(self, inputs,stage): # Spécial à Balan, pour son upB
+    def act(self, inputs,stage,other): # Spécial à Balan, pour son upB
         self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage)
+        self.get_inputs(inputs,stage,other)
         self.move(stage)
         for i,hitbox in enumerate(self.active_hitboxes) :
             hitbox.update()
@@ -35,8 +37,8 @@ class Balan(Char):
         if self.hitstun: # Arrête la charge du neutral B et des smashs en hitstun
             self.charge = 0
 
-    def animation_attack(self,attack,inputs,stage):
-        left, right, up, down,jump, attack_button, special, shield = inputs # dissociation des inputs
+    def animation_attack(self,attack,inputs,stage,other):
+        left, right, up, down,jump, attack_button, special, shield, smash = inputs # dissociation des inputs
         if attack == "UpB":
             if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
@@ -74,6 +76,49 @@ class Balan(Char):
             if self.frame > 15: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
+
+        if attack == "DownB":
+            if self.frame < 5 and special: # Chargement jusqu'à 200 frames
+                self.frame = 0
+                self.charge = min(199,self.charge+1)
+                if left : # peut changer de direction
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame == 5 : # 5 frames après relache
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction),32,32,64,0,0,0,0,0,20,self))
+                self.active_hitboxes[-1].update()
+                if self.active_hitboxes[-1].hit.colliderect(other.rect):
+                    self.projectiles.append(Exposant(other,self,self.charge//40))
+            if self.frame > 20 : # 15 frames de lag
+                self.attack = None
+                self.charge = 0
+
+                
+
+        if attack == "SideB":
+            if self.frame < 8 :
+                if left : # peut reverse netre les frames 1 et 7
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame == 8 :
+                if self.direction < 0:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(16,30,32,32,angle,30,10,0,12,3,self,False))
+            if self.frame == 10 : # Active on 10-70
+                if self.direction < 0:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(8,94,32,10,angle,3,4,1/250,3,60,self,False))
+            if self.frame > 9 and self.frame < 71: # Déplacement
+                self.vx = 15*signe(self.direction)/(self.frame/10)
+                self.vy = 1
+            if self.frame > 95 : # 25 frames de lag
+                self.attack = None
 
         if attack == "Jab":
             if self.frame == 5 : # 1er hit frame 5-10
@@ -115,6 +160,23 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,58,24,24,angle,6,8,1/150,12,6,self,False))
 
             if self.frame > 30: # 8 frames de lag
+                self.attack = None
+
+        if attack == "UpTilt":
+            if self.frame == 6 : # Frame 6-14
+                angle = pi/2
+                self.active_hitboxes.append(Hitbox(-20*signe(self.direction)+12,8,16,16,angle,9,8.2,1/250,10,8,self,False))
+            # Dessin du cercle
+            if self.active_hitboxes :
+                if self.frame < 9 : # Frames 7-8
+                    self.active_hitboxes[-1].y -= 8
+                    self.active_hitboxes[-1].sizey += 8
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 11 : # Frames 9-10
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 13 : # Frames 11-12
+                    self.active_hitboxes[-1].sizey += 8
+            if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
@@ -225,7 +287,7 @@ class Balan(Char):
                 else:
                     angle = pi
                 self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,angle,10,2,0,8,20,self))
-                self.active_hitboxes.append(Hitbox(8,32,32,32,pi/2,12,8,1/200,10,20,self,False))
+                self.active_hitboxes.append(Hitbox(8,16,32,64,pi/2,12,8,1/200,10,20,self,False))
             if self.frame == 7 : # Frame 7-23
                 if self.active_hitboxes : # late hitbox
                     if self.active_hitboxes[-1].angle == pi/2:
@@ -241,6 +303,90 @@ class Balan(Char):
                 self.attack = None
                 if self.frame < 30 :
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+
+        if attack == "ForwardSmash":
+            if self.frame < 5 :
+                if left : # peut reverse netre les frames 1 et 5
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 7
+                self.charge = self.charge+1
+            elif self.frame == 12 : # Active on 12-18
+                self.charge = min(self.charge,100)
+                if self.direction < 0 :
+                    angle = 3*pi/4
+                else :
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/250,8*(self.charge/100+1),4,self,True,True,2))
+            if self.frame > 45: # 30 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "UpSmash":
+
+            if self.active_hitboxes: # Moving hitbox
+                self.active_hitboxes[-1].relativex -= 20*signe(self.direction)
+                if self.frame > 11 :
+                    if self.direction > 0 : # Reverse angle
+                        self.active_hitboxes[-1].angle = 2*pi/6
+                    else :
+                        self.active_hitboxes[-1].angle = 4*pi/6
+                    self.active_hitboxes[-1].relativey -= 3
+                else :
+                    self.active_hitboxes[-1].relativey += 3
+
+            if self.frame < 5 :
+                if left : # peut reverse netre les frames 1 et 5
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 6
+                self.charge = self.charge+1
+            elif self.frame == 10 : # Active on 10-15
+                self.charge = min(self.charge,100)
+                if self.direction < 0 :
+                    angle = 2*pi/6
+                else :
+                    angle = 4*pi/6
+                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
+
+            if self.frame > 40: # 25 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "DownSmash":
+
+            if self.frame < 2 :
+                if left : # peut reverse netre les frames 1 et 5
+                    self.direction = -90
+                if right :
+                    self.direction = 90
+            if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 4
+                self.charge = self.charge+1
+            elif self.frame == 7 : # Active on 7-9
+                self.charge = min(self.charge,100)
+                if self.direction < 0 :
+                    angle = 5*pi/6
+                else :
+                    angle = pi/6
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
+            
+            elif self.frame == 15 : # Active on 15-17
+                self.charge = min(self.charge,100)
+                if self.direction < 0 :
+                    angle = pi/6
+                else :
+                    angle = 5*pi/6
+                self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,60,32,32,angle,9*(self.charge/200+1),14.5,1/250,5*(self.charge/50+1),3,self,False))
+
+            if self.frame > 40: # 23 frames de lag
+                self.attack = None
+                self.charge = 0
+                
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
@@ -282,9 +428,36 @@ class Projo_Craie():
         if self.y > 800 :
             self.duration = 0
 
+    def deflect(self,modifier):
+        self.vy = -(self.id)
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
+
     def draw(self,window):
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
-        
+
+class Exposant():
+    def __init__(self,opponent,own,charge) -> None:
+        self.opponent = opponent
+        self.charge = charge + 1
+        self.duration = (charge+1)*120
+        self.own = own
+        self.rect = pygame.Rect(-1000,1000,0,0)
+    
+    def update(self):
+        if self.opponent.rect.y > 750 or  self.opponent.rect.y < -750 or  self.opponent.rect.x > 750 or  self.opponent.rect.x < -750:
+            self.duration = 0
+            self.charge = 0
+        if self.duration == 1 :
+            self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,5*self.charge,10*self.charge,1/250,8*self.charge,5,self.opponent,False))
+        self.duration -= 1
+
+    def draw(self,window):
+        self.x = self.opponent.rect.x+self.opponent.rect.w
+        self.y = self.opponent.rect.y-30
+        window.blit(exposant_sprite[self.duration//120],(self.x+800,self.y+450))
 
 ##### Autres skins
 

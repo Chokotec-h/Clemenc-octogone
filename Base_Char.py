@@ -8,7 +8,7 @@ def signe(val):
         return val/abs(val)
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True,deflect=False,modifier=1) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -18,9 +18,11 @@ class Hitbox():
         self.damages = damages
         self.damages_stacking = damage_stacking
         self.stun = stun
-        self.duration = duration
+        self.duration = duration + 1 # Because duration is reduced on init (line 26)
         self.own = own
         self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
+        self.deflect = deflect
+        self.modifier = modifier
         self.update()
 
     def update(self):
@@ -33,7 +35,7 @@ class Hitbox():
         pygame.draw.rect(window,(255,0,0),(self.x+800,self.y+450,self.sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
-    def __init__(self, speed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
+    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
         self.damages = 0.0
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
@@ -45,6 +47,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.sprite = []            # Sprite vide (à remplir via <Personnage>.py)
 
         self.speed = speed          # vitesse au sol
+        self.dashspeed = dashspeed          # vitesse de dash
         self.airspeed = airspeed    # vitesse aérienne
         self.deceleration = deceleration  # vitesse de décélération (peut permettre de faire un perso qui glisse ;) )
         self.fallspeed = fallspeed  # vitesse de chute
@@ -82,12 +85,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.can_act = False # Ne peut pas attaquer après le up B
                 self.upB = True # Effets spéciaux après upB (uniquement grounded)
     
-    def animation_attack(self,attack,inputs,stage):
+    def animation_attack(self,attack,inputs,stage,other):
         pass # à modifier pour chaque personnage dans <Personnage>.py
 
-    def act(self, inputs,stage):
+    def act(self, inputs,stage,other):
         self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage)
+        self.get_inputs(inputs,stage,other)
         self.move(stage)
         for i,hitbox in enumerate(self.active_hitboxes) :
             hitbox.update()
@@ -102,10 +105,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.charge = 0
 
 
-    def get_inputs(self, inputs, stage):
+    def get_inputs(self, inputs, stage, other):
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
-        left, right, up, down,jump, attack, special, shield = inputs # dissociation des inputs
+        left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
+        if not (left or right) :
+            self.dash = False
+        if not self.grounded and self.vy > -3 and down and not (attack or special or smash): # si le personnage est en fin de saut
+            if not self.fastfall:  # fastfall
+                self.vy = self.vy + self.fastfallspeed * 5
+            self.fastfall = True
         if self.hitstun: # Directional Influence
             if right:
                 self.vx += self.airspeed/10
@@ -117,12 +126,21 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vy += self.fallspeed/10
         else :
             if self.grounded and self.attack is None and not self.lag:
-                self.parry = shield
+                if (right or left) and shield:
+                    self.dash = True
+                else :
+                    self.parry = shield
             else :
                 self.parry = False
+            if self.attack is None :
+                self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 
+                if smash and self.grounded and (right or left):
+                    self.inputattack("ForwardSmash")
                 if right:            # Si on input à droite
+                    if special :
+                        self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
@@ -133,11 +151,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.inputattack("ForwardAir")
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
-                        self.vx += self.speed
+                        self.vx += self.dashspeed if self.dash else self.speed
                     else:             # Sinon, se déplace de la vitesse aérienne
                         self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
+                    if special :
+                        self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
@@ -146,20 +166,25 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.inputattack("BackAir")
                             else :
                                 self.inputattack("ForwardAir")
+                    
                     if self.grounded: # la même, mais vers la gauche
                         self.direction = -90
-                        self.vx -= self.speed
+                        self.vx -= self.dashspeed if self.dash else self.speed
                     else:
                         self.vx -= self.airspeed
-                if up and self.can_act:         # si on input vers le haut
+                if up:         # si on input vers le haut
                     if special and not self.upB : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
                         jump = False  # On input pas un saut en plus
                     if attack :
+                        jump = False
                         if self.grounded:
-                            pass
+                            self.inputattack("UpTilt")
                         else :
                             self.inputattack("UpAir")
+                    if smash and self.grounded:
+                        jump = False
+                        self.inputattack("UpSmash")
 
                 if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
@@ -186,10 +211,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("DownTilt")
                         else :
                             self.inputattack("DownAir")
-                    elif not self.grounded and self.vy > -3: # si le personnage est en fin de saut
-                        if not self.fastfall:  # on fastfall
-                            self.vy = self.vy + self.fastfallspeed * 5
-                        self.fastfall = True
+                    if special :
+                        self.inputattack("DownB")
+                    if smash and self.grounded:
+                        self.inputattack("DownSmash")
 
                 if not (left or right or up or down):
                     if special :
@@ -199,8 +224,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("Jab")
                         else :
                             self.inputattack("NeutralAir")
+                if attack and self.dash :
+                    self.inputattack("DashAttack")
+
             else : # si une attaque est exécutée, on anime la frame suivante
-                self.animation_attack(self.attack,inputs,stage)
+                self.animation_attack(self.attack,inputs,stage,other)
                 if not self.grounded:
                     if right: # drift en l'air
                         self.vx += self.airspeed/10
@@ -227,7 +255,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             while not self.rect.move(0,signe(self.vy)).colliderect(stage.rect):
                 self.rect.y += signe(self.vy)
             if self.hitstun:
-                self.vy = -self.vy
+                self.vy = -self.vy*0.5
             else :
                 self.vy = 0
 
@@ -238,17 +266,17 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             # déceleration et vitesse max
             if self.grounded :
                 self.vx *= self.deceleration
-            elif self.vx < -5*self.airspeed:
-                self.vx = self.airspeed*-5
-            elif self.vx > 5*self.airspeed:
-                self.vx = self.airspeed*5
+            elif self.vx < -3*self.airspeed:
+                self.vx = self.vx*0.8
+            elif self.vx > 3*self.airspeed:
+                self.vx = self.vx*0.8
             if abs(self.vx) < 0.01 :
                 self.vx = 0
 
         # Détection de si le personnage est au sol
         if self.rect.move(0,1).colliderect(stage.rect):
             if self.hitstun : # annule la vitesse de hitstun
-                self.vx *= 0.5
+                self.vx *= 0.8
             if not self.can_act : # permet de jouer après un upb
                 self.can_act = True
             if self.upB: # reset le upb
@@ -267,6 +295,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.damages = 0.
             self.vy = 0
             self.vx = 0
+            self.hitstun = 0
 
 
     def draw(self, window):
@@ -311,10 +340,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.attack = None # cancel l'attacue en cours
                 else :
                     self.parrying = True
-
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
-        for projectile in other.projectiles: # Détection des projectiles
+        for i,projectile in enumerate(other.projectiles): # Détection des projectiles
+            for h in self.active_hitboxes :
+                if h.deflect and h.hit.colliderect(projectile.rect):
+                    projectile.deflect(h.modifier)
+                    self.projectiles.append(projectile)
+                    del other.projectiles[i] # Supprime la hitbox
+                    return
+
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
                 if not self.parry : # Parry

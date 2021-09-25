@@ -31,7 +31,7 @@ def setup_controls(window,width,height,joysticks):
     player = 0
     run = True
     # liste des action
-    actions = ("Left","Right","Up","Down","Jump","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
+    actions = ("Left","Right","Up","Down","Jump","Attack","Special","Shield","Smash modifier","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
         window.fill((200,200,200))
         for e in pygame.event.get():
@@ -133,7 +133,7 @@ def main():
                 hold_pause = False
             
             if not pause:
-                inputs_1 = convert_inputs(controls[0])[0:8]
+                inputs_1 = convert_inputs(controls[0])[0:9]
                 if not inputs_1[4]: # Jump
                     Char_P1.jumping = False
 
@@ -145,10 +145,10 @@ def main():
                     parry1 = 0
 
                 # Transmission des inputs à l'objet Palyer 1
-                Char_P1.act(inputs_1, stage)
+                Char_P1.act(inputs_1, stage, Char_P2)
 
                 # P2
-                inputs_2 = convert_inputs(controls[1])[0:8]
+                inputs_2 = convert_inputs(controls[1])[0:9]
                 if not inputs_2[4]: # Jump
                     Char_P2.jumping = False
 
@@ -158,7 +158,7 @@ def main():
                         inputs_2[7] = False
                 else:
                     parry2 = 0
-                Char_P2.act(inputs_2, stage)
+                Char_P2.act(inputs_2, stage, Char_P1)
                 ########
 
                 Char_P2.collide(Char_P1)
@@ -167,12 +167,12 @@ def main():
                 Texte(f"Pause",("Arial",60,False,False),(0,0,0),width//2,height//2,800).draw(window)
 
             """ Affichage des éléments """
+
             ### Debug
             for h in Char_P1.active_hitboxes:
                 h.draw(window)
             for h in Char_P2.active_hitboxes:
                 h.draw(window)
-
             # Smoke
             if Char_P1.hitstun :
                 smoke.append(Smoke(Char_P1.rect.x+Char_P1.rect.w/2,Char_P1.rect.y+Char_P1.rect.h/2))
@@ -183,16 +183,16 @@ def main():
                 if s.duration <= 0:
                     del smoke[i]
             # Chars
-            Char_P1.draw(window)
             Char_P2.draw(window)
+            Char_P1.draw(window)
             # Stage
             stage.draw(window)
             # Damages
             Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages)))*25,height-30,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
             Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages)))*25,height-30,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
