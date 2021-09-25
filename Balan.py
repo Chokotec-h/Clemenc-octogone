@@ -8,7 +8,7 @@ exposant_sprite = [pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png") f
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
                          doublejumpheight=15)
         # Liste des frames
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]

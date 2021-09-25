@@ -35,7 +35,7 @@ class Hitbox():
         pygame.draw.rect(window,(255,0,0),(self.x+800,self.y+450,self.sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
-    def __init__(self, speed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
+    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
         self.damages = 0.0
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
@@ -47,6 +47,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.sprite = []            # Sprite vide (à remplir via <Personnage>.py)
 
         self.speed = speed          # vitesse au sol
+        self.dashspeed = dashspeed          # vitesse de dash
         self.airspeed = airspeed    # vitesse aérienne
         self.deceleration = deceleration  # vitesse de décélération (peut permettre de faire un perso qui glisse ;) )
         self.fallspeed = fallspeed  # vitesse de chute
@@ -108,6 +109,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
+        if not (left or right) :
+            self.dash = False
         if not self.grounded and self.vy > -3 and down and not (attack or special or smash): # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
                 self.vy = self.vy + self.fastfallspeed * 5
@@ -123,7 +126,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vy += self.fallspeed/10
         else :
             if self.grounded and self.attack is None and not self.lag:
-                self.parry = shield
+                if (right or left) and shield:
+                    self.dash = True
+                else :
+                    self.parry = shield
             else :
                 self.parry = False
             if self.attack is None :
@@ -145,7 +151,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.inputattack("ForwardAir")
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
-                        self.vx += self.speed
+                        self.vx += self.dashspeed if self.dash else self.speed
                     else:             # Sinon, se déplace de la vitesse aérienne
                         self.vx += self.airspeed
 
@@ -163,7 +169,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     
                     if self.grounded: # la même, mais vers la gauche
                         self.direction = -90
-                        self.vx -= self.speed
+                        self.vx -= self.dashspeed if self.dash else self.speed
                     else:
                         self.vx -= self.airspeed
                 if up:         # si on input vers le haut
@@ -218,6 +224,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("Jab")
                         else :
                             self.inputattack("NeutralAir")
+                if attack and self.dash :
+                    self.inputattack("DashAttack")
+
             else : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage,other)
                 if not self.grounded:
