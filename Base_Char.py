@@ -194,6 +194,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if attack :
                         if self.grounded:
                             self.inputattack("Jab")
+                        else :
+                            self.inputattack("NeutralAir")
             else : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage)
                 if not self.grounded:
