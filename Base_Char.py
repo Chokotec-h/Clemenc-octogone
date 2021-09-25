@@ -143,15 +143,21 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.doublejump[i] = True
 
                 if down : # Si on input vers le bas
-                    if not self.grounded and self.vy > -3: # si le personnage est en fin de saut
+                    
+                    if attack :
+                        if self.grounded :
+                            self.inputattack("DownTilt")
+                    elif not self.grounded and self.vy > -3: # si le personnage est en fin de saut
                         if not self.fastfall:  # on fastfall
                             self.vy = self.vy + self.fastfallspeed * 5
                         self.fastfall = True
+
                 if not (left or right or up or down):
                     if special :
                         self.inputattack("NeutralB")
                     if attack :
-                        self.inputattack("Jab")
+                        if self.grounded:
+                            self.inputattack("Jab")
             else : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage)
             self.frame += 1

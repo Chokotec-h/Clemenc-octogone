@@ -51,7 +51,7 @@ class Balan(Char):
                     self.direction = 90
                 self.rect.move_ip(0,-6)
                 self.sprite_frame = 1
-            if self.frame == 6: # Hitbox frame 6
+            if self.frame == 6: # Hitbox frame 6-11
                 if self.direction < 0 :
                     angle = pi/3
                 else:
@@ -75,16 +75,31 @@ class Balan(Char):
                 self.charge = 0
 
         if attack == "Jab":
-            if self.frame == 5 : # 1er hit frame 5
-                self.active_hitboxes.append(Hitbox(64*signe(self.direction),64,24,10,signe(self.direction),2,1.3,0,5,5,self))
-            if self.frame == 10 : # 2e hit frame 10
+            if self.frame == 5 : # 1er hit frame 5-10
+                if self.direction < 0:
+                    angle = pi/4
+                else:
+                    angle = 3*pi/4
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,64,24,10,angle,2,0.6,0,5,5,self))
+            if self.frame == 10 : # 2e hit frame 10-15
                 if self.direction < 0:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(64*signe(self.direction)+7,52,10,24,angle,4.5,2.5,1/1000,8,5,self))
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self))
 
-            if self.frame > 20: # 10 frames de lag
+            if self.frame > 25: # 10 frames de lag
+                self.attack = None
+
+        if attack == "DownTilt":
+            if self.frame == 8 : # Frame 8-13
+                if self.direction < 0:
+                    angle = 2*pi/3
+                else:
+                    angle = pi/3
+                self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,90,24,10,angle,3,3.8,1/500,10,5,self))
+
+            if self.frame > 20: # 7 frames de lag
                 self.attack = None
 
 class Projo_Craie():
