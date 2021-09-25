@@ -94,8 +94,6 @@ class Balan(Char):
                 self.attack = None
                 self.charge = 0
 
-                
-
         if attack == "SideB":
             if self.frame < 8 :
                 if left : # peut reverse netre les frames 1 et 7
@@ -386,6 +384,30 @@ class Balan(Char):
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
                 self.charge = 0
+
+        if attack == "DashAttack":
+            if self.frame < 26 :
+                self.vy = 0
+                if self.grounded :
+                    self.vx += self.dashspeed*signe(self.direction)
+                else :
+                    self.vx -= self.dashspeed*signe(self.direction)
+                
+            if self.frame < 21 and self.frame%5 == 0 and self.frame > 4: # active on 5/10/15/20
+                if self.direction < 0 :
+                    angle = 11*pi/12
+                else :
+                    angle = pi/12
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,32,32,angle,abs(self.vx),1.5,0,5,2,self,False))
+            if self.frame == 26: # active on 26
+                if self.direction < 0 :
+                    angle = 3*pi/4
+                else :
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,64,64,angle,9,3.5,1/250,10,3,self,False))
+            if self.frame > 50: # 24 frames de lag
+                self.attack = None
+            
                 
 
 class Projo_Craie():

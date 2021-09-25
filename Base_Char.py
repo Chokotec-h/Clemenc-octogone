@@ -73,6 +73,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.charge = 0
         self.parry = False
         self.parrying = False
+        self.lenght_parry = 0
 
         self.jumping = False
         self.dash = False # Unused
@@ -125,13 +126,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if down:
                 self.vy += self.fallspeed/10
         else :
-            if self.grounded and self.attack is None and not self.lag:
-                if (right or left) and shield:
+            if self.grounded and self.attack is None and not self.lag and shield:
+                if right or left:
                     self.dash = True
+                    self.parry = False
+                elif self.lenght_parry < 4:
+                    self.parry = True
                 else :
-                    self.parry = shield
+                    self.parry = False
+                self.lenght_parry = min(5,self.lenght_parry+1)
             else :
                 self.parry = False
+                self.lenght_parry = 0
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
@@ -224,7 +230,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("Jab")
                         else :
                             self.inputattack("NeutralAir")
-                if attack and self.dash :
+                if attack and self.dash and self.grounded:
                     self.inputattack("DashAttack")
 
             else : # si une attaque est exécutée, on anime la frame suivante
