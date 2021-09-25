@@ -145,7 +145,7 @@ def main():
                     parry1 = 0
 
                 # Transmission des inputs à l'objet Palyer 1
-                Char_P1.act(inputs_1, stage)
+                Char_P1.act(inputs_1, stage, Char_P2)
 
                 # P2
                 inputs_2 = convert_inputs(controls[1])[0:9]
@@ -158,7 +158,7 @@ def main():
                         inputs_2[7] = False
                 else:
                     parry2 = 0
-                Char_P2.act(inputs_2, stage)
+                Char_P2.act(inputs_2, stage, Char_P1)
                 ########
 
                 Char_P2.collide(Char_P1)
@@ -183,8 +183,8 @@ def main():
                 if s.duration <= 0:
                     del smoke[i]
             # Chars
-            Char_P1.draw(window)
             Char_P2.draw(window)
+            Char_P1.draw(window)
             # Stage
             stage.draw(window)
             # Damages
