@@ -173,9 +173,9 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,32,16,16,angle,10,12,1/150,15,6,self,False))
             if self.frame == 9 : # Frame 9-11
                 if self.direction < 0:
-                    angle = 0.1
+                    angle = 0
                 else:
-                    angle = pi-0.1
+                    angle = pi
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].angle = angle
                     self.active_hitboxes[-1].knockback = 3
@@ -217,6 +217,30 @@ class Balan(Char):
                 self.attack = None
                 if self.frame < 20 :
                     self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
+
+        if attack == "NeutralAir":
+            if self.frame == 3 : # Frame 3-6
+                if self.direction < 0:
+                    angle = 0
+                else:
+                    angle = pi
+                self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,angle,10,2,0,8,20,self))
+                self.active_hitboxes.append(Hitbox(8,32,32,32,pi/2,12,8,1/200,10,20,self,False))
+            if self.frame == 7 : # Frame 7-23
+                if self.active_hitboxes :
+                    if self.active_hitboxes[-1].angle == pi/2:
+                        self.active_hitboxes[-1].knockback = 3
+                        self.active_hitboxes[-1].damages = 3
+                        self.active_hitboxes[-1].damage_stacking = 1/250
+                        self.active_hitboxes[-1].stun = 6
+
+            if self.frame > 40: # 17 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 30 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
