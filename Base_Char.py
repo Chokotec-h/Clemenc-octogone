@@ -18,7 +18,7 @@ class Hitbox():
         self.damages = damages
         self.damages_stacking = damage_stacking
         self.stun = stun
-        self.duration = duration
+        self.duration = duration + 1 # Because duration is reduced on init (line 26)
         self.own = own
         self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
         self.deflect = deflect
@@ -126,6 +126,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 
+                if smash and self.grounded and (right or left):
+                    self.inputattack("ForwardSmash")
                 if right:            # Si on input à droite
                     if special :
                         self.inputattack("SideB")
@@ -140,8 +142,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.speed
-                        if smash :
-                            self.inputattack("ForwardSmash")
                     else:             # Sinon, se déplace de la vitesse aérienne
                         self.vx += self.airspeed
 
@@ -156,22 +156,25 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.inputattack("BackAir")
                             else :
                                 self.inputattack("ForwardAir")
+                    
                     if self.grounded: # la même, mais vers la gauche
                         self.direction = -90
                         self.vx -= self.speed
-                        if smash :
-                            self.inputattack("ForwardSmash")
                     else:
                         self.vx -= self.airspeed
-                if up and self.can_act:         # si on input vers le haut
+                if up:         # si on input vers le haut
                     if special and not self.upB : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
                         jump = False  # On input pas un saut en plus
                     if attack :
+                        jump = False
                         if self.grounded:
                             self.inputattack("UpTilt")
                         else :
                             self.inputattack("UpAir")
+                    if smash and self.grounded:
+                        jump = False
+                        self.inputattack("UpSmash")
 
                 if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
@@ -200,6 +203,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("DownAir")
                     if special :
                         self.inputattack("DownB")
+                    if smash and self.grounded:
+                        self.inputattack("DownSmash")
                     elif not self.grounded and self.vy > -3: # si le personnage est en fin de saut
                         if not self.fastfall:  # on fastfall
                             self.vy = self.vy + self.fastfallspeed * 5
@@ -262,7 +267,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Détection de si le personnage est au sol
         if self.rect.move(0,1).colliderect(stage.rect):
             if self.hitstun : # annule la vitesse de hitstun
-                self.vx *= 0.5
+                self.vx *= 0.8
             if not self.can_act : # permet de jouer après un upb
                 self.can_act = True
             if self.upB: # reset le upb
