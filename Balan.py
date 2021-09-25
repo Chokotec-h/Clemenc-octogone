@@ -234,13 +234,13 @@ class Balan(Char):
                         self.active_hitboxes[-1].damage_stacking = 1/250
                         self.active_hitboxes[-1].stun = 6
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame > 40: # 17 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 30 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
