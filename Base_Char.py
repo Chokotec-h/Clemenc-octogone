@@ -120,6 +120,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.parry = shield
             else :
                 self.parry = False
+            if self.attack is None :
+                self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 
                 if right:            # Si on input à droite
@@ -157,7 +159,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         jump = False  # On input pas un saut en plus
                     if attack :
                         if self.grounded:
-                            pass
+                            self.inputattack("UpTilt")
                         else :
                             self.inputattack("UpAir")
 

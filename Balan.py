@@ -225,7 +225,7 @@ class Balan(Char):
                 else:
                     angle = pi
                 self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,angle,10,2,0,8,20,self))
-                self.active_hitboxes.append(Hitbox(8,32,32,32,pi/2,12,8,1/200,10,20,self,False))
+                self.active_hitboxes.append(Hitbox(8,16,32,64,pi/2,12,8,1/200,10,20,self,False))
             if self.frame == 7 : # Frame 7-23
                 if self.active_hitboxes : # late hitbox
                     if self.active_hitboxes[-1].angle == pi/2:
@@ -241,6 +241,24 @@ class Balan(Char):
                 self.attack = None
                 if self.frame < 30 :
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+
+        if attack == "UpTilt":
+            if self.frame == 6 : # Frame 6-14
+                angle = pi/2
+                self.active_hitboxes.append(Hitbox(-20*signe(self.direction)+12,8,16,16,angle,9,8.2,1/250,10,8,self,False))
+            # Dessin du cercle
+            if self.active_hitboxes :
+                if self.frame < 9 : # Frames 7-8
+                    self.active_hitboxes[-1].y -= 8
+                    self.active_hitboxes[-1].sizey += 8
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 11 : # Frames 9-10
+                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                if self.frame < 13 : # Frames 11-12
+                    self.active_hitboxes[-1].sizey += 8
+            if self.frame > 25: # 11 Frames de lag
+                self.attack = None
+                
 
 class Projo_Craie():
     def __init__(self,id,own,stage):

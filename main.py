@@ -167,11 +167,6 @@ def main():
                 Texte(f"Pause",("Arial",60,False,False),(0,0,0),width//2,height//2,800).draw(window)
 
             """ Affichage des éléments """
-            ### Debug
-            for h in Char_P1.active_hitboxes:
-                h.draw(window)
-            for h in Char_P2.active_hitboxes:
-                h.draw(window)
 
             # Smoke
             if Char_P1.hitstun :
@@ -185,14 +180,19 @@ def main():
             # Chars
             Char_P1.draw(window)
             Char_P2.draw(window)
+            ### Debug
+            for h in Char_P1.active_hitboxes:
+                h.draw(window)
+            for h in Char_P2.active_hitboxes:
+                h.draw(window)
             # Stage
             stage.draw(window)
             # Damages
             Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages)))*25,height-30,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
             Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages)))*25,height-30,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
