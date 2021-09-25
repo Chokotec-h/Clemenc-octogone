@@ -108,6 +108,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
+        if not self.grounded and self.vy > -3 and down and not (attack or special or smash): # si le personnage est en fin de saut
+            if not self.fastfall:  # fastfall
+                self.vy = self.vy + self.fastfallspeed * 5
+            self.fastfall = True
         if self.hitstun: # Directional Influence
             if right:
                 self.vx += self.airspeed/10
@@ -205,10 +209,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.inputattack("DownB")
                     if smash and self.grounded:
                         self.inputattack("DownSmash")
-                    elif not self.grounded and self.vy > -3: # si le personnage est en fin de saut
-                        if not self.fastfall:  # on fastfall
-                            self.vy = self.vy + self.fastfallspeed * 5
-                        self.fastfall = True
 
                 if not (left or right or up or down):
                     if special :

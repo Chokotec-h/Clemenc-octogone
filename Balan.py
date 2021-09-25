@@ -316,9 +316,9 @@ class Balan(Char):
             elif self.frame == 12 : # Active on 12-18
                 self.charge = min(self.charge,100)
                 if self.direction < 0 :
-                    angle = 4*pi/6
+                    angle = 3*pi/4
                 else :
-                    angle = 2*pi/6
+                    angle = pi/4
                 self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/250,8*(self.charge/100+1),4,self,True,True,2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
@@ -330,9 +330,9 @@ class Balan(Char):
                 self.active_hitboxes[-1].relativex -= 20*signe(self.direction)
                 if self.frame > 11 :
                     if self.direction > 0 : # Reverse angle
-                        self.active_hitboxes[-1].angle = pi/4
+                        self.active_hitboxes[-1].angle = 2*pi/6
                     else :
-                        self.active_hitboxes[-1].angle = 3*pi/4
+                        self.active_hitboxes[-1].angle = 4*pi/6
                     self.active_hitboxes[-1].relativey -= 3
                 else :
                     self.active_hitboxes[-1].relativey += 3
@@ -348,9 +348,9 @@ class Balan(Char):
             elif self.frame == 10 : # Active on 10-15
                 self.charge = min(self.charge,100)
                 if self.direction < 0 :
-                    angle = pi/4
+                    angle = 2*pi/6
                 else :
-                    angle = 3*pi/4
+                    angle = 4*pi/6
                 self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
 
             if self.frame > 40: # 25 frames de lag
@@ -447,7 +447,10 @@ class Exposant():
         self.rect = pygame.Rect(-1000,1000,0,0)
     
     def update(self):
-        if self.duration == 2 :
+        if self.opponent.rect.y > 750 or  self.opponent.rect.y < -750 or  self.opponent.rect.x > 750 or  self.opponent.rect.x < -750:
+            self.duration = 0
+            self.charge = 0
+        if self.duration == 1 :
             self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,5*self.charge,10*self.charge,1/250,8*self.charge,5,self.opponent,False))
         self.duration -= 1
 
