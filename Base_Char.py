@@ -227,7 +227,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             while not self.rect.move(0,signe(self.vy)).colliderect(stage.rect):
                 self.rect.y += signe(self.vy)
             if self.hitstun:
-                self.vy = -self.vy
+                self.vy = -self.vy*0.5
             else :
                 self.vy = 0
 
@@ -238,10 +238,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             # déceleration et vitesse max
             if self.grounded :
                 self.vx *= self.deceleration
-            elif self.vx < -5*self.airspeed:
-                self.vx = self.airspeed*-5
-            elif self.vx > 5*self.airspeed:
-                self.vx = self.airspeed*5
+            elif self.vx < -3*self.airspeed:
+                self.vx = self.vx*0.8
+            elif self.vx > 3*self.airspeed:
+                self.vx = self.vx*0.8
             if abs(self.vx) < 0.01 :
                 self.vx = 0
 
@@ -267,6 +267,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.damages = 0.
             self.vy = 0
             self.vx = 0
+            self.hitstun = 0
 
 
     def draw(self, window):
