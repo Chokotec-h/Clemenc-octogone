@@ -90,7 +90,7 @@ class Balan(Char):
                     angle = pi/4
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self,False))
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 22: # 7 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
@@ -102,6 +102,20 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,90,24,10,angle,3,3.8,1/500,10,5,self,False))
 
             if self.frame > 20: # 7 frames de lag
+                self.attack = None
+
+        if attack == "ForwardTilt":
+            if self.frame == 6 : # 1er hit frame 6-12
+                angle = pi/2
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,58,24,24,angle,2,0.6,0,5,6,self))
+            if self.frame == 14 : # 2e hit frame 14-22
+                if self.direction < 0:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,58,24,24,angle,6,8,1/250,12,6,self,False))
+
+            if self.frame > 35: # 13 frames de lag
                 self.attack = None
 
         if attack == "UpAir":

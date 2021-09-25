@@ -68,6 +68,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.last_hit = 0
         self.lag = 0
 
+        self.dash = False # Unused
+
     def inputattack(self,attack):
         if self.can_act :
             self.frame = 0  # on démarre à la frame 0
@@ -110,6 +112,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         else :
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if right:            # Si on input à droite
+                    if attack :
+                        if self.grounded:
+                            self.inputattack("ForwardTilt")
                     if self.grounded: # Si le personnage est au sol
                         self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.speed
@@ -117,6 +122,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
+                    if attack :
+                        if self.grounded:
+                            self.inputattack("ForwardTilt")
                     if self.grounded: # la même, mais vers la gauche
                         self.direction = -90
                         self.vx -= self.speed
