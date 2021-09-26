@@ -73,6 +73,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.charge = 0
         self.parry = False
         self.parrying = False
+        self.lenght_parry = 0
 
         self.jumping = False
         self.dash = False # Unused
@@ -109,7 +110,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
-        if not (left or right) :
+        if not (left or right) or (left and self.direction > 0) or (right and self.direction < 0):
             self.dash = False
         if not self.grounded and self.vy > -3 and down and not (attack or special or smash): # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
@@ -125,13 +126,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if down:
                 self.vy += self.fallspeed/10
         else :
-            if self.grounded and self.attack is None and not self.lag:
-                if (right or left) and shield:
+            if self.grounded and self.attack is None and not self.lag and shield:
+                if right or left:
                     self.dash = True
+                    self.parry = False
+                elif self.lenght_parry < 4:
+                    self.parry = True
                 else :
-                    self.parry = shield
+                    self.parry = False
+                self.lenght_parry = min(5,self.lenght_parry+1)
             else :
                 self.parry = False
+                self.lenght_parry = 0
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
@@ -224,7 +230,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("Jab")
                         else :
                             self.inputattack("NeutralAir")
-                if attack and self.dash :
+                if attack and self.dash and self.grounded:
                     self.inputattack("DashAttack")
 
             else : # si une attaque est exécutée, on anime la frame suivante
