@@ -1,7 +1,6 @@
 import pygame
 from math import cos,sin,pi
 
-from pygame import draw
 from Animations import get_sprite
 
 def signe(val):
@@ -87,6 +86,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.name = "Name"
 
     def inputattack(self,attack):
+        self.animeframe = 0
         if self.can_act :
             self.frame = 0  # on démarre à la frame 0
             self.attack = attack  # on update l'action en cours

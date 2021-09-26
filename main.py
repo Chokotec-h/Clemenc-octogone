@@ -33,7 +33,7 @@ def setup_controls(window,width,height,joysticks):
     # liste des action
     actions = ("Left","Right","Up","Down","Fullhop","Shorthop","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
-        window.fill((200,200,200))
+        window.fill((200,220,200))
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
@@ -111,7 +111,7 @@ def main():
         hold_pause = False
         while run:  # Boucle du programme
 
-            window.fill((200, 220, 250)) # Réinitialisation de l'écran à chaque frame
+            window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
 
 
             # Récupération des events

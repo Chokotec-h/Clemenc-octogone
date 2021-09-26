@@ -119,20 +119,25 @@ class Balan(Char):
                 self.attack = None
 
         if attack == "Jab":
-            if self.frame == 5 : # 1er hit frame 5-10
+            self.animation = "jab"
+            if self.frame == 10 : # 1er hit frame 10-20
                 if not self.look_right:
                     angle = pi/4
+                    x = 0
                 else:
                     angle = 3*pi/4
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,64,24,10,angle,2,0.6,0,5,5,self))
-            if self.frame == 10 : # 2e hit frame 10-15
+                    x = 56
+                self.active_hitboxes.append(Hitbox(x,36,32*signe(self.direction),8,angle,2,0.6,0,5,10,self))
+            if self.frame == 25 : # 2e hit frame 25-35
                 if not self.look_right:
                     angle = 3*pi/4
+                    x = 12
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self,False))
+                    x = 64
+                self.active_hitboxes.append(Hitbox(x,32,8*signe(self.direction),32,angle,4.5,1.4,1/1000,8,10,self,False))
 
-            if self.frame > 22: # 7 frames de lag
+            if self.frame > 45: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
