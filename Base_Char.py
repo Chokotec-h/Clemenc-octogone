@@ -35,7 +35,7 @@ class Hitbox():
         pygame.draw.rect(window,(255,0,0),(self.x+800,self.y+450,self.sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
-    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, jumpheight, doublejumpheight):
+    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
         self.damages = 0.0
         self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
@@ -52,7 +52,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.deceleration = deceleration  # vitesse de décélération (peut permettre de faire un perso qui glisse ;) )
         self.fallspeed = fallspeed  # vitesse de chute
         self.fastfallspeed = fastfallspeed  # vitesse de fastfall
-        self.jumpheight = jumpheight # Hauter de saut
+        self.fullhop = fullhop # Hauteur de saut (full hop)
+        self.shorthop = shorthop # Hauteur de saut (short hop)
         self.doublejumpheight = doublejumpheight  # Hauteur des double sauts
 
         self.collidegroup = pygame.sprite.GroupSingle() # Groupe de collision (spécial à pygame)
@@ -110,10 +111,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def get_inputs(self, inputs, stage, other):
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
-        left, right, up, down,jump, attack, special, shield, smash = inputs # dissociation des inputs
+        left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
+        jump = fullhop or shorthop
+
         if not (left or right) or (left and self.direction > 0) or (right and self.direction < 0):
             self.dash = False
-        if not self.grounded and self.vy > -3 and down and not (attack or special or smash): # si le personnage est en fin de saut
+        if not self.grounded and self.vy > -3 and down and not (attack or special or C_Left or C_Right or C_Up or C_Down): # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
                 self.vy = self.vy + self.fastfallspeed * 5
             self.fastfall = True
@@ -142,9 +145,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
-                
-                if smash and self.grounded and (right or left):
-                    self.inputattack("ForwardSmash")
+                    
+                if (D_Left or D_Right or D_Up or D_Down) and self.grounded:
+                    self.inputattack("Taunt")
+
                 if right:            # Si on input à droite
                     self.look_right = True
                     if special :
@@ -191,14 +195,14 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("UpTilt")
                         else :
                             self.inputattack("UpAir")
-                    if smash and self.grounded:
-                        jump = False
-                        self.inputattack("UpSmash")
 
                 if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
                         self.jumping = True
-                        self.vy = -self.jumpheight # il utilise son premier saut
+                        if fullhop :
+                            self.vy = -self.fullhop # il utilise son premier saut
+                        else :
+                            self.vy = -self.shorthop # il utilise son premier saut
                         self.jumpsound.play() # joli son
 
                     else:  # Si le personnage est en l'air
@@ -222,8 +226,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("DownAir")
                     if special :
                         self.inputattack("DownB")
-                    if smash and self.grounded:
-                        self.inputattack("DownSmash")
 
                 if not (left or right or up or down):
                     if special :
@@ -233,8 +235,38 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("Jab")
                         else :
                             self.inputattack("NeutralAir")
+
                 if attack and self.dash and self.grounded:
                     self.inputattack("DashAttack")
+
+                if C_Left : # C-Stick inputs
+                    if self.grounded: # Smash
+                        self.direction = -90
+                        self.inputattack("ForwardSmash")
+                    else : # Aerial
+                        if self.direction < 0 :
+                            self.inputattack("ForwardAir")
+                        else :
+                            self.inputattack("BackAir")
+                if C_Right:
+                    if self.grounded: # Smash
+                        self.direction = 90
+                        self.inputattack("ForwardSmash")
+                    else : # Aerial
+                        if self.direction > 0 :
+                            self.inputattack("ForwardAir")
+                        else :
+                            self.inputattack("BackAir")
+                if C_Down:
+                    if self.grounded: # Smash
+                        self.inputattack("DownSmash")
+                    else : # Aerial
+                        self.inputattack("DownAir")
+                if C_Up:
+                    if self.grounded: # Smash
+                        self.inputattack("UpSmash")
+                    else : # Aerial
+                        self.inputattack("UpAir")
 
             else : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage,other)

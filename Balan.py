@@ -8,7 +8,7 @@ exposant_sprite = [pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png") f
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=12, shorthop=6,
                          doublejumpheight=15)
         # Liste des frames
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
@@ -38,7 +38,8 @@ class Balan(Char):
             self.charge = 0
 
     def animation_attack(self,attack,inputs,stage,other):
-        left, right, up, down,jump, attack_button, special, shield, smash = inputs # dissociation des inputs
+        left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
+        smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
             if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
@@ -420,6 +421,10 @@ class Balan(Char):
                     angle = pi/4
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,64,64,angle,9,3.5,1/250,10,3,self,False))
             if self.frame > 50: # 24 frames de lag
+                self.attack = None
+
+        if attack == "Taunt":
+            if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
 ###################          

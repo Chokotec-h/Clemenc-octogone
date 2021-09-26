@@ -39,7 +39,7 @@ def convert_inputs(controls):
         if c[0] == "Keyboard":
             bool_list.append(keys[c[1]])
         if c[0] == "Joy":
-            if abs(c[1].get_axis(c[2])) > 0.3 and signe(c[1].get_axis(c[2])) == signe(c[-1]):
+            if abs(c[1].get_axis(c[2])) > 0.6 and signe(c[1].get_axis(c[2])) == signe(c[-1]):
                 bool_list.append(True)
             else :
                 bool_list.append(False)

@@ -18,7 +18,9 @@ class Nom_Personnage(Char):
 
 
     def animation_attack(self,attack,inputs,stage,other):
-        left, right, up, down,jump, attack_button, special, shield, smash = inputs # dissociation des inputs
+        left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
+        smash = C_Down or C_Left or C_Right or C_Up
+
         if attack == "UpB":
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
@@ -202,6 +204,10 @@ class Nom_Personnage(Char):
                     self.vx -= self.dashspeed*signe(self.direction)
 
             if self.frame > 50: #  frames de lag
+                self.attack = None
+
+        if attack == "Taunt":
+            if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
 ###################          
