@@ -63,7 +63,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.attack = None          # Attaque en cours
         self.sprite_frame = 0       # numéro de l'image à afficher
         self.can_act = True         # Le personnage peut-il agir ?
-        self.upB = False         # Le personnage peut-il agir ?
+        self.upB = False            # Le personnage peut-il agir ?
+        self.look_right = True
 
         self.hitstun = 0            # Frames de hitstun
         self.active_hitboxes = list() # Liste des hitbox actives
@@ -145,6 +146,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if smash and self.grounded and (right or left):
                     self.inputattack("ForwardSmash")
                 if right:            # Si on input à droite
+                    self.look_right = True
                     if special :
                         self.inputattack("SideB")
                     if attack :
@@ -162,6 +164,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
+                    self.look_right = False
                     if special :
                         self.inputattack("SideB")
                     if attack :

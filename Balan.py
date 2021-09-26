@@ -52,10 +52,12 @@ class Balan(Char):
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame == 6: # Hitbox frame 6-11
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = pi/3
                 else:
                     angle = 2*pi/3
@@ -68,8 +70,10 @@ class Balan(Char):
                 self.charge = min(100,self.charge+1)
                 if left : # peut changer de direction
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             elif self.frame == 5 : # 5 frames après relache
                     for i in range(0,(self.charge-1)//20+1):
                         self.projectiles.append(Projo_Craie(i,self,stage))
@@ -83,8 +87,10 @@ class Balan(Char):
                 self.charge = min(199,self.charge+1)
                 if left : # peut changer de direction
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame == 5 : # 5 frames après relache
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction),32,32,64,0,0,0,0,0,20,self))
                 self.active_hitboxes[-1].update()
@@ -98,16 +104,18 @@ class Balan(Char):
             if self.frame < 8 :
                 if left : # peut reverse netre les frames 1 et 7
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame == 8 :
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
                 self.active_hitboxes.append(Hitbox(16,30,32,32,angle,30,10,0,12,3,self,False))
             if self.frame == 10 : # Active on 10-70
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
@@ -120,13 +128,13 @@ class Balan(Char):
 
         if attack == "Jab":
             if self.frame == 5 : # 1er hit frame 5-10
-                if self.direction < 0:
+                if not self.look_right:
                     angle = pi/4
                 else:
                     angle = 3*pi/4
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,64,24,10,angle,2,0.6,0,5,5,self))
             if self.frame == 10 : # 2e hit frame 10-15
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
@@ -137,7 +145,7 @@ class Balan(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 3*pi/5
                 else:
                     angle = 2*pi/5
@@ -151,7 +159,7 @@ class Balan(Char):
                 angle = pi/2
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,58,24,24,angle,2,0.6,0,5,6,self))
             if self.frame == 14 : # 2e hit frame 14-22
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
@@ -182,7 +190,7 @@ class Balan(Char):
                 angle = pi/2
                 self.active_hitboxes.append(Hitbox(-1,-10,50,10,angle,0,2.5,1/1000,4,5,self))
             if self.frame == 10 : # Frame 10-15
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
@@ -198,13 +206,13 @@ class Balan(Char):
 
         if attack == "ForwardAir":
             if self.frame == 15 : # Frame 15-16
-                if self.direction < 0:
+                if not self.look_right:
                     angle = -3*pi/4
                 else:
                     angle = -pi/4
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,16,32,angle,10,14,1/150,18,6,self,False))
             if self.frame == 17 : # Frame 17-21
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
@@ -226,13 +234,13 @@ class Balan(Char):
 
         if attack == "BackAir":
             if self.frame == 6 : # Frame 6-8
-                if self.direction < 0:
+                if self.look_right:
                     angle = 0
                 else:
                     angle = pi
                 self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,32,16,16,angle,10,12,1/150,15,6,self,False))
             if self.frame == 9 : # Frame 9-11
-                if self.direction < 0:
+                if self.look_right:
                     angle = 0
                 else:
                     angle = pi
@@ -253,13 +261,13 @@ class Balan(Char):
 
         if attack == "DownAir":
             if self.frame == 10 : # Frame 10
-                if self.direction < 0:
+                if not self.look_right:
                     angle = -pi/3
                 else:
                     angle = -2*pi/3
                 self.active_hitboxes.append(Hitbox(16,90,24,32,angle,2,12,1/20,5,5,self,False))
             if self.frame == 11 : # Frame 11-15
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 4*pi/6
                 else:
                     angle = 2*pi/6
@@ -280,7 +288,7 @@ class Balan(Char):
 
         if attack == "NeutralAir":
             if self.frame == 3 : # Frame 3-6
-                if self.direction < 0:
+                if not self.look_right:
                     angle = 0
                 else:
                     angle = pi
@@ -306,18 +314,20 @@ class Balan(Char):
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.charge = self.charge+1
             elif self.frame == 12 : # Active on 12-18
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 3*pi/4
                 else :
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/250,8*(self.charge/100+1),4,self,True,True,2))
+                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/50,8*(self.charge/100+3),4,self,True,True,2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -327,7 +337,7 @@ class Balan(Char):
             if self.active_hitboxes: # Moving hitbox
                 self.active_hitboxes[-1].relativex -= 20*signe(self.direction)
                 if self.frame > 11 :
-                    if self.direction > 0 : # Reverse angle
+                    if not self.look_right : # Reverse angle
                         self.active_hitboxes[-1].angle = 2*pi/6
                     else :
                         self.active_hitboxes[-1].angle = 4*pi/6
@@ -338,14 +348,16 @@ class Balan(Char):
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 6
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-15
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 2*pi/6
                 else :
                     angle = 4*pi/6
@@ -360,14 +372,16 @@ class Balan(Char):
             if self.frame < 2 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.direction = -90
+                    self.look_right = False
                 if right :
                     self.direction = 90
+                    self.look_right = True
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 5*pi/6
                 else :
                     angle = pi/6
@@ -375,7 +389,7 @@ class Balan(Char):
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = pi/6
                 else :
                     angle = 5*pi/6
@@ -394,13 +408,13 @@ class Balan(Char):
                     self.vx -= self.dashspeed*signe(self.direction)
                 
             if self.frame < 21 and self.frame%5 == 0 and self.frame > 4: # active on 5/10/15/20
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 11*pi/12
                 else :
                     angle = pi/12
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,32,32,angle,abs(self.vx),1.5,0,5,2,self,False))
             if self.frame == 26: # active on 26
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 3*pi/4
                 else :
                     angle = pi/4
@@ -425,7 +439,7 @@ class Projo_Craie():
         self.duration = 5
         self.stage = stage
         self.damages_stacking=0
-        if own.direction < 0 :
+        if not own.look_right :
             self.angle = 3*pi/4
         else :
             self.angle = pi/4
