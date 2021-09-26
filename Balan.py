@@ -357,8 +357,8 @@ class Balan(Char):
 
         if attack == "DownSmash":
 
-            if self.frame < 2 :
-                if left : # peut reverse netre les frames 1 et 5
+            if self.frame < 3 :
+                if left : # peut reverse netre les frames 1 et 2
                     self.direction = -90
                 if right :
                     self.direction = 90
