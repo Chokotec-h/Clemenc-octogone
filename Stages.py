@@ -10,7 +10,7 @@ class Stage:
 
     def draw(self, window):
         # Position réelle
-        pos = [self.rect.x+800, self.rect.y+448]
+        pos = [self.rect.x+800, self.rect.y+449]
 
         # Affichage du stage
         #self.rect.move(self.rect)

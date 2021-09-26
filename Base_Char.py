@@ -245,6 +245,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                 if attack and self.dash and self.grounded:
                     self.inputattack("DashAttack")
+                    self.dash = False
 
                 if C_Left : # C-Stick inputs
                     if self.grounded: # Smash
@@ -353,7 +354,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         size = [size[0]*3,size[1]*3,size[2]*3,size[3]*3] # Rescale
         pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
-        self.rect.y -=  size[3] - self.rect.h
+        self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
         self.rect.w = size[2]
         self.rect.h = size[3]
 

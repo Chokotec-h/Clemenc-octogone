@@ -111,7 +111,7 @@ class Balan(Char):
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(8,94,32,10,angle,3,4,1/250,3,60,self,False))
+                self.active_hitboxes.append(Hitbox(8,82,32,10,angle,3,4,1/250,3,60,self,False))
             if self.frame > 9 and self.frame < 71: # Déplacement
                 self.vx = 15*signe(self.direction)/(self.frame/10)
                 self.vy = 1
@@ -141,7 +141,7 @@ class Balan(Char):
                     angle = 3*pi/5
                 else:
                     angle = 2*pi/5
-                self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,90,24,10,angle,8,3.8,1/200,10,5,self,False))
+                self.active_hitboxes.append(Hitbox(35*signe(self.direction)+11,80,24,10,angle,8,3.8,1/200,10,5,self,False))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
