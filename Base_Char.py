@@ -39,6 +39,7 @@ class Hitbox():
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
     def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
+        self.x = 0
         self.damages = 0.0
         self.direction = 90
         self.vx = 0           # vitesse (x,y)
@@ -141,14 +142,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if right or left:
                     self.dash = True
                     self.parry = False
-                elif self.lenght_parry < 4:
+                elif self.lenght_parry < 3:
                     self.parry = True
                 else :
                     self.parry = False
-                self.lenght_parry = min(5,self.lenght_parry+1)
+                    self.lag = 10
+                self.lenght_parry = self.lenght_parry+1
             else :
                 self.parry = False
-                self.lenght_parry = 0
+                if not shield :
+                    self.lenght_parry = 0
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
@@ -297,7 +300,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if nextframe.colliderect(stage.rect):
             while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.rect):
                 self.rect.x += signe(self.vx)
-            self.rect.x -= signe(self.vx)
+                self.x += signe(self.vx)
+            self.x -= signe(self.vx)
             self.vx = 0
         nextframe = self.rect.move(0,self.vy)
         if nextframe.colliderect(stage.rect):
@@ -310,7 +314,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         # Déplacement
         self.rect.y += self.vy
-        self.rect.x += round(self.vx)
+        self.x += round(self.vx)
         if not self.hitstun :
             # déceleration et vitesse max
             if self.grounded :
@@ -340,11 +344,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # respawn
         if self.rect.y > 800 or self.rect.y < -800 or self.rect.x < -900 or self.rect.x > 900 :
             self.rect.y = -200
-            self.rect.x = 0
+            self.x = 0
             self.damages = 0.
             self.vy = 0
             self.vx = 0
             self.hitstun = 0
+        self.rect.x = self.x - self.rect.w/2
 
 
     def draw(self, window):
@@ -352,11 +357,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
         size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
-        pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
+        pos = [self.x + 800 - size[2]/2, self.rect.y + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
-        self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
-        self.rect.w = size[2]
-        self.rect.h = size[3]
+        #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
 
         # debug
         if self.parry:
@@ -372,9 +375,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.rect.colliderect(hitbox.hit):
                 if not self.parry : # Parry
                     if hitbox.position_relative : # Reverse hit
-                        if self.rect.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
+                        if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
-                        if self.rect.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
+                        if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
                         
                     self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x

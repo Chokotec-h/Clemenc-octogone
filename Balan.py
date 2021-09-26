@@ -11,7 +11,7 @@ class Balan(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
-        self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
+        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Balan"
 
@@ -120,24 +120,24 @@ class Balan(Char):
 
         if attack == "Jab":
             self.animation = "jab"
-            if self.frame == 10 : # 1er hit frame 10-20
+            if self.frame == 3 : # 1er hit frame 3-6
                 if not self.look_right:
                     angle = pi/4
-                    x = 0
+                    x = -44
                 else:
                     angle = 3*pi/4
-                    x = 56
-                self.active_hitboxes.append(Hitbox(x,36,32*signe(self.direction),8,angle,2,0.6,0,5,10,self))
-            if self.frame == 25 : # 2e hit frame 25-35
+                    x = 44
+                self.active_hitboxes.append(Hitbox(x,36,48,24,angle,2,0.6,0,5,4,self))
+            if self.frame == 9 : # 2e hit frame 9-12
                 if not self.look_right:
                     angle = 3*pi/4
-                    x = 12
+                    x = -44
                 else:
                     angle = pi/4
-                    x = 64
-                self.active_hitboxes.append(Hitbox(x,32,8*signe(self.direction),32,angle,4.5,1.4,1/1000,8,10,self,False))
+                    x = 24
+                self.active_hitboxes.append(Hitbox(x,20,68,48,angle,4.5,1.4,1/1000,8,4,self,False))
 
-            if self.frame > 45: # 10 frames de lag
+            if self.frame > 22: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
@@ -454,8 +454,8 @@ class Projo_Craie():
         self.y += self.vy
         self.vy += 0.3
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.rect.w *= 3 # Rescale
-        self.rect.h *= 3 # Rescale
+        self.rect.w *= 1.5 # Rescale
+        self.rect.h *= 1.5 # Rescale
         if self.y > 800 :
             self.duration = 0
 

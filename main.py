@@ -98,6 +98,7 @@ def main():
     Char_P2 = Chars.Balan2()
     stage = Stages.Stage()
     smoke = list()
+    smokeframe = 0
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")
@@ -157,9 +158,11 @@ def main():
             for h in Char_P2.active_hitboxes:
                 h.draw(window)
             # Smoke
-            if Char_P1.hitstun :
+            smokeframe += 1
+            smokeframe = smokeframe%4
+            if Char_P1.hitstun and smokeframe == 0:
                 smoke.append(Smoke(Char_P1.rect.x+Char_P1.rect.w/2,Char_P1.rect.y+Char_P1.rect.h/2))
-            if Char_P2.hitstun :
+            if Char_P2.hitstun and smokeframe == 0:
                 smoke.append(Smoke(Char_P2.rect.x+Char_P2.rect.w/2,Char_P2.rect.y+Char_P2.rect.h/2))
             for i,s in enumerate(smoke):
                 s.draw(window)
