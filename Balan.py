@@ -8,7 +8,7 @@ exposant_sprite = [pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png") f
 
 class Balan(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=12, shorthop=6,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
         # Liste des frames
         self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
@@ -52,10 +52,8 @@ class Balan(Char):
                 self.sprite_frame = 1
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             if self.frame == 6: # Hitbox frame 6-11
                 if not self.look_right :
@@ -70,10 +68,8 @@ class Balan(Char):
                 self.frame = 0
                 self.charge = min(100,self.charge+1)
                 if left : # peut changer de direction
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             elif self.frame == 5 : # 5 frames après relache
                     for i in range(0,(self.charge-1)//20+1):
@@ -87,10 +83,8 @@ class Balan(Char):
                 self.frame = 0
                 self.charge = min(199,self.charge+1)
                 if left : # peut changer de direction
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             if self.frame == 5 : # 5 frames après relache
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction),32,32,64,0,0,0,0,0,20,self))
@@ -104,10 +98,8 @@ class Balan(Char):
         if attack == "SideB":
             if self.frame < 8 :
                 if left : # peut reverse netre les frames 1 et 7
-                    self.direction = -90
                     self.look_right = False
-                if right :
-                    self.direction = 90
+                if right :                    
                     self.look_right = True
             if self.frame == 8 :
                 if not self.look_right:
@@ -235,7 +227,7 @@ class Balan(Char):
 
         if attack == "BackAir":
             if self.frame == 6 : # Frame 6-8
-                if self.look_right:
+                if not self.look_right:
                     angle = 0
                 else:
                     angle = pi
@@ -314,10 +306,8 @@ class Balan(Char):
         if attack == "ForwardSmash":
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
@@ -338,7 +328,7 @@ class Balan(Char):
             if self.active_hitboxes: # Moving hitbox
                 self.active_hitboxes[-1].relativex -= 20*signe(self.direction)
                 if self.frame > 11 :
-                    if not self.look_right : # Reverse angle
+                    if self.look_right : # Reverse angle
                         self.active_hitboxes[-1].angle = 2*pi/6
                     else :
                         self.active_hitboxes[-1].angle = 4*pi/6
@@ -348,10 +338,8 @@ class Balan(Char):
 
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 6
@@ -372,10 +360,8 @@ class Balan(Char):
 
             if self.frame < 3 :
                 if left : # peut reverse netre les frames 1 et 2
-                    self.direction = -90
                     self.look_right = False
                 if right :
-                    self.direction = 90
                     self.look_right = True
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4

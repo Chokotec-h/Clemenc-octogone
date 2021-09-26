@@ -24,9 +24,9 @@ class Nom_Personnage(Char):
         if attack == "UpB":
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
+                    self.look_right = False
                 if right :
-                    self.direction = 90
+                    self.look_right = True
             if self.frame == 11: # Saute frame 11
                 self.sprite_frame = 0
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -35,7 +35,7 @@ class Nom_Personnage(Char):
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
 
             #if self.frame == 6: # Hitbox frame 6-11
-            #    if self.direction < 0 :
+            #    if not self.look_right :
             #        angle = pi/3
             #    else:
             #        angle = 2*pi/3
@@ -54,9 +54,9 @@ class Nom_Personnage(Char):
         if attack == "SideB":
             if self.frame < 8 :
                 if left : # peut reverse netre les frames 1 et 7
-                    self.direction = -90
+                    self.look_right = False
                 if right :
-                    self.direction = 90
+                    self.look_right = True
             if self.frame > 95 : #  frames de lag
                 self.attack = None
 
@@ -124,16 +124,16 @@ class Nom_Personnage(Char):
         if attack == "ForwardSmash":
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
+                    self.look_right = False
                 if right :
-                    self.direction = 90
+                    self.look_right = True
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.charge = self.charge+1
 
             #elif self.frame == 12 : # Active on 12-18
             #    self.charge = min(self.charge,100)
-            #    if self.direction < 0 :
+            #    if not self.look_right :
             #        angle = 3*pi/4
             #    else :
             #        angle = pi/4
@@ -146,16 +146,16 @@ class Nom_Personnage(Char):
         if attack == "UpSmash":
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
+                    self.look_right = False
                 if right :
-                    self.direction = 90
+                    self.look_right = True
             if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 6
                 self.charge = self.charge+1
 
             #elif self.frame == 10 : # Active on 10-15
             #    self.charge = min(self.charge,100)
-            #    if self.direction < 0 :
+            #    if not self.look_right :
             #        angle = 2*pi/6
             #    else :
             #        angle = 4*pi/6
@@ -169,15 +169,15 @@ class Nom_Personnage(Char):
 
             if self.frame < 2 :
                 if left : # peut reverse netre les frames 1 et 5
-                    self.direction = -90
+                    self.look_right = False
                 if right :
-                    self.direction = 90
+                    self.look_right = True
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = 5*pi/6
                 else :
                     angle = pi/6
@@ -185,7 +185,7 @@ class Nom_Personnage(Char):
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
-                if self.direction < 0 :
+                if not self.look_right :
                     angle = pi/6
                 else :
                     angle = 5*pi/6

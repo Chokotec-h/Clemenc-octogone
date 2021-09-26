@@ -38,7 +38,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight):
         pygame.sprite.Sprite.__init__(self)
         self.damages = 0.0
-        self.direction = 90         # direction (permet de savoir si le sprite doit être orienté à gauche ou à droite)
+        self.direction = 90
         self.vx = 0           # vitesse (x,y)
         self.vy = 0
         self.grounded = False       # Le personnage touche-t-il le sol ?
@@ -109,12 +109,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 
     def get_inputs(self, inputs, stage, other):
+        self.direction = 90 if self.look_right else -90
         self.lag = max(0,self.lag-1)
         self.hitstun = max(0, self.hitstun-1)
         left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         jump = fullhop or shorthop
 
-        if not (left or right) or (left and self.direction > 0) or (right and self.direction < 0):
+        if not (left or right) or (left and self.look_right) or (right and not self.look_right):
             self.dash = False
         if not self.grounded and self.vy > -3 and down and not (attack or special or C_Left or C_Right or C_Up or C_Down): # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
@@ -150,38 +151,36 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.inputattack("Taunt")
 
                 if right:            # Si on input à droite
-                    self.look_right = True
                     if special :
                         self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
                         else :
-                            if self.direction < 0 :
+                            if not self.look_right :
                                 self.inputattack("BackAir")
                             else :
                                 self.inputattack("ForwardAir")
                     if self.grounded: # Si le personnage est au sol
-                        self.direction = 90  # tourne à droite et se déplace de la vitesse au sol
+                        self.look_right = True  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.dashspeed if self.dash else self.speed
                     else:             # Sinon, se déplace de la vitesse aérienne
                         self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
-                    self.look_right = False
                     if special :
                         self.inputattack("SideB")
                     if attack :
                         if self.grounded:
                             self.inputattack("ForwardTilt")
                         else :
-                            if self.direction > 0 :
+                            if self.look_right :
                                 self.inputattack("BackAir")
                             else :
                                 self.inputattack("ForwardAir")
                     
                     if self.grounded: # la même, mais vers la gauche
-                        self.direction = -90
+                        self.look_right = False
                         self.vx -= self.dashspeed if self.dash else self.speed
                     else:
                         self.vx -= self.airspeed
@@ -241,19 +240,19 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                 if C_Left : # C-Stick inputs
                     if self.grounded: # Smash
-                        self.direction = -90
+                        self.look_right = False
                         self.inputattack("ForwardSmash")
                     else : # Aerial
-                        if self.direction < 0 :
+                        if not self.look_right :
                             self.inputattack("ForwardAir")
                         else :
                             self.inputattack("BackAir")
                 if C_Right:
-                    if self.grounded: # Smash
-                        self.direction = 90
+                    if self.grounded : # Smash
+                        self.look_right = True
                         self.inputattack("ForwardSmash")
                     else : # Aerial
-                        if self.direction > 0 :
+                        if self.look_right :
                             self.inputattack("ForwardAir")
                         else :
                             self.inputattack("BackAir")
@@ -342,7 +341,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def draw(self, window):
 
         ### à supprimer, provisoire pour le retournement
-        if self.direction < 0:
+        if not self.look_right:
             sprite = pygame.transform.flip(self.sprite[self.sprite_frame], True, False)
         else:
             sprite = self.sprite[self.sprite_frame]
