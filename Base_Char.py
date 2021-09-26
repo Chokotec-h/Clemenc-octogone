@@ -350,8 +350,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def draw(self, window):
         drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe+1,self.look_right)
 
-        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*3),round(drawing_sprite.get_size()[1]*3))) # Rescale
-        size = [size[0]*3,size[1]*3,size[2]*3,size[3]*3] # Rescale
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
         pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
         self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
