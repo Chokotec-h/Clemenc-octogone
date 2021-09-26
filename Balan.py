@@ -63,6 +63,7 @@ class Balan(Char):
             #self.can_act = False
             if self.frame < 5 and special : # Chargement jusqu'à 100 frames
                 self.frame = 0
+                self.animeframe -= 1
                 self.charge = min(100,self.charge+1)
                 if left : # peut changer de direction
                     self.look_right = False
@@ -78,6 +79,7 @@ class Balan(Char):
         if attack == "DownB":
             if self.frame < 5 and special: # Chargement jusqu'à 200 frames
                 self.frame = 0
+                self.animeframe -= 1
                 self.charge = min(199,self.charge+1)
                 if left : # peut changer de direction
                     self.look_right = False
@@ -230,7 +232,7 @@ class Balan(Char):
                     angle = pi
                 self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,32,16,16,angle,10,12,1/150,15,6,self,False))
             if self.frame == 9 : # Frame 9-11
-                if self.look_right:
+                if not self.look_right:
                     angle = 0
                 else:
                     angle = pi
@@ -308,6 +310,7 @@ class Balan(Char):
                     self.look_right = True
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
+                self.animeframe -= 1
                 self.charge = self.charge+1
             elif self.frame == 12 : # Active on 12-18
                 self.charge = min(self.charge,100)
@@ -339,6 +342,7 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.animeframe -= 1
                 self.frame = 6
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-15
@@ -361,6 +365,7 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.animeframe -= 1
                 self.frame = 4
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
