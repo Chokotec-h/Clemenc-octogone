@@ -2,7 +2,7 @@ from Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
-exposant_sprite = [pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png") for i in range(5)]
+exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png"),(48,48)) for i in range(5)]
 
 ##### M Balan
 
@@ -418,7 +418,7 @@ class Projo_Craie():
     def __init__(self,id,own,stage):
         # Craies de M Balan
         self.id = id+1
-        self.sprite = pygame.image.load("./DATA/Images/Sprites/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png")
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
@@ -437,7 +437,7 @@ class Projo_Craie():
 
     def update(self):
         if self.rect.colliderect(self.stage.rect) :
-            self.sprite = pygame.image.load("./DATA/Images/Sprites/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png")
+            self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
             self.y -= 3
             self.duration -= 1
             self.vx = 0
@@ -482,7 +482,7 @@ class Exposant():
 
     def draw(self,window):
         self.x = self.opponent.rect.x+self.opponent.rect.w
-        self.y = self.opponent.rect.y-30
+        self.y = self.opponent.rect.y-50
         window.blit(exposant_sprite[self.duration//120],(self.x+800,self.y+450))
 
 ##### Autres skins
