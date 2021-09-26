@@ -7,8 +7,13 @@ Balan = {
     "run":("./DATA/Images/Sprites/Balan/Default/balan_run.png",((2,3,21,29),(34,3,22,29),(34,4,22,28),(99,4,20,28)),5,True)
 }
 
+BalanM = dict()
+for s in Balan:
+    BalanM[s] = (Balan[s][0].replace("Default","Masked"),Balan[s][1],Balan[s][2],Balan[s][3])
+
 animations = {
-    "Balan":Balan
+    "Balan":Balan,
+    "BalanM":BalanM
 }
 
 def get_sprite(animation,char,newframe,right):

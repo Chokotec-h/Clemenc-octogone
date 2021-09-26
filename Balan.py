@@ -303,11 +303,6 @@ class Balan(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "ForwardSmash":
-            if self.frame < 5 :
-                if left : # peut reverse netre les frames 1 et 5
-                    self.look_right = False
-                if right :
-                    self.look_right = True
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.animeframe -= 1
@@ -495,4 +490,4 @@ class Exposant():
 class Balan2(Balan):
     def __init__(self) -> None:
         super().__init__()
-        
+        self.name = "BalanM"
