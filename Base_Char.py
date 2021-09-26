@@ -1,6 +1,9 @@
 import pygame
 from math import cos,sin,pi
 
+from pygame import draw
+from Animations import get_sprite
+
 def signe(val):
     if val == 0:
         return 0
@@ -44,7 +47,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.grounded = False       # Le personnage touche-t-il le sol ?
         self.fastfall = False       # Le personnage fastfall-t-il ?
         self.doublejump = [False]   # Liste des double sauts, ainsi que de leur utilisation
-        self.sprite = []            # Sprite vide (à remplir via <Personnage>.py)
 
         self.speed = speed          # vitesse au sol
         self.dashspeed = dashspeed          # vitesse de dash
@@ -79,6 +81,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.jumping = False
         self.dash = False # Unused
+
+        self.animeframe = 0
+        self.animation = "idle"
+        self.name = "Name"
 
     def inputattack(self,attack):
         if self.can_act :
@@ -115,7 +121,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         jump = fullhop or shorthop
 
-        if not (left or right) or (left and self.look_right) or (right and not self.look_right):
+        if not (left or right) or (left and self.look_right) or (right and not self.look_right): # Cancel le dash au changement de direction
             self.dash = False
         if not self.grounded and self.vy > -3 and down and not (attack or special or C_Left or C_Right or C_Up or C_Down): # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
@@ -146,7 +152,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
-                    
+                self.animation = "idle"
                 if (D_Left or D_Right or D_Up or D_Down) and self.grounded:
                     self.inputattack("Taunt")
 
@@ -162,6 +168,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             else :
                                 self.inputattack("ForwardAir")
                     if self.grounded: # Si le personnage est au sol
+                        self.animation = "run" if self.dash else "walk"
                         self.look_right = True  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.dashspeed if self.dash else self.speed
                     else:             # Sinon, se déplace de la vitesse aérienne
@@ -180,6 +187,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.inputattack("ForwardAir")
                     
                     if self.grounded: # la même, mais vers la gauche
+                        self.animation = "run" if self.dash else "walk"
                         self.look_right = False
                         self.vx -= self.dashspeed if self.dash else self.speed
                     else:
@@ -339,19 +347,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 
     def draw(self, window):
+        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe+1,self.look_right)
 
-        ### à supprimer, provisoire pour le retournement
-        if not self.look_right:
-            sprite = pygame.transform.flip(self.sprite[self.sprite_frame], True, False)
-        else:
-            sprite = self.sprite[self.sprite_frame]
-        ####
-        sprite = pygame.transform.scale(sprite,(round(sprite.get_size()[0]*1.5),round(sprite.get_size()[1]*1.5))) # Rescale
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*3),round(drawing_sprite.get_size()[1]*3))) # Rescale
+        size = [size[0]*3,size[1]*3,size[2]*3,size[3]*3] # Rescale
         pos = [self.rect.x + 800, self.rect.y + 449] # Position réelle du sprite
-        window.blit(sprite, pos) # on dessine le sprite
-        self.rect = self.sprite[self.sprite_frame].get_rect(topleft=(self.rect.x,self.rect.y))
-        self.rect.w *= 1.5 # Rescale
-        self.rect.h *= 1.5 # Rescale
+        window.blit(drawing_sprite, pos,size) # on dessine le sprite
+        self.rect.y -=  size[3] - self.rect.h
+        self.rect.w = size[2]
+        self.rect.h = size[3]
 
         # debug
         if self.parry:

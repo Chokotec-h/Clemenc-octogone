@@ -8,13 +8,10 @@ class Nom_Personnage(Char):
     def __init__(self) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
                          doublejumpheight=15)
-        # Liste des frames
-        self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
 
-        self.rect = self.sprite[0].get_rect(center=(0, -100)) # Crée le rectangle de perso
-        self.rect.w *= 1.5 # Rescale
-        self.rect.h *= 1.5 # Rescale
+        self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
+        self.name = "Name"
 
 
     def animation_attack(self,attack,inputs,stage,other):

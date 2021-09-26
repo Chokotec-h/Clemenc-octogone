@@ -106,11 +106,7 @@ def main():
 
     try:
 
-        run,controls = setup_controls(window,width,height,joysticks)
-        #run = True
-        # permettra de modifier les contrôles
-        #controls = [[pygame.K_LEFT,pygame.K_RIGHT,pygame.K_UP,pygame.K_DOWN,pygame.K_SPACE,pygame.K_x,pygame.K_c],[pygame.K_q,pygame.K_d,pygame.K_z,pygame.K_s,0,0,0]]
-
+        run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
         pause = False
         hold_pause = False
         while run:  # Boucle du programme

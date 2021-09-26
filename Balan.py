@@ -10,13 +10,10 @@ class Balan(Char):
     def __init__(self) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
-        # Liste des frames
-        self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan_upB.png")]
 
-        self.rect = self.sprite[0].get_rect(center=(0, -100)) # Crée le rectangle de perso
-        self.rect.w *= 1.5 # Rescale
-        self.rect.h *= 1.5 # Rescale
+        self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
+        self.name = "Balan"
 
 
     def act(self, inputs,stage,other): # Spécial à Balan, pour son upB
@@ -452,8 +449,8 @@ class Projo_Craie():
         self.y += self.vy
         self.vy += 0.3
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.rect.w *= 1.5 # Rescale
-        self.rect.h *= 1.5 # Rescale
+        self.rect.w *= 3 # Rescale
+        self.rect.h *= 3 # Rescale
         if self.y > 800 :
             self.duration = 0
 
@@ -493,5 +490,4 @@ class Exposant():
 class Balan2(Balan):
     def __init__(self) -> None:
         super().__init__()
-        self.sprite = [pygame.image.load("DATA/Images/Sprites/M_Balan2_idle.png"),pygame.image.load("DATA/Images/Sprites/M_Balan2_upB.png")]  # dictionnaire ?
-        self.image = pygame.image.load("DATA/Images/Sprites/M_Balan2_idle.png").convert_alpha()
+        
