@@ -2,7 +2,7 @@ from Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
-exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png"),(48,48)) for i in range(5)]
+exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png"),(36,36)) for i in range(5)]
 
 ##### M Balan
 
