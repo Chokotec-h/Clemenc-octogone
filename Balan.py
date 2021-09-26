@@ -407,8 +407,10 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,32,64,64,angle,9,3.5,1/250,10,3,self,False))
             if self.frame > 50: # 24 frames de lag
                 self.attack = None
-            
-                
+
+###################          
+""" Projectiles """
+###################
 
 class Projo_Craie():
     def __init__(self,id,own,stage):
