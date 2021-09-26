@@ -134,7 +134,7 @@ def main():
             if not pause:
                 # P1
                 inputs_1 = convert_inputs(controls[0])[0:-1]
-                if not inputs_1[4]: # Jump
+                if not (inputs_1[4] or inputs_1[5]): # Jump
                     Char_P1.jumping = False
 
                 # Transmission des inputs à l'objet Palyer 1
@@ -142,7 +142,7 @@ def main():
 
                 # P2
                 inputs_2 = convert_inputs(controls[1])[0:-1]
-                if not inputs_2[4]: # Jump
+                if not (inputs_2[4] or inputs_2[5]): # Jump
                     Char_P2.jumping = False
 
                 Char_P2.act(inputs_2, stage, Char_P1)
