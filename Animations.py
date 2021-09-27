@@ -12,9 +12,14 @@ BalanM = dict()
 for s in Balan:
     BalanM[s] = (Balan[s][0].replace("Default","Masked"),Balan[s][1],Balan[s][2],Balan[s][3])
 
+AirPresident = {
+    "idle":("",(0,0,0,0),1,True)
+}
+
 animations = {
     "Balan":Balan,
-    "BalanM":BalanM
+    "BalanM":BalanM,
+    "Air President":AirPresident
 }
 
 def get_sprite(animation,char,newframe,right):
