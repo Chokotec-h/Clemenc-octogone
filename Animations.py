@@ -13,7 +13,10 @@ for s in Balan:
     BalanM[s] = (Balan[s][0].replace("Default","Masked"),Balan[s][1],Balan[s][2],Balan[s][3])
 
 AirPresident = {
-    "idle":("",(0,0,0,0),1,True)
+    "idle":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
+    "jab":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
 }
 
 animations = {

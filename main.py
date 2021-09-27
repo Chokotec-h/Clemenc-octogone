@@ -94,7 +94,7 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Balan()
+    Char_P1 = Chars.Air_President()
     Char_P2 = Chars.Balan2()
     stage = Stages.Stage()
     smoke = list()

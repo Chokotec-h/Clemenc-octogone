@@ -15,38 +15,21 @@ class Balan(Char):
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Balan"
 
-
-    def act(self, inputs,stage,other): # Spécial à Balan, pour son upB
-        self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage,other)
-        self.move(stage)
-        for i,hitbox in enumerate(self.active_hitboxes) :
-            hitbox.update()
-            if hitbox.duration <= 0:
-                del self.active_hitboxes[i]
-        for i,projectile in enumerate(self.projectiles) :
-            self.projectiles[i].update()
-            if projectile.duration <= 0:
-                del self.projectiles[i]
-        self.damages = min(999,self.damages)
+    def special(self): # Spécial à Balan, pour son upB
         if self.upB: # Vitesse de merde après upB
             self.vx *= 0.3
-        if self.hitstun: # Arrête la charge du neutral B et des smashs en hitstun
-            self.charge = 0
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
             if self.frame == 11: # Saute frame 11
-                self.sprite_frame = 0
                 self.can_act = False # ne peut pas agir après un grounded up B
                 self.vy = -20
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             elif self.frame > 6 : # Sort frame 7
                 self.rect.move_ip(0,-6)
-                self.sprite_frame = 1
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.look_right = False

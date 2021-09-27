@@ -6,7 +6,7 @@ from math import pi
 
 class Nom_Personnage(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, jumpheight=12,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
         self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
@@ -15,7 +15,7 @@ class Nom_Personnage(Char):
 
 
     def animation_attack(self,attack,inputs,stage,other):
-        left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
+        left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
 
         if attack == "UpB":
