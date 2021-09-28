@@ -145,9 +145,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if right or left:
                     self.dash = True
                     self.parry = False
-                elif self.lenght_parry < 3:
+                    self.lenght_parry = 0
+                elif self.lenght_parry > 2 and self.lenght_parry < 5:
                     self.parry = True
-                else :
+                elif self.lenght_parry > 5 :
                     self.parry = False
                     self.lag = 10
                 self.lenght_parry = self.lenght_parry+1
@@ -294,7 +295,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def move(self, stage):
         if self.fastfall : # gravité
-            self.vy = self.vy + self.fastfallspeed
+            self.vy = self.vy + self.fastfallspeed #prout prout
         else :
             self.vy = self.vy + self.fallspeed
         

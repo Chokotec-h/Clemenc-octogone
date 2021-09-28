@@ -109,7 +109,7 @@ class Balan(Char):
                     x = -44
                 else:
                     angle = 3*pi/4
-                    x = 44
+                    x = 40
                 self.active_hitboxes.append(Hitbox(x,36,48,24,angle,2,0.6,0,5,4,self))
             if self.frame == 9 : # 2e hit frame 9-12
                 if not self.look_right:
@@ -117,7 +117,7 @@ class Balan(Char):
                     x = -44
                 else:
                     angle = pi/4
-                    x = 24
+                    x = 20
                 self.active_hitboxes.append(Hitbox(x,20,68,48,angle,4.5,1.4,1/1000,8,4,self,False))
 
             if self.frame > 22: # 10 frames de lag
@@ -465,7 +465,7 @@ class Exposant():
             self.duration = 0
             self.charge = 0
         if self.duration == 1 :
-            self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,5*self.charge,10*self.charge,1/250,8*self.charge,5,self.opponent,False))
+            self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,2**self.charge,2.4**self.charge,1/250,8*self.charge,5,self.opponent,False))
         self.duration -= 1
 
     def draw(self,window):
