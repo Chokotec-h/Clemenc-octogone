@@ -1,20 +1,20 @@
 from Base_Char import Char, Hitbox, signe
 import pygame
-from math import pi
+from math import pi, cos, sin
 from random import randint
 
 ##### Perso
 
 class Air_President(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.8, fastfallspeed=1.6, fullhop=13, shorthop=10,
+        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.6, fastfallspeed=1.6, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Air President"
         self.mao = False
-        self.chaises = 0
+        self.mao_used = False
         self.basefallspeed = 0.8
         self.canchaise = True
 
@@ -28,11 +28,7 @@ class Air_President(Char):
                 self.upB = True # Effets spéciaux après upB (uniquement grounded)
 
     def special(self): # Spécial à Airpresidentman, pour son upB
-        if not self.upB: # reset la fallspeed
-            self.lag = self.chaises*10
-            self.chaises = 0
-            self.canchaise = True
-        self.fallspeed = (1+self.chaises) * self.basefallspeed
+        pass
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -40,12 +36,11 @@ class Air_President(Char):
 
         if attack == "UpB":
             if self.frame == 8: # Saute frame 8
-                self.vy = -20 # monte sur la chaise
+                self.vy = -20
             if self.frame > 11 :
                 self.attack = None
                 self.upB = True
-                self.projectiles.append(Chaise(0,26*(self.chaises)+120,self,stage))
-                self.chaises += 1
+                self.can_act = False
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
 
             #if self.frame == 6: # Hitbox frame 6-11
@@ -61,9 +56,15 @@ class Air_President(Char):
                 self.charge = 0
 
         if attack == "DownB":
-            if self.frame > 20 : # 15 frames de lag
+            if self.frame == 5 :
+                self.mao = True
+                self.mao_used = False
+            if self.frame > 28 :
+                if self.mao and not self.mao_used :
+                    self.damages += 20
+                self.mao = False
+            if self.frame > 45 : # 18 frames de lag
                 self.attack = None
-                self.charge = 0
 
         if attack == "SideB":
             if self.frame < 8 :
@@ -71,13 +72,13 @@ class Air_President(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 15 :
+            if self.frame == 16 :
                 if randint(1,208) == 1:
                     self.y = 10000
                 else :
                     if not self.look_right:
                         angle = 3*pi/4
-                        x = -56
+                        x = -54
                     else:
                         angle = pi/4
                         x = 24
@@ -85,24 +86,49 @@ class Air_President(Char):
                     self.active_hitboxes[-1].update()
                     if self.active_hitboxes[-1].hit.colliderect(other.rect):
                         if randint(1,208) == 1:
-                            other.y = 10000
+                            other.rect.y = 10000
                             self.projectiles.append(Carte(x,20,pi/42,"R",self))
                         else :
                             self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
 
-            if self.frame > 20 : #  frames de lag
+            if self.frame > 50 : # 25 frames de lag
                 self.attack = None
 
         if attack == "Jab":
-            if self.frame > 22: #  frames de lag
+            if self.frame == 2 : # Frame 2-3
+                if not self.look_right:
+                    angle = pi/4
+                    x = -32
+                else:
+                    angle = 3*pi/4
+                    x = 32
+                self.active_hitboxes.append(Hitbox(x,20,44,48,angle,0.7,0.3,1/1000,1,2,self,False))
+            if self.frame > 5: #  2 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
-            if self.frame > 20: #  frames de lag
+            if self.frame == 5 : # Frames 5-10
+                if not self.look_right:
+                    angle = 2*pi/3
+                    x = -40
+                else:
+                    angle = pi/3
+                    x = 24
+                self.active_hitboxes.append(Hitbox(x,64,64,64,angle,3,1.2,1/750,1,2,self,False))
+            if self.frame > 15: # 5 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
-            if self.frame > 35: #  frames de lag
+            if self.frame == 12: # Frames 12-15
+                if not self.look_right:
+                    angle = 3*pi/4
+                    x = -24
+                else:
+                    angle = pi/4
+                    x = 24
+                self.active_hitboxes.append(Hitbox(x,30,48,48,angle,8,12,1/300,12,4,self,False))
+
+            if self.frame > 30: # 15 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
@@ -110,22 +136,53 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "UpAir":
-            if self.frame > 25: #  frames de lag
+            if self.frame == 5 : #frames 5-11
+                if not self.look_right:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(-8,-20,12,30,angle,5,4,1/300,5,7,self))
+            if self.frame > 5 and self.frame < 12 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].sizex += 10
+            if self.frame == 15 : #frames 14-15
+                if not self.look_right:
+                    angle = 3*pi/4
+                else:
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(-8,-20,60,30,angle,8,7,1/400,7,3,self))
+            if self.frame > 30: # 15 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 15 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+                if self.frame < 24 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 24+
 
         if attack == "ForwardAir":
-            if self.frame > 50: #  frames de lag
+            if self.frame == 9 : # Frame 9-10
+                if self.look_right :
+                    angle = 0
+                    x = 24
+                else :
+                    angle = pi
+                    x = -56
+                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,12,11.3,1/150,10,2,self,False))
+            if self.frame > 14  and self.frame < 21: # Fame 15-20
+                if self.look_right :
+                    angle = pi/42
+                    x = 24
+                else :
+                    angle = 41*pi/42
+                    x = -56
+                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,2,0.5,1/550,3,2,self,False))
+            if self.frame > 45: # 25 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+                if self.frame < 25 :
+                    self.lag = self.frame # Auto cancel frame 25+
 
         if attack == "BackAir":
             if self.frame > 25: #  frames de lag
@@ -137,13 +194,24 @@ class Air_President(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
-            if self.frame > 25: #  frames de lag
+            self.vy -= 0.2
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.5,0,8,2,self,False))
+            if self.frame == 9 :
+                self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.1,0,8,2,self,False))
+            if self.frame == 13 :
+                self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.2,0,8,2,self,False))
+            if self.frame == 17 :
+                self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.3,0,12,2,self,False))
+            if self.frame == 23 :
+                self.active_hitboxes.append(Hitbox(-8,128,64,64,-pi/2,5,6.5,1/200,8,2,self,False))
+            if self.frame > 40: # 17 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
+                if self.frame < 30 :
+                    self.lag = self.frame-4 # Auto cancel frame 1-4 et 30+
 
         if attack == "NeutralAir":
             if self.frame > 40: #  frames de lag
@@ -238,6 +306,57 @@ class Air_President(Char):
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
+
+    def collide(self,other):
+        self.parrying = False
+        for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
+            if self.rect.colliderect(hitbox.hit):
+                if (not self.parry) and not (self.mao): # Parry and counter
+                    if hitbox.position_relative : # Reverse hit
+                        if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
+                            hitbox.angle = pi - hitbox.angle
+                        if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
+                            hitbox.angle = pi - hitbox.angle
+                        
+                    self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
+                    self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
+                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
+                    self.damages += hitbox.damages # dommages
+                    self.rect.y -= 1
+                    self.attack = None # cancel l'attacue en cours
+                else :
+                    if self.parry :
+                        self.parrying = True
+                    if self.mao :
+                        self.damages = max(0,self.damages - hitbox.damages) # heal
+                        self.mao_used = True
+                del other.active_hitboxes[i] # Supprime la hitbox
+                return
+        for i,projectile in enumerate(other.projectiles): # Détection des projectiles
+            for h in self.active_hitboxes :
+                if h.deflect and h.hit.colliderect(projectile.rect):
+                    projectile.deflect(h.modifier)
+                    self.projectiles.append(projectile)
+                    del other.projectiles[i] # Supprime la hitbox
+                    return
+
+            if self.rect.colliderect(projectile.rect) and not self.last_hit:
+                self.last_hit = 10 # invincibilité aux projectiles de 10 frames
+                if (not self.parry) and (not self.mao) : # Parry
+                    self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
+                    self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
+                    self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
+                    self.damages += projectile.damages # dommages
+                    self.rect.y -= 1
+                    self.attack = None
+                else :
+                    if self.parry :
+                        self.parrying = True
+                    if self.mao :
+                        self.damages = max(0.,self.damages - projectile.damages) # heal
+                        self.mao_used = True
+                return
+
 ###################          
 """ Projectiles """
 ###################
@@ -246,6 +365,10 @@ class Carte():
     def __init__(self,x,y,angle,number,own) -> None:
         if number == "R":
             self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Cartes/Revolution.png")
+            self.knockback = 0
+            self.damages = 999
+            self.stun = 0
+            self.damages_stacking = 0
         else :
             self.number = number + 2
             if self.number > 13 :
@@ -307,3 +430,5 @@ class Chaise():
 
     def draw(self,window):
         window.blit(self.sprite,(self.x+800,self.y+450))
+    
+    
