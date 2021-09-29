@@ -16,16 +16,8 @@ class Air_President(Char):
         self.mao = False
         self.mao_used = False
         self.basefallspeed = 0.8
-        self.canchaise = True
-
-    def inputattack(self, attack):
-        self.animeframe = 0
-        if self.can_act or (self.canchaise and attack == "UpB"): # Spam la chaise
-            self.frame = 0  # on démarre à la frame 0
-            self.attack = attack  # on update l'action en cours
-            if attack == "UpB":
-                self.can_act = False # Ne peut pas attaquer après le up B
-                self.upB = True # Effets spéciaux après upB (uniquement grounded)
+        self.stylo = ["Bleu","Violet","Vert","Rouge"]
+        self.currentstylo = 0
 
     def special(self): # Spécial à Airpresidentman, pour son upB
         pass
@@ -51,9 +43,23 @@ class Air_President(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
-            if self.frame > 15: #  frames de lag
+            if self.frame == 10 :
+                if self.look_right :
+                    x = 24
+                else :
+                    x = -104
+                self.active_hitboxes.append(Hitbox(x,0,128,128,0,0,0,0,0,6,self))
+            if self.frame > 9 and self.frame < 16:
+                if self.active_hitboxes and self.active_hitboxes[-1].hit.colliderect(other.rect):
+                    if other.grounded :
+                        other.can_act = True
+                        other.inputattack("Jab")
+                    else :
+                        other.can_act = True
+                        other.inputattack("NeutralAir")
+                    self.active_hitboxes.pop()
+            if self.frame > 25: # 9 frames de lag
                 self.attack = None
-                self.charge = 0
 
         if attack == "DownB":
             if self.frame == 5 :
@@ -167,7 +173,7 @@ class Air_President(Char):
                 else :
                     angle = pi
                     x = -56
-                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,12,11.3,1/150,10,2,self,False))
+                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,12,11.3,1/150,12,2,self,False))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
                 if self.look_right :
                     angle = pi/42
@@ -194,7 +200,7 @@ class Air_President(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
-            self.vy -= 0.2
+            self.vy -= 0.1
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.5,0,8,2,self,False))
             if self.frame == 9 :
@@ -214,13 +220,16 @@ class Air_President(Char):
                     self.lag = self.frame-4 # Auto cancel frame 1-4 et 30+
 
         if attack == "NeutralAir":
-            if self.frame > 40: #  frames de lag
+            if self.frame == 9:
+                self.projectiles.append(Stylo(self.stylo[self.currentstylo],self,stage))
+                self.currentstylo = (self.currentstylo+1)%4
+            if self.frame > 24: #  frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 30 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+                if self.frame < 20 :
+                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "ForwardSmash":
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
@@ -271,21 +280,21 @@ class Air_President(Char):
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge+1
-            elif self.frame == 7 : # Active on 7-9
-                self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = 5*pi/6
-                else :
-                    angle = pi/6
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
+            #elif self.frame == 7 : # Active on 7-9
+            #    self.charge = min(self.charge,100)
+            #    if not self.look_right :
+            #        angle = 5*pi/6
+            #    else :
+            #        angle = pi/6
+            #    self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
             
-            elif self.frame == 15 : # Active on 15-17
-                self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = pi/6
-                else :
-                    angle = 5*pi/6
-                self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,60,32,32,angle,9*(self.charge/200+1),14.5,1/250,5*(self.charge/50+1),3,self,False))
+            #elif self.frame == 15 : # Active on 15-17
+            #    self.charge = min(self.charge,100)
+            #    if not self.look_right :
+            #        angle = pi/6
+            #    else :
+            #        angle = 5*pi/6
+            #    self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,60,32,32,angle,9*(self.charge/200+1),14.5,1/250,5*(self.charge/50+1),3,self,False))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
@@ -431,4 +440,72 @@ class Chaise():
     def draw(self,window):
         window.blit(self.sprite,(self.x+800,self.y+450))
     
-    
+class Stylo():
+    def __init__(self,color,own,stage):
+        # Stylos d'Elsa
+        self.sprite = pygame.image.load("./DATA/Images/Sprites/Stylo/Stylo_"+color+".png")
+        self.rect = self.sprite.get_rect()
+        self.x = own.rect.x
+        self.y = own.rect.y + own.rect.h//2
+        self.color = color
+        if self.color == "Vert":
+            self.vx = 15*signe(own.direction)
+        else :
+            self.vx = 10*signe(own.direction)
+        if self.color == "Vert" :
+            self.vy = -6
+        else :
+            self.vy = -4
+        self.duration = 5
+        self.stage = stage
+        if self.color == "Violet":
+            self.damages_stacking=1/250
+        else :
+            self.damages_stacking=1/750
+        if self.color == "Bleu":
+            self.angle = -pi/2
+        elif not own.look_right :
+            self.angle = 3*pi/4
+        else :
+            self.angle = pi/4
+        if self.color == "Violet":
+            self.knockback = 7
+        elif self.color == "Bleu" :
+            self.knockback = 5
+        else :
+            self.knockback = 3
+        if self.color == "Rouge":
+            self.damages = 3.2
+        elif self.color == "Vert" :
+            self.damages = 0.8
+        else :
+            self.damages = 1.2
+        if self.color == "Rouge" :
+            self.stun = 6
+        elif self.color == "Violet":
+            self.stun = 8
+        else :
+            self.stun = 3
+
+    def update(self):
+        if self.rect.colliderect(self.stage.rect) :
+            self.duration = 0
+        self.x += round(self.vx)
+        self.y += self.vy
+        if self.color == "Bleu":
+            self.vy += 0.7
+        else :
+            self.vy += 0.4
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        if self.y > 800 :
+            self.duration = 0
+
+    def deflect(self,modifier):
+        self.vy = -(self.id)
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
+
+    def draw(self,window):
+        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
