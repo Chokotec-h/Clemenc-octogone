@@ -68,7 +68,7 @@ class Balan(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 5 : # 5 frames après relache
+            if self.frame == 8 : # 8 frames après relache
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction),32,32,64,0,0,0,0,0,20,self))
                 self.active_hitboxes[-1].update()
                 if self.active_hitboxes[-1].hit.colliderect(other.rect):
@@ -89,16 +89,16 @@ class Balan(Char):
                 else:
                     angle = pi/4
                 self.active_hitboxes.append(Hitbox(16,30,32,32,angle,30,10,0,12,3,self,False))
-            if self.frame == 10 : # Active on 10-70
+            if self.frame == 10 : # Active on 10-60
                 if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(8,82,32,10,angle,3,4,1/250,3,60,self,False))
-            if self.frame > 9 and self.frame < 71: # Déplacement
+                self.active_hitboxes.append(Hitbox(8,82,32,10,angle,3,4,1/250,3,50,self,False))
+            if self.frame > 9 and self.frame < 60: # Déplacement
                 self.vx = 15*signe(self.direction)/(self.frame/10)
                 self.vy = 1
-            if self.frame > 95 : # 25 frames de lag
+            if self.frame > 80 : # 20 frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -301,7 +301,7 @@ class Balan(Char):
                     angle = 3*pi/4
                 else :
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/120,8*(self.charge/100+3),4,self,True,True,2))
+                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/120,8*(self.charge/100+3),4,self,True,True,1.2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
