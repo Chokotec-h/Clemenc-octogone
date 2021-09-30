@@ -69,6 +69,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.look_right = True
 
         self.hitstun = 0            # Frames de hitstun
+        self.totalhitstun = 0
         self.active_hitboxes = list() # Liste des hitbox actives
         self.projectiles = list()
         self.last_hit = 0
@@ -77,6 +78,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.parry = False
         self.parrying = False
         self.lenght_parry = 0
+        self.tumble = False
 
         self.jumping = False
         self.dash = False # Unused
@@ -87,6 +89,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def inputattack(self,attack):
         self.animeframe = 0
+        self.tumble = False
         if self.can_act :
             self.frame = 0  # on démarre à la frame 0
             self.attack = attack  # on update l'action en cours
@@ -127,19 +130,20 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         if not (left or right) or (left and self.look_right) or (right and not self.look_right): # Cancel le dash au changement de direction
             self.dash = False
-        if not self.grounded and self.vy > -3 and down and not (attack or special or C_Left or C_Right or C_Up or C_Down): # si le personnage est en fin de saut
+        if not self.grounded and self.vy > -3 and down and not (attack or special or C_Left or C_Right or C_Up or C_Down) and not self.tumble: # si le personnage est en fin de saut
             if not self.fastfall:  # fastfall
                 self.vy = self.vy + self.fastfallspeed * 5
             self.fastfall = True
         if self.hitstun: # Directional Influence
-            if right:
-                self.vx += self.airspeed/10
-            if left:
-                self.vx -= self.airspeed/10
-            if up:
-                self.vy -= self.fallspeed/10
-            if down:
-                self.vy += self.fallspeed/10
+            if self.totalhitstun-self.hitstun < 5 :
+                if right:
+                    self.vx += self.airspeed/5
+                if left:
+                    self.vx -= self.airspeed/5
+                if up:
+                    self.vy -= self.fallspeed/5
+                if down:
+                    self.vy += self.fallspeed/5
         else :
             if self.grounded and self.attack is None and not self.lag and shield:
                 if right or left:
@@ -179,7 +183,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.look_right = True  # tourne à droite et se déplace de la vitesse au sol
                         self.vx += self.dashspeed if self.dash else self.speed
                     else:             # Sinon, se déplace de la vitesse aérienne
-                        self.vx += self.airspeed
+                        if not self.tumble:
+                            self.vx += self.airspeed
 
                 if left:            # Si on input à gauche
                     if special :
@@ -198,7 +203,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.look_right = False
                         self.vx -= self.dashspeed if self.dash else self.speed
                     else:
-                        self.vx -= self.airspeed
+                        if not self.tumble:
+                            self.vx -= self.airspeed
                 if up:         # si on input vers le haut
                     if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
@@ -212,6 +218,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                 if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
+                        self.tumble = False
                         self.jumping = True
                         if fullhop :
                             self.vy = -self.fullhop # il utilise son premier saut
@@ -222,6 +229,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     else:  # Si le personnage est en l'air
                         self.fastfall = False  # il cesse de fastfall
                         if not self.doublejump[-1]:  # Si il possède un double saut
+                            self.tumble = False
                             self.jumping = True
                             self.jumpsound.play()  # joli son
                             self.vy = -self.doublejumpheight # il saute
@@ -319,20 +327,22 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Déplacement
         self.rect.y += self.vy
         self.x += round(self.vx)
-        if not self.hitstun :
+        if (not self.hitstun) and (not self.tumble):
             # déceleration et vitesse max
             if self.grounded :
                 self.vx *= self.deceleration
             elif self.vx < -3*self.airspeed:
-                self.vx = self.vx*0.8
+                self.vx = (self.vx - 3*self.airspeed)/2
             elif self.vx > 3*self.airspeed:
-                self.vx = self.vx*0.8
+                self.vx = (self.vx + 3*self.airspeed)/2
             if abs(self.vx) < 0.01 :
                 self.vx = 0
+        if abs(self.vx)+abs(self.vy) < 0.5 :
+            self.hitstun = 0
 
         # Détection de si le personnage est au sol
         if self.rect.move(0,1).colliderect(stage.rect):
-            if self.hitstun : # annule la vitesse de hitstun
+            if self.hitstun : # diminue la vitesse de hitstun
                 self.vx *= 0.8
             if not self.can_act : # permet de jouer après un upb
                 self.can_act = True
@@ -340,6 +350,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.upB = False
             self.grounded = True
             self.fastfall = False
+            if self.tumble :
+                self.tumble = False
+                self.lag = 20
             for dj in range(len(self.doublejump)):
                 self.doublejump[dj] = False
         else :
@@ -386,12 +399,17 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         
                     self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                     self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
-                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
+                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2) # hitstun
+                    self.totalhitstun = self.hitstun
                     self.damages += hitbox.damages # dommages
                     self.rect.y -= 1
                     self.attack = None # cancel l'attacue en cours
+                    if abs(self.vx) + abs(self.vy) > 1 :
+                        self.tumble = True
                 else :
                     self.parrying = True
+                    other.attack = None
+                    other.lag = 10
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -408,9 +426,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                     self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                     self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
+                    self.totalhitstun = self.hitstun
                     self.damages += projectile.damages # dommages
                     self.rect.y -= 1
                     self.attack = None
+                    self.tumble = True
                 else :
                     self.parrying = True
                 return
