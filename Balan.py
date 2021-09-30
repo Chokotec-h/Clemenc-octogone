@@ -315,9 +315,9 @@ class Balan(Char):
                         self.active_hitboxes[-1].angle = 2*pi/6
                     else :
                         self.active_hitboxes[-1].angle = 4*pi/6
-                    self.active_hitboxes[-1].relativey -= 3
+                    self.active_hitboxes[-1].relativey += 10
                 else :
-                    self.active_hitboxes[-1].relativey += 3
+                    self.active_hitboxes[-1].relativey -= 10
 
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
@@ -334,7 +334,7 @@ class Balan(Char):
                     angle = 2*pi/6
                 else :
                     angle = 4*pi/6
-                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
+                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
