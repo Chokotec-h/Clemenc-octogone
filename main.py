@@ -89,8 +89,8 @@ def main():
     """"""""""""""""""""""""""""""""""""
 
     # initialisation de la fenêtre
-    height = 900
     width = 1600
+    height = 900
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
