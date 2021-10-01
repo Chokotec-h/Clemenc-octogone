@@ -19,7 +19,7 @@ class Air_President(Char):
         self.stylo = ["Bleu","Violet","Vert","Rouge"]
         self.currentstylo = 0
 
-    def special(self): # Spécial à Airpresidentman, pour son upB
+    def special(self): # Spécial
         pass
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -138,6 +138,19 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame > 8 and self.frame < 16 :
+                if self.active_hitboxes :
+                    if self.frame > 12 :
+                        self.active_hitboxes[-1].relativey += 24
+                    else :
+                        self.active_hitboxes[-1].relativey -= 24
+                    self.active_hitboxes[-1].relativex += signe(self.direction)
+            if self.frame == 8 :
+                if self.look_right :
+                    x = 0
+                else :
+                    x = 8
+                self.active_hitboxes.append(Hitbox(x,0,32,32,pi/2,9,8.5,1/500,9,11,self,False))
             if self.frame > 25: #  Frames de lag
                 self.attack = None
 
@@ -191,7 +204,15 @@ class Air_President(Char):
                     self.lag = self.frame # Auto cancel frame 25+
 
         if attack == "BackAir":
-            if self.frame > 25: #  frames de lag
+            if self.frame == 10: # Active on 10-12
+                if not self.look_right :
+                    angle = 0
+                    x = 32
+                else :
+                    angle = pi
+                    x = -48
+                self.active_hitboxes.append(Hitbox(x,32,48,52,angle,9,9.5,1/250,8,3,self,False))
+            if self.frame > 25: # 13 frames de lag
                 self.attack = None
 
             if self.grounded :

@@ -396,7 +396,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                         if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
-                        
+
                     self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                     self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                     self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2) # hitstun
@@ -404,6 +404,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.damages += hitbox.damages # dommages
                     self.rect.y -= 1
                     self.attack = None # cancel l'attacue en cours
+                    self.upB = False
                     if abs(self.vx) + abs(self.vy) > 1 :
                         self.tumble = True
                 else :
@@ -430,7 +431,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.damages += projectile.damages # dommages
                     self.rect.y -= 1
                     self.attack = None
-                    self.tumble = True
+                    self.upB = False
+                    if abs(self.vx) + abs(self.vy) > 1 :
+                        self.tumble = True
                 else :
                     self.parrying = True
                 return
