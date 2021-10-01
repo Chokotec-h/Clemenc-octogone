@@ -7,8 +7,8 @@ from random import randint
 
 class Air_President(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.6, fastfallspeed=1.6, fullhop=13, shorthop=10,
-                         doublejumpheight=15)
+        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.8, fastfallspeed=1.6, fullhop=15, shorthop=12,
+                         doublejumpheight=18)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -27,20 +27,21 @@ class Air_President(Char):
         smash = C_Down or C_Left or C_Right or C_Up
 
         if attack == "UpB":
-            if self.frame == 8: # Saute frame 8
-                self.vy = -20
             if self.frame > 11 :
                 self.attack = None
                 self.upB = True
                 self.can_act = False
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
 
-            #if self.frame == 6: # Hitbox frame 6-11
-            #    if not self.look_right :
-            #        angle = pi/3
-            #    else:
-            #        angle = 2*pi/3
-            #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
+            if self.frame == 6: # Hitbox frame 6-15
+                if not self.look_right :
+                    angle = -pi/2
+                else:
+                    angle = -pi/2
+                self.vy = -24
+                self.active_hitboxes.append(Hitbox(-1.5,88,51,48,angle,2,6,1/150,3,8,self,False))
+            if self.frame > 6 and self.active_hitboxes :
+                self.active_hitboxes[-1].sizey -= self.vy
 
         if attack == "NeutralB":
             if self.frame == 10 :
@@ -144,13 +145,15 @@ class Air_President(Char):
                         self.active_hitboxes[-1].relativey += 24
                     else :
                         self.active_hitboxes[-1].relativey -= 24
-                    self.active_hitboxes[-1].relativex += signe(self.direction)
+                    self.active_hitboxes[-1].relativex += -7*signe(self.direction)
             if self.frame == 8 :
                 if self.look_right :
-                    x = 0
+                    x = 24
+                    angle = 7*pi/13
                 else :
-                    x = 8
-                self.active_hitboxes.append(Hitbox(x,0,32,32,pi/2,9,8.5,1/500,9,11,self,False))
+                    angle = 6*pi/13
+                    x = -18
+                self.active_hitboxes.append(Hitbox(x,0,32,32,angle,9,8.5,1/500,9,11,self,False))
             if self.frame > 25: #  Frames de lag
                 self.attack = None
 
@@ -285,15 +288,17 @@ class Air_President(Char):
                 self.frame = 6
                 self.charge = self.charge+1
 
-            #elif self.frame == 10 : # Active on 10-15
-            #    self.charge = min(self.charge,100)
-            #    if not self.look_right :
-            #        angle = 2*pi/6
-            #    else :
-            #        angle = 4*pi/6
-            #    self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
+            elif self.frame == 15 : # Active on 15-28
+                self.charge = min(self.charge,100)
+                if not self.look_right :
+                    angle = pi/2
+                    x = 0
+                else :
+                    angle = pi/2
+                    x = -10
+                self.active_hitboxes.append(Hitbox(x,-50,48,48,angle,9*(self.charge/150+1),14,1/80,7*(self.charge/100+1),13,self,False))
 
-            if self.frame > 40: #  frames de lag
+            if self.frame > 49: # 21 frames de lag
                 self.attack = None
                 self.charge = 0
 
