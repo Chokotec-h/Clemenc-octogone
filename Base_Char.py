@@ -145,11 +145,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if down:
                     self.vy += self.fallspeed/5
         else :
+            if (not shield) and self.parry :
+                self.lag = 10
             if self.grounded and self.attack is None and not self.lag and shield:
                 if right or left:
                     self.dash = True
                     self.parry = False
-                    self.lenght_parry = 0
+                    self.lenght_parry = -10
                 elif self.lenght_parry > 2 and self.lenght_parry < 5:
                     self.parry = True
                 elif self.lenght_parry > 5 :
