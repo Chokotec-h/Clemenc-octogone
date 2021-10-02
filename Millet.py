@@ -39,9 +39,9 @@ class Millet(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
-            if self.frame == 10:
+            if self.frame == 25:
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y-52,pi/6*signe(self.direction),self))
-            if self.frame > 25: #  frames de lag
+            if self.frame > 50: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
 
