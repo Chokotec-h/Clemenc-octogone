@@ -34,7 +34,12 @@ class Hitbox():
         self.duration -= 1
     
     def draw(self,window): # debug
-        pygame.draw.rect(window,(255,0,0),(self.x+800,self.y+450,self.sizex,self.sizey))
+        x = self.x
+        sizex = self.sizex
+        if sizex < 0 :
+            x =  self.x + self.sizex
+            sizex = abs(self.sizex)
+        pygame.draw.rect(window,(255,0,0),(x+800,self.y+450,sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
     def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight):
@@ -165,7 +170,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.attack is None :
                 self.active_hitboxes = list()
             if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
-                self.animation = "idle"
+                if self.grounded :
+                    self.animation = "idle"
+                elif self.vy > 0 :
+                    self.animation = "fall"
+                else :
+                    self.animation = "jump"
                 if (D_Left or D_Right or D_Up or D_Down) and self.grounded:
                     self.inputattack("Taunt")
 
@@ -220,6 +230,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                 if jump and not self.jumping:        # si on input un saut
                     if self.grounded:  # Si le personnage est au sol
+                        self.animeframe = 0
                         self.tumble = False
                         self.jumping = True
                         if fullhop :
@@ -231,6 +242,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     else:  # Si le personnage est en l'air
                         self.fastfall = False  # il cesse de fastfall
                         if not self.doublejump[-1]:  # Si il possède un double saut
+                            self.animeframe = 0
                             self.tumble = False
                             self.jumping = True
                             self.jumpsound.play()  # joli son
@@ -407,6 +419,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.rect.y -= 1
                     self.attack = None # cancel l'attacue en cours
                     self.upB = False
+                    self.can_act = True
+                    self.fastfall = False
                     if abs(self.vx) + abs(self.vy) > 1 :
                         self.tumble = True
                 else :
@@ -434,6 +448,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.rect.y -= 1
                     self.attack = None
                     self.upB = False
+                    self.can_act = True
+                    self.fastfall = False
                     if abs(self.vx) + abs(self.vy) > 1 :
                         self.tumble = True
                 else :
