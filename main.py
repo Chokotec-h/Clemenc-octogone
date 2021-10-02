@@ -33,7 +33,7 @@ def setup_controls(window,width,height,joysticks):
     # liste des action
     actions = ("Left","Right","Up","Down","Fullhop","Shorthop","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
-        window.fill((200,200,200))
+        window.fill((200,220,200))
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
@@ -89,15 +89,16 @@ def main():
     """"""""""""""""""""""""""""""""""""
 
     # initialisation de la fenêtre
-    height = 900
     width = 1600
+    height = 900
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Balan()
+    Char_P1 = Chars.Air_President()
     Char_P2 = Chars.Balan2()
     stage = Stages.Stage()
     smoke = list()
+    smokeframe = 0
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")
@@ -111,7 +112,7 @@ def main():
         hold_pause = False
         while run:  # Boucle du programme
 
-            window.fill((200, 220, 250)) # Réinitialisation de l'écran à chaque frame
+            window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
 
 
             # Récupération des events
@@ -157,9 +158,11 @@ def main():
             for h in Char_P2.active_hitboxes:
                 h.draw(window)
             # Smoke
-            if Char_P1.hitstun :
+            smokeframe += 1
+            smokeframe = smokeframe%4
+            if Char_P1.hitstun and smokeframe == 0:
                 smoke.append(Smoke(Char_P1.rect.x+Char_P1.rect.w/2,Char_P1.rect.y+Char_P1.rect.h/2))
-            if Char_P2.hitstun :
+            if Char_P2.hitstun and smokeframe == 0:
                 smoke.append(Smoke(Char_P2.rect.x+Char_P2.rect.w/2,Char_P2.rect.y+Char_P2.rect.h/2))
             for i,s in enumerate(smoke):
                 s.draw(window)
@@ -171,11 +174,13 @@ def main():
             # Stage
             stage.draw(window)
             # Damages
-            Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
+            Char_P1.damages = float(Char_P1.damages)
+            Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
-            Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]} %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
-            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",20,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
+            Char_P2.damages = float(Char_P2.damages)
+            Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
+            Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)

@@ -11,42 +11,25 @@ class Balan(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
-        self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
+        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Balan"
 
-
-    def act(self, inputs,stage,other): # Spécial à Balan, pour son upB
-        self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage,other)
-        self.move(stage)
-        for i,hitbox in enumerate(self.active_hitboxes) :
-            hitbox.update()
-            if hitbox.duration <= 0:
-                del self.active_hitboxes[i]
-        for i,projectile in enumerate(self.projectiles) :
-            self.projectiles[i].update()
-            if projectile.duration <= 0:
-                del self.projectiles[i]
-        self.damages = min(999,self.damages)
+    def special(self): # Spécial à Balan, pour son upB
         if self.upB: # Vitesse de merde après upB
             self.vx *= 0.3
-        if self.hitstun: # Arrête la charge du neutral B et des smashs en hitstun
-            self.charge = 0
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
             if self.frame == 11: # Saute frame 11
-                self.sprite_frame = 0
                 self.can_act = False # ne peut pas agir après un grounded up B
                 self.vy = -20
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             elif self.frame > 6 : # Sort frame 7
                 self.rect.move_ip(0,-6)
-                self.sprite_frame = 1
             if self.frame < 6 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.look_right = False
@@ -85,7 +68,7 @@ class Balan(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 5 : # 5 frames après relache
+            if self.frame == 8 : # 8 frames après relache
                 self.active_hitboxes.append(Hitbox(40*signe(self.direction),32,32,64,0,0,0,0,0,20,self))
                 self.active_hitboxes[-1].update()
                 if self.active_hitboxes[-1].hit.colliderect(other.rect):
@@ -106,33 +89,38 @@ class Balan(Char):
                 else:
                     angle = pi/4
                 self.active_hitboxes.append(Hitbox(16,30,32,32,angle,30,10,0,12,3,self,False))
-            if self.frame == 10 : # Active on 10-70
+            if self.frame == 10 : # Active on 10-60
                 if not self.look_right:
                     angle = 3*pi/4
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(8,82,32,10,angle,3,4,1/250,3,60,self,False))
-            if self.frame > 9 and self.frame < 71: # Déplacement
+                self.active_hitboxes.append(Hitbox(8,82,32,10,angle,3,4,1/250,3,50,self,False))
+            if self.frame > 9 and self.frame < 60: # Déplacement
                 self.vx = 15*signe(self.direction)/(self.frame/10)
                 self.vy = 1
-            if self.frame > 95 : # 25 frames de lag
+            if self.frame > 80 : # 20 frames de lag
                 self.attack = None
 
         if attack == "Jab":
-            if self.frame == 5 : # 1er hit frame 5-10
+            self.animation = "jab"
+            if self.frame == 3 : # 1er hit frame 3-6
                 if not self.look_right:
                     angle = pi/4
+                    x = -44
                 else:
                     angle = 3*pi/4
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,64,24,10,angle,2,0.6,0,5,5,self))
-            if self.frame == 10 : # 2e hit frame 10-15
+                    x = 40
+                self.active_hitboxes.append(Hitbox(x,36,48,24,angle,2,0.6,0,5,4,self))
+            if self.frame == 9 : # 2e hit frame 9-12
                 if not self.look_right:
                     angle = 3*pi/4
+                    x = -44
                 else:
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+19,52,10,24,angle,4.5,1.4,1/1000,8,5,self,False))
+                    x = 20
+                self.active_hitboxes.append(Hitbox(x,20,68,48,angle,4.5,1.4,1/1000,8,4,self,False))
 
-            if self.frame > 22: # 7 frames de lag
+            if self.frame > 22: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
@@ -313,7 +301,7 @@ class Balan(Char):
                     angle = 3*pi/4
                 else :
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/120,8*(self.charge/100+3),4,self,True,True,2))
+                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/120,8*(self.charge/200+3),4,self,True,True,1.2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -327,9 +315,9 @@ class Balan(Char):
                         self.active_hitboxes[-1].angle = 2*pi/6
                     else :
                         self.active_hitboxes[-1].angle = 4*pi/6
-                    self.active_hitboxes[-1].relativey -= 3
+                    self.active_hitboxes[-1].relativey += 10
                 else :
-                    self.active_hitboxes[-1].relativey += 3
+                    self.active_hitboxes[-1].relativey -= 10
 
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
@@ -346,7 +334,7 @@ class Balan(Char):
                     angle = 2*pi/6
                 else :
                     angle = 4*pi/6
-                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/120,6*(self.charge/10+1),6,self,False))
+                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,10,32,32,angle,10*(self.charge/100+1),13,1/250,6*(self.charge/100+1),6,self,False))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
@@ -449,8 +437,8 @@ class Projo_Craie():
         self.y += self.vy
         self.vy += 0.3
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.rect.w *= 3 # Rescale
-        self.rect.h *= 3 # Rescale
+        self.rect.w *= 1.5 # Rescale
+        self.rect.h *= 1.5 # Rescale
         if self.y > 800 :
             self.duration = 0
 
@@ -477,7 +465,7 @@ class Exposant():
             self.duration = 0
             self.charge = 0
         if self.duration == 1 :
-            self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,5*self.charge,10*self.charge,1/250,8*self.charge,5,self.opponent,False))
+            self.own.active_hitboxes.append(Hitbox(20,20,20,20,-pi/2,2**self.charge,2.4**self.charge,1/250,8*self.charge,5,self.opponent,False))
         self.duration -= 1
 
     def draw(self,window):
@@ -491,3 +479,8 @@ class Balan2(Balan):
     def __init__(self) -> None:
         super().__init__()
         self.name = "BalanM"
+
+class Balan3(Balan):
+    def __init__(self) -> None:
+        super().__init__()
+        self.name = "BalanJ"

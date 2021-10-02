@@ -1,17 +1,17 @@
 from Base_Char import Char, Hitbox, signe
 import pygame
-from math import pi
+from math import pi,cos,sin,asin
 
 ##### Perso
 
-class Nom_Personnage(Char):
+class Millet(Char):
     def __init__(self) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
         self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
-        self.name = "Name"
+        self.name = "Air President"
 
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -39,7 +39,9 @@ class Nom_Personnage(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
-            if self.frame > 15: #  frames de lag
+            if self.frame == 10:
+                self.projectiles.append(Rayon(stage,self.x,self.rect.y-52,pi/6*signe(self.direction),self))
+            if self.frame > 25: #  frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -206,4 +208,49 @@ class Nom_Personnage(Char):
 """ Projectiles """
 ###################
 
-# Objets projectiles si le perso en possède
+class Rayon():
+    def __init__(self,stage,x,y,angle_fwd,own) -> None:
+        self.len = 20
+        self.stage = stage
+        self.x = [x for _ in range(self.len)]
+        self.y = [y for _ in range(self.len)]
+        self.angle_fwd = [angle_fwd for _ in range(self.len)]
+        self.v = 6*signe(own.direction)
+        self.rect = pygame.Rect(x,y,5,5)
+        self.damages_stacking=0
+        if own.look_right :
+            self.angle = pi/4
+        else :
+            self.angle = 3*pi/4
+        self.knockback = 3
+        self.damages = 1.2
+        self.stun = 4
+        self.duration = 10
+        for i in range(self.len) :
+            for _ in range(self.len-i):
+                nextx = self.x[i] + cos(self.angle_fwd[i])*self.v
+                nexty = self.y[i] + sin(self.angle_fwd[i])*self.v
+                self.x[i] = nextx
+                self.y[i] = nexty
+
+    def update(self):
+        for i in range(self.len) :
+            if pygame.Rect(self.x[i],self.y[i],5,5).colliderect(self.stage.rect):
+                if self.rect.y < self.stage.rect.y :
+                    self.angle_fwd[i] = -self.angle_fwd[i]
+                else :
+                    self.angle_fwd[i] = pi-self.angle_fwd[i]
+
+
+            nextx = self.x[i] + cos(self.angle_fwd[i])*self.v
+            nexty = self.y[i] + sin(self.angle_fwd[i])*self.v
+            self.x[i] = nextx
+            self.y[i] = nexty
+        self.rect.x = self.x[0]
+        self.rect.y = self.y[0]
+        if self.x[-1] < -800 or self.x[-1] > 800:
+            self.duration = 0
+
+    def draw(self,window):
+        for i in range(self.len):
+            pygame.draw.rect(window,(250,0,0),(self.x[i]+800,self.y[i]+450,10,10))
