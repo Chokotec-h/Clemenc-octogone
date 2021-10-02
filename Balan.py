@@ -149,19 +149,24 @@ class Balan(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            self.animation = "uptilt"
             if self.frame == 6 : # Frame 6-14
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-20*signe(self.direction)+12,8,16,16,angle,9,8.2,1/250,10,8,self,False))
+                if self.look_right :
+                    x = 78
+                else :
+                    x = -32
+                self.active_hitboxes.append(Hitbox(x,-5,-16*signe(self.direction),16,angle,9,8.2,1/250,10,8,self,False))
             # Dessin du cercle
             if self.active_hitboxes :
                 if self.frame < 9 : # Frames 7-8
-                    self.active_hitboxes[-1].y -= 8
-                    self.active_hitboxes[-1].sizey += 8
-                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                    self.active_hitboxes[-1].y -= 10
+                    self.active_hitboxes[-1].sizey += 10
+                    self.active_hitboxes[-1].sizex -= 12*signe(self.direction)
                 if self.frame < 11 : # Frames 9-10
-                    self.active_hitboxes[-1].sizex += 8*signe(self.direction)
+                    self.active_hitboxes[-1].sizex -= 12*signe(self.direction)
                 if self.frame < 13 : # Frames 11-12
-                    self.active_hitboxes[-1].sizey += 8
+                    self.active_hitboxes[-1].sizey += 10
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
