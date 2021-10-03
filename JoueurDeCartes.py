@@ -184,10 +184,10 @@ class Air_President(Char):
         if attack == "ForwardAir":
             if self.frame == 9 : # Frame 9-10
                 if self.look_right :
-                    angle = 0
+                    angle = pi/6
                     x = 24
                 else :
-                    angle = pi
+                    angle = 5*pi/6
                     x = -56
                 self.active_hitboxes.append(Hitbox(x,28,64,12,angle,12,11.3,1/150,12,2,self,False))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
@@ -209,10 +209,10 @@ class Air_President(Char):
         if attack == "BackAir":
             if self.frame == 10: # Active on 10-12
                 if not self.look_right :
-                    angle = 0
+                    angle = pi-3
                     x = 32
                 else :
-                    angle = pi
+                    angle = 3
                     x = -48
                 self.active_hitboxes.append(Hitbox(x,32,48,52,angle,9,9.5,1/250,8,3,self,False))
             if self.frame > 25: # 13 frames de lag
@@ -288,13 +288,21 @@ class Air_President(Char):
                 self.frame = 6
                 self.charge = self.charge+1
 
+            if self.frame == 11 :
+                if self.look_right :
+                    x = 36
+                    angle = 3*pi/4
+                else :
+                    x = -24
+                    angle = pi/4
+                self.active_hitboxes.append(Hitbox(x,50,32,32,angle,9,3,0,7,4,self,False))
             elif self.frame == 15 : # Active on 15-28
                 self.charge = min(self.charge,100)
                 if not self.look_right :
-                    angle = pi/2
+                    angle = 4*pi/6
                     x = 0
                 else :
-                    angle = pi/2
+                    angle = 2*pi/6
                     x = -10
                 self.active_hitboxes.append(Hitbox(x,-50,48,48,angle,9*(self.charge/150+1),14,1/80,7*(self.charge/100+1),13,self,False))
 
