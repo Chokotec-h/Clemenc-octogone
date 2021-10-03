@@ -34,6 +34,7 @@ class Air_President(Char):
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
 
             if self.frame == 6: # Hitbox frame 6-15
+                self.vx = 0
                 if not self.look_right :
                     angle = -pi/2
                 else:
