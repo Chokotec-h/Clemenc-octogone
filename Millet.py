@@ -1,3 +1,4 @@
+from random import randint
 from Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi,cos,sin,asin
@@ -223,7 +224,7 @@ class Rayon():
         else :
             self.angle = 3*pi/4
         self.knockback = 3
-        self.damages = 1.2
+        self.damages = 1.2 + randint(-1,1)
         self.stun = 4
         self.duration = 10
         for i in range(self.len) :
