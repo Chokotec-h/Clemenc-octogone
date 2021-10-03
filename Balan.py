@@ -220,15 +220,15 @@ class Balan(Char):
         if attack == "BackAir":
             if self.frame == 6 : # Frame 6-8
                 if not self.look_right:
-                    angle = 0
+                    angle = pi/50
                 else:
-                    angle = pi
+                    angle = 49*pi/50
                 self.active_hitboxes.append(Hitbox(-40*signe(self.direction)+12,32,16,16,angle,10,12,1/150,15,6,self,False))
             if self.frame == 9 : # Frame 9-11
                 if not self.look_right:
-                    angle = 0
+                    angle = pi/25
                 else:
-                    angle = pi
+                    angle = 24*pi/25
                 if self.active_hitboxes : # Late hitbox
                     self.active_hitboxes[-1].angle = angle
                     self.active_hitboxes[-1].knockback = 3
