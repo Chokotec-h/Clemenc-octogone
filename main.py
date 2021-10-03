@@ -44,7 +44,8 @@ def setup_controls(window,width,height,joysticks):
                         controls[player].pop()
                     else :
                         player = 0
-                        controls[player].pop()
+                        if len(controls[player]) > 0:
+                            controls[player].pop()
                 elif ("Keyboard",e.key) not in controls[int(not player)]:
                     controls[player].append(("Keyboard",e.key))
         # récupération des inputs manette
@@ -94,7 +95,7 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Balan()
+    Char_P1 = Chars.Air_President()
     Char_P2 = Chars.Balan2()
     stage = Stages.Stage()
     smoke = list()
