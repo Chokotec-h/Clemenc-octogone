@@ -29,11 +29,22 @@ AirPresident = {
     "airdodge":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
 }
 
+Nonesprite = {
+    "idle":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "jump":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "fall":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+
+}
+
 animations = {
     "Balan":Balan,
     "BalanM":BalanM,
     "BalanJ":BalanJ,
-    "Air President":AirPresident
+    "Air President":AirPresident,
+    "Millet":Nonesprite,
 }
 
 def get_sprite(animation,char,newframe,right):
