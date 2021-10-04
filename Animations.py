@@ -30,12 +30,12 @@ AirPresident = {
 }
 
 Nonesprite = {
-    "idle":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
-    "walk":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
-    "run":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
-    "jump":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
-    "fall":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Nameless_sprite",((0,0,12,30),),1,True),
+    "idle":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "jump":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "fall":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Nameless_sprite.png",((0,0,12,30),),1,True),
 
 }
 

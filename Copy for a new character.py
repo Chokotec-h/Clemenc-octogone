@@ -9,7 +9,7 @@ class Nom_Personnage(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15)
 
-        self.rect = pygame.Rect(100,0,10,10) # Crée le rectangle de perso
+        self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Name"
 
