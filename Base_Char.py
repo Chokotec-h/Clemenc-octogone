@@ -42,7 +42,7 @@ class Hitbox():
         pygame.draw.rect(window,(255,0,0),(x+800,self.y+450,sizex,self.sizey))
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
-    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight):
+    def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop, doublejumpheight,airdodgespeed,airdodgetime,dodgeduration):
         pygame.sprite.Sprite.__init__(self)
         self.x = 0
         self.damages = 0.0
@@ -91,6 +91,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.animeframe = 0
         self.animation = "idle"
         self.name = "Name"
+
+        self.airdodgespeed = airdodgespeed
+        self.airdodgetime = airdodgetime
+        self.airdodgeduration = dodgeduration
+        self.airdodge = False
+        self.can_airdodge = True
+
+        self.intangibility = False
+        self.dodgex = 0
+        self.dodgey = 0
 
     def inputattack(self,attack):
         self.animeframe = 0
@@ -167,9 +177,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.parry = False
                 if not shield :
                     self.lenght_parry = 0
+            if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None:
+                self.animation = "airdodge"
+                self.can_airdodge = False
+                self.airdodge = True
+                self.dodgex = (right-left)*self.airdodgespeed
+                self.dodgey = (down-up)*self.airdodgespeed
+                self.vx = self.dodgex*(self.airdodgeduration-self.airdodgetime)/2
+                self.vy = self.dodgey*(self.airdodgeduration-self.airdodgetime)/2
+                self.frame = 0
             if self.attack is None :
                 self.active_hitboxes = list()
-            if self.attack is None and not self.lag: # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
+            if self.attack is None and not self.lag and not(self.airdodge): # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if self.grounded :
                     self.animation = "idle"
                 elif self.vy > 0 :
@@ -305,21 +324,36 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     else : # Aerial
                         self.inputattack("UpAir")
 
-            else : # si une attaque est exécutée, on anime la frame suivante
+            elif self.attack is not None : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage,other)
                 if not self.grounded:
                     if right: # drift en l'air
                         self.vx += self.airspeed/10
                     if left:
                         self.vx -= self.airspeed/10
+            if self.airdodge:
+                if self.frame > self.airdodgetime and self.frame < self.airdodgeduration:
+                    self.intangibility = True
+                    #self.vx = self.dodgex*(self.airdodgeduration/self.frame)
+                    #self.vy = self.dodgey*(self.airdodgeduration/self.frame)
+                elif self.frame > self.airdodgeduration:
+                    self.intangibility = False
+                    self.airdodge = False
+                    self.lag = 10
+                
+                    
+
             self.frame += 1
 
 
     def move(self, stage):
-        if self.fastfall : # gravité
-            self.vy = self.vy + self.fastfallspeed #prout prout
+        if not self.airdodge :
+            if self.fastfall : # gravité
+                self.vy = self.vy + self.fastfallspeed #prout prout
+            else :
+                self.vy = self.vy + self.fallspeed
         else :
-            self.vy = self.vy + self.fallspeed
+            self.vy *= 0.8
         
         # détection de collisions à la frame suivante
         nextframe = self.rect.move(self.vx,-signe(self.vy))
@@ -342,15 +376,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.rect.y += self.vy
         self.x += round(self.vx)
         if (not self.hitstun) and (not self.tumble):
-            # déceleration et vitesse max
-            if self.grounded :
-                self.vx *= self.deceleration
-            elif self.vx < -3*self.airspeed:
-                self.vx = (self.vx - 3*self.airspeed)/2
-            elif self.vx > 3*self.airspeed:
-                self.vx = (self.vx + 3*self.airspeed)/2
-            if abs(self.vx) < 0.01 :
-                self.vx = 0
+            if self.airdodge:
+                self.vx *= 0.8
+            else :
+                # déceleration et vitesse max
+                if self.grounded :
+                    self.vx *= self.deceleration
+                elif self.vx < -3*self.airspeed:
+                    self.vx = (self.vx - 3*self.airspeed)/2
+                elif self.vx > 3*self.airspeed:
+                    self.vx = (self.vx + 3*self.airspeed)/2
+                if abs(self.vx) < 0.01 :
+                    self.vx = 0
         if abs(self.vx)+abs(self.vy) < 0.5 :
             self.hitstun = 0
 
@@ -364,6 +401,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.upB = False
             self.grounded = True
             self.fastfall = False
+            if self.airdodge :
+                self.airdodge = False
+                self.intangibility = False
+            self.can_airdodge = True
             if self.tumble :
                 self.tumble = False
                 self.lag = 20
@@ -404,7 +445,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.parrying = False
         for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
-                if not self.parry : # Parry
+                if (not self.parry) and (not self.intangibility): # Parry
                     if hitbox.position_relative : # Reverse hit
                         if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
@@ -424,9 +465,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if abs(self.vx) + abs(self.vy) > 1 :
                         self.tumble = True
                 else :
-                    self.parrying = True
-                    other.attack = None
-                    other.lag = 10
+                    if self.parry :
+                        self.parrying = True
+                        other.attack = None
+                        other.lag = 20
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -439,7 +481,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
-                if not self.parry : # Parry
+                if (not self.parry) and (not self.intangibility): # Parry
                     self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                     self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                     self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun

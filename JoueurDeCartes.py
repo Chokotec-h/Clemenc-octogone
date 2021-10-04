@@ -8,7 +8,7 @@ from random import randint
 class Air_President(Char):
     def __init__(self) -> None:
         super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.8, fastfallspeed=1.6, fullhop=15, shorthop=12,
-                         doublejumpheight=18)
+                         doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -269,7 +269,7 @@ class Air_President(Char):
                 else :
                     angle = 2*pi/6
                     x = -26
-                self.active_hitboxes.append(Hitbox(x,0,52,52,angle,12.5*(self.charge/250+1),17,1/250,9*(self.charge/150+1),5,self,False))
+                self.active_hitboxes.append(Hitbox(x,0,52,52,angle,15+12.5*(self.charge/250),17,1/250,10+9*(self.charge/150),5,self,False))
             if self.frame > 18 and self.frame < 23 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].relativex += (60-self.frame*2)*signe(self.direction)
@@ -305,7 +305,7 @@ class Air_President(Char):
                 else :
                     angle = 2*pi/6
                     x = -10
-                self.active_hitboxes.append(Hitbox(x,-50,48,48,angle,9*(self.charge/150+1),14,1/80,7*(self.charge/100+1),13,self,False))
+                self.active_hitboxes.append(Hitbox(x,-50,48,48,angle,9+7*(self.charge/150),14,1/80,8+7*(self.charge/100),13,self,False))
 
             if self.frame > 49: # 21 frames de lag
                 self.attack = None
@@ -338,7 +338,7 @@ class Air_President(Char):
                 else :
                     angle = 5*pi/13
                     x = -10
-                self.active_hitboxes.append(Hitbox(x,100,100,32,angle,10*(self.charge/200+1),10.5,1/250,8*(self.charge/300+1),8,self,False))
+                self.active_hitboxes.append(Hitbox(x,100,100,32,angle,12+10*(self.charge/200),10.5,1/250,9+8*(self.charge/300+1),8,self,False))
 
             if self.frame > 50: # 23 frames de lag
                 self.attack = None
@@ -371,7 +371,7 @@ class Air_President(Char):
         self.parrying = False
         for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
-                if (not self.parry) and not (self.mao): # Parry and counter
+                if (not self.parry) and (not self.intangibility) and not (self.mao): # Parry and counter
                     self.tumble = True
                     if hitbox.position_relative : # Reverse hit
                         if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
@@ -403,7 +403,7 @@ class Air_President(Char):
 
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
-                if (not self.parry) and (not self.mao) : # Parry
+                if (not self.parry) and (not self.intangibility) and (not self.mao) : # Parry
                     self.tumble = True
                     self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                     self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
