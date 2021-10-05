@@ -48,9 +48,9 @@ class Millet(Char):
                 if up :
                     self.angle_rayon = pi/4
                 if down :
-                    self.angle_rayon = -pi/4
+                    self.angle_rayon = -pi/6
             if self.frame == 25:
-                self.projectiles.append(Rayon(stage,self.x,self.rect.y,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
+                self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -87,7 +87,7 @@ class Millet(Char):
                     angle = 2*pi/3
                     x = -48
                 #self.active_hitboxes.append(Hitbox(x,32,64,32,angle,2,1.7+randint(-5,5)/10,0,8,3,self))
-                self.projectiles.append(Fire(self.x+x,self.rect.y+32,self))
+                self.projectiles.append(Fire(self.x+x-24,self.rect.y+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
 
@@ -282,8 +282,7 @@ class Rayon():
             #self.g[i] += 0.0981
             self.x[i] = nextx
             self.y[i] = nexty
-        self.rect.x = self.x[0]
-        self.rect.y = self.y[0]
+        self.rect = pygame.Rect(self.x[0],self.y[0],signe(-self.v)*self.len,5)
         if self.x[-1] < -800 or self.x[-1] > 800:
             self.duration = 0
 
@@ -300,7 +299,7 @@ class Fire():
         self.size = 2
         self.x = x
         self.y = y
-        self.vx = 14*signe(own.direction)
+        self.vx = 15*signe(own.direction)
         self.vy = randint(-10,10)/10
         self.duration = 11
         self.knockback = 2
