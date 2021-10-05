@@ -306,7 +306,7 @@ class Balan(Char):
                     angle = 3*pi/4
                 else :
                     angle = pi/4
-                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12+5*(self.charge/150),14,1/120,8+6*(self.charge/100),4,self,True,True,1.2))
+                self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12+6*(self.charge/150),14,1/120,20+4*(self.charge/100),4,self,True,True,1.2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -339,7 +339,7 @@ class Balan(Char):
                     angle = 2*pi/6
                 else :
                     angle = 4*pi/6
-                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,10,32,32,angle,10+5*(self.charge/100),13,1/250,7+6*(self.charge/100),6,self,False))
+                self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,10,32,32,angle,18+10*(self.charge/100),13,1/100,14+6*(self.charge/100),6,self,False))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
