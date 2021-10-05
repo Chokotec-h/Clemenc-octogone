@@ -177,14 +177,17 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.parry = False
                 if not shield :
                     self.lenght_parry = 0
-            if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None:
+            if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None and self.can_act:
                 self.animation = "airdodge"
                 self.can_airdodge = False
                 self.airdodge = True
                 self.dodgex = (right-left)*self.airdodgespeed
                 self.dodgey = (down-up)*self.airdodgespeed
-                self.vx = self.dodgex*(self.airdodgeduration-self.airdodgetime)/2
-                self.vy = self.dodgey*(self.airdodgeduration-self.airdodgetime)/2
+                if not self.tumble :
+                    self.vx = 0
+                    self.vy = 0
+                self.vx += self.dodgex*(self.airdodgeduration-self.airdodgetime)/2
+                self.vy += self.dodgey*(self.airdodgeduration-self.airdodgetime)/2
                 self.frame = 0
             if self.attack is None :
                 self.active_hitboxes = list()
@@ -334,6 +337,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.airdodge:
                 if self.frame > self.airdodgetime and self.frame < self.airdodgeduration:
                     self.intangibility = True
+                    self.tumble = False
                     #self.vx = self.dodgex*(self.airdodgeduration/self.frame)
                     #self.vy = self.dodgey*(self.airdodgeduration/self.frame)
                 elif self.frame > self.airdodgeduration:
@@ -348,8 +352,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def move(self, stage):
         if not self.airdodge :
-            if self.fastfall : # gravité
-                self.vy = self.vy + self.fastfallspeed #prout prout
+            if self.hitstun :
+                self.vy = self.vy + self.fastfallspeed/2
+            elif self.fastfall : # gravité
+                self.vy = self.vy + self.fastfallspeed
             else :
                 self.vy = self.vy + self.fallspeed
         else :
@@ -375,19 +381,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Déplacement
         self.rect.y += self.vy
         self.x += round(self.vx)
-        if (not self.hitstun) and (not self.tumble):
-            if self.airdodge:
-                self.vx *= 0.8
-            else :
-                # déceleration et vitesse max
-                if self.grounded :
-                    self.vx *= self.deceleration
-                elif self.vx < -3*self.airspeed:
-                    self.vx = (self.vx - 3*self.airspeed)/2
-                elif self.vx > 3*self.airspeed:
-                    self.vx = (self.vx + 3*self.airspeed)/2
-                if abs(self.vx) < 0.01 :
-                    self.vx = 0
+        if self.airdodge:
+            self.vx *= 0.8
+        elif (not self.hitstun) and (not self.tumble):
+            # déceleration et vitesse max
+            if self.grounded :
+                self.vx *= self.deceleration
+            elif self.vx < -3*self.airspeed:
+                self.vx = (self.vx - 3*self.airspeed)/2
+            elif self.vx > 3*self.airspeed:
+                self.vx = (self.vx + 3*self.airspeed)/2
+            if abs(self.vx) < 0.01 :
+                self.vx = 0
         if abs(self.vx)+abs(self.vy) < 0.5 :
             self.hitstun = 0
 
