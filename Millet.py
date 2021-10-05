@@ -13,7 +13,11 @@ class Millet(Char):
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Millet"
+        self.angle_rayon = -pi/300000
 
+    def special(self):
+        if self.attack is None :
+            self.angle_rayon = -pi/300000
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -40,8 +44,13 @@ class Millet(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
+            if self.frame < 25 :
+                if up :
+                    self.angle_rayon = pi/4
+                if down :
+                    self.angle_rayon = -pi/4
             if self.frame == 25:
-                self.projectiles.append(Rayon(stage,self.x,self.rect.y,pi/6*signe(self.direction),self))
+                self.projectiles.append(Rayon(stage,self.x,self.rect.y,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -70,7 +79,16 @@ class Millet(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 95 : #  frames de lag
+            if self.frame%5 == 1 and self.frame > 15 and self.frame < 58:
+                if self.look_right :
+                    angle = pi/3
+                    x = 0
+                else :
+                    angle = 2*pi/3
+                    x = -48
+                #self.active_hitboxes.append(Hitbox(x,32,64,32,angle,2,1.7+randint(-5,5)/10,0,8,3,self))
+                self.projectiles.append(Fire(self.x+x,self.rect.y+32,self))
+            if self.frame > 84 : #  frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -229,15 +247,15 @@ class Rayon():
         self.x = [x for _ in range(self.len)]
         self.y = [y for _ in range(self.len)]
         self.angle_fwd = [angle_fwd for _ in range(self.len)]
-        self.v = 6*signe(own.direction)
-        self.rect = pygame.Rect(x,y,5,5)
-        self.damages_stacking=0
+        self.v = 9*signe(own.direction)
+        self.rect = pygame.Rect(x-20,y-20,25,25)
+        self.damages_stacking=1/300
         if own.look_right :
             self.angle = pi/4
         else :
             self.angle = 3*pi/4
         self.knockback = 3
-        self.damages = 1.2 + randint(-1,1)
+        self.damages = 4 + randint(-12,12)/10
         self.stun = 4
         self.duration = 10
         #self.g = [-6.74/4 for _ in range(self.len)]
@@ -272,3 +290,35 @@ class Rayon():
     def draw(self,window):
         for i in range(self.len):
             pygame.draw.rect(window,(250,0,0),(self.x[i]+800,self.y[i]+450,10,10))
+
+firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Fire/{i}.png") for i in range(6)]
+for i in range(len(firesprite)):
+    firesprite[i] = pygame.transform.scale(firesprite[i],(3*firesprite[i].get_size()[0],3*firesprite[i].get_size()[1]))
+
+class Fire():
+    def __init__(self,x,y,own) -> None:
+        self.size = 2
+        self.x = x
+        self.y = y
+        self.vx = 14*signe(own.direction)
+        self.vy = randint(-10,10)/10
+        self.duration = 11
+        self.knockback = 2
+        self.damages = 2 + randint(-6,6)/10
+        self.stun = 4
+        self.damages_stacking = 0
+        if own.look_right :
+            self.angle = pi/4
+        else :
+            self.angle = 3*pi/4
+        self.rect = pygame.Rect(x,y,2,2)
+    
+    def update(self):
+        self.rect = firesprite[self.duration//2].get_rect(topleft=(self.x,self.y))
+        self.x += self.vx
+        self.y += self.vy
+        self.vx *= 0.8
+        self.duration -= 1
+
+    def draw(self,window):
+        window.blit(firesprite[self.duration//2],(self.x+800,self.y+450))
