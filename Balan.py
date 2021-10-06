@@ -83,7 +83,9 @@ class Balan(Char):
                     self.look_right = False
                 if right :                    
                     self.look_right = True
+                self.intangibility = True
             if self.frame == 8 :
+                self.intangibility = False
                 if not self.look_right:
                     angle = 3*pi/4
                 else:
