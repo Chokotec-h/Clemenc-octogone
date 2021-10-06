@@ -14,6 +14,7 @@ class Millet(Char):
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Millet"
         self.angle_rayon = -pi/300000
+        self.rapidjab = False
 
     def special(self):
         if self.attack is None :
@@ -82,18 +83,40 @@ class Millet(Char):
             if self.frame%5 == 1 and self.frame > 15 and self.frame < 58:
                 if self.look_right :
                     angle = pi/3
-                    x = 0
+                    x = 24
                 else :
                     angle = 2*pi/3
-                    x = -48
+                    x = -24
                 #self.active_hitboxes.append(Hitbox(x,32,64,32,angle,2,1.7+randint(-5,5)/10,0,8,3,self))
-                self.projectiles.append(Fire(self.x+x-24,self.rect.y+24,self))
+                self.projectiles.append(Fire(self.x+x,self.rect.y+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
 
         if attack == "Jab":
-            if self.frame > 22: #  frames de lag
-                self.attack = None
+            if attack_button and self.frame < 2 :
+                self.rapidjab = True
+            if self.frame > 10 and self.rapidjab:
+                if self.look_right:
+                    x = 24
+                    angle = 0
+                else :
+                    x = -29
+                    angle = pi
+                self.projectiles.append(Sinusoide(self.x+x,self.rect.y+50+20*sin(self.frame/2),angle,self))
+            if self.rapidjab and not attack_button :
+                self.rapidjab = False
+                self.frame = 0
+            if not self.rapidjab :
+                if self.frame > 3: #  frames de lag
+                    if self.look_right:
+                        x = 48
+                        angle = pi/4
+                    else :
+                        x = -64
+                        angle = 3*pi/4
+                    self.active_hitboxes.append(Hitbox(x,32,64,64,angle,10,2.5+randint(-7,7)/10,1/200,8,3,self,False))
+                if self.frame > 30:
+                    self.attack = None
 
         if attack == "DownTilt":
             if self.frame > 20: #  frames de lag
@@ -201,13 +224,13 @@ class Millet(Char):
             if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge+1
-            elif self.frame == 7 : # Active on 7-9
-                self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = 5*pi/6
-                else :
-                    angle = pi/6
-                self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
+            #elif self.frame == 7 : # Active on 7-9
+            #    self.charge = min(self.charge,100)
+            #    if not self.look_right :
+            #        angle = 5*pi/6
+            #    else :
+            #        angle = pi/6
+            #    self.active_hitboxes.append(Hitbox(40*signe(self.direction)+12,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
@@ -321,3 +344,27 @@ class Fire():
 
     def draw(self,window):
         window.blit(firesprite[self.duration//2],(self.x+800,self.y+450))
+    
+    def deflect(self):
+        self.vx = -self.vx
+
+class Sinusoide():
+    def __init__(self,x,y,angle,own) -> None:
+        self.rect = pygame.Rect(x,y,5,5)
+        self.angle = angle
+        self.v = 5*signe(own.direction)
+        self.duration = 15
+        self.knockback = 2
+        self.damages = 0.5 + randint(-1,1)/10
+        self.stun = 3
+        self.damages_stacking = 1/200
+    
+    def update(self):
+        self.rect.x += self.v
+        self.duration -= 1
+    
+    def draw(self,window):
+        pygame.draw.rect(window,(20,130,100),(self.rect.x+800,self.rect.y+450,self.rect.w,self.rect.h))
+
+    def deflect(self):
+        self.duration = 0
