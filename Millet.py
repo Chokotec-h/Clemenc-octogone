@@ -1,7 +1,8 @@
-from random import randint
+from random import randint,choice
 from Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi,cos,sin,asin
+import Animations
 
 ##### Perso
 
@@ -25,17 +26,27 @@ class Millet(Char):
         smash = C_Down or C_Left or C_Right or C_Up
 
         if attack == "UpB":
-            if self.frame < 6 :
+            if self.frame < 12 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 11: # Saute frame 11
-                self.sprite_frame = 0
+            if self.frame == 12 :
+                self.projectiles.append(Quantique(self.x,self.rect.y,self))
+            if self.frame > 12 and self.frame < 25: # Saute frame 12
                 self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -20
-                self.attack = None
+                self.vx = (right-left)*20
+                self.vy = (down-up)*20
+                self.airdodge = True
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
+            if self.frame > 35:
+                self.airdodge = False
+                self.vy = 0
+                self.vx = 0
+            if self.frame > 40:
+                self.attack = None
+            if self.grounded :
+                self.lag += 1
 
             #if self.frame == 6: # Hitbox frame 6-11
             #    if not self.look_right :
@@ -50,6 +61,10 @@ class Millet(Char):
                     self.angle_rayon = pi/4
                 if down :
                     self.angle_rayon = -pi/6
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 25:
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
@@ -83,12 +98,12 @@ class Millet(Char):
             if self.frame%5 == 1 and self.frame > 15 and self.frame < 58:
                 if self.look_right :
                     angle = pi/3
-                    x = 24
+                    x = 0
                 else :
                     angle = 2*pi/3
-                    x = -24
+                    x = -48
                 #self.active_hitboxes.append(Hitbox(x,32,64,32,angle,2,1.7+randint(-5,5)/10,0,8,3,self))
-                self.projectiles.append(Fire(self.x+x,self.rect.y+24,self))
+                self.projectiles.append(Fire(self.x+x-24,self.rect.y+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
 
@@ -107,7 +122,7 @@ class Millet(Char):
                 self.rapidjab = False
                 self.frame = 0
             if not self.rapidjab :
-                if self.frame > 3: #  frames de lag
+                if self.frame > 3:
                     if self.look_right:
                         x = 48
                         angle = pi/4
@@ -115,7 +130,7 @@ class Millet(Char):
                         x = -64
                         angle = 3*pi/4
                     self.active_hitboxes.append(Hitbox(x,32,64,64,angle,10,2.5+randint(-7,7)/10,1/200,8,3,self,False))
-                if self.frame > 30:
+                if self.frame > 30: # 24 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
@@ -368,3 +383,28 @@ class Sinusoide():
 
     def deflect(self):
         self.duration = 0
+
+class Quantique():
+    def __init__(self,x,y,own) -> None:
+        self.rect = pygame.Rect(own.rect.x,own.rect.y,own.rect.w,own.rect.h)
+        self.x = x
+        self.y = y
+        self.own = own
+        self.animeframe = self.own.animeframe
+        self.duration = 60
+        self.angle = pi/2
+        self.knockback = 16
+        self.damages = 12 + randint(-35,35)/10
+        self.stun = 15
+        self.damages_stacking = 1/100
+    
+    def update(self):
+        self.duration -= 1
+
+    def draw(self, window):
+        drawing_sprite,size,self.animeframe = Animations.get_sprite(self.own.animation,self.own.name,self.animeframe+1,self.own.look_right)
+
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+        pos = [self.x + 800 - size[2]/2, self.y-size[3]+self.rect.h + 449] # Position réelle du sprite
+        window.blit(drawing_sprite, pos,size)
