@@ -198,7 +198,7 @@ class Millet(Char):
                     angle = pi/4
                     x = 48
                 self.active_hitboxes.append(Hitbox(x,16,64,64,angle,15+12*(self.charge/200),20+randint(-58,58)/10,1/250,9+8*(self.charge/100),5,self))
-            elif self.frame == 24:
+            elif self.frame == 24: # Late hitbox
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.5
             if self.frame > 69: #  frames de lag
