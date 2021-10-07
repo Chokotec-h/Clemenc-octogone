@@ -452,7 +452,7 @@ class Carte():
     def update(self):
         self.duration -= 1
     
-    def deflect(self):
+    def deflect(self,modifier):
         self.duration = 0
     
     def draw(self,window):

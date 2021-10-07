@@ -96,7 +96,7 @@ def main():
 
     # Déclaration des variables
     Char_P1 = Chars.Millet()
-    Char_P2 = Chars.Air_President()
+    Char_P2 = Chars.Balan()
     stage = Stages.Stage()
     smoke = list()
     smokeframe = 0

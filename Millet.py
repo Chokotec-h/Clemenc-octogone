@@ -43,17 +43,10 @@ class Millet(Char):
                 self.airdodge = False
                 self.vy = 0
                 self.vx = 0
-            if self.frame > 40:
+            if self.frame > 45: # 10 frames de lag
                 self.attack = None
             if self.grounded :
                 self.lag += 1
-
-            #if self.frame == 6: # Hitbox frame 6-11
-            #    if not self.look_right :
-            #        angle = pi/3
-            #    else:
-            #        angle = 2*pi/3
-            #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,angle,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
             if self.frame < 25 :
@@ -65,7 +58,8 @@ class Millet(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 25:
+            if self.frame > 25 and self.frame < 45:
+                self.vy = 0
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
                 self.attack = None
@@ -102,7 +96,6 @@ class Millet(Char):
                 else :
                     angle = 2*pi/3
                     x = -48
-                #self.active_hitboxes.append(Hitbox(x,32,64,32,angle,2,1.7+randint(-5,5)/10,0,8,3,self))
                 self.projectiles.append(Fire(self.x+x-24,self.rect.y+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
@@ -191,41 +184,62 @@ class Millet(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "ForwardSmash":
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 7
+            if self.frame > 3 and self.frame < 6 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 4
                 self.charge = self.charge+1
 
-            #elif self.frame == 12 : # Active on 12-18
-            #    self.charge = min(self.charge,100)
-            #    if not self.look_right :
-            #        angle = 3*pi/4
-            #    else :
-            #        angle = pi/4
-            #    self.active_hitboxes.append(Hitbox(60*signe(self.direction)+12,16,52,64,angle,12*(self.charge/200+1),14,1/250,8*(self.charge/100+1),4,self,True,True,2))
-           
-            if self.frame > 45: #  frames de lag
+            elif self.frame == 22 : # Active on 22-27
+                self.vx = 20*signe(self.direction)
+                self.charge = min(self.charge,100)
+                if not self.look_right :
+                    angle = 3*pi/4
+                    x = -64
+                else :
+                    angle = pi/4
+                    x = 48
+                self.active_hitboxes.append(Hitbox(x,16,64,64,angle,15+12*(self.charge/200),20+randint(-58,58)/10,1/250,9+8*(self.charge/100),5,self))
+            elif self.frame == 24:
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].knockback *= 0.5
+            if self.frame > 69: #  frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "UpSmash":
+
+            if self.active_hitboxes: # Moving hitbox
+                self.active_hitboxes[-1].relativex -= 20*signe(self.direction)
+                if self.frame == 12 :
+                    self.active_hitboxes[-1].relativey += 10
+                if self.frame == 13:
+                    self.active_hitboxes[-1].relativey -= 10
+                if self.frame < 14 :
+                    if self.look_right :
+                        self.active_hitboxes[-1].relativex += 50
+                    
+                    else :
+                        self.active_hitboxes[-1].relativex -= 50
+
             if self.frame < 5 :
                 if left : # peut reverse netre les frames 1 et 5
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 6
+            if self.frame > 4 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 5
                 self.charge = self.charge+1
 
-            #elif self.frame == 10 : # Active on 10-15
-            #    self.charge = min(self.charge,100)
-            #    if not self.look_right :
-            #        angle = 2*pi/6
-            #    else :
-            #        angle = 4*pi/6
-            #    self.active_hitboxes.append(Hitbox(30*signe(self.direction)+12,-10,32,32,angle,10*(self.charge/200+1),13,1/250,6*(self.charge/10+1),6,self,False))
+            elif self.frame == 11 : # Active on 11-13
+                self.charge = min(self.charge,100)
+                if not self.look_right :
+                    angle = 3*pi/4
+                    x = 34
+                else :
+                    angle = pi/4
+                    x = -50
+                self.active_hitboxes.append(Hitbox(x,-16,64,64,angle,13+10*(self.charge/200),13,1/90,10+7*(self.charge/100),5,self,False))
 
-            if self.frame > 40: #  frames de lag
+            if self.frame > 57: # 44 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -280,11 +294,10 @@ class Millet(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own) -> None:
-        self.len = 20
         self.stage = stage
-        self.x = [x for _ in range(self.len)]
-        self.y = [y for _ in range(self.len)]
-        self.angle_fwd = [angle_fwd for _ in range(self.len)]
+        self.x = x
+        self.y = y
+        self.angle_fwd = angle_fwd
         self.v = 9*signe(own.direction)
         self.rect = pygame.Rect(x-20,y-20,25,25)
         self.damages_stacking=1/300
@@ -293,40 +306,40 @@ class Rayon():
         else :
             self.angle = 3*pi/4
         self.knockback = 3
-        self.damages = 4 + randint(-12,12)/10
+        self.damages = 2 + randint(-6,6)/10
         self.stun = 4
         self.duration = 10
-        #self.g = [-6.74/4 for _ in range(self.len)]
-        for i in range(self.len) :
-            for _ in range(self.len-i):
-                nextx = self.x[i] + cos(self.angle_fwd[i])*self.v
-                nexty = self.y[i] + sin(self.angle_fwd[i])*self.v #+ self.g[i]
-                #self.g[i] += 0.0981
-                self.x[i] = nextx
-                self.y[i] = nexty
+        #self.g = -6.74/4
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v #+ self.g
+        #self.g += 0.0981
+        self.x = nextx
+        self.y = nexty
 
     def update(self):
-        for i in range(self.len) :
-            if pygame.Rect(self.x[i],self.y[i],5,5).colliderect(self.stage.rect):
-                #self.g[i] = -6.74/2
-                if self.rect.y < self.stage.rect.y+10 :
-                    self.angle_fwd[i] = -self.angle_fwd[i]
-                else :
-                    self.angle_fwd[i] = pi-self.angle_fwd[i]
+        if pygame.Rect(self.x,self.y,5,5).colliderect(self.stage.rect):
+            #self.g = -self.g*2
+            if self.rect.y < self.stage.rect.y+10 :
+                self.angle_fwd = -self.angle_fwd
+            else :
+                self.angle_fwd = pi-self.angle_fwd
 
 
-            nextx = self.x[i] + cos(self.angle_fwd[i])*self.v
-            nexty = self.y[i] + sin(self.angle_fwd[i])*self.v #+ self.g[i]
-            #self.g[i] += 0.0981
-            self.x[i] = nextx
-            self.y[i] = nexty
-        self.rect = pygame.Rect(self.x[0],self.y[0],signe(-self.v)*self.len,5)
-        if self.x[-1] < -800 or self.x[-1] > 800:
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v #+ self.g
+        #self.g += 0.0981
+        self.x = nextx
+        self.y = nexty
+        self.rect = pygame.Rect(self.x,self.y,5,5)
+        if self.x < -800 or self.x > 800:
             self.duration = 0
 
     def draw(self,window):
-        for i in range(self.len):
-            pygame.draw.rect(window,(250,0,0),(self.x[i]+800,self.y[i]+450,10,10))
+        pygame.draw.rect(window,(250,0,0),(self.x+800,self.y+450,10,10))
+        
+    def deflect(self,modifier):
+        self.v *= -modifier
+
 
 firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Fire/{i}.png") for i in range(6)]
 for i in range(len(firesprite)):
@@ -360,8 +373,10 @@ class Fire():
     def draw(self,window):
         window.blit(firesprite[self.duration//2],(self.x+800,self.y+450))
     
-    def deflect(self):
+    def deflect(self,modifier):
         self.vx = -self.vx
+        self.damages *= modifier
+        self.angle_fwd = -self.angle_fwd
 
 class Sinusoide():
     def __init__(self,x,y,angle,own) -> None:
@@ -381,7 +396,7 @@ class Sinusoide():
     def draw(self,window):
         pygame.draw.rect(window,(20,130,100),(self.rect.x+800,self.rect.y+450,self.rect.w,self.rect.h))
 
-    def deflect(self):
+    def deflect(self,modifier):
         self.duration = 0
 
 class Quantique():
@@ -393,10 +408,10 @@ class Quantique():
         self.animeframe = self.own.animeframe
         self.duration = 60
         self.angle = pi/2
-        self.knockback = 16
-        self.damages = 12 + randint(-35,35)/10
+        self.knockback = 7
+        self.damages = 3 + randint(-9,9)/10
         self.stun = 15
-        self.damages_stacking = 1/100
+        self.damages_stacking = 1/250
     
     def update(self):
         self.duration -= 1
