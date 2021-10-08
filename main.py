@@ -136,14 +136,14 @@ def main():
                     Char_P1.jumping = False
 
                 # Transmission des inputs à l'objet Palyer 1
-                Char_P1.act(inputs_1, stage, Char_P2)
+                Char_P1.act(inputs_1, stage, Char_P2,not(pause or Char_P1.BOUM or Char_P2.BOUM))
 
                 # P2
                 inputs_2 = convert_inputs(controls[1])[0:-1]
                 if not (inputs_2[4] or inputs_2[5]): # Jump
                     Char_P2.jumping = False
 
-                Char_P2.act(inputs_2, stage, Char_P1)
+                Char_P2.act(inputs_2, stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
                 ########
 
                 Char_P2.collide(Char_P1)
