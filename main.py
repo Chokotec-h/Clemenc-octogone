@@ -95,11 +95,11 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Millet()
+    Char_P1 = Chars.Balan2()
     Char_P2 = Chars.Balan()
     stage = Stages.Stage()
     smoke = list()
-    smokeframe = 0
+    smokeframe  = 0
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/main.wav")

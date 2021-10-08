@@ -9,6 +9,9 @@ def signe(val):
     else :
         return val/abs(val)
 
+def change_left(x,size):
+    return -x-size+48
+
 class Hitbox():
     def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True,deflect=False,modifier=1) -> None:
         self.relativex = x # Position relative 
@@ -25,6 +28,9 @@ class Hitbox():
         self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
         self.deflect = deflect
         self.modifier = modifier
+        if not own.look_right :
+            self.relativex = change_left(x,sizex)
+            self.angle = pi - angle
         self.update()
 
     def update(self):

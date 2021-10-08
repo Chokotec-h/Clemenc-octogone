@@ -35,22 +35,14 @@ class Air_President(Char):
 
             if self.frame == 6: # Hitbox frame 6-15
                 self.vx = 0
-                if not self.look_right :
-                    angle = -pi/2
-                else:
-                    angle = -pi/2
                 self.vy = -24
-                self.active_hitboxes.append(Hitbox(-1.5,88,51,48,angle,2,6,1/150,3,8,self,False))
+                self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False))
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
 
         if attack == "NeutralB":
             if self.frame == 10 :
-                if self.look_right :
-                    x = 24
-                else :
-                    x = -104
-                self.active_hitboxes.append(Hitbox(x,0,128,128,0,0,0,0,0,6,self))
+                self.active_hitboxes.append(Hitbox(24,0,128,128,0,0,0,0,0,6,self))
             if self.frame > 9 and self.frame < 16:
                 if self.active_hitboxes and self.active_hitboxes[-1].hit.colliderect(other.rect):
                     if other.grounded :
@@ -90,7 +82,7 @@ class Air_President(Char):
                     else:
                         angle = pi/4
                         x = 24
-                    self.active_hitboxes.append(Hitbox(x,20,68,48,0,0,0,0,0,8,self))
+                    self.active_hitboxes.append(Hitbox(24,20,68,48,0,0,0,0,0,8,self))
                     self.active_hitboxes[-1].update()
                     if self.active_hitboxes[-1].hit.colliderect(other.rect):
                         if randint(1,208) == 1:
@@ -104,37 +96,19 @@ class Air_President(Char):
 
         if attack == "Jab":
             if self.frame == 2 : # Frame 2-3
-                if not self.look_right:
-                    angle = pi/4
-                    x = -32
-                else:
-                    angle = 3*pi/4
-                    x = 32
-                self.active_hitboxes.append(Hitbox(x,20,44,48,angle,0.7,0.3,1/1000,1,2,self,False))
+                self.active_hitboxes.append(Hitbox(32,20,44,48,3*pi/4,0.7,0.3,1/1000,1,2,self,False))
             if self.frame > 5: #  2 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 5 : # Frames 5-10
-                if not self.look_right:
-                    angle = 2*pi/3
-                    x = -40
-                else:
-                    angle = pi/3
-                    x = 24
-                self.active_hitboxes.append(Hitbox(x,64,64,64,angle,3,1.2,1/750,1,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/750,1,2,self,False))
             if self.frame > 15: # 5 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
             if self.frame == 12: # Frames 12-15
-                if not self.look_right:
-                    angle = 3*pi/4
-                    x = -24
-                else:
-                    angle = pi/4
-                    x = 24
-                self.active_hitboxes.append(Hitbox(x,30,48,48,angle,4,12,1/50,12,4,self,False))
+                self.active_hitboxes.append(Hitbox(24,30,48,48,pi/4,4,12,1/50,12,4,self,False))
 
             if self.frame > 30: # 15 frames de lag
                 self.attack = None
@@ -148,32 +122,18 @@ class Air_President(Char):
                         self.active_hitboxes[-1].relativey -= 24
                     self.active_hitboxes[-1].relativex += -7*signe(self.direction)
             if self.frame == 8 :
-                if self.look_right :
-                    x = 24
-                    angle = 7*pi/13
-                else :
-                    angle = 6*pi/13
-                    x = -18
-                self.active_hitboxes.append(Hitbox(x,0,32,32,angle,9,8.5,1/500,9,11,self,False))
+                self.active_hitboxes.append(Hitbox(24,0,32,32,7*pi/13,9,8.5,1/500,9,11,self,False))
             if self.frame > 25: #  Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
             if self.frame == 5 : #frames 5-11
-                if not self.look_right:
-                    angle = 3*pi/4
-                else:
-                    angle = pi/4
-                self.active_hitboxes.append(Hitbox(-8,-20,12,30,angle,5,4,1/300,5,7,self))
+                self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,5,7,self))
             if self.frame > 5 and self.frame < 12 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].sizex += 10
             if self.frame == 15 : #frames 14-15
-                if not self.look_right:
-                    angle = 3*pi/4
-                else:
-                    angle = pi/4
-                self.active_hitboxes.append(Hitbox(-8,-20,60,30,angle,8,7,1/400,7,3,self))
+                self.active_hitboxes.append(Hitbox(-8,-20,60,30,pi/4,8,7,1/400,7,3,self))
             if self.frame > 30: # 15 frames de lag
                 self.attack = None
 
@@ -184,21 +144,9 @@ class Air_President(Char):
 
         if attack == "ForwardAir":
             if self.frame == 9 : # Frame 9-10
-                if self.look_right :
-                    angle = pi/6
-                    x = 24
-                else :
-                    angle = 5*pi/6
-                    x = -56
-                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,12,11.3,1/150,12,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,12,2,self,False))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
-                if self.look_right :
-                    angle = pi/42
-                    x = 24
-                else :
-                    angle = 41*pi/42
-                    x = -56
-                self.active_hitboxes.append(Hitbox(x,28,64,12,angle,2,0.5,1/550,3,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/42,2,0.5,1/550,3,2,self,False))
             if self.frame > 45: # 25 frames de lag
                 self.attack = None
 
@@ -209,13 +157,7 @@ class Air_President(Char):
 
         if attack == "BackAir":
             if self.frame == 10: # Active on 10-12
-                if not self.look_right :
-                    angle = pi-3
-                    x = 32
-                else :
-                    angle = 3
-                    x = -48
-                self.active_hitboxes.append(Hitbox(x,32,48,52,angle,9,9.5,1/250,8,3,self,False))
+                self.active_hitboxes.append(Hitbox(-48,32,48,52,3,9,9.5,1/250,8,3,self,False))
             if self.frame > 25: # 13 frames de lag
                 self.attack = None
 
@@ -263,13 +205,7 @@ class Air_President(Char):
 
             elif self.frame == 19 : # Active on 19-24
                 self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = 4*pi/6
-                    x = 24
-                else :
-                    angle = 2*pi/6
-                    x = -26
-                self.active_hitboxes.append(Hitbox(x,0,52,52,angle,15+12.5*(self.charge/250),17,1/250,10+9*(self.charge/150),5,self,False))
+                self.active_hitboxes.append(Hitbox(-26,0,52,52,pi/3,15+12.5*(self.charge/250),17,1/250,10+9*(self.charge/150),5,self,False))
             if self.frame > 18 and self.frame < 23 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].relativex += (60-self.frame*2)*signe(self.direction)
@@ -290,22 +226,10 @@ class Air_President(Char):
                 self.charge = self.charge+1
 
             if self.frame == 11 :
-                if self.look_right :
-                    x = 36
-                    angle = 3*pi/4
-                else :
-                    x = -24
-                    angle = pi/4
-                self.active_hitboxes.append(Hitbox(x,50,32,32,angle,9,3,0,7,4,self,False))
+                self.active_hitboxes.append(Hitbox(36,50,32,32,9*pi/4,9,3,0,7,4,self,False))
             elif self.frame == 15 : # Active on 15-28
                 self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = 4*pi/6
-                    x = 0
-                else :
-                    angle = 2*pi/6
-                    x = -10
-                self.active_hitboxes.append(Hitbox(x,-50,48,48,angle,9+7*(self.charge/150),14,1/80,8+7*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(-10,-50,48,48,pi/3,9+7*(self.charge/150),14,1/80,8+7*(self.charge/100),13,self,False))
 
             if self.frame > 49: # 21 frames de lag
                 self.attack = None
@@ -323,22 +247,11 @@ class Air_President(Char):
                 self.charge = self.charge+1
             elif self.frame == 16 : # Active on 16-18
                 self.charge = min(self.charge,100)
-                angle = -pi/2
-                if self.look_right:
-                    x = 35
-                else :
-                    x = -23
-                self.active_hitboxes.append(Hitbox(x,-20,32,42,angle,12,3,0,8,3,self,False))
+                self.active_hitboxes.append(Hitbox(35,-20,32,42,-pi/2,12,3,0,8,3,self,False))
             
             elif self.frame == 19 : # Active on 19-27
                 self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = 8*pi/13
-                    x = -42
-                else :
-                    angle = 5*pi/13
-                    x = -10
-                self.active_hitboxes.append(Hitbox(x,100,100,32,angle,12+10*(self.charge/200),10.5,1/250,9+8*(self.charge/300+1),8,self,False))
+                self.active_hitboxes.append(Hitbox(-10,100,100,32,5*pi/13,12+10*(self.charge/200),10.5,1/250,9+8*(self.charge/300+1),8,self,False))
 
             if self.frame > 50: # 23 frames de lag
                 self.attack = None
@@ -351,13 +264,7 @@ class Air_President(Char):
                     self.vx += self.dashspeed*signe(self.direction)*5
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)*5
-                if self.look_right :
-                    angle = pi/5
-                    x = 10
-                else :
-                    angle = 4*pi/5
-                    x = -50
-                self.active_hitboxes.append(Hitbox(x,32,64,64,angle,8,3.5,1/350,7,3,self))
+                self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,8,3.5,1/350,7,3,self))
 
             if self.frame > 66: # 15 frames de lag
                 self.attack = None
