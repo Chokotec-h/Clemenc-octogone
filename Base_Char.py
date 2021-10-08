@@ -81,9 +81,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.lag = 0
         self.charge = 0
         self.parry = False
-        self.parrying = False
         self.lenght_parry = 0
         self.tumble = False
+        self.parried = False
 
         self.jumping = False
         self.dash = False # Unused
@@ -102,6 +102,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.dodgex = 0
         self.dodgey = 0
 
+        self.BOUM = 0
+
     def inputattack(self,attack):
         self.animeframe = 0
         self.tumble = False
@@ -118,28 +120,36 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def special(self):
         pass
 
-    def act(self, inputs,stage,other):
-        self.last_hit = max(self.last_hit-1,0)
-        self.get_inputs(inputs,stage,other)
-        self.move(stage)
-        self.special()
-        for i,hitbox in enumerate(self.active_hitboxes) :
-            hitbox.update()
-            if hitbox.duration <= 0:
-                del self.active_hitboxes[i]
-        for i,projectile in enumerate(self.projectiles) :
-            self.projectiles[i].update()
-            if projectile.duration <= 0:
-                del self.projectiles[i]
-        self.damages = min(999.,self.damages)
-        if self.hitstun: # Arrête la charge des smashs en hitstun
-            self.charge = 0
+    def act(self, inputs,stage,other,continuer):
+        if continuer :
+            if self.attack is None :
+                self.lag = max(0,self.lag-1)
+            self.hitstun = max(0, self.hitstun-1)
+            self.frame += 1
+            self.animeframe += 1
+            self.last_hit = max(self.last_hit-1,0)
+            self.get_inputs(inputs,stage,other)
+            self.move(stage)
+            self.special()
+            for i,hitbox in enumerate(self.active_hitboxes) :
+                hitbox.update()
+                if hitbox.duration <= 0:
+                    del self.active_hitboxes[i]
+            for i,projectile in enumerate(self.projectiles) :
+                self.projectiles[i].update()
+                if projectile.duration <= 0:
+                    del self.projectiles[i]
+            self.damages = min(999.,self.damages)
+            if self.hitstun: # Arrête la charge des smashs en hitstun
+                self.charge = 0
+        else :
+            self.BOUM = max(0,self.BOUM-1)
+        
 
 
     def get_inputs(self, inputs, stage, other):
         self.direction = 90 if self.look_right else -90
-        self.lag = max(0,self.lag-1)
-        self.hitstun = max(0, self.hitstun-1)
+
         left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         jump = fullhop or shorthop
 
@@ -161,23 +171,25 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vy += self.fallspeed/5
         else :
             if (not shield) and self.parry :
-                self.lag = 10
+                self.lag = 3
             if self.grounded and self.attack is None and not self.lag and shield:
                 if right or left:
                     self.dash = True
                     self.parry = False
                     self.lenght_parry = -10
-                elif self.lenght_parry > 2 and self.lenght_parry < 5:
+                elif self.lenght_parry > 1 and self.lenght_parry < 8:
                     self.parry = True
-                elif self.lenght_parry > 5 :
+                elif self.lenght_parry > 8 :
                     self.parry = False
-                    self.lag = 10
+                    if not self.parried :
+                        self.lag = 10
                 self.lenght_parry = self.lenght_parry+1
             else :
                 self.parry = False
                 if not shield :
+                    self.parried = False
                     self.lenght_parry = 0
-            if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None and self.can_act:
+            if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None and self.can_act and not self.jumping:
                 self.animation = "airdodge"
                 self.can_airdodge = False
                 self.airdodge = True
@@ -345,9 +357,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.airdodge = False
                     self.lag = 10
                 
-                    
 
-            self.frame += 1
 
 
     def move(self, stage):
@@ -430,7 +440,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
 
     def draw(self, window):
-        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe+1,self.look_right)
+        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
 
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
         size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
@@ -447,7 +457,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             p.draw(window)
 
     def collide(self,other):
-        self.parrying = False
         for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
                 if (not self.parry) and (not self.intangibility): # Parry
@@ -466,14 +475,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.attack = None # cancel l'attacue en cours
                     self.upB = False
                     self.can_act = True
+                    self.can_airdodge = True
                     self.fastfall = False
-                    if abs(self.vx) + abs(self.vy) > 1 :
+                    if abs(self.vx) + abs(self.vy) > 5 :
                         self.tumble = True
                 else :
                     if self.parry :
-                        self.parrying = True
+                        self.parried = True
                         other.attack = None
-                        other.lag = 20
+                        other.lag = max(hitbox.damages*hitbox.knockback/10,15)
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -496,9 +506,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.attack = None
                     self.upB = False
                     self.can_act = True
+                    self.can_airdodge = True
                     self.fastfall = False
-                    if abs(self.vx) + abs(self.vy) > 1 :
+                    if abs(self.vx) + abs(self.vy) > 5 :
                         self.tumble = True
                 else :
-                    self.parrying = True
+                    if self.parry :
+                        self.parried = True
+                        other.attack = None
+                        other.lag = max(projectile.damages*projectile.knockback/10,15)
                 return
