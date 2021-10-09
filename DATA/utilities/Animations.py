@@ -10,7 +10,7 @@ def get_sprite(animation,char,newframe,right):
     if not right :
         image = image[0:-4]+"_l.png"
     image = pygame.image.load(image).convert_alpha()
-    
+
     frame = round(newframe / (60/time))
     if frame >= len(positions):
         if looped :
