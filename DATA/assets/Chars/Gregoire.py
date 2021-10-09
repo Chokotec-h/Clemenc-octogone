@@ -86,9 +86,15 @@ class Gregoire(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame%5 == 1 and self.frame > 15 and self.frame < 58:
-                self.projectiles.append(Fire(self.x+24*signe(self.direction)-48,self.rect.y+24,self))
-            if self.frame > 84 : #  frames de lag
+            if self.frame > 23 and self.frame < 48:
+                self.projectiles.append(Thunder(self.x+24*signe(self.direction)-48,self.rect.y+24,self)) 
+            if self.frame == 47 :
+                self.active_hitboxes.append(Hitbox(32,32,32,64,pi/4,12,incertitude(7),1/150,15,3,self,False))
+            if self.frame > 48 and self.frame < 90 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].duration += 1
+                    self.active_hitboxes[-1].relativex += 32*signe(self.direction)
+            if self.frame > 92 : # 44 frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -97,29 +103,29 @@ class Gregoire(Char):
             if self.frame > 10 and self.rapidjab:
                 if self.look_right:
                     x = 24
-                    angle = 0
+                    angle = 3*pi/4
                 else :
                     x = -29
-                    angle = pi
-                self.projectiles.append(Sinusoide(self.x+x,self.rect.y+50+20*sin(self.frame/2),angle,self))
+                    angle = pi/4
+                self.projectiles.append(Sinusoide(self.x+x,self.rect.y+50+20*cos(self.frame/2),angle,self))
             if self.rapidjab and not attack_button :
                 self.rapidjab = False
                 self.frame = 0
             if not self.rapidjab :
                 if self.frame == 3:
-                    self.active_hitboxes.append(Hitbox(24,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
+                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
                 if self.frame > 30: # 24 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(24,64,48,48,-2*pi/5,15,incertitude(6),1/200,13,3,self,False))
+                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(9),1/200,13,3,self,False))
             if self.frame > 35: # 19 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
-            if self.frame == 6 :
-                self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,8,3,self,False))
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(48,52,32,32,pi/4,12,incertitude(8),1/225,10,3,self,False))
             if self.frame > 33: # 27 frames de lag
                 self.attack = None
 
@@ -127,7 +133,7 @@ class Gregoire(Char):
             if self.frame == 8:
                 self.vy = -6
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-5,-25,58,58,angle,9,incertitude(10),1/300,12,3,self,False))
+                self.active_hitboxes.append(Hitbox(-5,-48,58,58,angle,10,incertitude(10),1/300,13,3,self,False))
             if self.frame > 25: #  Frames de lag
                 self.attack = None
 
@@ -153,7 +159,7 @@ class Gregoire(Char):
 
         if attack == "ForwardAir":
             if self.frame == 45:
-                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self))
+                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,95.45,1/1000,25,3,self))
             if self.frame == 46 :
                 if not self.active_hitboxes:
                     self.BOUM = 30
@@ -165,9 +171,9 @@ class Gregoire(Char):
             # Pas d'auto cancel. Agit même après avoir atterri
 
         if attack == "BackAir":
-            if self.frame == 10:
-                self.active_hitboxes.append(Hitbox(-48,64,32,32,5*pi/6,8,incertitude(13),1/200,10,5,self,False))
-            if self.frame > 25: #  frames de lag
+            if self.frame == 13:
+                self.active_hitboxes.append(Hitbox(-48,64,32,32,pi/6,13,incertitude(13),1/200,14,5,self,False))
+            if self.frame > 27: #  frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -176,19 +182,22 @@ class Gregoire(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
-            self.vx = 0
+            self.vx = min(self.frame/10,15)*signe(self.direction)
             if self.frame < 14 :
                 self.vy = 0
             self.vy *= 1.1
             if self.frame == 17 :
-                self.active_hitboxes.append(Hitbox(-26,64,100,48,-pi/2,15,incertitude(10),1/200,15,4096,self))
-            if self.frame == 19 :
+                self.active_hitboxes.append(Hitbox(0,0,48,128,-pi/2,15,incertitude(10),1/200,15,4096,self))
+            if self.frame > 19 :
                 if self.active_hitboxes :
-                    self.active_hitboxes[-1].knockback = 4
-                    self.active_hitboxes[-1].damages = incertitude(6)
+                    self.active_hitboxes[-1].knockback = 8
+                    self.active_hitboxes[-1].damages = incertitude(7)
                     self.active_hitboxes[-1].damages_stacking = 1/500
                     self.active_hitboxes[-1].hitstun = 5
-                    self.active_hitboxes[-1].angle = 0 if self.look_right else pi
+                    if self.frame %2 == 0 :
+                        self.active_hitboxes[-1].angle = 0 if self.look_right else pi
+                    else :
+                        self.active_hitboxes[-1].angle = pi if self.look_right else 0
 
             if self.grounded :
                 if self.active_hitboxes :
@@ -197,10 +206,10 @@ class Gregoire(Char):
                 self.lag = 10 # Ne se termine que lorsqu'il touche le sol
 
         if attack == "NeutralAir":
-            if self.frame == 9 :
+            if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(48,48,32,32,0,0,incertitude(6),0,20,3,self))
-            if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,12,incertitude(10),1/250,12,3,self))
+            if self.frame == 18 :
+                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,23,incertitude(10),1/250,12,3,self))
 
             if self.frame > 40: # 26 frames de lag
                 self.attack = None
@@ -215,10 +224,10 @@ class Gregoire(Char):
                 self.frame = 4
                 self.charge = self.charge+1
 
-            elif self.frame == 22 : # Active on 22-27
-                self.vx = 20*signe(self.direction)
+            elif self.frame == 24 : # Active on 24-27
+                self.vx = 10*signe(self.direction)
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(48,16,64,64,pi/4,25+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
+                self.active_hitboxes.append(Hitbox(48,16,48,48,pi/4,25+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
             elif self.frame == 24: # Late hitbox
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.5
@@ -270,7 +279,7 @@ class Gregoire(Char):
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-16
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(30,60,60,32,pi/6,12+7*(self.charge/200),incertitude(13),1/250,9+5*(self.charge/50),6,self,False))
+                self.active_hitboxes.append(Hitbox(30,60,60,32,pi/5,12+7*(self.charge/200),incertitude(13),1/250,9+5*(self.charge/150),6,self,False))
             
 
             if self.frame > 35: # 19 frames de lag
@@ -349,37 +358,34 @@ class Rayon():
         self.v *= -modifier
 
 
-firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Fire/{i}.png") for i in range(6)]
-for i in range(len(firesprite)):
-    firesprite[i] = pygame.transform.scale(firesprite[i],(3*firesprite[i].get_size()[0],3*firesprite[i].get_size()[1]))
+thundersprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Thunder.png"),(64,64))
 
-class Fire():
+class Thunder():
     def __init__(self,x,y,own) -> None:
         self.size = 2
         self.x = x
         self.y = y
-        self.vx = 15*signe(own.direction)
-        self.vy = randint(-10,10)/10
-        self.duration = 11
-        self.knockback = 2
-        self.damages = incertitude(2)
-        self.stun = 4
+        self.vx = 32*signe(own.direction)
+        self.duration = 50
+        self.knockback = 1
+        self.damages = incertitude(2.4)
+        self.stun = 12
         self.damages_stacking = 0
         if own.look_right :
             self.angle = pi/4
         else :
             self.angle = 3*pi/4
         self.rect = pygame.Rect(x,y,2,2)
+        if not own.look_right :
+            self.x += 32
     
     def update(self):
-        self.rect = firesprite[self.duration//2].get_rect(topleft=(self.x,self.y))
+        self.rect = thundersprite.get_rect(topleft=(self.x,self.y))
         self.x += self.vx
-        self.y += self.vy
-        self.vx *= 0.8
         self.duration -= 1
 
     def draw(self,window):
-        window.blit(firesprite[self.duration//2],(self.x+800,self.y+450))
+        window.blit(thundersprite,(self.x+800,self.y+450))
     
     def deflect(self,modifier):
         self.vx = -self.vx
@@ -402,7 +408,7 @@ class Sinusoide():
         self.duration -= 1
     
     def draw(self,window):
-        pygame.draw.rect(window,(20,130,100),(self.rect.x+800,self.rect.y+450,self.rect.w,self.rect.h))
+        pygame.draw.rect(window,(220,200,120),(self.rect.x+800,self.rect.y+450,self.rect.w,self.rect.h))
 
     def deflect(self,modifier):
         self.duration = 0
