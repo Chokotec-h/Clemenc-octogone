@@ -1,6 +1,6 @@
 import pygame
 import traceback
-import DATA.assets.Chars as Chars
+import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 from DATA.assets.Misc import *
 from DATA.utilities.Interface import *
@@ -93,7 +93,7 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Millet()
+    Char_P1 = Chars.Gregoire()
     Char_P2 = Chars.Balan()
     stage = Stages.Stage()
     smoke = list()
