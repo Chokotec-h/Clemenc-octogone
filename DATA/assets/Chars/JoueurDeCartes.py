@@ -333,7 +333,7 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own) -> None:
         if number == "R":
-            self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Cartes/Revolution.png")
+            self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/Revolution.png")
             self.knockback = 0
             self.damages = 999
             self.stun = 0
@@ -342,7 +342,7 @@ class Carte():
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
-            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Cartes/{self.number}.png"),(48,64))
+            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/{self.number}.png"),(48,64))
             self.number = number
             self.angle = angle
             self.knockback = self.number*0.9
@@ -368,7 +368,7 @@ class Carte():
 class Stylo():
     def __init__(self,color,own,stage):
         # Stylos d'Elsa
-        self.sprite = pygame.image.load("./DATA/Images/Sprites/Stylo/Stylo_"+color+".png")
+        self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Stylo/Stylo_"+color+".png")
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2

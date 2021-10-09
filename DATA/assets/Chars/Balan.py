@@ -2,7 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
-exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Exposants/{i}.png"),(36,36)) for i in range(5)]
+exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Exposants/{i}.png"),(36,36)) for i in range(5)]
 
 ##### M Balan
 
@@ -293,11 +293,11 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
+                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,8+5*(self.charge/100),3,self,False))
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,5*(self.charge/50+1),3,self,False))
+                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,8+5*(self.charge/100),3,self,False))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
@@ -330,7 +330,7 @@ class Projo_Craie():
     def __init__(self,id,own,stage):
         # Craies de M Balan
         self.id = id+1
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
@@ -349,7 +349,7 @@ class Projo_Craie():
 
     def update(self):
         if self.rect.colliderect(self.stage.rect) :
-            self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
+            self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
             self.y -= 3
             self.duration -= 1
             self.vx = 0

@@ -107,13 +107,13 @@ class Millet(Char):
                 self.frame = 0
             if not self.rapidjab :
                 if self.frame == 3:
-                    self.active_hitboxes.append(Hitbox(24,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
+                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
                 if self.frame > 30: # 24 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(24,64,48,48,-2*pi/5,15,incertitude(6),1/200,13,3,self,False))
+                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(6),1/200,13,3,self,False))
             if self.frame > 35: # 19 frames de lag
                 self.attack = None
 
@@ -349,7 +349,7 @@ class Rayon():
         self.v *= -modifier
 
 
-firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Fire/{i}.png") for i in range(6)]
+firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
 for i in range(len(firesprite)):
     firesprite[i] = pygame.transform.scale(firesprite[i],(3*firesprite[i].get_size()[0],3*firesprite[i].get_size()[1]))
 
