@@ -11,8 +11,8 @@ def incertitude(x):
 
 class Millet(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
-                         doublejumpheight=15,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.9, dashspeed=3.1, airspeed=1.2, deceleration=0.8, fallspeed=0.4, fastfallspeed=1.2, fullhop=14, shorthop=11,
+                         doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -218,7 +218,7 @@ class Millet(Char):
             elif self.frame == 22 : # Active on 22-27
                 self.vx = 20*signe(self.direction)
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(48,16,64,64,pi/4,25+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
+                self.active_hitboxes.append(Hitbox(48,16,64,64,pi/4,19+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
             elif self.frame == 24: # Late hitbox
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.5

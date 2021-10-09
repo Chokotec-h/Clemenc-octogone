@@ -11,8 +11,8 @@ def incertitude(x):
 
 class Gregoire(Char):
     def __init__(self) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
-                         doublejumpheight=15,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.75, fallspeed=0.6, fastfallspeed=1.4, fullhop=13, shorthop=10,
+                         doublejumpheight=13,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -209,7 +209,7 @@ class Gregoire(Char):
             if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(48,48,32,32,0,0,incertitude(6),0,20,3,self))
             if self.frame == 18 :
-                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,23,incertitude(10),1/250,12,3,self))
+                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,20,incertitude(10),1/250,12,3,self))
 
             if self.frame > 40: # 26 frames de lag
                 self.attack = None
@@ -227,7 +227,7 @@ class Gregoire(Char):
             elif self.frame == 24 : # Active on 24-27
                 self.vx = 10*signe(self.direction)
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(48,16,48,48,pi/4,25+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
+                self.active_hitboxes.append(Hitbox(48,16,48,48,pi/4,22+12*(self.charge/200),incertitude(20),1/250,9+8*(self.charge/100),5,self))
             elif self.frame == 24: # Late hitbox
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.5
