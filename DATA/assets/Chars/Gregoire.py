@@ -317,25 +317,25 @@ class Rayon():
         self.damages = incertitude(2)
         self.stun = 4
         self.duration = 10
-        #self.g = -6.74/4
+        self.g = -6.74/4
         nextx = self.x + cos(self.angle_fwd)*self.v
-        nexty = self.y + sin(self.angle_fwd)*self.v #+ self.g
-        #self.g += 0.0981
+        nexty = self.y + sin(self.angle_fwd)*self.v + self.g
+        self.g += 0.0981
         self.x = nextx
         self.y = nexty
 
     def update(self):
-        if pygame.Rect(self.x,self.y,5,5).colliderect(self.stage.rect):
-            #self.g = -self.g*2
-            if self.rect.y < self.stage.rect.y+10 :
+        nexty = self.y + sin(self.angle_fwd)*self.v + self.g
+        if pygame.Rect(self.x,nexty,5,5).colliderect(self.stage.rect):
+            self.g = -self.g*0.8
+            if self.rect.y < self.stage.rect.y-self.g+abs(self.v)+5 :
                 self.angle_fwd = -self.angle_fwd
             else :
                 self.angle_fwd = pi-self.angle_fwd
 
 
         nextx = self.x + cos(self.angle_fwd)*self.v
-        nexty = self.y + sin(self.angle_fwd)*self.v #+ self.g
-        #self.g += 0.0981
+        self.g += 0.981
         self.x = nextx
         self.y = nexty
         self.rect = pygame.Rect(self.x,self.y,5,5)

@@ -46,4 +46,5 @@ animations = {
     "BalanJ":BalanJ,
     "Air President":AirPresident,
     "Millet":Nonesprite,
+    "Gregoire":Nonesprite,
 }
