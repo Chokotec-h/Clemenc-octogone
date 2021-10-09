@@ -1,8 +1,8 @@
 from random import randint,choice
-from Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi,cos,sin,asin, sqrt
-import Animations
+import DATA.utilities.Animations as Animations
 
 def incertitude(x):
     return x + randint(round(-x/(2*sqrt(3)))*10,round(x/(2*sqrt(3)))*10)/10
@@ -153,7 +153,7 @@ class Millet(Char):
 
         if attack == "ForwardAir":
             if self.frame == 45:
-                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/4,1,3,self))
+                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self))
             if self.frame == 46 :
                 if not self.active_hitboxes:
                     self.BOUM = 30
@@ -161,11 +161,8 @@ class Millet(Char):
                     self.active_hitboxes.pop()
             if self.frame > 69: # 24 frames de lag
                 self.attack = None
-
-            if self.grounded and self.frame != 45:
-                self.attack = None
-                if self.frame < 50 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 50+
+            
+            # Pas d'auto cancel. Agit même après avoir atterri
 
         if attack == "BackAir":
             if self.frame == 10:
@@ -268,26 +265,15 @@ class Millet(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 4 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge+1
-            #elif self.frame == 7 : # Active on 7-9
-            #    self.charge = min(self.charge,100)
-            #    if not self.look_right :
-            #        angle = 5*pi/6
-            #    else :
-            #        angle = pi/6
-            #    self.active_hitboxes.append(Hitbox(40,60,32,32,angle,7*(self.charge/200+1),12.5,1/250,5*(self.charge/50+1),3,self,False))
-            
-            elif self.frame == 15 : # Active on 15-17
+            elif self.frame == 10 : # Active on 10-16
                 self.charge = min(self.charge,100)
-                if not self.look_right :
-                    angle = pi/6
-                else :
-                    angle = 5*pi/6
-                self.active_hitboxes.append(Hitbox(-40,60,32,32,angle,9*(self.charge/200+1),14.5,1/250,5*(self.charge/50+1),3,self,False))
+                self.active_hitboxes.append(Hitbox(30,60,60,32,pi/6,12+7*(self.charge/200),incertitude(13),1/250,9+5*(self.charge/50),6,self,False))
+            
 
-            if self.frame > 40: #  frames de lag
+            if self.frame > 35: # 19 frames de lag
                 self.attack = None
                 self.charge = 0
 

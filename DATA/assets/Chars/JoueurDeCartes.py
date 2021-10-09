@@ -1,4 +1,4 @@
-from Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi, cos, sin
 from random import randint

@@ -1,12 +1,10 @@
-from Misc import Smoke
 import pygame
 import traceback
-import spritesLoader
-import Chars
-import Stages
-from Misc import *
-from Interface import *
-from Gamepad_gestion import *
+import DATA.assets.Chars as Chars
+import DATA.assets.Stages as Stages
+from DATA.assets.Misc import *
+from DATA.utilities.Interface import *
+from DATA.utilities.Gamepad_gestion import *
 
 ####################################
 ########## Initialisation ##########
@@ -95,7 +93,7 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Déclaration des variables
-    Char_P1 = Chars.Balan2()
+    Char_P1 = Chars.Millet()
     Char_P2 = Chars.Balan()
     stage = Stages.Stage()
     smoke = list()
