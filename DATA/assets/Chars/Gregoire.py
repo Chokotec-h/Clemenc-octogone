@@ -209,7 +209,7 @@ class Gregoire(Char):
             if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(48,48,32,32,0,0,incertitude(6),0,20,3,self))
             if self.frame == 18 :
-                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,20,incertitude(10),1/250,12,3,self))
+                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,20,incertitude(10),1/250,12,3,self,False))
 
             if self.frame > 40: # 26 frames de lag
                 self.attack = None

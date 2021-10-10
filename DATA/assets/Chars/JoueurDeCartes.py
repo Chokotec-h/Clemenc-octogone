@@ -16,7 +16,7 @@ class Air_President(Char):
         self.mao = False
         self.mao_used = False
         self.basefallspeed = 0.8
-        self.stylo = ["Bleu","Violet","Vert","Rouge"]
+        self.stylo = ["Bleu","Violet","Vert","Noir"]
         self.currentstylo = 0
 
     def special(self): # Spécial
@@ -399,13 +399,13 @@ class Stylo():
             self.knockback = 5
         else :
             self.knockback = 3
-        if self.color == "Rouge":
+        if self.color == "Noir":
             self.damages = 3.2
         elif self.color == "Vert" :
             self.damages = 0.8
         else :
             self.damages = 1.2
-        if self.color == "Rouge" :
+        if self.color == "Noir" :
             self.stun = 6
         elif self.color == "Violet":
             self.stun = 8

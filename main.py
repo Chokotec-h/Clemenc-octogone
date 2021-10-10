@@ -100,8 +100,8 @@ def main():
     smokeframe  = 0
 
     # test de music et de bruitages
-    pygame.mixer.music.load("DATA/Musics/main.wav")
-    #pygame.mixer.music.play()
+    pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
+    pygame.mixer.music.play()
     soundReady = True
 
     try:
