@@ -11,7 +11,7 @@ def incertitude(x):
 
 class Gregoire(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.75, fallspeed=0.6, fastfallspeed=1.4, fullhop=13, shorthop=10,
+        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.6, fallspeed=0.7, fastfallspeed=1.4, fullhop=13, shorthop=10,
                          doublejumpheight=13,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso

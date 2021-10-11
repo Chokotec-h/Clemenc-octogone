@@ -11,7 +11,7 @@ def incertitude(x):
 
 class Millet(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1.9, dashspeed=3.1, airspeed=1.2, deceleration=0.8, fallspeed=0.4, fastfallspeed=1.2, fullhop=14, shorthop=11,
+        super().__init__(speed=1.9, dashspeed=3.1, airspeed=1.2, deceleration=0.7, fallspeed=0.55, fastfallspeed=1.2, fullhop=14, shorthop=11,
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
