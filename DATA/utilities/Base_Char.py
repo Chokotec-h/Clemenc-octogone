@@ -117,6 +117,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.frame = 0  # on démarre à la frame 0
             self.attack = attack  # on update l'action en cours
             if attack == "UpB":
+                self.fastfall = False
                 self.can_act = False # Ne peut pas attaquer après le up B
                 self.upB = True # Effets spéciaux après upB (uniquement grounded)
     
