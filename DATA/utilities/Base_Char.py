@@ -295,7 +295,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.doublejump[i] = True
 
                 if down : # Si on input vers le bas
-                    
                     if attack :
                         if self.grounded :
                             self.inputattack("DownTilt")
@@ -365,7 +364,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.lag = 10
                 
 
-
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h <= p.rect.y+self.vy+3:
+                return True
+        return False
 
     def move(self, stage):
         if not self.airdodge :
@@ -380,15 +385,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         
         # détection de collisions à la frame suivante
         nextframe = self.rect.move(self.vx,-signe(self.vy))
-        if nextframe.colliderect(stage.rect):
-            while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.rect):
+        if nextframe.colliderect(stage.mainplat.rect):
+            while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.mainplat.rect):
                 self.rect.x += signe(self.vx)
                 self.x += signe(self.vx)
             self.x -= signe(self.vx)
             self.vx = 0
         nextframe = self.rect.move(0,self.vy)
-        if nextframe.colliderect(stage.rect):
-            while not self.rect.move(0,signe(self.vy)).colliderect(stage.rect):
+        if self.touch_stage(stage,nextframe):
+            while not self.touch_stage(stage,self.rect.move(0,signe(self.vy))):
                 self.rect.y += signe(self.vy)
             if self.hitstun:
                 self.vy = -self.vy*0.5
@@ -414,7 +419,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.hitstun = 0
 
         # Détection de si le personnage est au sol
-        if self.rect.move(0,1).colliderect(stage.rect):
+        if self.touch_stage(stage,self.rect.move(0,1)):
             if self.hitstun : # diminue la vitesse de hitstun
                 self.vx *= 0.8
             if not self.can_act : # permet de jouer après un upb

@@ -241,7 +241,7 @@ def main():
                         Char_P1 = Chars.charobjects[chars[selectchar_1]]()
                         Char_P2 = Chars.charobjects[chars[selectchar_2]]()
                         run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
-                        stage = Stages.Stage()
+                        stage = Stages.Stage([(-200,50,400,10,(150,150,150))])
             else :
                 if not musicplaying :
                     pygame.mixer.music.stop()
