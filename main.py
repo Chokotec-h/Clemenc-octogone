@@ -101,7 +101,7 @@ def main():
     smokeframe  = 0
 
     # test de music et de bruitages
-    pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
+    pygame.mixer.music.load("DATA/Musics/intro_.mp3")
     pygame.mixer.music.play()
     soundReady = True
 
@@ -114,6 +114,7 @@ def main():
         hold_pause = False
         Play = False
         Menu = "main"
+        musicplaying = False
         while run:  # Boucle du programme
 
             click = False
@@ -242,6 +243,11 @@ def main():
                         run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
                         stage = Stages.Stage()
             else :
+                if not musicplaying :
+                    pygame.mixer.music.stop()
+                    pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
+                    pygame.mixer.music.play()
+                    musicplaying = True
 
                 window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
 
