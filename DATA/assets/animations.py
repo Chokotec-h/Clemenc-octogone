@@ -1,4 +1,11 @@
 
+icons ={
+    "Balan":"./DATA/Images/Sprites/Chars/Balan/icon.png",
+    "Joueur de air-president":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
+}
+
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
 Balan = {
     "idle":("./DATA/Images/Sprites/Chars/Balan/Default/balan_idle.png",((10,2,12,30),(42,2,12,30),(74,4,12,28),(106,3,12,29)),5,True),
@@ -44,7 +51,7 @@ animations = {
     "Balan":Balan,
     "BalanM":BalanM,
     "BalanJ":BalanJ,
-    "Air President":Nonesprite,
+    "Joueur de air-president":Nonesprite,
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
 }

@@ -19,6 +19,9 @@ class Millet(Char):
         self.name = "Millet"
         self.angle_rayon = -pi/300000
         self.rapidjab = False
+    
+    def __str__(self) -> str:
+        return "Millet"
 
     def special(self):
         if self.attack is None :

@@ -12,12 +12,15 @@ class Air_President(Char):
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
-        self.name = "Air President"
+        self.name = "Joueur de air-president"
         self.mao = False
         self.mao_used = False
         self.basefallspeed = 0.8
         self.stylo = ["Bleu","Violet","Vert","Noir"]
         self.currentstylo = 0
+    
+    def __str__(self) -> str:
+        return "Joueur de air-president"
 
     def special(self): # Spécial
         pass
@@ -88,6 +91,7 @@ class Air_President(Char):
                         if randint(1,208) == 1:
                             other.rect.y = 10000
                             self.projectiles.append(Carte(x,20,pi/42,"R",self))
+                            self.BOUM = 30
                         else :
                             self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
 

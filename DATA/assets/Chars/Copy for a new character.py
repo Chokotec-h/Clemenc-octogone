@@ -12,6 +12,9 @@ class Nome_Personnage(Char):
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Name"
+    
+    def __str__(self) -> str:
+        return "Name"
 
     def special(self): 
         pass

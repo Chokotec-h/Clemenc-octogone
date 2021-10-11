@@ -14,6 +14,9 @@ class Balan(Char):
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Balan"
+    
+    def __str__(self) -> str:
+        return "Balan"
 
     def special(self): # Spécial à Balan, pour son upB
         if self.upB: # Vitesse de merde après upB

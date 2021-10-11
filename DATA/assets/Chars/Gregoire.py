@@ -19,6 +19,9 @@ class Gregoire(Char):
         self.name = "Gregoire"
         self.angle_rayon = -pi/300000
         self.rapidjab = False
+    
+    def __str__(self) -> str:
+        return "Gregoire"
 
     def special(self):
         if self.attack is None :
