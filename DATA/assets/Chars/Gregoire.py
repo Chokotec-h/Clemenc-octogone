@@ -11,8 +11,8 @@ def incertitude(x):
 
 class Gregoire(Char):
     def __init__(self) -> None:
-        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.6, fallspeed=0.7, fastfallspeed=1.4, fullhop=13, shorthop=10,
-                         doublejumpheight=13,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.6, fallspeed=0.7, fastfallspeed=1.4, fullhop=15, shorthop=13,
+                         doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -338,9 +338,9 @@ class Rayon():
 
     def update(self):
         nexty = self.y + sin(self.angle_fwd)*self.v + self.g
-        if pygame.Rect(self.x,nexty,5,5).colliderect(self.stage.rect):
+        if pygame.Rect(self.x,nexty,5,5).colliderect(self.stage.mainplat.rect):
             self.g = -self.g*0.8
-            if self.rect.y < self.stage.rect.y-self.g+abs(self.v)+5 :
+            if self.rect.y < self.stage.mainplat.rect.y-self.g+abs(self.v)+5 :
                 self.angle_fwd = -self.angle_fwd
             else :
                 self.angle_fwd = pi-self.angle_fwd

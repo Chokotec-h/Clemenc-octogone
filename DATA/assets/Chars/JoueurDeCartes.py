@@ -1,4 +1,4 @@
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi, cos, sin
 from random import randint
@@ -77,11 +77,11 @@ class Air_President(Char):
                     self.look_right = True
             if self.frame == 16 :
                 if randint(1,208) == 1:
-                    self.y = 10000
+                    self.rect.y = 10000
                 else :
                     if not self.look_right:
                         angle = 3*pi/4
-                        x = -54
+                        x = change_left(24)
                     else:
                         angle = pi/4
                         x = 24
@@ -417,7 +417,7 @@ class Stylo():
             self.stun = 3
 
     def update(self):
-        if self.rect.colliderect(self.stage.rect) :
+        if self.rect.colliderect(self.stage.mainplat.rect) :
             self.duration = 0
         self.x += round(self.vx)
         self.y += self.vy

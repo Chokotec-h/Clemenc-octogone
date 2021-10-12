@@ -351,7 +351,7 @@ class Projo_Craie():
         self.stun = 4
 
     def update(self):
-        if self.rect.colliderect(self.stage.rect) :
+        if self.rect.colliderect(self.stage.mainplat.rect) :
             self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
             self.y -= 3
             self.duration -= 1
