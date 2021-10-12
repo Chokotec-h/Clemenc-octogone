@@ -27,11 +27,17 @@ class Texte:
             win.blit(text,(self.x , self.y))
 
 class Button :
-    def __init__(self,text,image,x,y,w,h,show=True) :
+    def __init__(self,text,font,image,x,y,w,h,show=True) :
         self.x = x
         self.y = y
 
-        self.textobject = Texte(text,("arial",50,True,False),(0,0,0),self.x,self.y)
+        self.textobject = Texte(text,font,(0,0,0),self.x,self.y)
+        if isinstance(image,str):
+            self.image = pygame.image.load(image)
+        else :
+            self.image = image
+        self.width = round(self.image.get_size()[0])
+        self.height = round(self.image.get_size()[1])
         self.changeImage(image)
         self.resize(w,h)
 
@@ -61,8 +67,7 @@ class Button :
             self.image = pygame.image.load(image)
         else :
             self.image = image
-        self.width = round(self.image.get_size()[0])
-        self.height = round(self.image.get_size()[1])
+        self.resize(self.width,self.height)
         self.rect = pygame.Rect(self.x-self.width//2,self.y-self.height//2,self.width,self.height)
 
     def draw(self,win):

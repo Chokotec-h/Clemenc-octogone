@@ -153,12 +153,16 @@ def main():
             if not Play :
                 window.fill((153,102,255))
                 if Menu == "main":
-                    Bouton = Button("Play","./DATA/Images/Menu/Button.png",width/2,height/4,250,100)
+                    Bouton = Button("Play",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/4,250,100)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     Bouton.draw(window)
                     if Bouton.is_clicked(click):
                         Menu = "stage"
                         click = False
-                    Bouton = Button("Settings","./DATA/Images/Menu/Button.png",width/2,height/2,250,100)
+                    Bouton = Button("Settings",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/2,250,100)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     Bouton.draw(window)
                     if Bouton.is_clicked(click):
                         Menu = "commands"
@@ -169,17 +173,23 @@ def main():
                     if commandconfig is None:
                         for i,n in enumerate(commands) :
                             if n != "Default":
-                                Bouton = Button(n,"./DATA/Images/Menu/Button.png",100,(i+1)*60,120,50)
+                                Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",100,(i+1)*60,120,50)
+                                if Bouton.is_focused():
+                                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 if Bouton.is_clicked(click):
                                     commandconfig = n
                                     inputget = -1
                                 Bouton.draw(window)
-                        Bouton = Button("+","./DATA/Images/Menu/Button.png",100,800,50,50)
+                        Bouton = Button("+",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,800,50,50)
+                        if Bouton.is_focused():
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         Bouton.draw(window)
                         if Bouton.is_clicked(click):
                             commandconfig = 0
                             name = "Player"
-                        Bouton = Button("Back","./DATA/Images/Menu/Button.png",100,850,100,60)
+                        Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                        if Bouton.is_focused():
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if Bouton.is_clicked(click):
                             Menu = "main"
                         Bouton.draw(window)
@@ -188,7 +198,9 @@ def main():
                         Entry.update(events)
                         name = Entry.get_text()
                         Texte("Enter name :  "+Entry.get_text(),("arial",30,False,False),(0,0,0),width/2,height/2).draw(window)
-                        Bouton = Button("OK","./DATA/Images/Menu/Button.png",100,850,50,50)
+                        Bouton = Button("OK",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,50,50)
+                        if Bouton.is_focused():
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         Bouton.draw(window)
                         if Bouton.is_clicked(click):
                             commands[name] = commands["Default"]
@@ -205,7 +217,9 @@ def main():
                                 text = "[input]"
                             else :
                                 text = str(k)
-                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",width/6,(i+1)*80,200,60)
+                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",width/6,(i+1)*80,200,60)
+                            if Bouton.is_focused():
+                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if Bouton.is_clicked(click):
                                 inputget = i
                             Bouton.draw(window)
@@ -215,7 +229,9 @@ def main():
                                 text = "[input]"
                             else :
                                 text = str(k)
-                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",2*width/6,(i+1)*80,200,60)
+                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",2*width/6,(i+1)*80,200,60)
+                            if Bouton.is_focused():
+                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if Bouton.is_clicked(click):
                                 inputget = i+4
                             Bouton.draw(window)
@@ -225,7 +241,9 @@ def main():
                                 text = "[input]"
                             else :
                                 text = str(k)
-                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",4*width/6,(i+1)*80,200,60)
+                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",4*width/6,(i+1)*80,200,60)
+                            if Bouton.is_focused():
+                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if Bouton.is_clicked(click):
                                 inputget = i+9
                             Bouton.draw(window)
@@ -235,11 +253,15 @@ def main():
                                 text = "[input]"
                             else :
                                 text = str(k)
-                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",5*width/6,(i+1)*80,200,60)
+                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",5*width/6,(i+1)*80,200,60)
+                            if Bouton.is_focused():
+                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if Bouton.is_clicked(click):
                                 inputget = i+13
                             Bouton.draw(window)
-                        Bouton = Button("Save","./DATA/Images/Menu/Button.png",100,850,100,60)
+                        Bouton = Button("Save",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                        if Bouton.is_focused():
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if Bouton.is_clicked(click):
                             with open("./commands.py","w") as commandfile :
                                 commandfile.write("commands = {\n")
@@ -252,7 +274,7 @@ def main():
                             
                                 
                 if Menu == "stage":
-                    Bouton = Button("","./DATA/Images/Menu/Button.png",100,100,100,100)
+                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,100,100,100)
                     if Bouton.is_focused() :
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         Bouton.resize(100,100)
@@ -265,15 +287,17 @@ def main():
                         selected_2 = False
                         stage = 0
                         click = False
+                        names = [0,0]
+                        namelist = [k for k in commands]
                 if Menu == "char":
                     chars = ["Balan","Joueur de air-president","Millet","Gregoire","Balan"]
                     ### P1
                     for i in range(len(chars)):
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
                         Bouton.draw(window)
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1+len(chars)+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1+len(chars)+4),400,100)
                         Bouton.draw(window)
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1+4),400,100)
                         if selectchar_1 == i :
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             Bouton.resize(400,100)
@@ -282,14 +306,14 @@ def main():
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4)-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4-len(chars))-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4+len(chars))-32))
-                    Bouton = Button("","./DATA/Images/Menu/Down.png",width/3,800,20,20,not selected_1)
+                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Down.png",width/3,800,20,20,not selected_1)
                     Bouton.draw(window)
                     if Bouton.is_clicked(click) and not selected_1:
                         selectchar_1 += 1
                         if selectchar_1 >= len(chars) :
                             selectchar_1 = 0
                         click = False
-                    Bouton = Button("","./DATA/Images/Menu/Up.png",width/3,50,20,20,not selected_1)
+                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Up.png",width/3,50,20,20,not selected_1)
                     Bouton.draw(window)
                     if Bouton.is_clicked(click) and not selected_1:
                         selectchar_1 -= 1
@@ -300,11 +324,11 @@ def main():
                     ### P2
                     for i in range(len(chars)):
                         # Buttons
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2-len(chars)+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2-len(chars)+4),400,100)
                         Bouton.draw(window)
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2+len(chars)+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2+len(chars)+4),400,100)
                         Bouton.draw(window)
-                        Bouton = Button("","./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2+4),400,100)
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width-200,105*(i-selectchar_2+4),400,100)
                         if selectchar_2 == i :
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             Bouton.resize(400,100)
@@ -315,14 +339,14 @@ def main():
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-232,105*(i-selectchar_2+4-len(chars))-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-232,105*(i-selectchar_2+4+len(chars))-32))
                     # Arrows
-                    Bouton = Button("","./DATA/Images/Menu/Down.png",2*width/3,800,20,20,not selected_2)
+                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Down.png",2*width/3,800,20,20,not selected_2)
                     Bouton.draw(window)
                     if Bouton.is_clicked(click) and not selected_2:
                         selectchar_2 += 1
                         if selectchar_2 >= len(chars) :
                             selectchar_2 = 0
                         click = False
-                    Bouton = Button("","./DATA/Images/Menu/Up.png",2*width/3,50,20,20,not selected_2)
+                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Up.png",2*width/3,50,20,20,not selected_2)
                     Bouton.draw(window)
                     if Bouton.is_clicked(click) and not selected_2:
                         selectchar_2 -= 1
@@ -331,15 +355,44 @@ def main():
                         click = False
                     
                     # OK Buttons
-                    Bouton = Button("OK","./DATA/Images/Menu/Button.png",width/2-100,height-150,64,64)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click):
-                        selected_1 = not selected_1
-                    Bouton = Button("OK","./DATA/Images/Menu/Button.png",width/2+100,height-150,64,64)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click):
-                        selected_2 = not selected_2
+                    if convert_inputs(controls[0],joysticks[0])[6]:
+                        selected_1 = True
+                    if convert_inputs(controls[0],joysticks[0])[7]:
+                        selected_1 = False
+                    if convert_inputs(controls[1],joysticks[0])[6]:
+                        selected_2 = True
+                    if convert_inputs(controls[1],joysticks[0])[7]:
+                        selected_2 = False
                     
+                    # Names
+                    if names[0] == 0 :
+                        text = "Player 1"
+                    else :
+                        text = namelist[names[0]]
+                    Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",3*width/10,height-150,200,32)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    if Bouton.is_clicked(click):
+                        names[0] += 1
+                        if names[0] >= len(namelist):
+                            names[0] = 0
+                    Bouton.draw(window)
+
+                    if names[1] == 0 :
+                        text = "Player 2"
+                    else :
+                        text = namelist[names[1]]
+                    Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",7*width/10,height-150,200,32)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    if Bouton.is_clicked(click):
+                        names[1] += 1
+                        if names[1] >= len(namelist):
+                            names[1] = 0
+                    Bouton.draw(window)
+
+                    #Texte(names[0],("arial",24,True,False),(0,0,0),width/4,height-150,format_="center").draw(window)
+                    #Texte(names[1],("arial",24,True,False),(0,0,0),3*width/4,height-150,format_="center").draw(window)
                     # Text
                     if selected_1 :
                         pygame.draw.rect(window,(230,230,230),(width/8,height-120,width/4,30))
@@ -358,8 +411,9 @@ def main():
                         Menu = "stage"
                         Char_P1 = Chars.charobjects[chars[selectchar_1]]()
                         Char_P2 = Chars.charobjects[chars[selectchar_2]]()
-                        run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
-                        stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(400,100,100,10,(150,150,150))])
+                        #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
+                        controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
+                        stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
             else :
                 if not musicplaying :
                     pygame.mixer.music.stop()

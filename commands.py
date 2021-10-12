@@ -1,5 +1,4 @@
 commands = {
-	"Default":[('Joy', 0, -1), ('Joy', 0, 1), ('Joy', 1, -1), ('Joy', 1, 1), ('Button', 2), ('Button', 3), ('Button', 0), ('Button', 1), ('Joy', 5, 1), ('Joy', 2, -1), ('Joy', 2, 1), ('Joy', 3, -1), ('Joy', 3, 1), ('Button', 13), ('Button', 14), ('Button', 11), ('Button', 12), ('Button', 6)],
-	"Test":[('Joy', 0, -1), ('Joy', 0, 1), ('Joy', 1, -1), ('Joy', 1, 1), ('Button', 2), ('Button', 3), ('Button', 0), ('Button', 1), ('Joy', 5, 1), ('Joy', 2, -1), ('Joy', 2, 1), ('Joy', 3, -1), ('Joy', 3, 1), ('Button', 13), ('Button', 14), ('Button', 11), ('Button', 12), ('Button', 6)],
-	"Chokotrec'h":[('Joy', 0, -1), ('Joy', 0, 1), ('Joy', 1, -1), ('Joy', 1, 1), ('Button', 2), ('Button', 3), ('Button', 0), ('Button', 1), ('Joy', 5, 1), ('Joy', 2, -1), ('Joy', 2, 1), ('Joy', 3, -1), ('Joy', 3, 1), ('Button', 13), ('Button', 14), ('Button', 11), ('Button', 12), ('Button', 6)],
+	"Default":[('Joy', 0, -1.0), ('Joy', 0, 1.0), ('Joy', 1, -1.0), ('Joy', 1, 1.0), ('Button', 2), ('Button', 3), ('Button', 0), ('Button', 1), ('Joy', 5, 1.0), ('Joy', 2, -1.0), ('Joy', 2, 1.0), ('Joy', 3, -1.0), ('Joy', 3, 1.0), ('Button', 13), ('Button', 14), ('Button', 11), ('Button', 12), ('Button', 6)],
+	"Chokotrec'h":[('Joy', 0, -1.0), ('Joy', 0, 1.0), ('Joy', 1, -1.0), ('Joy', 1, 1.0), ('Button', 2), ('Button', 3), ('Button', 0), ('Button', 1), ('Joy', 5, 1.0), ('Joy', 2, -1.0), ('Joy', 2, 1.0), ('Joy', 3, -1.0), ('Joy', 3, 1.0), ('Button', 13), ('Button', 14), ('Button', 11), ('Button', 12), ('Button', 6)],
 }
