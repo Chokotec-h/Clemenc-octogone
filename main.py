@@ -54,7 +54,7 @@ def setup_controls(window,width,height,joysticks):
     controls = [[],[]]
     player = 0
     run = True
-    # liste des action
+    # liste des actions
     actions = ("Left","Right","Up","Down","Fullhop","Shorthop","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
         window.fill((200,220,200))
@@ -119,13 +119,17 @@ def main():
     height = 900
     window = pygame.display.set_mode((width, height))
 
+    # Se joue uniquement avec deux manettes
+    if len(joysticks) < 2 :
+        print("\n----------------------------------\nVeuillez connecter deux manettes !\n----------------------------------\n")
+        return
     # Déclaration des variables
     smoke = list()
     smokeframe  = 0
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/intro_.mp3")
-    #pygame.mixer.music.play()
+    pygame.mixer.music.play()
     soundReady = True
 
     try:
@@ -274,6 +278,12 @@ def main():
                             
                                 
                 if Menu == "stage":
+                    Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    if Bouton.is_clicked(click):
+                        Menu = "main"
+                    Bouton.draw(window)
                     Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,100,100,100)
                     if Bouton.is_focused() :
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
@@ -290,6 +300,12 @@ def main():
                         names = [0,0]
                         namelist = [k for k in commands]
                 if Menu == "char":
+                    Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
+                    if Bouton.is_focused():
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    if Bouton.is_clicked(click):
+                        Menu = "main"
+                    Bouton.draw(window)
                     chars = ["Balan","Joueur de air-president","Millet","Gregoire","Balan"]
                     ### P1
                     for i in range(len(chars)):
@@ -424,16 +440,16 @@ def main():
                 window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
 
                 # Recuperation des touches
-                if (convert_inputs(controls[0])[-1] or convert_inputs(controls[1])[-1]):
+                if (convert_inputs(controls[0],joysticks[0])[-1] or convert_inputs(controls[1],joysticks[1])[-1]):
                     if not hold_pause:
                         pause = not pause
                         hold_pause  = True
                 else :
                     hold_pause = False
-                
+
                 if not pause:
                     # P1
-                    inputs_1 = convert_inputs(controls[0])[0:-1]
+                    inputs_1 = convert_inputs(controls[0],joysticks[0])[0:-1]
                     if not (inputs_1[4] or inputs_1[5]): # Jump
                         Char_P1.jumping = False
 
@@ -441,7 +457,7 @@ def main():
                     Char_P1.act(inputs_1, stage, Char_P2,not(pause or Char_P1.BOUM or Char_P2.BOUM))
 
                     # P2
-                    inputs_2 = convert_inputs(controls[1])[0:-1]
+                    inputs_2 = convert_inputs(controls[1],joysticks[1])[0:-1]
                     if not (inputs_2[4] or inputs_2[5]): # Jump
                         Char_P2.jumping = False
 
