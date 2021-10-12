@@ -5,10 +5,11 @@ from pygame.constants import MOUSEBUTTONDOWN
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 from DATA.assets.Misc import *
-from DATA.utilities.Base_Char import Char
 from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.assets.animations import icons
+from commands import *
+from DATA.utilities.Entry import *
 
 ####################################
 ########## Initialisation ##########
@@ -27,6 +28,27 @@ for j in joysticks:
 ####################################
 ####################################
 
+def get_controler_input():
+    controls = []
+    for joystick in joysticks:
+        inputs = get_inputs(joystick)
+        for i in inputs :
+            if len(i) > 3 :
+                if i[0] == "D-Pad":
+                    if i not in controls[0] + controls[1]:
+                        controls.append(i)
+                else :
+                    if abs(i[-1]) > 0.3 and abs(i[-1]) != 1:
+                        move = list(i[0:3])+[signe(i[-1])]
+                        if move not in controls[0] + controls[1]:
+                            controls.append(move)
+            else :
+                if i not in controls[0] + controls[1]:
+                    controls.append(i)
+    if controls :
+        controls[0].pop(1)
+        return controls[0]
+
 ### Version bêta
 def setup_controls(window,width,height,joysticks):
     controls = [[],[]]
@@ -36,7 +58,8 @@ def setup_controls(window,width,height,joysticks):
     actions = ("Left","Right","Up","Down","Fullhop","Shorthop","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
     while run :
         window.fill((200,220,200))
-        for e in pygame.event.get():
+        events = pygame.event.get
+        for e in events:
             if e.type == pygame.QUIT:
                 run = False
             # Récupération des inputs claviers
@@ -102,24 +125,26 @@ def main():
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/intro_.mp3")
-    pygame.mixer.music.play()
+    #pygame.mixer.music.play()
     soundReady = True
 
     try:
 
         #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
         run = True
-        controls = []
+        controls = [commands["Default"],commands["Default"]]
         pause = False
         hold_pause = False
         Play = False
         Menu = "main"
+        commandconfig = None
         musicplaying = False
         while run:  # Boucle du programme
 
             click = False
             # Récupération des events
-            for e in pygame.event.get():
+            events = pygame.event.get()
+            for e in events:
                 if e.type == pygame.QUIT: # Bouton croix en haut à droite de l'écran
                     run = False
                 if e.type == pygame.MOUSEBUTTONDOWN:
@@ -133,6 +158,99 @@ def main():
                     if Bouton.is_clicked(click):
                         Menu = "stage"
                         click = False
+                    Bouton = Button("Settings","./DATA/Images/Menu/Button.png",width/2,height/2,250,100)
+                    Bouton.draw(window)
+                    if Bouton.is_clicked(click):
+                        Menu = "commands"
+                        click = False
+
+                # MENU COMMANDES
+                if Menu == "commands":
+                    if commandconfig is None:
+                        for i,n in enumerate(commands) :
+                            if n != "Default":
+                                Bouton = Button(n,"./DATA/Images/Menu/Button.png",100,(i+1)*60,120,50)
+                                if Bouton.is_clicked(click):
+                                    commandconfig = n
+                                    inputget = -1
+                                Bouton.draw(window)
+                        Bouton = Button("+","./DATA/Images/Menu/Button.png",100,800,50,50)
+                        Bouton.draw(window)
+                        if Bouton.is_clicked(click):
+                            commandconfig = 0
+                            name = "Player"
+                        Bouton = Button("Back","./DATA/Images/Menu/Button.png",100,850,100,60)
+                        if Bouton.is_clicked(click):
+                            Menu = "main"
+                        Bouton.draw(window)
+                    elif commandconfig == 0:
+                        Entry = TextInput(name)
+                        Entry.update(events)
+                        name = Entry.get_text()
+                        Texte("Enter name :  "+Entry.get_text(),("arial",30,False,False),(0,0,0),width/2,height/2).draw(window)
+                        Bouton = Button("OK","./DATA/Images/Menu/Button.png",100,850,50,50)
+                        Bouton.draw(window)
+                        if Bouton.is_clicked(click):
+                            commands[name] = commands["Default"]
+                            commandconfig = name
+                            inputget = -1
+                    else :
+                        if inputget > -1:
+                            if get_controler_input():
+                                commands[commandconfig][inputget] = get_controler_input()
+                                inputget = -1
+                        # Stick
+                        for i,k in enumerate(commands[commandconfig][0:4]):
+                            if inputget == i :
+                                text = "[input]"
+                            else :
+                                text = str(k)
+                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",width/6,(i+1)*80,200,60)
+                            if Bouton.is_clicked(click):
+                                inputget = i
+                            Bouton.draw(window)
+                        # Jump, Attack, Special, Shield
+                        for i,k in enumerate(commands[commandconfig][4:9]):
+                            if inputget == i+4 :
+                                text = "[input]"
+                            else :
+                                text = str(k)
+                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",2*width/6,(i+1)*80,200,60)
+                            if Bouton.is_clicked(click):
+                                inputget = i+4
+                            Bouton.draw(window)
+                        # C-Stick
+                        for i,k in enumerate(commands[commandconfig][9:13]):
+                            if inputget == i+9 :
+                                text = "[input]"
+                            else :
+                                text = str(k)
+                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",4*width/6,(i+1)*80,200,60)
+                            if Bouton.is_clicked(click):
+                                inputget = i+9
+                            Bouton.draw(window)
+                        # D-Pad + Pause
+                        for i,k in enumerate(commands[commandconfig][13:]):
+                            if inputget == i+13 :
+                                text = "[input]"
+                            else :
+                                text = str(k)
+                            Bouton = Button(text,"./DATA/Images/Menu/Button.png",5*width/6,(i+1)*80,200,60)
+                            if Bouton.is_clicked(click):
+                                inputget = i+13
+                            Bouton.draw(window)
+                        Bouton = Button("Save","./DATA/Images/Menu/Button.png",100,850,100,60)
+                        if Bouton.is_clicked(click):
+                            with open("./commands.py","w") as commandfile :
+                                commandfile.write("commands = {\n")
+                                for k in commands :
+                                    commandfile.write(f'\t"{k}":{commands[k]},\n')
+                                commandfile.write("}")
+
+                            commandconfig = None
+                        Bouton.draw(window)
+                            
+                                
                 if Menu == "stage":
                     Bouton = Button("","./DATA/Images/Menu/Button.png",100,100,100,100)
                     if Bouton.is_focused() :
@@ -241,7 +359,7 @@ def main():
                         Char_P1 = Chars.charobjects[chars[selectchar_1]]()
                         Char_P2 = Chars.charobjects[chars[selectchar_2]]()
                         run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
-                        stage = Stages.Stage([(-200,50,400,10,(150,150,150))])
+                        stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(400,100,100,10,(150,150,150))])
             else :
                 if not musicplaying :
                     pygame.mixer.music.stop()
@@ -313,10 +431,9 @@ def main():
                 Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
 
-
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)
-            
+
 
     except:
         traceback.print_exc()
