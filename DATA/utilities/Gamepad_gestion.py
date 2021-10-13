@@ -30,14 +30,14 @@ def get_inputs(joystick):
             get.append(("D-Pad",joystick,i,0,1))
         if hat[0] == -1 :
             get.append(("D-Pad",joystick,i,0,-1))
-    return get
+    return list(get)
 
-def convert_inputs(controls,joystick):
+def convert_inputs(controls,joystick,number):
     bool_list = list()
     keys = pygame.key.get_pressed()
     for i in range(len(controls)):
         if controls[i][0] != "Keyboard":
-            controls[i].insert(1,joystick)
+            controls[i].insert(1,joystick[number])
     for c in controls:
         if c[0] == "Keyboard":
             bool_list.append(keys[c[1]])

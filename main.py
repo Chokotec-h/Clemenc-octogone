@@ -28,7 +28,7 @@ for j in joysticks:
 ####################################
 ####################################
 
-def get_controler_input():
+def get_controler_input(events):
     controls = []
     for joystick in joysticks:
         inputs = get_inputs(joystick)
@@ -45,6 +45,10 @@ def get_controler_input():
             else :
                 if i not in controls[0] + controls[1]:
                     controls.append(i)
+    for e in events:
+        # Récupération des inputs claviers
+        if e.type == pygame.KEYDOWN:
+            controls.append(["Keyboard","",e.key])
     if controls :
         controls[0].pop(1)
         return controls[0]
@@ -120,23 +124,28 @@ def main():
     window = pygame.display.set_mode((width, height))
 
     # Se joue uniquement avec deux manettes
-    if len(joysticks) < 2 :
-        print("\n----------------------------------\nVeuillez connecter deux manettes !\n----------------------------------\n")
-        return
+    #if len(joysticks) < 2 :
+    #    print("\n----------------------------------\nVeuillez connecter deux manettes !\n----------------------------------\n")
+    #    return
     # Déclaration des variables
     smoke = list()
     smokeframe  = 0
 
     # test de music et de bruitages
     pygame.mixer.music.load("DATA/Musics/intro_.mp3")
-    pygame.mixer.music.play()
+    #pygame.mixer.music.play()
     soundReady = True
 
     try:
 
         #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
         run = True
-        controls = [commands["Default"],commands["Default"]]
+        if len(joysticks) > 1 :
+            controls = [commands["Default"],commands["Default"]]
+        elif len(joysticks) > 0 :
+            controls = [commands["Default"],commands["Keyboard"]]
+        else :
+            controls = [commands["Keyboard"],commands["Keyboard"]]
         pause = False
         hold_pause = False
         Play = False
@@ -212,8 +221,8 @@ def main():
                             inputget = -1
                     else :
                         if inputget > -1:
-                            if get_controler_input():
-                                commands[commandconfig][inputget] = get_controler_input()
+                            if get_controler_input(events):
+                                commands[commandconfig][inputget] = get_controler_input(events)
                                 inputget = -1
                         # Stick
                         for i,k in enumerate(commands[commandconfig][0:4]):
@@ -322,20 +331,15 @@ def main():
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4)-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4-len(chars))-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(168,105*(i-selectchar_1+4+len(chars))-32))
-                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Down.png",width/3,800,20,20,not selected_1)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click) and not selected_1:
+                    # Arrows                    
+                    if convert_inputs(controls[0],joysticks,0)[3]:
                         selectchar_1 += 1
                         if selectchar_1 >= len(chars) :
                             selectchar_1 = 0
-                        click = False
-                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Up.png",width/3,50,20,20,not selected_1)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click) and not selected_1:
+                    if convert_inputs(controls[0],joysticks,0)[2]:
                         selectchar_1 -= 1
                         if selectchar_1 < 0 :
                             selectchar_1 = len(chars) - 1
-                        click = False
 
                     ### P2
                     for i in range(len(chars)):
@@ -355,31 +359,25 @@ def main():
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-232,105*(i-selectchar_2+4-len(chars))-32))
                         window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-232,105*(i-selectchar_2+4+len(chars))-32))
                     # Arrows
-                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Down.png",2*width/3,800,20,20,not selected_2)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click) and not selected_2:
+                    if convert_inputs(controls[1],joysticks,1)[3]:
                         selectchar_2 += 1
                         if selectchar_2 >= len(chars) :
                             selectchar_2 = 0
-                        click = False
-                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Up.png",2*width/3,50,20,20,not selected_2)
-                    Bouton.draw(window)
-                    if Bouton.is_clicked(click) and not selected_2:
+                    if convert_inputs(controls[1],joysticks,1)[2]:
                         selectchar_2 -= 1
                         if selectchar_2 < 0 :
                             selectchar_2 = len(chars) - 1
-                        click = False
                     
                     # OK Buttons
-                    if convert_inputs(controls[0],joysticks[0])[6]:
+                    if convert_inputs(controls[0],joysticks,0)[6]:
                         selected_1 = True
-                    if convert_inputs(controls[0],joysticks[0])[7]:
+                    if convert_inputs(controls[0],joysticks,0)[7]:
                         selected_1 = False
-                    if convert_inputs(controls[1],joysticks[0])[6]:
+                    if convert_inputs(controls[1],joysticks,1)[6]:
                         selected_2 = True
-                    if convert_inputs(controls[1],joysticks[0])[7]:
+                    if convert_inputs(controls[1],joysticks,1)[7]:
                         selected_2 = False
-                    
+
                     # Names
                     if names[0] == 0 :
                         text = "Player 1"
@@ -431,6 +429,9 @@ def main():
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
                         stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
             else :
+                #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
+                """""""""""""""""""""  IN  BATTLE  """""""""""""""""""""""""""
+                #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
                 if not musicplaying :
                     pygame.mixer.music.stop()
                     pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
@@ -440,7 +441,7 @@ def main():
                 window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
 
                 # Recuperation des touches
-                if (convert_inputs(controls[0],joysticks[0])[-1] or convert_inputs(controls[1],joysticks[1])[-1]):
+                if (convert_inputs(controls[0],joysticks,0)[-1] or convert_inputs(controls[1],joysticks,1)[-1]):
                     if not hold_pause:
                         pause = not pause
                         hold_pause  = True
@@ -449,7 +450,7 @@ def main():
 
                 if not pause:
                     # P1
-                    inputs_1 = convert_inputs(controls[0],joysticks[0])[0:-1]
+                    inputs_1 = convert_inputs(controls[0],joysticks,0)[0:-1]
                     if not (inputs_1[4] or inputs_1[5]): # Jump
                         Char_P1.jumping = False
 
@@ -457,7 +458,7 @@ def main():
                     Char_P1.act(inputs_1, stage, Char_P2,not(pause or Char_P1.BOUM or Char_P2.BOUM))
 
                     # P2
-                    inputs_2 = convert_inputs(controls[1],joysticks[1])[0:-1]
+                    inputs_2 = convert_inputs(controls[1],joysticks,1)[0:-1]
                     if not (inputs_2[4] or inputs_2[5]): # Jump
                         Char_P2.jumping = False
 
