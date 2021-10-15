@@ -1,7 +1,7 @@
 
 icons ={
     "Balan":"./DATA/Images/Sprites/Chars/Balan/icon.png",
-    "Joueur de air-president":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Joueur de air-president":"./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png",
     "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
