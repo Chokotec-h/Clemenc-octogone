@@ -10,13 +10,15 @@ def incertitude(x):
 ##### Perso
 
 class Millet(Char):
-    def __init__(self) -> None:
+    def __init__(self,x,y) -> None:
         super().__init__(speed=1.9, dashspeed=3.1, airspeed=1.2, deceleration=0.7, fallspeed=0.55, fastfallspeed=1.2, fullhop=14, shorthop=11,
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Millet"
+        self.x = x
+        self.rect.y = y
         self.angle_rayon = -pi/300000
         self.rapidjab = False
     
@@ -26,6 +28,7 @@ class Millet(Char):
     def special(self):
         if self.attack is None :
             self.angle_rayon = -pi/300000
+        return False
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs

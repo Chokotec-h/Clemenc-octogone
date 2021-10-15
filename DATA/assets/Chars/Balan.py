@@ -7,13 +7,15 @@ exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprite
 ##### M Balan
 
 class Balan(Char):
-    def __init__(self) -> None:
+    def __init__(self,x,y) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.45, fastfallspeed=1, fullhop=14, shorthop=11,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Balan"
+        self.x = x
+        self.rect.y = y
     
     def __str__(self) -> str:
         return "Balan"
@@ -21,6 +23,7 @@ class Balan(Char):
     def special(self): # Spécial à Balan, pour son upB
         if self.upB: # Vitesse de merde après upB
             self.vx *= 0.3
+        return False
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs

@@ -5,13 +5,15 @@ from math import pi
 ##### Copier
 
 class Nome_Personnage(Char):
-    def __init__(self) -> None:
+    def __init__(self,x,y) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Name"
+        self.x = x
+        self.rect.y = y
     
     def __str__(self) -> str:
         return "Name"

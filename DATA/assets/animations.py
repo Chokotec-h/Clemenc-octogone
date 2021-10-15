@@ -4,6 +4,7 @@ icons ={
     "Joueur de air-president":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -54,4 +55,5 @@ animations = {
     "Joueur de air-president":Nonesprite,
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
+    "Reignaud":Nonesprite,
 }

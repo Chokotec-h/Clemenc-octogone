@@ -6,13 +6,15 @@ from random import randint
 ##### Perso
 
 class Air_President(Char):
-    def __init__(self) -> None:
+    def __init__(self,x,y) -> None:
         super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.5, fastfallspeed=1.6, fullhop=15, shorthop=12,
                          doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
         self.name = "Joueur de air-president"
+        self.x = x
+        self.rect.y = y
         self.mao = False
         self.mao_used = False
         self.basefallspeed = 0.8
@@ -23,7 +25,7 @@ class Air_President(Char):
         return "Joueur de air-president"
 
     def special(self): # Spécial
-        pass
+        return False
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs

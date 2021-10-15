@@ -379,7 +379,7 @@ def main():
                     if b >= 20:
                         Menu = "stage"
                     Bouton.draw(window)
-                    chars = ["Balan","Joueur de air-president","Millet","Gregoire","Balan"]
+                    chars = ["Balan","Joueur de air-president","Millet","Gregoire","Reignaud"]
                     ### P1
                     for i in range(len(chars)):
                         Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
@@ -492,15 +492,15 @@ def main():
                         Texte("READY",("arial",24,True,False),(0,0,0),3*width/4,height-110,format_="center").draw(window)
                     
                     pygame.draw.rect(window,(200,200,200),(0,height-90,width,90))
-                    Texte(str(Chars.charobjects[chars[selectchar_1]]()),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
-                    Texte(str(Chars.charobjects[chars[selectchar_2]]()),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
+                    Texte(str(Chars.charobjects[chars[selectchar_1]](0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
+                    Texte(str(Chars.charobjects[chars[selectchar_2]](0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
                     Texte("|",("arial",80,True,False),(0,0,0),width/2,height-50,format_="center").draw(window)
 
                     if selected_2 and selected_1 :
                         Play = True
                         Menu = "stage"
-                        Char_P1 = Chars.charobjects[chars[selectchar_1]]()
-                        Char_P2 = Chars.charobjects[chars[selectchar_2]]()
+                        Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
+                        Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
                         #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
                         stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
