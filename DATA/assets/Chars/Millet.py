@@ -81,7 +81,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame == 70 :
-                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,20,5,self,False))
+                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,25,5,self,False))
             if self.frame > 120 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -113,19 +113,19 @@ class Millet(Char):
                 self.frame = 0
             if not self.rapidjab :
                 if self.frame == 3:
-                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
-                if self.frame > 30: # 24 frames de lag
+                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,10,incertitude(2.5),1/200,18,3,self,False))
+                if self.frame > 20: # 14 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(6),1/200,15,3,self,False))
-            if self.frame > 35: # 19 frames de lag
+                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(6),1/200,18,3,self,False))
+            if self.frame > 30: # 14 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
             if self.frame == 6 :
-                self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,10,3,self,False))
+                self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,25,3,self,False))
             if self.frame > 33: # 27 frames de lag
                 self.attack = None
 
@@ -133,8 +133,8 @@ class Millet(Char):
             if self.frame == 8:
                 self.vy = -6
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-5,-25,58,58,angle,9,incertitude(10),1/300,14,3,self,False))
-            if self.frame > 25: #  Frames de lag
+                self.active_hitboxes.append(Hitbox(-5,-25,58,58,angle,9,incertitude(10),1/300,20,3,self,False))
+            if self.frame > 25: # 17 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
@@ -144,10 +144,10 @@ class Millet(Char):
             if self.frame == 12: #12-15
                 x = 24
                 angle = 3*pi/5
-                self.active_hitboxes.append(Hitbox(24,64,64,16,3*pi/5,10,incertitude(5),0,8,3,self,False))
-                self.active_hitboxes.append(Hitbox(-40,64,64,16,2*pi/5,10,incertitude(5),0,8,3,self,False))
+                self.active_hitboxes.append(Hitbox(24,64,64,16,3*pi/5,10,incertitude(5),0,12,3,self,False))
+                self.active_hitboxes.append(Hitbox(-40,64,64,16,2*pi/5,10,incertitude(5),0,12,3,self,False))
             if self.frame == 15: # 15-23
-                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,12,incertitude(7),1/90,15,8,self,False))
+                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,12,incertitude(7),1/90,19,8,self,False))
 
             if self.frame > 45: # 22 frames de lag
                 self.attack = None
@@ -173,7 +173,7 @@ class Millet(Char):
         if attack == "BackAir":
             if self.frame == 10:
                 self.active_hitboxes.append(Hitbox(-48,64,32,32,5*pi/6,8,incertitude(13),1/200,14,5,self,False))
-            if self.frame > 25: #  frames de lag
+            if self.frame > 25: # 15 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -187,7 +187,7 @@ class Millet(Char):
                 self.vy = 0
             self.vy *= 1.1
             if self.frame == 17 :
-                self.active_hitboxes.append(Hitbox(-26,64,100,48,-pi/2,15,incertitude(10),1/200,16,4096,self))
+                self.active_hitboxes.append(Hitbox(-26,64,100,48,-pi/2,15,incertitude(10),1/200,25,4096,self))
             if self.frame == 19 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback = 4
@@ -206,7 +206,7 @@ class Millet(Char):
             if self.frame == 9 :
                 self.active_hitboxes.append(Hitbox(48,48,32,32,0,0,incertitude(6),0,20,3,self))
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,12,incertitude(10),1/250,14,3,self))
+                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,12,incertitude(10),1/250,18,3,self))
 
             if self.frame > 40: # 26 frames de lag
                 self.attack = None

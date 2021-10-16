@@ -81,7 +81,7 @@ class Gregoire(Char):
                 if right :
                     self.look_right = True
             if self.frame == 70 :
-                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,9,5,self,False))
+                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,23,68.29,1/100,9,5,self,False))
             if self.frame > 120 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -95,7 +95,7 @@ class Gregoire(Char):
             if self.frame > 23 and self.frame < 48:
                 self.projectiles.append(Thunder(self.x+24*signe(self.direction)-48,self.rect.y+24,self)) 
             if self.frame == 47 :
-                self.active_hitboxes.append(Hitbox(32,32,32,64,pi/4,12,incertitude(7),1/150,15,3,self,False))
+                self.active_hitboxes.append(Hitbox(32,32,32,64,pi/4,14,incertitude(7),1/150,15,3,self,False))
             if self.frame > 48 and self.frame < 90 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].duration += 1
@@ -119,19 +119,19 @@ class Gregoire(Char):
                 self.frame = 0
             if not self.rapidjab :
                 if self.frame == 3:
-                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,10,incertitude(2.5),1/200,8,3,self,False))
+                    self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,18,incertitude(2.5),1/200,8,3,self,False))
                 if self.frame > 30: # 24 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(9),1/200,13,3,self,False))
+                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,22,incertitude(9),1/200,13,3,self,False))
             if self.frame > 35: # 19 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(48,52,32,32,pi/4,12,incertitude(8),1/225,10,3,self,False))
+                self.active_hitboxes.append(Hitbox(48,52,32,32,pi/4,19,incertitude(8),1/225,10,3,self,False))
             if self.frame > 33: # 27 frames de lag
                 self.attack = None
 
@@ -139,7 +139,7 @@ class Gregoire(Char):
             if self.frame == 8:
                 self.vy = -6
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-5,-48,58,58,angle,10,incertitude(10),1/300,13,3,self,False))
+                self.active_hitboxes.append(Hitbox(-5,-48,58,58,angle,15,incertitude(10),1/300,13,3,self,False))
             if self.frame > 25: #  Frames de lag
                 self.attack = None
 
@@ -150,10 +150,10 @@ class Gregoire(Char):
             if self.frame == 12: #12-15
                 x = 24
                 angle = 3*pi/5
-                self.active_hitboxes.append(Hitbox(24,64,64,16,3*pi/5,10,incertitude(5),0,8,3,self,False))
-                self.active_hitboxes.append(Hitbox(-40,64,64,16,2*pi/5,10,incertitude(5),0,8,3,self,False))
+                self.active_hitboxes.append(Hitbox(24,64,64,16,3*pi/5,10,incertitude(5),0,10,3,self,False))
+                self.active_hitboxes.append(Hitbox(-40,64,64,16,2*pi/5,10,incertitude(5),0,10,3,self,False))
             if self.frame == 15: # 15-23
-                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,12,incertitude(7),1/90,12,8,self,False))
+                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,20,incertitude(7),1/90,12,8,self,False))
 
             if self.frame > 45: # 22 frames de lag
                 self.attack = None
@@ -178,7 +178,7 @@ class Gregoire(Char):
 
         if attack == "BackAir":
             if self.frame == 13:
-                self.active_hitboxes.append(Hitbox(-48,64,32,32,pi/6,13,incertitude(13),1/200,14,5,self,False))
+                self.active_hitboxes.append(Hitbox(-48,64,32,32,pi/6,25,incertitude(13),1/200,14,5,self,False))
             if self.frame > 27: #  frames de lag
                 self.attack = None
 
@@ -193,7 +193,7 @@ class Gregoire(Char):
                 self.vy = 0
             self.vy *= 1.1
             if self.frame == 17 :
-                self.active_hitboxes.append(Hitbox(0,0,48,128,-pi/2,15,incertitude(10),1/200,15,4096,self))
+                self.active_hitboxes.append(Hitbox(0,0,48,128,-pi/2,19,incertitude(10),1/200,15,4096,self))
             if self.frame > 19 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback = 8

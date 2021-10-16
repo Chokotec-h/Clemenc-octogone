@@ -346,7 +346,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     else : # Aerial
                         self.inputattack("UpAir")
 
-            if self.attack is not None and not self.lag and not(self.airdodge): # si une attaque est exécutée, on anime la frame suivante
+            if self.attack is not None : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage,other)
                 if not self.grounded:
                     if right: # drift en l'air
