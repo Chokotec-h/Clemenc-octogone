@@ -109,6 +109,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.dodgey = 0
 
         self.BOUM = 0
+        self.superarmor = 0
 
     def inputattack(self,attack):
         if self.attack != attack :
@@ -477,20 +478,24 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                         if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
-
-                    self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
-                    self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
-                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2) # hitstun
-                    self.totalhitstun = self.hitstun
-                    self.damages += hitbox.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None # cancel l'attacue en cours
-                    self.upB = False
-                    self.can_act = True
-                    self.can_airdodge = True
-                    self.fastfall = False
-                    if abs(self.vx) + abs(self.vy) > 5 :
-                        self.tumble = True
+                    if not self.superarmor :
+                        self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
+                        self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
+                        self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2) # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += hitbox.damages # dommages
+                        self.rect.y -= 1
+                        self.attack = None # cancel l'attacue en cours
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5 :
+                            self.tumble = True
+                    else :
+                        if self.superarmor != -1 :
+                            self.superarmor = max(self.superarmor - hitbox.damages,0)
+                        self.damages += hitbox.damages/2
                 else :
                     if self.parry :
                         self.parried = True
@@ -509,19 +514,24 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
                 if (not self.parry) and (not self.intangibility): # Parry
-                    self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
-                    self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
-                    self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
-                    self.totalhitstun = self.hitstun
-                    self.damages += projectile.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None
-                    self.upB = False
-                    self.can_act = True
-                    self.can_airdodge = True
-                    self.fastfall = False
-                    if abs(self.vx) + abs(self.vy) > 5 :
-                        self.tumble = True
+                    if not self.superarmor :
+                        self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
+                        self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
+                        self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += projectile.damages # dommages
+                        self.rect.y -= 1
+                        self.attack = None
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5 :
+                            self.tumble = True
+                    else :
+                        if self.superarmor != -1 :
+                            self.superarmor = max(self.superarmor - projectile.damages,0)
+                        self.damages += projectile.damages/2
                 else :
                     if self.parry :
                         self.parried = True
