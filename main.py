@@ -50,65 +50,6 @@ def get_controler_input(events):
         controls[0].pop(1)
         return controls[0]
 
-### Version bêta
-def setup_controls(window,width,height,joysticks):
-    controls = [[],[]]
-    player = 0
-    run = True
-    # liste des actions
-    actions = ("Left","Right","Up","Down","Fullhop","Shorthop","Attack","Special","Shield","C-Stick Left","C-Stick Right","C-Stick Up","C-Stick Down","D-Pad Left","D-Pad Right","D-Pad Up","D-Pad Down","Pause")
-    while run :
-        window.fill((200,220,200))
-        events = pygame.event.get
-        for e in events:
-            if e.type == pygame.QUIT:
-                run = False
-            # Récupération des inputs claviers
-            if e.type == pygame.KEYDOWN:
-                if e.key == pygame.K_ESCAPE:
-                    if len(controls[player]) > 0:
-                        controls[player].pop()
-                    else :
-                        player = 0
-                        if len(controls[player]) > 0:
-                            controls[player].pop()
-                elif ("Keyboard",e.key) not in controls[int(not player)]:
-                    controls[player].append(("Keyboard",e.key))
-        # récupération des inputs manette
-        for joystick in joysticks:
-            inputs = get_inputs(joystick)
-            for i in inputs :
-                if len(i) > 3 :
-                    if i[0] == "D-Pad":
-                        if i not in controls[0] + controls[1]:
-                           controls[player].append(i)
-                    else :
-                        if abs(i[-1]) > 0.3 and abs(i[-1]) != 1:
-                            move = list(i[0:3])+[signe(i[-1])]
-                            if move not in controls[0] + controls[1]:
-                                controls[player].append(move)
-                else :
-                    if i not in controls[0] + controls[1]:
-                        controls[player].append(i)
-        # affichage des contrôles
-        for i,action in enumerate(actions):
-            Texte(action,("Arial",18,False,False),(0,0,0),width//3,(i+1)*height//20,800).draw(window)
-            if len(controls[0]) > i :
-                Texte(str(controls[0][i]),("Arial",18,False,False),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
-            elif len(controls[0]) == i :
-                Texte("<input>",("Arial",18,False,True),(0,0,0),width//2,(i+1)*height//20,800).draw(window)
-            if len(controls[1]) > i :
-                Texte(str(controls[1][i]),("Arial",18,False,False),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
-            elif len(controls[1]) == i and player == 1:
-                Texte("<input>",("Arial",18,False,True),(0,0,0),2*width//3,(i+1)*height//20,800).draw(window)
-        if len(controls[0]) >= len(actions):
-            player = 1
-        if len(controls[1]) >= len(actions):
-            return run, controls
-        pygame.display.flip()
-    return run, controls
-
-
 
 def main():
     """"""""""""""""""""""""""""""""""""
@@ -138,11 +79,11 @@ def main():
         #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
         run = True
         if len(joysticks) > 1 :
-            controls = [commands["Default"],commands["Default"]]
+            controls = [commands["Menu"],commands["Menu"]]
         elif len(joysticks) > 0 :
-            controls = [commands["Default"],commands["Keyboard"]]
+            controls = [commands["Menu"],commands["DefaultKeyboard"]]
         else :
-            controls = [commands["Keyboard"],commands["Keyboard"]]
+            controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
         pause = False
         hold_pause = False
         Play = False
@@ -168,7 +109,7 @@ def main():
                     if convert_inputs(controls[0],joysticks,0)[3]:
                         focusedbutton += 1
                         clock.tick(10)
-                    if convert_inputs(controls[0],joysticks,0)[4]:
+                    if convert_inputs(controls[0],joysticks,0)[2]:
                         focusedbutton -= 1
                         clock.tick(10)
                     focusedbutton = focusedbutton%2
@@ -196,18 +137,18 @@ def main():
                         if convert_inputs(controls[0],joysticks,0)[3]:
                             focusedbutton += 1
                             clock.tick(10)
-                        if convert_inputs(controls[0],joysticks,0)[4]:
+                        if convert_inputs(controls[0],joysticks,0)[2]:
                             focusedbutton -= 1
                             clock.tick(10)
-                        focusedbutton = (focusedbutton+2)%(len(commands)+1)-2
+                        focusedbutton = (focusedbutton+2)%(len(commands)-1)-2
                         for i,n in enumerate(commands) :
-                            if n != "Default":
+                            if n not in ["Default","DefaultKeyboard","Menu"]:
                                 Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",100,(i+1)*60,120,50)
-                                if focusedbutton == i-1:
+                                if focusedbutton == i-2:
                                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                         commandconfig = n
-                                        inputget = -1
+                                        inputget = -3
                                         confirm = True
                                 Bouton.draw(window)
                         Bouton = Button("+",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,800,50,50)
@@ -240,7 +181,7 @@ def main():
                         if convert_inputs(controls[0],joysticks,0)[3]:
                             focusedbutton += 1
                             clock.tick(10)
-                        if convert_inputs(controls[0],joysticks,0)[4]:
+                        if convert_inputs(controls[0],joysticks,0)[2]:
                             focusedbutton -= 1
                             clock.tick(10)
                         if convert_inputs(controls[0],joysticks,0)[0]:
@@ -335,7 +276,7 @@ def main():
                     if convert_inputs(controls[0],joysticks,0)[3]:
                         focusedbutton += 1
                         clock.tick(10)
-                    if convert_inputs(controls[0],joysticks,0)[4]:
+                    if convert_inputs(controls[0],joysticks,0)[2]:
                         focusedbutton -= 1
                         clock.tick(10)
                     if convert_inputs(controls[0],joysticks,0)[0]:
@@ -365,6 +306,7 @@ def main():
                             stage = 0
                             names = [0,0]
                             namelist = [k for k in commands]
+                            namelist.pop(0)
                             confirm = True
                             b = 0
                     Bouton.draw(window)
@@ -401,11 +343,15 @@ def main():
                         clock.tick(10)
                         if selectchar_1 >= len(chars) :
                             selectchar_1 = 0
+                        if selectchar_1 == 1 : # Defaultkeyboard
+                            selectchar_1 += 1
                     if convert_inputs(controls[0],joysticks,0)[2] and not selected_1:
                         selectchar_1 -= 1
                         clock.tick(10)
                         if selectchar_1 < 0 :
                             selectchar_1 = len(chars) - 1
+                        if selectchar_1 == 1 : # Defaultkeyboard
+                            selectchar_1 -= 1
 
                     ### P2
                     for i in range(len(chars)):
@@ -430,11 +376,15 @@ def main():
                         clock.tick(10)
                         if selectchar_2 >= len(chars) :
                             selectchar_2 = 0
+                        if selectchar_2 == 1 : # Defaultkeyboard
+                            selectchar_2 += 1
                     if convert_inputs(controls[1],joysticks,1)[2] and not selected_2:
                         selectchar_2 -= 1
                         clock.tick(10)
                         if selectchar_2 < 0 :
                             selectchar_2 = len(chars) - 1
+                        if selectchar_2 == 1 : # Defaultkeyboard
+                            selectchar_2 -= 1
                     
                     # OK Buttons
                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
@@ -497,12 +447,17 @@ def main():
                     Texte("|",("arial",80,True,False),(0,0,0),width/2,height-50,format_="center").draw(window)
 
                     if selected_2 and selected_1 :
+                        if names[0] == 0 and controls[0] == commands["DefaultKeyboard"]:
+                            names[0] = 1
+                        if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
+                            names[1] = 1
+                        print(names)
                         Play = True
                         Menu = "stage"
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
                         Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
-                        #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
+                        print(names[1],namelist[names[1]],namelist)
                         stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
             else :
                 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
