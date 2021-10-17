@@ -60,11 +60,7 @@ def main():
     width = 1600
     height = 900
     window = pygame.display.set_mode((width, height))
-
-    # Se joue uniquement avec deux manettes
-    #if len(joysticks) < 2 :
-    #    print("\n----------------------------------\nVeuillez connecter deux manettes !\n----------------------------------\n")
-    #    return
+    
     # Déclaration des variables
     smoke = list()
     smokeframe  = 0
@@ -447,13 +443,11 @@ def main():
                             names[0] = 1
                         if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
                             names[1] = 1
-                        print(names)
                         Play = True
                         Menu = "stage"
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
                         Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
-                        print(names[1],namelist[names[1]],namelist)
                         stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
             else :
                 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
