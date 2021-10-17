@@ -1,4 +1,4 @@
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import factorial, pi,cos,sin
 
@@ -6,8 +6,8 @@ from math import factorial, pi,cos,sin
 
 class Reignaud(Char):
     def __init__(self,x,y) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=1.2, fastfallspeed=2, fullhop=20, shorthop=15,
-                         doublejumpheight=21,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
+                         doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -31,6 +31,7 @@ class Reignaud(Char):
             if self.frame < 8 and self.frame > 6 and special and self.charge < 24:
                 self.frame = 6
                 self.vy = 0
+                self.vx = 0
                 self.charge += 1
             if self.frame == 15: # Saute frame 15
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -73,7 +74,8 @@ class Reignaud(Char):
             if self.frame == 16 :
                 self.vx = signe(self.direction)*25
                 self.active_hitboxes.append(Hitbox(24,32,64,32,pi/4,20 if other.look_right == self.look_right else 10,16 if other.look_right == self.look_right else 8,1/250,22 if other.look_right == self.look_right else 11,6,self,False))
-            
+            if self.frame < 25 :
+                self.vy = -self.fallspeed
             if self.frame > 66 : # 44 frames de lag
                 self.attack = None
 
@@ -98,9 +100,9 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame >= 8 and self.frame < 17 and self.frame%4 == 0:
-                self.active_hitboxes.append(Hitbox(-5,-25,58,32,pi/2,1,3,0,6,3,self,False))
+                self.active_hitboxes.append(Hitbox(-5,-25,58,32,pi/2,1,1.2,0,6,3,self,False))
             if self.frame == 20:
-                self.active_hitboxes.append(Hitbox(-6,-25,60,32,pi/2,15,6,1/200,15,3,self,False))
+                self.active_hitboxes.append(Hitbox(-6,-25,60,32,pi/2,15,4.8,1/200,15,3,self,False))
             if self.frame > 27: # 11 Frames de lag
                 self.attack = None
 
@@ -161,10 +163,17 @@ class Reignaud(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "ForwardSmash":
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 7
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 14 and self.frame < 16 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 14
                 self.animeframe -= 1
                 self.charge = self.charge+1
+            if self.frame == 20:
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,29+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -176,9 +185,9 @@ class Reignaud(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 14 and self.frame < 16  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.animeframe -= 1
-                self.frame = 6
+                self.frame = 14
                 self.charge = self.charge+1
 
             if self.frame > 40: # 25 frames de lag
@@ -186,6 +195,10 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "DownSmash":
+            if self.frame < 3 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
 
             if self.frame < 3 :
                 if left : # peut reverse netre les frames 1 et 2
@@ -196,8 +209,15 @@ class Reignaud(Char):
                 self.animeframe -= 1
                 self.frame = 4
                 self.charge = self.charge+1
-
-            if self.frame > 40: # 23 frames de lag
+            if self.frame == 15 :
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(change_left(35,64),52,64,64,5*pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
+            if self.frame == 18:
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].knockback *= 0.75
+                    self.active_hitboxes[-1].damages = 7
+            if self.frame > 54: # 23 frames de lag
                 self.attack = None
                 self.charge = 0
 
