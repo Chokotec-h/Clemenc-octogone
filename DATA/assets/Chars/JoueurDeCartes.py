@@ -135,6 +135,10 @@ class Air_President(Char):
         if attack == "UpAir":
             if self.frame == 5 : #frames 5-11
                 self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self))
+                if not self.look_right :
+                    self.active_hitboxes[-1].sizex *= -1
+                    self.active_hitboxes[-1].relativex += 10
+
             if self.frame > 5 and self.frame < 12 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].sizex += 10*signe(self.direction)
@@ -233,10 +237,10 @@ class Air_President(Char):
                 self.charge = self.charge+1
 
             if self.frame == 11 :
-                self.active_hitboxes.append(Hitbox(36,50,32,32,9*pi/4,9,3,0,7,4,self,False))
+                self.active_hitboxes.append(Hitbox(42,50,32,32,3*pi/4,9,3,0,7,4,self,False))
             elif self.frame == 15 : # Active on 15-28
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-10,-50,48,48,pi/3,9+7*(self.charge/150),14,1/80,13+7*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(0,-50,48,48,pi/3,9+7*(self.charge/150),14,1/80,13+7*(self.charge/100),13,self,False))
 
             if self.frame > 49: # 21 frames de lag
                 self.attack = None
