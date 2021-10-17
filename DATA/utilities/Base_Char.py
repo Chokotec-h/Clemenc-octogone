@@ -1,5 +1,6 @@
 import pygame
 from math import cos,sin,pi
+from copy import deepcopy
 
 from DATA.utilities.Animations import get_sprite
 
@@ -387,15 +388,25 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # détection de collisions à la frame suivante
         nextframe = self.rect.move(self.vx,-signe(self.vy))
         if nextframe.colliderect(stage.mainplat.rect):
-            while not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.mainplat.rect):
+            i = 0
+            previousrect = deepcopy(self.rect)
+            while (not self.rect.move(signe(self.vx),-signe(self.vy)).colliderect(stage.mainplat.rect)) and i <= (abs(self.vx)+1)*3:
                 self.rect.x += signe(self.vx)
                 self.x += signe(self.vx)
+                i += 1
+            if i > (abs(self.vx)+1)*3 :
+                self.rect = previousrect
             self.x -= signe(self.vx)
             self.vx = 0
         nextframe = self.rect.move(0,self.vy)
         if self.touch_stage(stage,nextframe):
-            while not self.touch_stage(stage,self.rect.move(0,signe(self.vy))):
+            i = 0
+            previousrect = deepcopy(self.rect)
+            while (not self.touch_stage(stage,self.rect.move(0,signe(self.vy)))) and i <= (abs(self.vy)+1)*3:
                 self.rect.y += signe(self.vy)
+                i += 1
+            if i > (abs(self.vy)+1)*3 :
+                self.rect = previousrect
             if self.hitstun:
                 self.vy = -self.vy*0.5
             else :
@@ -441,15 +452,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         else :
             self.grounded = False
 
+        self.rect.x = self.x - self.rect.w/2
         # respawn
-        if self.rect.y > 800 or self.rect.y < -800 or self.rect.x < -900 or self.rect.x > 900 :
+        if self.rect.y > 1000 or self.rect.y < -1000 or self.x < -1000 or self.x > 1000 :
             self.rect.y = -200
             self.x = 0
             self.damages = 0.
             self.vy = 0
             self.vx = 0
             self.hitstun = 0
-        self.rect.x = self.x - self.rect.w/2
 
 
     def draw(self, window):
