@@ -416,7 +416,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vx = (self.vx + 3*self.airspeed)/2
             if abs(self.vx) < 0.01 :
                 self.vx = 0
-        if abs(self.vx)+abs(self.vy) < 0.5 :
+        if abs(self.vx)+abs(self.vy) < 0.5 and self.hitstun < 4:
             self.hitstun = 0
 
         # Détection de si le personnage est au sol

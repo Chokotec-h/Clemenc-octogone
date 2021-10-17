@@ -343,15 +343,11 @@ def main():
                         clock.tick(10)
                         if selectchar_1 >= len(chars) :
                             selectchar_1 = 0
-                        if selectchar_1 == 1 : # Defaultkeyboard
-                            selectchar_1 += 1
                     if convert_inputs(controls[0],joysticks,0)[2] and not selected_1:
                         selectchar_1 -= 1
                         clock.tick(10)
                         if selectchar_1 < 0 :
                             selectchar_1 = len(chars) - 1
-                        if selectchar_1 == 1 : # Defaultkeyboard
-                            selectchar_1 -= 1
 
                     ### P2
                     for i in range(len(chars)):
@@ -376,15 +372,11 @@ def main():
                         clock.tick(10)
                         if selectchar_2 >= len(chars) :
                             selectchar_2 = 0
-                        if selectchar_2 == 1 : # Defaultkeyboard
-                            selectchar_2 += 1
                     if convert_inputs(controls[1],joysticks,1)[2] and not selected_2:
                         selectchar_2 -= 1
                         clock.tick(10)
                         if selectchar_2 < 0 :
                             selectchar_2 = len(chars) - 1
-                        if selectchar_2 == 1 : # Defaultkeyboard
-                            selectchar_2 -= 1
                     
                     # OK Buttons
                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
@@ -405,11 +397,15 @@ def main():
                     Bouton.draw(window)
                     if convert_inputs(controls[0],joysticks,0)[11] or convert_inputs(controls[0],joysticks,0)[10]:
                         names[0] += 1
+                        if names[0] == 1 : # Defaultkeyboard
+                            names[0] += 1
                         if names[0] >= len(namelist):
                             names[0] = 0
                         clock.tick(10)
                     if convert_inputs(controls[0],joysticks,0)[12] or convert_inputs(controls[0],joysticks,0)[9]:
                         names[0] -= 1
+                        if names[0] == 1 : # Defaultkeyboard
+                            names[0] -= 1
                         if names[0] < 0:
                             names[0] = len(namelist)-1
                         clock.tick(10)
@@ -466,7 +462,7 @@ def main():
                 if not musicplaying :
                     pygame.mixer.music.stop()
                     pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
-                    pygame.mixer.music.play()
+                    #pygame.mixer.music.play()
                     musicplaying = True
 
                 window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
