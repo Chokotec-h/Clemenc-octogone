@@ -448,7 +448,7 @@ def main():
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
                         Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
-                        stage = Stages.Stage([(-400,100,100,10,(150,150,150)),(300,100,100,10,(150,150,150))])
+                        stage = Stages.Stage([(-400,150,100,10,(150,150,150)),(300,150,100,10,(150,150,150))])
             else :
                 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
                 """""""""""""""""""""  IN  BATTLE  """""""""""""""""""""""""""
