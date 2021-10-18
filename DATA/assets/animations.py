@@ -31,12 +31,12 @@ for s in Balan:
     BalanJ[s] = (Balan[s][0].replace("Default","Jedi"),Balan[s][1],Balan[s][2],Balan[s][3])
 
 Air_President = {
-    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
-    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
-    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
-    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
-    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
 
 }
 
