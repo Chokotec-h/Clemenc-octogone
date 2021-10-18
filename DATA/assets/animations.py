@@ -1,4 +1,7 @@
 
+
+
+
 icons ={
     "Balan":"./DATA/Images/Sprites/Chars/Balan/icon.png",
     "Joueur de air-president":"./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png",
@@ -27,14 +30,15 @@ BalanJ = dict()
 for s in Balan:
     BalanJ[s] = (Balan[s][0].replace("Default","Jedi"),Balan[s][1],Balan[s][2],Balan[s][3])
 
-#AirPresident = {
-#    "idle":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#    "walk":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#    "run":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#    "jump":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#    "fall":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#    "airdodge":("./DATA/Images/Sprites/Ca_ressemble_a_rien_mais_faut_que_jaie_un_truc_pour_coder_vite_fait.png",((0,0,12,30),),1,True),
-#}
+Air_President = {
+    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),4,True),
+
+}
 
 Nonesprite = {
     "idle":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
@@ -52,7 +56,7 @@ animations = {
     "Balan":Balan,
     "BalanM":BalanM,
     "BalanJ":BalanJ,
-    "Joueur de air-president":Nonesprite,
+    "Joueur de air-president":Air_President,
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
     "Reignaud":Nonesprite,
