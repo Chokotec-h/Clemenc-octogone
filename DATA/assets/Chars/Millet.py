@@ -11,7 +11,7 @@ def incertitude(x):
 
 class Millet(Char):
     def __init__(self,x,y) -> None:
-        super().__init__(speed=1.9, dashspeed=3.1, airspeed=1.2, deceleration=0.7, fallspeed=0.55, fastfallspeed=1.2, fullhop=14, shorthop=11,
+        super().__init__(speed=1, dashspeed=2, airspeed=1.2, deceleration=0.91, fallspeed=0.55, fastfallspeed=1.2, fullhop=14, shorthop=11,
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
@@ -28,6 +28,10 @@ class Millet(Char):
     def special(self):
         if self.attack is None :
             self.angle_rayon = -pi/300000
+        if self.attack == "ForwardAir":
+            self.superarmor = -1
+        else :
+            self.superarmor = 13
         return False
 
     def animation_attack(self,attack,inputs,stage,other):

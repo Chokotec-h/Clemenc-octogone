@@ -11,7 +11,7 @@ def incertitude(x):
 
 class Gregoire(Char):
     def __init__(self,x,y) -> None:
-        super().__init__(speed=1.8, dashspeed=3, airspeed=1.3, deceleration=0.6, fallspeed=0.7, fastfallspeed=1.4, fullhop=15, shorthop=13,
+        super().__init__(speed=0.9, dashspeed=1.9, airspeed=1.3, deceleration=0.9, fallspeed=0.7, fastfallspeed=1.4, fullhop=15, shorthop=13,
                          doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
@@ -28,6 +28,10 @@ class Gregoire(Char):
     def special(self):
         if self.attack is None :
             self.angle_rayon = -pi/300000
+        if self.attack == "ForwardAir":
+            self.superarmor = -1
+        else :
+            self.superarmor = 13
         return False
 
     def animation_attack(self,attack,inputs,stage,other):
