@@ -46,9 +46,9 @@ class Air_President(Char):
                 self.active_hitboxes[-1].sizey -= self.vy
 
         if attack == "NeutralB":
-            if self.frame == 10 :
+            if self.frame == 18 :
                 self.active_hitboxes.append(Hitbox(24,-32,256,256,0,0,0,0,0,6,self))
-            if self.frame > 9 and self.frame < 16:
+            if self.frame > 18 and self.frame < 22:
                 if self.active_hitboxes and self.active_hitboxes[-1].hit.colliderect(other.rect):
                     if other.grounded :
                         other.can_act = True
@@ -57,7 +57,7 @@ class Air_President(Char):
                         other.can_act = True
                         other.inputattack("NeutralAir")
                     self.active_hitboxes.pop()
-            if self.frame > 25: # 9 frames de lag
+            if self.frame > 25: # 3 frames de lag
                 self.attack = None
 
         if attack == "DownB":
@@ -77,7 +77,7 @@ class Air_President(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 16 :
+            if self.frame == 9 :
                 if randint(1,208) == 1:
                     self.rect.y = 10000
                 else :
@@ -97,7 +97,7 @@ class Air_President(Char):
                         else :
                             self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
 
-            if self.frame > 50 : # 25 frames de lag
+            if self.frame > 30 : # 21 frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -128,7 +128,7 @@ class Air_President(Char):
                         self.active_hitboxes[-1].relativey -= 24
                     self.active_hitboxes[-1].relativex += -7*signe(self.direction)
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(24,0,32,32,7*pi/13,9,8.5,1/500,19,11,self,False))
+                self.active_hitboxes.append(Hitbox(24,0,32,32,pi/2,9,8.5,1/500,13,11,self,False))
             if self.frame > 25: # 17 Frames de lag
                 self.attack = None
 
@@ -356,9 +356,9 @@ class Carte():
             self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/{self.number}.png"),(48,64))
             self.number = number
             self.angle = angle
-            self.knockback = self.number*0.9
+            self.knockback = (self.number/2+1)*3
             self.damages = 1.5*self.number
-            self.stun = self.number
+            self.stun = self.number+5
             self.damages_stacking = self.number*1/500
         self.duration = 6
         self.rect = self.sprite.get_rect(topleft=(x+own.x,y+own.rect.y))
