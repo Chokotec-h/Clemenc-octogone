@@ -308,7 +308,7 @@ def main():
                     Bouton.draw(window)
                 if Menu == "char":
                     Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
-                    if not convert_inputs(controls[1],joysticks,1)[7]:
+                    if not convert_inputs(controls[0],joysticks,1)[7]:
                         b = 0
                     else :
                         b += 1
@@ -414,11 +414,15 @@ def main():
                     Bouton.draw(window)
                     if convert_inputs(controls[1],joysticks,1)[11] or convert_inputs(controls[1],joysticks,1)[10]:
                         names[1] += 1
+                        if names[1] == 1 : # Defaultkeyboard
+                            names[1] += 1
                         if names[1] >= len(namelist):
                             names[1] = 0
                         clock.tick(10)
                     if convert_inputs(controls[1],joysticks,1)[12] or convert_inputs(controls[1],joysticks,1)[9]:
                         names[1] -= 1
+                        if names[1] == 1 : # Defaultkeyboard
+                            names[1] -= 1
                         if names[1] < 0:
                             names[1] = len(namelist)-1
                         clock.tick(10)
