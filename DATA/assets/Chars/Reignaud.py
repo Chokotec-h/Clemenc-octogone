@@ -1,6 +1,6 @@
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
-from math import factorial, pi,cos,sin
+from math import pi,cos,sin
 
 ##### Reignaud
 
@@ -153,7 +153,16 @@ class Reignaud(Char):
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 32+
 
         if attack == "NeutralAir":
-
+            if self.frame < 10 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False))
+            if self.frame > 10 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].relativex += signe(self.direction)*sin(pi*self.frame/10)*176/11
+                    self.active_hitboxes[-1].relativey += -cos(pi*self.frame/10)*30
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
 
