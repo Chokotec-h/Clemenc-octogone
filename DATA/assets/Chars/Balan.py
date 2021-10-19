@@ -256,7 +256,7 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 12 : # Active on 12-18
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(60,16,52,64,pi/4,12+6*(self.charge/150),14,1/120,20+4*(self.charge/100),4,self,True,True,1.2))
+                self.active_hitboxes.append(Hitbox(60,16,52,64,pi/4,12+6*(self.charge/150),14,1/120,24+4*(self.charge/100),4,self,True,True,1.2))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -285,7 +285,7 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-15
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(30,10,32,32,2*pi/3,18+10*(self.charge/100),13,1/100,14+6*(self.charge/100),6,self,False))
+                self.active_hitboxes.append(Hitbox(30,10,32,32,2*pi/3,18+10*(self.charge/100),13,1/100,22+6*(self.charge/100),6,self,False))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
@@ -304,11 +304,11 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,12+5*(self.charge/100),3,self,False))
+                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,19+5*(self.charge/100),3,self,False))
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,12+5*(self.charge/100),3,self,False))
+                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,19+5*(self.charge/100),3,self,False))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
@@ -323,7 +323,7 @@ class Balan(Char):
                     self.vx -= self.dashspeed*signe(self.direction)
                 
             if self.frame < 21 and self.frame%5 == 0 and self.frame > 4: # active on 5/10/15/20
-                self.active_hitboxes.append(Hitbox(40,32,32,32,pi/12,abs(self.vx),1.5,0,5,2,self,False))
+                self.active_hitboxes.append(Hitbox(40,32,32,32,pi/12,abs(self.vx),1.5,0,12,2,self,False))
             if self.frame == 26: # active on 26
                 self.active_hitboxes.append(Hitbox(40,32,64,64,pi/4,9,3.5,1/250,10,3,self,False))
             if self.frame > 50: # 24 frames de lag
