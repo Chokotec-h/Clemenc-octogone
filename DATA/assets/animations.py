@@ -8,6 +8,7 @@ icons ={
     "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Pyro-Aubin":"./DATA/Images/Sprites/Chars/None/icon.png",
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -60,4 +61,5 @@ animations = {
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
     "Reignaud":Nonesprite,
+    "Pyro-Aubin":Nonesprite,
 }
