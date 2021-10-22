@@ -38,7 +38,7 @@ class Reignaud(Char):
                 self.vy = -self.charge - 10
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
                 if self.charge // 6 == 4 :
-                    self.active_hitboxes.append(Hitbox(0,0,48,120,3*pi/4,12,15,1/200,14,10,self))
+                    self.active_hitboxes.append(Hitbox(0,0,48,120,3*pi/4,12,15,1/200,14,10,self,True))
                 self.charge = 0
             if self.frame > 25 :
                 self.attack = None
@@ -80,13 +80,25 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame < 7 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 7 :
+                self.active_hitboxes.append(Hitbox(40,42,50,42,pi/4,10,10,1/300,12,3,self,False))
 
-            if self.frame > 22: # 10 frames de lag
+            if self.frame > 20: # 14 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame < 6 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 6 :
+                self.active_hitboxes.append(Hitbox(40,62,60,42,pi/6,11,9,1/250,17,4,self,False))
 
-            if self.frame > 20: # 7 frames de lag
+            if self.frame > 20: # 15 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
@@ -240,7 +252,23 @@ class Reignaud(Char):
             if self.frame > 50: # 24 frames de lag
                 self.attack = None
 
-        if attack == "Taunt":
+        if attack == "UpTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "DownTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "LeftTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "RightTaunt":
+            
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
