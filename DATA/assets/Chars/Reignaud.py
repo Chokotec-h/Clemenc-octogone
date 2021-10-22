@@ -195,23 +195,27 @@ class Reignaud(Char):
             if self.frame == 20:
                 self.charge = min(self.charge,100)
                 self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,29+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False))
-            if self.frame > 45: # 30 frames de lag
+            if self.frame > 45: # 21 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "UpSmash":
-
-            if self.frame < 5 :
-                if left : # peut reverse netre les frames 1 et 5
+            if self.frame < 8 :
+                if left :
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 14 and self.frame < 16  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 7 and self.frame < 10 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 8
                 self.animeframe -= 1
-                self.frame = 14
                 self.charge = self.charge+1
-
-            if self.frame > 40: # 25 frames de lag
+            if self.frame == 14:
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,32+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
+            if self.frame > 45: # 27 frames de lag
                 self.attack = None
                 self.charge = 0
 
