@@ -134,7 +134,7 @@ class Air_President(Char):
 
         if attack == "UpAir":
             if self.frame == 5 : #frames 5-11
-                self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self))
+                self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self,True))
                 if not self.look_right :
                     self.active_hitboxes[-1].sizex *= -1
                     self.active_hitboxes[-1].relativex += 10
@@ -143,7 +143,7 @@ class Air_President(Char):
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].sizex += 10*signe(self.direction)
             if self.frame == 15 : #frames 14-15
-                self.active_hitboxes.append(Hitbox(-8,-20,60,30,pi/4,8,7,1/220,16,3,self))
+                self.active_hitboxes.append(Hitbox(-8,-20,60,30,pi/4,8,7,1/220,16,3,self,True))
             if self.frame > 30: # 15 frames de lag
                 self.attack = None
 
@@ -275,12 +275,28 @@ class Air_President(Char):
                     self.vx += self.dashspeed*signe(self.direction)*5
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)*5
-                self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,8,3.5,1/350,7,3,self))
+                self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,8,3.5,1/350,7,3,self,False))
 
             if self.frame > 66: # 15 frames de lag
                 self.attack = None
 
-        if attack == "Taunt":
+        if attack == "UpTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "DownTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "LeftTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "RightTaunt":
+            
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 

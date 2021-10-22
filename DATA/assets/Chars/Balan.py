@@ -71,7 +71,7 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame == 8 : # 8 frames après relache
-                self.active_hitboxes.append(Hitbox(40,32,32,64,0,0,0,0,0,20,self))
+                self.active_hitboxes.append(Hitbox(40,32,32,64,0,0,0,0,0,20,self,True))
                 self.active_hitboxes[-1].update()
                 if self.active_hitboxes[-1].hit.colliderect(other.rect):
                     self.projectiles.append(Exposant(other,self,self.charge//40))
@@ -101,7 +101,7 @@ class Balan(Char):
         if attack == "Jab":
             self.animation = "jab"
             if self.frame == 3 : # 1er hit frame 3-6
-                self.active_hitboxes.append(Hitbox(40,36,48,24,3*pi/4,2,0.6,0,10,4,self))
+                self.active_hitboxes.append(Hitbox(40,36,48,24,3*pi/4,2,0.6,0,10,4,self,True))
             if self.frame == 9 : # 2e hit frame 9-12
                 self.active_hitboxes.append(Hitbox(20,20,68,48,pi/4,4.5,1.4,1/1000,15,4,self,False))
 
@@ -117,7 +117,7 @@ class Balan(Char):
 
         if attack == "ForwardTilt":
             if self.frame == 6 : # 1er hit frame 6-12
-                self.active_hitboxes.append(Hitbox(40,58,24,24,pi/2,2,0.6,0,9,6,self))
+                self.active_hitboxes.append(Hitbox(40,58,24,24,pi/2,2,0.6,0,9,6,self,True))
             if self.frame == 14 : # 2e hit frame 14-22
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/4,6,8,1/150,15,6,self,False))
 
@@ -147,9 +147,9 @@ class Balan(Char):
 
         if attack == "UpAir":
             if self.frame == 5 : # Frame 5-10
-                self.active_hitboxes.append(Hitbox(-1,-10,50,10,pi/2,0,2.5,1/1000,8,5,self))
+                self.active_hitboxes.append(Hitbox(-1,-10,50,10,pi/2,0,2.5,1/1000,8,5,self,True))
             if self.frame == 10 : # Frame 10-15
-                self.active_hitboxes.append(Hitbox(15,-20,16,25,pi/3,10,5,1/80,18,5,self))
+                self.active_hitboxes.append(Hitbox(15,-20,16,25,pi/3,10,5,1/80,18,5,self,True))
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -231,7 +231,7 @@ class Balan(Char):
 
         if attack == "NeutralAir":
             if self.frame == 3 : # Frame 3-6
-                self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,0,10,2,0,12,20,self))
+                self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,pi,10,2,0,12,20,self,True))
                 self.active_hitboxes.append(Hitbox(8,16,32,64,pi/2,12,8,1/200,18,20,self,False))
             if self.frame == 7 : # Frame 7-23
                 if self.active_hitboxes : # late hitbox
@@ -329,7 +329,23 @@ class Balan(Char):
             if self.frame > 50: # 24 frames de lag
                 self.attack = None
 
-        if attack == "Taunt":
+        if attack == "UpTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "DownTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "LeftTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "RightTaunt":
+            
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
