@@ -138,9 +138,9 @@ def main():
                             clock.tick(10)
                         focusedbutton = (focusedbutton+2)%(len(commands)-1)-2
                         for i,n in enumerate(commands) :
-                            if n not in ["Default","DefaultKeyboard","Menu"]:
+                            if n not in ["Default","Menu","DefaultKeyboard"]:
                                 Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",100,(i+1)*60,120,50)
-                                if focusedbutton == i-2:
+                                if focusedbutton == i-3:
                                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                         commandconfig = n
@@ -317,7 +317,7 @@ def main():
                     if b >= 20:
                         Menu = "stage"
                     Bouton.draw(window)
-                    chars = ["Balan","Joueur de air-president","Millet","Gregoire","Reignaud"]
+                    chars = ["Balan","Millet","Gregoire","Reignaud","Joueur de air-president","Pyro-Aubin"]
                     ### P1
                     for i in range(len(chars)):
                         Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
@@ -487,6 +487,7 @@ def main():
                     if not (inputs_2[4] or inputs_2[5]): # Jump
                         Char_P2.jumping = False
 
+                    #Char_P2.act([False for _ in range(17)], stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
                     Char_P2.act(inputs_2, stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
                     ########
 
