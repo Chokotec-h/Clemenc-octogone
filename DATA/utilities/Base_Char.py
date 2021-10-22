@@ -14,7 +14,7 @@ def change_left(x,size):
     return -x-size+48
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=True,deflect=False,modifier=1) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -220,8 +220,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.animation = "fall"
                 else :
                     self.animation = "jump"
-                if (D_Left or D_Right or D_Up or D_Down) and self.grounded:
-                    self.inputattack("Taunt")
 
                 if right:            # Si on input à droite
                     if special :
@@ -347,6 +345,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.inputattack("UpSmash")
                     else : # Aerial
                         self.inputattack("UpAir")
+
+                if self.grounded:
+                    if D_Left:
+                        self.inputattack("LeftTaunt")
+                    if D_Right:
+                        self.inputattack("RightTaunt")
+                    if D_Up:
+                        self.inputattack("UpTaunt")
+                    if D_Down:
+                        self.inputattack("DownTaunt")
 
             if self.attack is not None : # si une attaque est exécutée, on anime la frame suivante
                 self.animation_attack(self.attack,inputs,stage,other)
@@ -489,8 +497,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback*(self.damages*hitbox.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
-                        self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/(self.superarmor/5) # éjection x
-                        self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/(self.superarmor/5) # éjection y
+                        self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.superarmor/5),1) # éjection x
+                        self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.superarmor/5),1) # éjection y
                         self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2)-(self.superarmor/5) # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages # dommages
