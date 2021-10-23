@@ -21,6 +21,8 @@ class Reignaud(Char):
         return "Reignaud"
 
     def special(self):
+        if self.attack is None :
+            self.cancelable = False
         return self.cancelable
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -119,12 +121,18 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "UpAir":
-
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(42,32,48,48,2*pi/5,14,11,1/200,13,7,self,False))
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
+                self.cancelable = False
                 if self.frame < 15 :
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
@@ -134,19 +142,28 @@ class Reignaud(Char):
                 self.attack = None
 
             if self.grounded :
+                self.cancelable = False
                 self.attack = None
                 if self.frame < 40 :
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "BackAir":
+            if self.frame < 10 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(-50,42,60,48,-pi/4,16,18,1/200,15,3,self,False))
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame > 30: # 17 frames de lag
+                self.cancelable = False
                 self.attack = None
 
             if self.grounded :
+                self.cancelable = False
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 22 :
+                    self.lag = self.frame-6 # Auto cancel frame 1-6 et 22+
 
         if attack == "DownAir":
             if self.frame < 16 :
@@ -160,6 +177,7 @@ class Reignaud(Char):
                 self.attack = None
 
             if self.grounded :
+                self.cancelable = False
                 self.attack = None
                 if self.frame < 32 :
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 32+
