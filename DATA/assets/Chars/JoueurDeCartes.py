@@ -66,7 +66,7 @@ class Air_President(Char):
                 self.mao_used = False
             if self.frame > 28 :
                 if self.mao and not self.mao_used :
-                    self.damages += 20
+                    self.damages += 2
                 self.mao = False
             if self.frame > 45 : # 18 frames de lag
                 self.attack = None
