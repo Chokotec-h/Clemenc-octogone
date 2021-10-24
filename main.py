@@ -308,7 +308,7 @@ def main():
                     Bouton.draw(window)
                 if Menu == "char":
                     Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
-                    if not convert_inputs(controls[0],joysticks,1)[7]:
+                    if not convert_inputs(controls[0],joysticks,0)[7]:
                         b = 0
                     else :
                         b += 1
