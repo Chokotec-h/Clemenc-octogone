@@ -60,3 +60,25 @@ class Dash_Smoke():
 
         if self.life_time >= 0 :
             self.life_time += 1
+
+
+
+class Double_Jump():
+    def __init__(self,x,y) -> None:
+        self.x = x
+        self.y = y
+        self.life_time = 0
+        self.right = True
+        self.animation = ("./DATA/Images/Sprites/Misc/double_jump.png", ((0 * 48, 0, 48, 32), (1  * 48, 0, 48, 32), (2 * 48, 0, 48, 32), (3 * 48, 0, 48, 32)), 20, False)
+    
+    def draw(self,window):
+        drawing_sprite,size,self.life_time = get_sprite(self.animation,self.life_time,self.right)
+
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+        pos = [self.x + 800 - size[2]/2, self.y-size[3] + 520] # Position réelle du sprite
+        window.blit(drawing_sprite, pos,size) # on dessine le sprite
+
+        if self.life_time >= 0 :
+            self.life_time += 1
+

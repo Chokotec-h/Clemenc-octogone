@@ -4,7 +4,7 @@ from copy import deepcopy
 
 from DATA.utilities.Animations import get_sprite
 
-from DATA.assets.Misc import Dash_Smoke
+from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
 def signe(val):
     if val == 0:
@@ -115,6 +115,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.superarmor = 0
 
         self.smoke_dash = list()
+        self.double_jump = list()
 
     def inputattack(self,attack):
         if self.attack != attack :
@@ -295,6 +296,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.jumping = True
                             self.jumpsound.play()  # joli son
                             self.vy = -self.doublejumpheight # il saute
+                            self.double_jump.append(Double_Jump(self.rect.x+self.rect.w/2,self.rect.y+self.rect.h/2))
 
                             i = 0   # il montre qu'il utilise le premier saut disponible dans la liste
                             while self.doublejump[i]:  # cette boucle a une fin, qui est testée ligne 70
@@ -488,6 +490,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     s.draw(window)
                     if s.life_time < 0:
                         del self.smoke_dash[i]
+        
+        for i,s in enumerate(self.double_jump):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.double_jump[i]
+        
+        
 
         # debug
         if self.parry:
