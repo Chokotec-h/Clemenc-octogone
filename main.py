@@ -269,43 +269,48 @@ def main():
                             
                                 
                 if Menu == "stage":
+                    stages = ["K201"] # Add stages here
                     if convert_inputs(controls[0],joysticks,0)[3]:
-                        focusedbutton += 1
+                        focusedbutton += 9
                         clock.tick(10)
                     if convert_inputs(controls[0],joysticks,0)[2]:
-                        focusedbutton -= 1
+                        focusedbutton -= 9
                         clock.tick(10)
                     if convert_inputs(controls[0],joysticks,0)[0]:
-                        row -= 1
+                        focusedbutton -= 1
                         clock.tick(10)
                     if convert_inputs(controls[0],joysticks,0)[1]:
-                        row += 1
+                        focusedbutton += 1
                         clock.tick(10)
-                    row = row%1
-                    focusedbutton = ((focusedbutton+1)%2)-1
+                    #row = row%1
+                    focusedbutton = ((focusedbutton+1)%(len(stages)+1))-1
                     Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
                     if focusedbutton == -1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "main"
                             confirm = True
+                    else :
+                        Texte(stages[focusedbutton],("arial",50,True,False),(0,0,0),30,height//2,format_="left").draw(window)
                     Bouton.draw(window)
-                    Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,100,100,100)
-                    if focusedbutton == 0 :
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "char"
-                            selectchar_1 = 0
-                            selectchar_2 = 0
-                            selected_1 = False
-                            selected_2 = False
-                            stage = 0
-                            names = [0,0]
-                            namelist = [k for k in commands]
-                            namelist.pop(0)
-                            confirm = True
-                            b = 0
-                    Bouton.draw(window)
+                    for i in range(len(stages)):
+                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",((i%9)*150)+250,(i//9*150)+100,100,100)
+                        if focusedbutton == i :
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                                Menu = "char"
+                                selectchar_1 = 0
+                                selectchar_2 = 0
+                                selected_1 = False
+                                selected_2 = False
+                                stage = i
+                                names = [0,0]
+                                namelist = [k for k in commands]
+                                namelist.pop(0)
+                                confirm = True
+                                b = 0
+                        Bouton.draw(window)
+                        window.blit(pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{stages[i]}.png"),(90,90)),((i%9*150)+205,(i//9*150)+55))
                 if Menu == "char":
                     Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
                     if not convert_inputs(controls[0],joysticks,0)[7]:
@@ -452,7 +457,8 @@ def main():
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
                         Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
-                        stage = Stages.Stage([(-400,150,100,10,(150,150,150)),(300,150,100,10,(150,150,150))])
+                        background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{stages[stage]}.png"),(1600,900))
+                        stage = Stages.create_stage(stages[stage])
             else :
                 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
                 """""""""""""""""""""  IN  BATTLE  """""""""""""""""""""""""""
@@ -463,7 +469,8 @@ def main():
                     #pygame.mixer.music.play()
                     musicplaying = True
 
-                window.fill((180, 180, 250)) # Réinitialisation de l'écran à chaque frame
+                window.fill((255, 255, 255)) # Réinitialisation de l'écran à chaque frame
+                window.blit(background,(0,0))
 
                 # Recuperation des touches
                 if (convert_inputs(controls[0],joysticks,0)[-1] or convert_inputs(controls[1],joysticks,1)[-1]):

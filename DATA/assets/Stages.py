@@ -1,8 +1,8 @@
 import pygame
 
 class Stage():
-    def __init__(self,platforms=[]) -> None:
-        self.mainplat = MainPlat("DATA/Images/Stages/Best Stage Ever.png")
+    def __init__(self,sprite,mainx,mainy,platforms=[]) -> None:
+        self.mainplat = MainPlat(f"DATA/Images/Stages/{sprite}.png",mainx,mainy)
         # Platforms : [(x,y,l,h,color),...]
         self.plats = []
         for p in platforms:
@@ -14,11 +14,14 @@ class Stage():
             p.draw(window)
 
 class MainPlat:
-    def __init__(self,sprite) -> None:
+    def __init__(self,sprite,x,y) -> None:
         # Sprite
+        self.x = x
+        self.y = y
         self.sprite = pygame.image.load(sprite).convert_alpha()
+        self.sprite = pygame.transform.scale(self.sprite,(self.sprite.get_size()[0]*4,self.sprite.get_size()[1]*4))
         # Rectangle
-        self.rect = self.sprite.get_rect(center=(0,650))
+        self.rect = self.sprite.get_rect(center=(x,y))
 
     def draw(self, window):
         # Position réelle
@@ -38,3 +41,7 @@ class Platform():
         # Position réelle
         pos = [self.rect.x+800, self.rect.y+449]
         pygame.draw.rect(window,self.color,(pos[0],pos[1],self.rect.w,self.rect.h))
+
+def create_stage(stage):
+    if stage == "K201":
+        return Stage("K201_plateforme",0,191*2)
