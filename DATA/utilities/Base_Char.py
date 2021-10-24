@@ -4,6 +4,8 @@ from copy import deepcopy
 
 from DATA.utilities.Animations import get_sprite
 
+from DATA.assets.Misc import Dash_Smoke
+
 def signe(val):
     if val == 0:
         return 0
@@ -112,6 +114,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.BOUM = 0
         self.superarmor = 0
 
+        self.smoke_dash = list()
+
     def inputattack(self,attack):
         if self.attack != attack :
             self.animeframe = 0
@@ -184,6 +188,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.lag = 3
             if self.grounded and self.attack is None and not self.lag and shield:
                 if right or left:
+                    if not self.dash:
+                        self.smoke_dash.append(Dash_Smoke(self.rect.x+self.rect.w/2 - (right - 0.5) * 70,self.rect.y+self.rect.h/2,right))
                     self.dash = True
                     self.parry = False
                     self.lenght_parry = -10
@@ -477,6 +483,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
         #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
+
+        for i,s in enumerate(self.smoke_dash):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.smoke_dash[i]
 
         # debug
         if self.parry:
