@@ -24,7 +24,7 @@ def get_sprite(animation,newframe,right):
 
 
 
-smokesprite = [pygame.image.load(f"./DATA/Images/Sprites/Smoke/{i}.png") for i in range(1,6)]
+smokesprite = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Smoke/{i}.png") for i in range(1,6)]
 
 class Smoke():
     def __init__(self,x,y) -> None:
