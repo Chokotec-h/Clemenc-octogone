@@ -134,6 +134,11 @@ class Gregoire(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 10 :
                 self.active_hitboxes.append(Hitbox(48,52,32,32,pi/4,19,incertitude(8),1/225,10,3,self,False))
             if self.frame > 33: # 27 frames de lag

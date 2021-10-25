@@ -128,6 +128,11 @@ class Millet(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 6 :
                 self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,25,3,self,False))
             if self.frame > 33: # 27 frames de lag

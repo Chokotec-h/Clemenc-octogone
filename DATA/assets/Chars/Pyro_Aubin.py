@@ -81,6 +81,11 @@ class Pyro_Aubin(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
 
             if self.frame > 30: # 8 frames de lag
                 self.attack = None

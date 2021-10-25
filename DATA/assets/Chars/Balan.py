@@ -116,6 +116,11 @@ class Balan(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 6 : # 1er hit frame 6-12
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/2,2,0.6,0,9,6,self,True))
             if self.frame == 14 : # 2e hit frame 14-22

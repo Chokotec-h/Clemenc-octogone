@@ -113,6 +113,11 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 12: # Frames 12-15
                 self.active_hitboxes.append(Hitbox(24,30,48,48,pi/4,4,12,1/50,12,4,self,False))
 
