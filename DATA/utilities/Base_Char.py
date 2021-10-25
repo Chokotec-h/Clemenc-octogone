@@ -544,8 +544,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
             for h in self.active_hitboxes :
                 if h.deflect and h.hit.colliderect(projectile.rect):
-                    projectile.deflect(h.modifier)
                     self.projectiles.append(projectile)
+                    projectile.deflect(h.modifier)
                     del other.projectiles[i] # Supprime la hitbox
                     return
 

@@ -1,3 +1,4 @@
+from random import randint
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi,cos,sin
@@ -5,7 +6,7 @@ from math import pi,cos,sin
 ##### Reignaud
 
 class Reignaud(Char):
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
                          doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
@@ -16,6 +17,8 @@ class Reignaud(Char):
         self.rect.y = y
         self.cancelable = False
         self.counter = False
+        self.duration_mot_invasif = 0
+        self.player = player
     
     def __str__(self) -> str:
         return "Reignaud"
@@ -46,9 +49,19 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "NeutralB":
-            if self.frame > 15: # 10 frames de lag
-                self.attack = None
-                self.charge = 0
+            if not self.projectiles:
+                if self.frame < 5 :
+                    self.cancelable = True
+                else :
+                    self.cancelable = False
+                if self.frame == 5 :
+                    self.duration_mot_invasif = 5
+                    self.projectiles.append(Mot_invasif(self.x,self.rect.y,other,self,stage))
+                if self.frame > 15: # 10 frames de lag
+                    self.attack = None
+            else :
+                if self.frame > 15 :
+                    self.attack = None
 
         if attack == "DownB":
             if self.frame < 8 :
@@ -370,5 +383,71 @@ class Reignaud(Char):
 ###################          
 """ Projectiles """
 ###################
+
+class Mot_invasif():
+    def __init__(self,x,y,other,own,stage) -> None:
+        self.other = other
+        self.own = own
+        self.duration=5
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Mot_invasif.png"),(32,128))
+        self.rect = self.sprite.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.vy = 0
+        self.stage = stage
+        self.damages = 0.4
+        self.stun = 0
+        self.knockback = 0
+        self.damages_stacking = 0
+        self.projectile_immune = []
+
+
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+3:
+                return True
+        return False
+
+    def update(self):
+        self.duration=self.own.duration_mot_invasif
+        if self.touch_stage(self.stage,self.rect):
+            self.vy = -1
+        else :
+            self.vy += 1
+        self.rect.y += self.vy
+        for hitbox in self.other.active_hitboxes :
+            if self.rect.colliderect(hitbox.hit):
+                self.other.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.other.superarmor/5),1) # éjection x
+                self.other.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.other.superarmor/5),1) # éjection y
+                self.other.hitstun = hitbox.stun*(self.other.damages*hitbox.damages_stacking+2)-(self.other.superarmor/5) # hitstun
+                self.other.totalhitstun = self.other.hitstun
+                self.other.damages += hitbox.damages # dommages
+                self.other.rect.y -= 1
+                self.other.attack = None # cancel l'attaque en cours
+                self.other.upB = False
+                self.other.can_act = True
+                self.other.can_airdodge = True
+                self.other.fastfall = False
+                if abs(self.other.vx) + abs(self.other.vy) > 5 :
+                    self.other.tumble = True
+                self.own.duration_mot_invasif -= 1
+                self.own.projectiles.append(Mot_invasif(randint(-300,300),0,self.other,self.own,self.stage))
+                self.other.active_hitboxes = list()
+                return
+        for projectile in self.other.projectiles: # Détection des projectiles
+            if self.rect.colliderect(projectile.rect) and projectile not in self.projectile_immune:
+                self.projectile_immune.append(projectile)
+                self.own.duration_mot_invasif -= 1
+                self.own.projectiles.append(Mot_invasif(randint(-300,300),0,self.other,self.own,self.stage))
+                self.own.projectiles[-1].projectile_immune.append(projectile)
+
+
+    def deflect(self,modifier):
+        self.own.projectiles.append(self)
+        self.other.projectiles.pop(-1)
+    def draw(self,window):
+        window.blit(self.sprite, (self.rect.x+800,self.rect.y+450)) # on dessine le sprite
 
 ##### Autres skins
