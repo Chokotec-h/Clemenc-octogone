@@ -21,6 +21,7 @@ Balan = {
     "jump":("./DATA/Images/Sprites/Chars/Balan/Default/balan_jumping.png",((5,6,20,26),(40,2,13,30),(63,1,14,29)),5,False),
     "fall":("./DATA/Images/Sprites/Chars/Balan/Default/balan_fall.png",((8,2,14,27),),1,False),
     "airdodge":("./DATA/Images/Sprites/Chars/Balan/Default/balan_idle.png",((10,2,12,30),(42,2,12,30),(74,4,12,28),(106,3,12,29)),5,True),
+    "nair":("./DATA/Images/Sprites/Chars/Balan/Default/balan_nair.png",((8,1,14,29),(36,2,22,28),(68,2,22,27),(100,2,22,27),(139,2,12,27)),10,False),
 }
 
 BalanM = dict()

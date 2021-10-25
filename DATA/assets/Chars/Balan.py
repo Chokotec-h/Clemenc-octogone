@@ -230,8 +230,9 @@ class Balan(Char):
                     self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
         if attack == "NeutralAir":
+            self.animation = "nair"
             if self.frame == 3 : # Frame 3-6
-                self.active_hitboxes.append(Hitbox(-32+12,16,64+8+8,64,pi,10,2,0,12,20,self,True))
+                self.active_hitboxes.append(Hitbox(-20,16,88,64,pi,10,2,0,12,20,self,True))
                 self.active_hitboxes.append(Hitbox(8,16,32,64,pi/2,12,8,1/200,18,20,self,False))
             if self.frame == 7 : # Frame 7-23
                 if self.active_hitboxes : # late hitbox
@@ -240,7 +241,8 @@ class Balan(Char):
                         self.active_hitboxes[-1].damages = 3
                         self.active_hitboxes[-1].damage_stacking = 1/250
                         self.active_hitboxes[-1].stun = 10
-
+            if self.frame < 23 and self.animeframe == 80:
+                self.animeframe -= 1
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
 
