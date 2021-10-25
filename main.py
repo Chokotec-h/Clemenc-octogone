@@ -432,8 +432,6 @@ def main():
                             names[1] = len(namelist)-1
                         clock.tick(10)
 
-                    #Texte(names[0],("arial",24,True,False),(0,0,0),width/4,height-150,format_="center").draw(window)
-                    #Texte(names[1],("arial",24,True,False),(0,0,0),3*width/4,height-150,format_="center").draw(window)
                     # Text
                     if selected_1 :
                         pygame.draw.rect(window,(230,230,230),(width/8,height-120,width/4,30))
@@ -443,8 +441,8 @@ def main():
                         Texte("READY",("arial",24,True,False),(0,0,0),3*width/4,height-110,format_="center").draw(window)
                     
                     pygame.draw.rect(window,(200,200,200),(0,height-90,width,90))
-                    Texte(str(Chars.charobjects[chars[selectchar_1]](0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
-                    Texte(str(Chars.charobjects[chars[selectchar_2]](0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
+                    Texte(str(Chars.charobjects[chars[selectchar_1]](0,0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
+                    Texte(str(Chars.charobjects[chars[selectchar_2]](0,0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
                     Texte("|",("arial",80,True,False),(0,0,0),width/2,height-50,format_="center").draw(window)
 
                     if selected_2 and selected_1 :
@@ -454,8 +452,8 @@ def main():
                             names[1] = 1
                         Play = True
                         Menu = "stage"
-                        Char_P1 = Chars.charobjects[chars[selectchar_1]](50,0)
-                        Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0)
+                        Char_P1 = Chars.charobjects[chars[selectchar_1]](-350,0,0)
+                        Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0,1)
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
                         background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{stages[stage]}.png"),(1600,900))
                         stage = Stages.create_stage(stages[stage])
@@ -521,11 +519,11 @@ def main():
                     s.draw(window)
                     if s.duration <= 0:
                         del smoke[i]
+                # Stage
+                stage.draw(window)
                 # Chars
                 Char_P2.draw(window)
                 Char_P1.draw(window)
-                # Stage
-                stage.draw(window)
                 # Damages
                 Char_P1.damages = float(Char_P1.damages)
                 Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
@@ -534,6 +532,7 @@ def main():
                 Char_P2.damages = float(Char_P2.damages)
                 Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
+
 
             pygame.display.flip()
             clock.tick(60)  # FPS (à régler sur 60)

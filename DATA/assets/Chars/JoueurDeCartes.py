@@ -6,7 +6,7 @@ from random import randint
 ##### Perso
 
 class Air_President(Char):
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.5, fastfallspeed=1.6, fullhop=15, shorthop=12,
                          doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
@@ -15,6 +15,7 @@ class Air_President(Char):
         self.name = "Joueur de air-president"
         self.x = x
         self.rect.y = y
+        self.player = player
         self.mao = False
         self.mao_used = False
         self.basefallspeed = 0.8

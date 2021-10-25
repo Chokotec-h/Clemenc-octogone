@@ -10,7 +10,7 @@ def incertitude(x):
 ##### Perso
 
 class Millet(Char):
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=1, dashspeed=2, airspeed=1.2, deceleration=0.91, fallspeed=0.55, fastfallspeed=1.2, fullhop=14, shorthop=11,
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
@@ -19,6 +19,7 @@ class Millet(Char):
         self.name = "Millet"
         self.x = x
         self.rect.y = y
+        self.player = player
         self.angle_rayon = -pi/300000
         self.rapidjab = False
     

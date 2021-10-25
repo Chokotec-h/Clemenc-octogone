@@ -10,7 +10,7 @@ def incertitude(x):
 ##### Perso
 
 class Gregoire(Char):
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=0.9, dashspeed=1.9, airspeed=1.3, deceleration=0.9, fallspeed=0.7, fastfallspeed=1.4, fullhop=15, shorthop=13,
                          doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
@@ -19,6 +19,7 @@ class Gregoire(Char):
         self.name = "Gregoire"
         self.x = x
         self.rect.y = y
+        self.player = player
         self.angle_rayon = -pi/300000
         self.rapidjab = False
     

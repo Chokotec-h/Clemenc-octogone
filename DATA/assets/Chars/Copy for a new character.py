@@ -4,8 +4,8 @@ from math import pi
 
 ##### Copier
 
-class Nome_Personnage(Char):
-    def __init__(self,x,y) -> None:
+class Nom_Personnage(Char):
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
@@ -14,6 +14,7 @@ class Nome_Personnage(Char):
         self.name = "Name"
         self.x = x
         self.rect.y = y
+        self.player = player
     
     def __str__(self) -> str:
         return "Name"

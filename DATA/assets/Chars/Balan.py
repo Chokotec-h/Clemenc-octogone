@@ -7,7 +7,7 @@ exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprite
 ##### M Balan
 
 class Balan(Char):
-    def __init__(self,x,y) -> None:
+    def __init__(self,x,y,player) -> None:
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.45, fastfallspeed=1, fullhop=14, shorthop=11,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
@@ -16,6 +16,7 @@ class Balan(Char):
         self.name = "Balan"
         self.x = x
         self.rect.y = y
+        self.player = player
     
     def __str__(self) -> str:
         return "Balan"
@@ -434,11 +435,11 @@ class Exposant():
 ##### Autres skins
 
 class Balan2(Balan):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self,x,y,player) -> None:
+        super().__init__(x,y,player)
         self.name = "BalanM"
 
 class Balan3(Balan):
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(self,x,y,player) -> None:
+        super().__init__(x,y,player)
         self.name = "BalanJ"
