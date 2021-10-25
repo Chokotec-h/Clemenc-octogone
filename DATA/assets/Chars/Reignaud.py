@@ -104,8 +104,23 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 8 and self.frame < 24 :
+                self.intangibility = True
+            else :
+                self.intangibility = False
+            if self.frame == 24:
+                self.active_hitboxes.append(Hitbox(32,8,48,70,pi/4,13,10,1/240,13,8,self,False))
 
-            if self.frame > 30: # 8 frames de lag
+            if self.frame > 52: # 20 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
@@ -126,7 +141,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(42,32,48,48,2*pi/5,14,11,1/200,13,7,self,False))
+                self.active_hitboxes.append(Hitbox(20,-5,68,80,2*pi/5,14,11,1/200,13,7,self,False))
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
 
@@ -137,8 +152,14 @@ class Reignaud(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 8:
+                self.active_hitboxes.append(Hitbox(22,42,64,64,-pi/6,11,9,1/250,12,8,self,False))
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 28: # 12 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -153,7 +174,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(-50,42,60,48,-pi/4,16,18,1/200,15,3,self,False))
+                self.active_hitboxes.append(Hitbox(-50,42,60,48,-3*pi/4,16,18,1/200,15,3,self,False))
 
             if self.frame > 30: # 17 frames de lag
                 self.cancelable = False
@@ -232,7 +253,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 14:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,32+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
+                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,29+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
             if self.frame > 45: # 27 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -265,13 +286,15 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
-            if self.frame < 26 :
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(20,-5,40,125,pi/4,12,13,1/250,14,20,self,False))
+            if self.frame > 5 and self.frame < 40 :
                 self.vy = 0
                 if self.grounded :
-                    self.vx += self.dashspeed*signe(self.direction)
+                    self.vx += self.dashspeed*signe(self.direction)/(self.frame-2)*12
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)
-            if self.frame > 50: # 24 frames de lag
+            if self.frame > 40: # 24 frames de lag
                 self.attack = None
 
         if attack == "UpTaunt":
