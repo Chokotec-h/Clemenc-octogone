@@ -66,8 +66,6 @@ def main():
     smokeframe  = 0
 
     # test de music et de bruitages
-    pygame.mixer.music.load("DATA/Musics/intro_.mp3")
-    #pygame.mixer.music.play()
     soundReady = True
 
     try:
@@ -89,6 +87,10 @@ def main():
         focusedbutton = 0
         row = 0
         confirm = False
+        playingmusicfor = 0
+        pygame.mixer.init()
+        pygame.mixer.music.load("DATA/Musics/menu.mp3")
+        pygame.mixer.music.play()
         while run:  # Boucle du programme
 
             # Récupération des events
@@ -98,6 +100,11 @@ def main():
                     run = False
 
             if not Play :
+                playingmusicfor += 1
+                if playingmusicfor >= 59*60 :
+                    pygame.mixer.music.load("DATA/Musics/menu.mp3")
+                    pygame.mixer.music.play()
+                    playingmusicfor = 0
                 if not convert_inputs(controls[0],joysticks,0)[6]:
                     confirm = False
                 window.fill((153,102,255))
@@ -322,7 +329,7 @@ def main():
                     if b >= 20:
                         Menu = "stage"
                     Bouton.draw(window)
-                    chars = ["Balan","Millet","Gregoire","Reignaud","Joueur de air-president","Pyro-Aubin"]
+                    chars = ["Balan","Millet","Gregoire","Reignaud","Rey","Joueur de air-president","Pyro-Aubin"]
                     ### P1
                     for i in range(len(chars)):
                         Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
