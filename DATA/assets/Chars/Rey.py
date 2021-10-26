@@ -94,6 +94,20 @@ class Rey(Char):
                 if right :
                     self.look_right = True
 
+            if self.frame == 4 :
+                self.active_hitboxes.append(Hitbox(42,42,48,64,pi/4,3,9,1/1000,12,3,self,False))
+
+            if self.frame > 10 and attack_button :
+                self.attack = "ForwardTilt2"
+                self.frame = 0
+
+            if self.frame > 31: # 8 frames de lag
+                self.attack = None
+
+        if attack == "ForwardTilt2":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(42,40,50,50,pi/4,14,11,1/250,14,2,self,False))
+
             if self.frame > 30: # 8 frames de lag
                 self.attack = None
 
