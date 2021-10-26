@@ -101,10 +101,11 @@ def main():
 
             if not Play :
                 playingmusicfor += 1
-                if playingmusicfor >= 59*60 :
+                if playingmusicfor > 59*60 : # Loop
                     pygame.mixer.music.load("DATA/Musics/menu.mp3")
                     pygame.mixer.music.play()
                     playingmusicfor = 0
+
                 if not convert_inputs(controls[0],joysticks,0)[6]:
                     confirm = False
                 window.fill((153,102,255))
