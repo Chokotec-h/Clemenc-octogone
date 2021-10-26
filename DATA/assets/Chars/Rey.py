@@ -1,4 +1,4 @@
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
 
@@ -82,7 +82,7 @@ class Rey(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                self.active_hitboxes.append(Hitbox(35,80,24,10,pi/5,12,1.2,1/200,20,5,self,False))
+                self.active_hitboxes.append(Hitbox(35,80,24,10,2*pi/5,12,1.2,1/200,20,3,self,False))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
@@ -112,6 +112,9 @@ class Rey(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 6 :
+                self.rect.y -= 60
+                self.active_hitboxes.append(Hitbox(0,0,48,128,6*pi/13,17,14,1/200,18,8,self,False))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
@@ -127,7 +130,7 @@ class Rey(Char):
 
         if attack == "ForwardAir":
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(32,42,48,48,pi/3,18,22,1/180,17,16,self))
+                self.active_hitboxes.append(Hitbox(32,42,48,48,pi/6,18,22,1/180,17,16,self))
             if self.frame == 16 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].damages = 3
@@ -143,8 +146,18 @@ class Rey(Char):
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "BackAir":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/4,7,3,1/1000,12,2,self,False))
+            if self.frame > 10 and self.frame%5 == 3 and self.frame < 28:
+                if self.frame%2 == 0 :
+                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/4,7,3,1/1000,12,2,self,False))
+                else :
+                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,3*pi/4,7,3,1/1000,12,2,self,False))
+            if self.frame == 30 :
+                    self.active_hitboxes.append(Hitbox(-100,42,100,48,5*pi/6,13,3.4,1/220,12,2,self,False))
+            
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame > 40: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -163,6 +176,12 @@ class Rey(Char):
                     self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
         if attack == "NeutralAir":
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(-20,-20,88,140,pi/2,1,4,0,10,2,self,False))
+            if self.frame == 15 :
+                self.active_hitboxes.append(Hitbox(-20,-20,88,140,pi/2,1,4,0,10,2,self,False))
+            if self.frame == 20 :
+                self.active_hitboxes.append(Hitbox(-20,-20,88,140,pi/4,10,8,0,12,2,self,True))
 
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
@@ -172,12 +191,19 @@ class Rey(Char):
                 if self.frame < 30 :
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
-        if attack == "ForwardSmash":
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 7
+        if attack == "DownSmash":
+            if self.frame > 5 and self.frame < 8 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 6
                 self.animeframe -= 1
                 self.charge = self.charge+1
-            if self.frame > 45: # 30 frames de lag
+            if self.frame < 20 :
+                self.superarmor = -1
+            else :
+                self.superarmor = 0
+            if self.frame == 20 :
+                self.charge = min(100,self.charge)
+                self.active_hitboxes.append(Hitbox(32,50,72,48,pi/10,22+9*(self.charge/100),17,1/130,20+11*(self.charge/100),3,self,False))
+            if self.frame > 65: # 42 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -197,7 +223,7 @@ class Rey(Char):
                 self.attack = None
                 self.charge = 0
 
-        if attack == "DownSmash":
+        if attack == "ForwardSmash":
 
             if self.frame < 3 :
                 if left : # peut reverse netre les frames 1 et 2
