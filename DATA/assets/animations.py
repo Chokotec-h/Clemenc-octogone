@@ -8,6 +8,7 @@ icons ={
     "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Rey":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Pyro-Aubin":"./DATA/Images/Sprites/Chars/None/icon.png",
 }
 
@@ -62,5 +63,6 @@ animations = {
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
     "Reignaud":Nonesprite,
+    "Rey":Nonesprite,
     "Pyro-Aubin":Nonesprite,
 }
