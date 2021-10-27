@@ -267,7 +267,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if not self.tumble:
                             self.vx -= self.airspeed
                 if up:         # si on input vers le haut
-                    if special : # si la touche spécial est pressée, et que le up b n'a pas été utilisé
+                    if special and not self.upB: # si la touche spécial est pressée, et que le up b n'a pas été utilisé
                         self.inputattack("UpB")  # on input un upB
                         jump = False  # On input pas un saut en plus
                     if attack :
