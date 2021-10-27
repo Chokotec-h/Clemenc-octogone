@@ -12,6 +12,8 @@ class Texte:
         self.text= text
         self.color = color
         self.format = format_
+        text = self.font.render(self.text,1,self.color)
+        self.width = text.get_size()[0]
     
     def draw(self,win):
         text = self.font.render(self.text,1,self.color)
