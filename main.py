@@ -11,6 +11,8 @@ from DATA.assets.animations import icons
 from commands import *
 from DATA.utilities.Entry import *
 
+import time
+
 ####################################
 ########## Initialisation ##########
 ####################################
@@ -61,16 +63,13 @@ def main():
     height = 900
     window = pygame.display.set_mode((width, height))
     
-    # Déclaration des variables
-    smoke = list()
-    smokeframe  = 0
 
     # test de music et de bruitages
     soundReady = True
 
     try:
 
-        #run,controls = setup_controls(window,width,height,joysticks) # Version test de modif des contrôles
+        # Initialisation des contrôles
         run = True
         if len(joysticks) > 1 :
             controls = [commands["Menu"],commands["Menu"]]
@@ -78,6 +77,9 @@ def main():
             controls = [commands["Menu"],commands["DefaultKeyboard"]]
         else :
             controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
+        # Déclaration des variables
+        smoke = list()
+        smokeframe  = 0
         pause = False
         hold_pause = False
         Play = False
@@ -87,10 +89,12 @@ def main():
         focusedbutton = 0
         row = 0
         confirm = False
-        playingmusicfor = 0
+        musicstartedat = 0
+        ############################
         pygame.mixer.init()
         pygame.mixer.music.load("DATA/Musics/menu.mp3")
         pygame.mixer.music.play()
+        musicstartedat = time.time()
         while run:  # Boucle du programme
 
             # Récupération des events
@@ -100,11 +104,10 @@ def main():
                     run = False
 
             if not Play :
-                playingmusicfor += 1
-                if playingmusicfor > 59*60 : # Loop
+                if time.time()-musicstartedat > 59 : # Loop
                     pygame.mixer.music.load("DATA/Musics/menu.mp3")
                     pygame.mixer.music.play()
-                    playingmusicfor = 0
+                    musicstartedat = time.time()
 
                 if not convert_inputs(controls[0],joysticks,0)[6]:
                     confirm = False
@@ -113,11 +116,9 @@ def main():
                     if convert_inputs(controls[0],joysticks,0)[3]:
                         focusedbutton += 1
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[0],joysticks,0)[2]:
                         focusedbutton -= 1
                         clock.tick(10)
-                        playingmusicfor += 5
                     focusedbutton = focusedbutton%2
 
                     Bouton = Button("Play",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/4,250,100)
@@ -143,11 +144,9 @@ def main():
                         if convert_inputs(controls[0],joysticks,0)[3]:
                             focusedbutton += 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         if convert_inputs(controls[0],joysticks,0)[2]:
                             focusedbutton -= 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         focusedbutton = (focusedbutton+2)%(len(commands)-1)-2
                         for i,n in enumerate(commands) :
                             if n not in ["Default","Menu","DefaultKeyboard"]:
@@ -190,27 +189,23 @@ def main():
                         if convert_inputs(controls[0],joysticks,0)[3]:
                             focusedbutton += 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         if convert_inputs(controls[0],joysticks,0)[2]:
                             focusedbutton -= 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         if convert_inputs(controls[0],joysticks,0)[0]:
                             row -= 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         if convert_inputs(controls[0],joysticks,0)[1]:
                             row += 1
                             clock.tick(10)
-                            playingmusicfor += 5
                         if row == 0 :
-                            focusedbutton = ((focusedbutton+1)%5)-1
+                            focusedbutton = ((focusedbutton+2)%6)-2
                         if row == 1 :
-                            focusedbutton = ((focusedbutton+1)%6)-1
+                            focusedbutton = ((focusedbutton+2)%7)-2
                         if row == 2 :
-                            focusedbutton = ((focusedbutton+1)%5)-1
+                            focusedbutton = ((focusedbutton+2)%6)-2
                         if row == 3 :
-                            focusedbutton = ((focusedbutton+1)%6)-1
+                            focusedbutton = ((focusedbutton+2)%7)-2
                         row = row%4
                         if inputget > -1:
                             
@@ -279,6 +274,18 @@ def main():
                                     for k in commands :
                                         commandfile.write(f'\t"{k}":{commands[k]},\n')
                                     commandfile.write("}")
+                        Bouton.draw(window)
+
+                        Bouton = Button("Delete",("arial",50,True,False),"./DATA/Images/Menu/Button.png",1450,850,100,60)
+                        if focusedbutton == -2:
+                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                                del commands[commandconfig]
+                                with open("./commands.py","w") as commandfile :
+                                    commandfile.write("commands = {\n")
+                                    for k in commands :
+                                        commandfile.write(f'\t"{k}":{commands[k]},\n')
+                                    commandfile.write("}")
 
                                 commandconfig = None
                                 confirm = True
@@ -290,19 +297,15 @@ def main():
                     if convert_inputs(controls[0],joysticks,0)[3]:
                         focusedbutton += 9
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[0],joysticks,0)[2]:
                         focusedbutton -= 9
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[0],joysticks,0)[0]:
                         focusedbutton -= 1
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[0],joysticks,0)[1]:
                         focusedbutton += 1
                         clock.tick(10)
-                        playingmusicfor += 5
                     #row = row%1
                     focusedbutton = ((focusedbutton+1)%(len(stages)+1))-1
                     Bouton = Button("Back",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
@@ -363,13 +366,11 @@ def main():
                     if convert_inputs(controls[0],joysticks,0)[3] and not selected_1:
                         selectchar_1 += 1
                         clock.tick(10)
-                        playingmusicfor += 5
                         if selectchar_1 >= len(chars) :
                             selectchar_1 = 0
                     if convert_inputs(controls[0],joysticks,0)[2] and not selected_1:
                         selectchar_1 -= 1
                         clock.tick(10)
-                        playingmusicfor += 5
                         if selectchar_1 < 0 :
                             selectchar_1 = len(chars) - 1
 
@@ -394,13 +395,11 @@ def main():
                     if convert_inputs(controls[1],joysticks,1)[3] and not selected_2:
                         selectchar_2 += 1
                         clock.tick(10)
-                        playingmusicfor += 5
                         if selectchar_2 >= len(chars) :
                             selectchar_2 = 0
                     if convert_inputs(controls[1],joysticks,1)[2] and not selected_2:
                         selectchar_2 -= 1
                         clock.tick(10)
-                        playingmusicfor += 5
                         if selectchar_2 < 0 :
                             selectchar_2 = len(chars) - 1
                     
@@ -428,7 +427,6 @@ def main():
                         if names[0] >= len(namelist):
                             names[0] = 0
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[0],joysticks,0)[12] or convert_inputs(controls[0],joysticks,0)[9]:
                         names[0] -= 1
                         if names[0] == 1 : # Defaultkeyboard
@@ -436,7 +434,6 @@ def main():
                         if names[0] < 0:
                             names[0] = len(namelist)-1
                         clock.tick(10)
-                        playingmusicfor += 5
 
                     if names[1] == 0 :
                         text = "Player 2"
@@ -451,7 +448,6 @@ def main():
                         if names[1] >= len(namelist):
                             names[1] = 0
                         clock.tick(10)
-                        playingmusicfor += 5
                     if convert_inputs(controls[1],joysticks,1)[12] or convert_inputs(controls[1],joysticks,1)[9]:
                         names[1] -= 1
                         if names[1] == 1 : # Defaultkeyboard
@@ -459,7 +455,6 @@ def main():
                         if names[1] < 0:
                             names[1] = len(namelist)-1
                         clock.tick(10)
-                        playingmusicfor += 5
 
                     # Text
                     if selected_1 :
