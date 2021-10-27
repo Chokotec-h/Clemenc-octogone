@@ -1,3 +1,5 @@
+from random import random
+import DATA.utilities.Animations as Animations
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
@@ -15,6 +17,8 @@ class Rey(Char):
         self.x = x
         self.rect.y = y
         self.player = player
+        self.foodvy = 0
+        self.door = None
     
     def __str__(self) -> str:
         return "Rey"
@@ -26,31 +30,59 @@ class Rey(Char):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
-            if self.frame == 11: # Saute frame 11
-                self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -20
-                self.attack = None
+            if self.frame > 5 and self.frame < 51: # Saute frame 11
+                self.vy = -7
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-            #if self.frame < 6 :
-            #    if left : # peut reverse netre les frames 1 et 5
-            #        self.look_right = False
-            #    if right :
-            #        self.look_right = True
-            #if self.frame == 6: # Hitbox frame 6-11
-            #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
+                if left :
+                    self.vx -= self.airspeed
+                if right :
+                    self.vx += self.airspeed
+            if self.frame > 51 :
+                self.attack = None
+                self.can_act = True
 
         if attack == "NeutralB":
-            if self.frame > 15: # 10 frames de lag
+            if self.frame == 5 : # active on 5-25
+                self.active_hitboxes.append(Hitbox(50,42,32,32,pi/4,3,16,1/200,12,20,self,False))
+                self.foodvy = -14
+            if self.frame > 5 and self.frame < 30 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].relativex += 11*signe(self.direction)
+                    self.active_hitboxes[-1].relativey += self.foodvy
+                    self.active_hitboxes[-1].sizex += 2
+                    self.active_hitboxes[-1].sizey += 2
+                    self.active_hitboxes[-1].knockback += 1
+                    self.foodvy += 3
+            if self.frame > 35: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "DownB":
-            if self.frame > 20 : # 15 frames de lag
+            if self.frame == 6 :
+                if self.door is None :
+                    self.door = Door(self.rect.x,self.rect.y,self)
+                    self.projectiles.append(self.door)
+                else :
+                    self.door.in_use = True
+                    self.x = self.door.x + self.rect.w/2
+                    self.rect.y = self.door.y
+                    self.vx = 0
+                    self.vy = 0
+            if self.frame > 20 : # 14 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "SideB":
-            if self.frame > 80 : # 20 frames de lag
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame == 5 :
+                self.projectiles.append(Spectre_de_rey(self,other))
+                self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
+                self.can_act = False
+            if self.frame > 30 : # 25 frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -82,7 +114,7 @@ class Rey(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                self.active_hitboxes.append(Hitbox(35,80,24,10,2*pi/5,12,1.2,1/200,20,3,self,False))
+                self.active_hitboxes.append(Hitbox(35,80,24,10,5*pi/13,12,1.2,1/200,20,3,self,False))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
@@ -119,6 +151,11 @@ class Rey(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(-8,-30,32,48,3*pi/10,10,9,1/250,14,8,self,False))
+            if self.frame == 12 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1] = Hitbox(24,-30,32,48,pi/3,10,9,1/250,14,4,self,False)
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -147,14 +184,14 @@ class Rey(Char):
 
         if attack == "BackAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/4,7,3,1/1000,12,2,self,False))
+                self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/6,7,3,1/1000,12,2,self,False))
             if self.frame > 10 and self.frame%5 == 3 and self.frame < 28:
                 if self.frame%2 == 0 :
-                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/4,7,3,1/1000,12,2,self,False))
+                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/6,7,3,1/1000,12,2,self,False))
                 else :
-                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,3*pi/4,7,3,1/1000,12,2,self,False))
+                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,5*pi/6,7,3,1/1000,12,2,self,False))
             if self.frame == 30 :
-                    self.active_hitboxes.append(Hitbox(-100,42,100,48,5*pi/6,13,3.4,1/220,12,2,self,False))
+                    self.active_hitboxes.append(Hitbox(-100,42,100,48,pi,13,3.4,1/220,12,2,self,False))
             
 
             if self.frame > 40: # 10 frames de lag
@@ -166,14 +203,19 @@ class Rey(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
+            if self.frame > 15 :
+                self.vx = 15*signe(self.direction)
+                self.vy += 2*self.fastfallspeed
+            if self.frame == 16 :
+                self.vy = 3*self.fastfallspeed
+                self.active_hitboxes.append(Hitbox(24,70,72,72,-pi/3,15,8,1/190,15,40,self,False))
 
-            if self.frame > 25: # 10 frames de lag
-                self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
+                self.lag = 5 # Finishes only on ground
+                if self.active_hitboxes :
+                    self.active_hitboxes.pop()
 
         if attack == "NeutralAir":
             if self.frame == 10 :
@@ -192,6 +234,12 @@ class Rey(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "DownSmash":
+
+            if self.frame < 5 :
+                if left : # peut reverse netre les frames 1 et 5
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame > 5 and self.frame < 8 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 6
                 self.animeframe -= 1
@@ -214,39 +262,53 @@ class Rey(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 10 and self.frame < 13  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.animeframe -= 1
-                self.frame = 6
+                self.frame = 11
                 self.charge = self.charge+1
-
+            if self.frame == 21 :
+                self.active_hitboxes.append(Hitbox(-32,-20,64,64,5*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),5,self,False))
+            if self.frame == 23 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1] = Hitbox(change_left(-32,64),-20,64,64,4*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),2,self,False)
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "ForwardSmash":
-
-            if self.frame < 3 :
-                if left : # peut reverse netre les frames 1 et 2
-                    self.look_right = False
-                if right :
-                    self.look_right = True
-            if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 7 and self.frame < 10  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.animeframe -= 1
-                self.frame = 4
+                self.frame = 8
                 self.charge = self.charge+1
+            
+            if self.frame == 24 :
+                self.charge = min(100,self.charge)
+                self.active_hitboxes.append(Hitbox(64,42,48,48,29/60,25+8*(self.charge/100),18,1/190,14+7*(self.charge/100),2,self,False))
 
-            if self.frame > 40: # 23 frames de lag
+            if self.frame > 47: # 23 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "DashAttack":
-            if self.frame < 26 :
+            if self.frame == 6 :
+                self.active_hitboxes.append(Hitbox(24,80,70,50,pi/4,14,8,1/200,13,20,self,False))
+            if self.frame == 10 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].knockback = 7
+                    self.active_hitboxes[-1].damages = 6
+                    self.active_hitboxes[-1].damages_stacking = 1/250
+                    self.active_hitboxes[-1].stun = 7
+                    if self.look_right :
+                        self.active_hitboxes[-1].angle = pi/6
+                    else :
+                        self.active_hitboxes[-1].angle = 5*pi/6
+            if self.frame > 4 and self.frame < 26 :
                 self.vy = 0
                 if self.grounded :
-                    self.vx += self.dashspeed*signe(self.direction)
+                    self.vx += self.dashspeed*signe(self.direction)/(self.frame-2)*10
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)
-            if self.frame > 50: # 24 frames de lag
+            if self.frame > 40: # 24 frames de lag
                 self.attack = None
 
         if attack == "UpTaunt":
@@ -272,5 +334,69 @@ class Rey(Char):
 ###################          
 """ Projectiles """
 ###################
+
+doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Rey_Porte/Open{6-i}.png") for i in range(6)]
+
+class Door():
+    def __init__(self,x,y,own:Rey) -> None:
+        self.x = x
+        self.y = y
+        self.own = own
+        self.in_use = False
+        self.damages = 0
+        self.stun = 0
+        self.knockback = 0
+        self.damages_stacking = 0
+        self.angle = 0
+        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Rey_Porte/Close.png")
+        self.duration = 7
+        self.rect = pygame.Rect(0,0,0,0)
+
+    def update(self):
+        if self.in_use :
+            self.duration -= 0.5
+            self.own.rect.x = self.x
+            self.own.rect.y = self.y
+            self.own.vx = 0
+            self.own.vy = 0
+            self.own.door = None
+
+    def draw(self,window):
+        sprite = self.sprite if self.duration > 6 else doorsprites[round(self.duration)-1] if self.duration > 2 else doorsprites[0]
+        window.blit(sprite, (self.x+800-8,self.y+450-8)) # on dessine le sprite
+
+    def deflect(self,modifier):
+        return
+
+class Spectre_de_rey():
+    def __init__(self,own:Rey,other) -> None:
+        self.x = own.rect.x
+        self.y = own.rect.y+own.rect.h/12
+        self.own = own
+        self.sprite = Animations.get_sprite(own.animation,own.name,own.animeframe+1,own.look_right)[0]
+        self.sprite = pygame.transform.scale(self.sprite,(self.sprite.get_size()[0]*3,self.sprite.get_size()[1]*3))
+        self.vx = 20*signe(own.direction)
+        self.other = other
+        self.damages = 2
+        self.stun = 5
+        self.knockback = 8
+        self.damages_stacking = 0
+        self.angle = random()*pi
+        self.rect = self.sprite.get_rect(topleft = (self.x,self.y))
+        self.duration = 2
+
+    
+    def update(self):
+        self.x += self.vx
+        self.rect = self.sprite.get_rect(topleft = (self.x,self.y))
+        if self.rect.colliderect(self.other.rect):
+            self.duration -= 1
+        if self.duration < 1 :
+            self.own.x,self.own.rect.y,self.other.x,self.other.rect.y = self.other.x-abs(self.own.vx),self.other.rect.y-abs(self.own.vy),self.own.x-abs(self.other.vx),self.own.rect.y-abs(self.other.vy)
+            # inverse les positions
+    def draw(self,window):
+        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+
+
 
 ##### Autres skins
