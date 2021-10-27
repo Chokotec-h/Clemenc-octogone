@@ -8,8 +8,8 @@ from math import pi
 
 class Rey(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
-                         doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.9, dashspeed=2.8, airspeed=1.1, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.4, fullhop=15, shorthop=12,
+                         doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -31,7 +31,7 @@ class Rey(Char):
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
             if self.frame > 5 and self.frame < 51: # Saute frame 11
-                self.vy = -7
+                self.vy = -9
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
                 if left :
                     self.vx -= self.airspeed
@@ -114,7 +114,7 @@ class Rey(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                self.active_hitboxes.append(Hitbox(35,80,24,10,5*pi/13,12,1.2,1/200,20,3,self,False))
+                self.active_hitboxes.append(Hitbox(24,80,75,24,5*pi/13,12,1.2,1/200,20,3,self,False))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
@@ -184,12 +184,12 @@ class Rey(Char):
 
         if attack == "BackAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/6,7,3,1/1000,12,2,self,False))
+                self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/50,7,3,1/1000,12,2,self,False))
             if self.frame > 10 and self.frame%5 == 3 and self.frame < 28:
                 if self.frame%2 == 0 :
-                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/6,7,3,1/1000,12,2,self,False))
+                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/50,7,3,1/1000,12,2,self,False))
                 else :
-                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,5*pi/6,7,3,1/1000,12,2,self,False))
+                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,49*pi/50,7,3,1/1000,12,2,self,False))
             if self.frame == 30 :
                     self.active_hitboxes.append(Hitbox(-100,42,100,48,pi,13,3.4,1/220,12,2,self,False))
             
