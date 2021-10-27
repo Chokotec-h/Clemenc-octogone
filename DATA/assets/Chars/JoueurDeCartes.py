@@ -364,7 +364,7 @@ class Air_President(Char):
 ###################
 
 class Carte():
-    def __init__(self,x,y,angle,number,own) -> None:
+    def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
             self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/Revolution.png")
             self.knockback = 0
@@ -399,7 +399,7 @@ class Carte():
         window.blit(self.sprite,(self.x+self.own.x+800,self.y+self.own.rect.y+450))
 
 class Stylo():
-    def __init__(self,color,own,stage):
+    def __init__(self,color,own:Air_President,stage):
         # Stylos d'Elsa
         self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Stylo/Stylo_"+color+".png")
         self.rect = self.sprite.get_rect()

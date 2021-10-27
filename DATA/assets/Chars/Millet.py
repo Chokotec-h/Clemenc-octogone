@@ -333,7 +333,7 @@ class Millet(Char):
 ###################
 
 class Rayon():
-    def __init__(self,stage,x,y,angle_fwd,own) -> None:
+    def __init__(self,stage,x,y,angle_fwd,own:Millet) -> None:
         self.stage = stage
         self.x = x
         self.y = y
@@ -386,7 +386,7 @@ for i in range(len(firesprite)):
     firesprite[i] = pygame.transform.scale(firesprite[i],(3*firesprite[i].get_size()[0],3*firesprite[i].get_size()[1]))
 
 class Fire():
-    def __init__(self,x,y,own) -> None:
+    def __init__(self,x,y,own:Millet) -> None:
         self.size = 2
         self.x = x
         self.y = y
@@ -419,7 +419,7 @@ class Fire():
         self.angle = -self.angle
 
 class Sinusoide():
-    def __init__(self,x,y,angle,own) -> None:
+    def __init__(self,x,y,angle,own:Millet) -> None:
         self.rect = pygame.Rect(x,y,5,5)
         self.angle = angle
         self.v = 5*signe(own.direction)
@@ -440,7 +440,7 @@ class Sinusoide():
         self.duration = 0
 
 class Quantique():
-    def __init__(self,x,y,own) -> None:
+    def __init__(self,x,y,own:Millet) -> None:
         self.rect = pygame.Rect(own.rect.x,own.rect.y,own.rect.w,own.rect.h)
         self.x = x
         self.y = y

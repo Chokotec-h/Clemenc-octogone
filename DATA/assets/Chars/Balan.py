@@ -412,7 +412,7 @@ class Projo_Craie():
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
 
 class Exposant():
-    def __init__(self,opponent,own,charge) -> None:
+    def __init__(self,opponent,own:Balan,charge) -> None:
         self.opponent = opponent
         self.charge = charge + 1
         self.duration = (charge+1)*120

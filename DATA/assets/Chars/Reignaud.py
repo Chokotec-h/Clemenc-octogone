@@ -385,7 +385,7 @@ class Reignaud(Char):
 ###################
 
 class Mot_invasif():
-    def __init__(self,x,y,other,own,stage) -> None:
+    def __init__(self,x,y,other,own:Reignaud,stage) -> None:
         self.other = other
         self.own = own
         self.duration=5
