@@ -199,13 +199,13 @@ def main():
                             row += 1
                             clock.tick(10)
                         if row == 0 :
-                            focusedbutton = ((focusedbutton+2)%6)-2
+                            focusedbutton = ((focusedbutton+1)%5)-1
                         if row == 1 :
-                            focusedbutton = ((focusedbutton+2)%7)-2
+                            focusedbutton = ((focusedbutton+1)%6)-1
                         if row == 2 :
-                            focusedbutton = ((focusedbutton+2)%6)-2
+                            focusedbutton = ((focusedbutton+1)%5)-1
                         if row == 3 :
-                            focusedbutton = ((focusedbutton+2)%7)-2
+                            focusedbutton = ((focusedbutton+1)%6)-1
                         row = row%4
                         if inputget > -1:
                             
@@ -266,7 +266,7 @@ def main():
                                     confirm = True
                             Bouton.draw(window)
                         Bouton = Button("Save",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
-                        if focusedbutton == -1:
+                        if focusedbutton == -1 and row%2 == 0:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                 with open("./commands.py","w") as commandfile :
@@ -274,10 +274,13 @@ def main():
                                     for k in commands :
                                         commandfile.write(f'\t"{k}":{commands[k]},\n')
                                     commandfile.write("}")
+
+                                commandconfig = None
+                                confirm = True
                         Bouton.draw(window)
 
                         Bouton = Button("Delete",("arial",50,True,False),"./DATA/Images/Menu/Button.png",1450,850,100,60)
-                        if focusedbutton == -2:
+                        if focusedbutton == -1 and row%2 == 1:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                 del commands[commandconfig]
