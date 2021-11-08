@@ -16,16 +16,74 @@ class Kebab(Char):
         self.x = x
         self.rect.y = y
         self.player = player
-        self.basestats = [1.3,2.3,1.9,0.75,0.3,1.3,9,7,8,6,3,15]
+        self.basestats = [1.3,2.3,1.9,0.75,0.3,1.3,9,7,8,6,3]
         self.damagemodifier = 1
         self.knockbackmodifier = 1
+        self.changeframe = 0
+        self.sauces = [1000,1000,1000,1000,1000,1000,1000,1000]
+        self.sauce = -1
+        self.current_sauce = -1
+
         self.eatleft = 3
-    
+
     def __str__(self) -> str:
         return "Kebab du dimanche soir"
 
-    def special(self): 
-        pass
+    def special(self):
+        for i in range(len(self.sauces)):
+            self.sauces[i] = min(self.sauces[i]+1,1000)
+        if self.current_sauce < 0 : # Reset stats
+            self.speed = 1.3
+            self.dashspeed = 2.3
+            self.airspeed = 1.9
+            self.deceleration = 0.75
+            self.fallspeed = 0.3
+            self.fastfallspeed = 1.1
+            self.fullhop = 9
+            self.shorthop = 7
+            self.doublejumpheight = 8
+            self.airdodgespeed = 6
+            self.airdodgetime = 3
+            self.damagemodifier = 1
+            self.knockbackmodifier = 1
+            self.changeframe = 0
+            self.superarmor = 0
+        else :
+            self.sauces[self.current_sauce] -= 2
+            if self.sauces[self.current_sauce] <= 0 :
+                self.current_sauce = -1
+
+        if self.current_sauce == 0 : # Algérienne : damages x2
+            self.damagemodifier = 2
+
+        if self.current_sauce == 1 : # Samouraï : knockback x2
+            self.knockbackmodifier = 2
+
+        if self.current_sauce == 3 : # Blanche : superarmor
+            self.superarmor = -1
+            self.sauces[self.sauce] -= 2
+
+        if self.current_sauce == 4 : # Moutarde : -5 frames de lag
+            self.changeframe = -5
+
+        if self.current_sauce == 5 : # Américaine : Better Air stats
+            self.airspeed = 3
+            self.fallspeed = 0.8
+            self.fastfallspeed = 1.5
+            self.fullhop = 18
+            self.shorthop = 14
+            self.doublejumpheight = 16
+
+        if self.current_sauce == 6 : # Harissa : Better Ground Speed
+            self.speed = 2
+            self.dashspeed = 4
+
+        if self.current_sauce == 7 : # BBQ : Better Airdodge Speed
+            self.airdodgespeed = 11
+            self.airdodgetime = 1
+
+        if self.current_sauce == 7 : # Ketchup : Less frictions
+            self.deceleration = 0.9
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -38,9 +96,31 @@ class Kebab(Char):
                 self.doublejump = [False for _ in self.doublejump] # Récupère tout les sauts
 
         if attack == "NeutralB":
+            if self.frame > 3 and self.frame < 6 and special:
+                self.frame = 4
+                if up and left :
+                    self.sauce = 0
+                elif up and right :
+                    self.sauce = 2
+                elif up :
+                    self.sauce = 1
+                elif down and left :
+                    self.sauce = 5
+                elif down and right :
+                    self.sauce = 7
+                elif down :
+                    self.sauce = 6
+                elif left :
+                    self.sauce = 3
+                elif right :
+                    self.sauce = 4
+                else :
+                    self.sauce = -1
+            if self.frame == 7 :
+                if self.sauce != self.current_sauce and self.sauces[self.sauces] >= 999:
+                    self.current_sauce = self.sauce
             if self.frame > 15: # 10 frames de lag
                 self.attack = None
-                self.charge = 0
 
         if attack == "DownB":
             if self.frame > 20 : # 15 frames de lag
