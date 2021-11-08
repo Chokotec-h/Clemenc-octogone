@@ -16,7 +16,7 @@ def change_left(x,size):
     return -x-size+48
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1,boum=0) -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -31,6 +31,7 @@ class Hitbox():
         self.position_relative = position_relative # Est-ce que l'ange d'éjection dépend de la position de l'adversaire par rapport à la hitbox ?
         self.deflect = deflect
         self.modifier = modifier
+        self.boum = boum
         if not own.look_right :
             self.relativex = change_left(x,sizex)
             self.angle = pi - angle
@@ -517,6 +518,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback*(self.damages*hitbox.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
+                        self.BOUM = hitbox.boum
                         self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                         self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                         self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2)-(self.superarmor/5) # hitstun

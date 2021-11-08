@@ -169,12 +169,7 @@ class Millet(Char):
 
         if attack == "ForwardAir":
             if self.frame == 45:
-                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self,False))
-            if self.frame == 46 :
-                if not self.active_hitboxes:
-                    self.BOUM = 30
-                else :
-                    self.active_hitboxes.pop()
+                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self,False,boum=30))
             if self.frame > 69: # 24 frames de lag
                 self.attack = None
             
