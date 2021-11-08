@@ -10,6 +10,7 @@ icons ={
     "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Rey":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Pyro-Aubin":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Kebab":"./DATA/Images/Sprites/Chars/None/icon.png",
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -53,6 +54,16 @@ Nonesprite = {
 
 }
 
+Kebab = {
+    "idle":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+
+}
+
 ### Lien Nom/animation
 
 animations = {
@@ -65,4 +76,5 @@ animations = {
     "Reignaud":Nonesprite,
     "Rey":Nonesprite,
     "Pyro-Aubin":Nonesprite,
+    "Kebab":Kebab,
 }

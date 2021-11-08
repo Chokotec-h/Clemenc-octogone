@@ -349,7 +349,7 @@ def main():
                     if b >= 20:
                         Menu = "stage"
                     Bouton.draw(window)
-                    chars = ["Balan","Millet","Gregoire","Reignaud","Rey","Joueur de air-president","Pyro-Aubin"]
+                    chars = ["Balan","Millet","Gregoire","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"]
                     ### P1
                     for i in range(len(chars)):
                         Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,105*(i-selectchar_1-len(chars)+4),400,100)
