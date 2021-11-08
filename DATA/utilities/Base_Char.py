@@ -517,8 +517,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback*(self.damages*hitbox.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
-                        self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.superarmor/5),1) # éjection x
-                        self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.superarmor/5),1) # éjection y
+                        self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
+                        self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                         self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2)-(self.superarmor/5) # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages # dommages

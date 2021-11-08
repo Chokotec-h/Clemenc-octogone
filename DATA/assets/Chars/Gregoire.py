@@ -32,7 +32,7 @@ class Gregoire(Char):
         if self.attack == "ForwardAir":
             self.superarmor = -1
         else :
-            self.superarmor = 13
+            self.superarmor = 14
         return False
 
     def animation_attack(self,attack,inputs,stage,other):
