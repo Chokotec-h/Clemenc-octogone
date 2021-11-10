@@ -1,8 +1,10 @@
+from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
-from math import pi
+from math import pi,cos,sin
 
-##### Copier
+##### Kebab
+saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Ketchup")]
 
 class Kebab(Char):
     def __init__(self,x,y,player) -> None:
@@ -16,11 +18,10 @@ class Kebab(Char):
         self.x = x
         self.rect.y = y
         self.player = player
-        self.basestats = [1.3,2.3,1.9,0.75,0.3,1.3,9,7,8,6,3]
         self.damagemodifier = 1
         self.knockbackmodifier = 1
         self.changeframe = 0
-        self.sauces = [1000,1000,1000,1000,1000,1000,1000,1000]
+        self.sauces = [600,600,600,600,600,600,600,600]
         self.sauce = -1
         self.current_sauce = -1
 
@@ -31,7 +32,7 @@ class Kebab(Char):
 
     def special(self):
         for i in range(len(self.sauces)):
-            self.sauces[i] = min(self.sauces[i]+1,1000)
+            self.sauces[i] = min(self.sauces[i]+0.3,600)
         if self.current_sauce < 0 : # Reset stats
             self.speed = 1.3
             self.dashspeed = 2.3
@@ -49,8 +50,8 @@ class Kebab(Char):
             self.changeframe = 0
             self.superarmor = 0
         else :
-            self.sauces[self.current_sauce] -= 2
-            if self.sauces[self.current_sauce] <= 0 :
+            self.sauces[self.current_sauce] -= 1.3
+            if self.sauces[self.current_sauce] <= 0 : # Resete sauce
                 self.current_sauce = -1
 
         if self.current_sauce == 0 : # Algérienne : damages x2
@@ -61,7 +62,7 @@ class Kebab(Char):
 
         if self.current_sauce == 3 : # Blanche : superarmor
             self.superarmor = -1
-            self.sauces[self.sauce] -= 2
+            self.sauces[self.current_sauce] -= 2
 
         if self.current_sauce == 4 : # Moutarde : -5 frames de lag
             self.changeframe = -5
@@ -82,7 +83,7 @@ class Kebab(Char):
             self.airdodgespeed = 11
             self.airdodgetime = 1
 
-        if self.current_sauce == 7 : # Ketchup : Less frictions
+        if self.current_sauce == 8 : # Ketchup : Less frictions
             self.deceleration = 0.9
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -99,25 +100,25 @@ class Kebab(Char):
             if self.frame > 3 and self.frame < 6 and special:
                 self.frame = 4
                 if up and left :
-                    self.sauce = 0
-                elif up and right :
-                    self.sauce = 2
-                elif up :
-                    self.sauce = 1
-                elif down and left :
                     self.sauce = 5
-                elif down and right :
+                elif up and right :
                     self.sauce = 7
-                elif down :
+                elif up :
                     self.sauce = 6
-                elif left :
+                elif down and left :
                     self.sauce = 3
-                elif right :
+                elif down and right :
+                    self.sauce = 1
+                elif down :
+                    self.sauce = 2
+                elif left :
                     self.sauce = 4
+                elif right :
+                    self.sauce = 0
                 else :
                     self.sauce = -1
             if self.frame == 7 :
-                if self.sauce != self.current_sauce and self.sauces[self.sauces] >= 999:
+                if self.sauce != self.current_sauce and self.sauces[self.sauce] >= 599:
                     self.current_sauce = self.sauce
             if self.frame > 15: # 10 frames de lag
                 self.attack = None
@@ -276,6 +277,39 @@ class Kebab(Char):
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
+    def draw(self, window): # Dessine aussi les inputs du konami code et la jauge d'explosifs
+        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
+
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+        pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
+        window.blit(drawing_sprite, pos,size) # on dessine le sprite
+        #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
+
+        for i,s in enumerate(self.smoke_dash):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.smoke_dash[i]
+        
+        for i,s in enumerate(self.double_jump):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.double_jump[i]
+        
+        if self.current_sauce != -1 :
+            if self.player == 0 :
+                x = 550
+            else :
+                x = 1100
+            window.blit(saucesprites[self.current_sauce],(x,750))
+            pygame.draw.rect(window,(0,0,0),(x-1,798,50,5))
+            pygame.draw.rect(window,(200,200,100),(x-1,798,self.sauces[self.current_sauce]/12,5))
+        if self.attack == "NeutralB":
+            for i in range(8):
+                if self.sauces[i] >= 599 :
+                    if self.sauce == i :
+                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*75+self.rect.x+800+24,sin(i*2*pi/8)*75+self.rect.y+450+24),30,width=2)
+                    window.blit(saucesprites[i],(cos(i*2*pi/8)*75+self.rect.x+800,sin(i*2*pi/8)*75+self.rect.y+450))
 ###################          
 """ Projectiles """
 ###################
