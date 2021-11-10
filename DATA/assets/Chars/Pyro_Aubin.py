@@ -4,7 +4,7 @@ import pygame
 from math import pi
 
 
-##### Copier
+##### Aubin
 
 class Pyro_Aubin(Char):
     def __init__(self,x,y,player) -> None:

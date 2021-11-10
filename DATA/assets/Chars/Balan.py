@@ -4,7 +4,7 @@ from math import pi
 
 exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Exposants/{i}.png"),(36,36)) for i in range(5)]
 
-##### M Balan
+##### Balan
 
 class Balan(Char):
     def __init__(self,x,y,player) -> None:

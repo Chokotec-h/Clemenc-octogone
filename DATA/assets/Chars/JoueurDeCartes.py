@@ -3,7 +3,7 @@ import pygame
 from math import pi, cos, sin
 from random import randint
 
-##### Perso
+##### Joueur de Air-Président
 
 class Air_President(Char):
     def __init__(self,x,y,player) -> None:

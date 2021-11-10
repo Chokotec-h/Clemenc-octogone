@@ -4,7 +4,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
 
-##### Copier
+##### Rey
 
 class Rey(Char):
     def __init__(self,x,y,player) -> None:

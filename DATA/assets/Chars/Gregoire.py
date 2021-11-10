@@ -7,7 +7,7 @@ import DATA.utilities.Animations as Animations
 def incertitude(x):
     return x + randint(round(-x/(2*sqrt(3)))*10,round(x/(2*sqrt(3)))*10)/10
 
-##### Perso
+##### Grégoire
 
 class Gregoire(Char):
     def __init__(self,x,y,player) -> None:
