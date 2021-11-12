@@ -55,19 +55,24 @@ class Kebab(Char):
                 self.current_sauce = -1
 
         if self.current_sauce == 0 : # Algérienne : damages x2
+            print("Algerienne")
             self.damagemodifier = 2
 
         if self.current_sauce == 1 : # Samouraï : knockback x2
+            print("Samourai")
             self.knockbackmodifier = 2
 
-        if self.current_sauce == 3 : # Blanche : superarmor
+        if self.current_sauce == 2 : # Blanche : superarmor
+            print("Blanche")
             self.superarmor = -1
             self.sauces[self.current_sauce] -= 2
 
-        if self.current_sauce == 4 : # Moutarde : -5 frames de lag
+        if self.current_sauce == 3 : # Moutarde : -5 frames de lag
+            print("Moutarde")
             self.changeframe = -5
 
-        if self.current_sauce == 5 : # Américaine : Better Air stats
+        if self.current_sauce == 4 : # Américaine : Better Air stats
+            print("Americaine")
             self.airspeed = 3
             self.fallspeed = 0.8
             self.fastfallspeed = 1.5
@@ -75,16 +80,21 @@ class Kebab(Char):
             self.shorthop = 14
             self.doublejumpheight = 16
 
-        if self.current_sauce == 6 : # Harissa : Better Ground Speed
-            self.speed = 2
-            self.dashspeed = 4
+        if self.current_sauce == 5 : # Harissa : Better Ground Speed
+            print("Harissa")
+            self.speed = 3
+            self.dashspeed = 5.5
 
-        if self.current_sauce == 7 : # BBQ : Better Airdodge Speed
+        if self.current_sauce == 6 : # BBQ : Better Airdodge Speed
+            print("BBQ")
             self.airdodgespeed = 11
             self.airdodgetime = 1
 
-        if self.current_sauce == 8 : # Ketchup : Less frictions
+        if self.current_sauce == 7 : # Ketchup : Less frictions
+            print("Ketchup")
             self.deceleration = 0.9
+            self.speed = 1
+            self.dashspeed = 2
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -124,41 +134,44 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "DownB":
-            if self.frame > 20 : # 15 frames de lag
+            if self.frame == 9 and self.eatleft:
+                self.damages = max(self.damages-15.5,0)
+                self.eatleft -= 1
+            if (self.frame > 20 + self.changeframe and self.eatleft) or self.frame > 25: # 16 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "SideB":
-            if self.frame > 80 : # 20 frames de lag
+            if self.frame > 80 + self.changeframe : # 20 frames de lag
                 self.attack = None
 
         if attack == "Jab":
 
-            if self.frame > 22: # 10 frames de lag
+            if self.frame > 22 + self.changeframe: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
 
-            if self.frame > 20: # 7 frames de lag
+            if self.frame > 20 + self.changeframe: # 7 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
-            if self.frame < 3 :
+            if self.frame < 3  + self.changeframe:
                 if left :
                     self.look_right = False
                 if right :
                     self.look_right = True
 
-            if self.frame > 30: # 8 frames de lag
+            if self.frame > 30 + self.changeframe: # 8 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
-            if self.frame > 25: # 11 Frames de lag
+            if self.frame > 25 + self.changeframe: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -168,7 +181,7 @@ class Kebab(Char):
 
         if attack == "ForwardAir":
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 50 + self.changeframe: # 29 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -178,7 +191,7 @@ class Kebab(Char):
 
         if attack == "BackAir":
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame > 25 + self.changeframe: # 14 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -188,7 +201,7 @@ class Kebab(Char):
 
         if attack == "DownAir":
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -198,7 +211,7 @@ class Kebab(Char):
 
         if attack == "NeutralAir":
 
-            if self.frame > 40: # 17 frames de lag
+            if self.frame > 40 + self.changeframe: # 17 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -211,7 +224,7 @@ class Kebab(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
-            if self.frame > 45: # 30 frames de lag
+            if self.frame > 45 + self.changeframe: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -227,7 +240,7 @@ class Kebab(Char):
                 self.frame = 6
                 self.charge = self.charge+1
 
-            if self.frame > 40: # 25 frames de lag
+            if self.frame > 40 + self.changeframe: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -243,7 +256,7 @@ class Kebab(Char):
                 self.frame = 4
                 self.charge = self.charge+1
 
-            if self.frame > 40: # 23 frames de lag
+            if self.frame > 40 + self.changeframe: # 23 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -254,7 +267,7 @@ class Kebab(Char):
                     self.vx += self.dashspeed*signe(self.direction)
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)
-            if self.frame > 50: # 24 frames de lag
+            if self.frame > 50 + self.changeframe: # 24 frames de lag
                 self.attack = None
 
         if attack == "UpTaunt":
