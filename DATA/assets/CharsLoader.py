@@ -6,6 +6,7 @@ from DATA.assets.Chars.Reignaud import *
 from DATA.assets.Chars.Pyro_Aubin import *
 from DATA.assets.Chars.Rey import *
 from DATA.assets.Chars.Kebab import *
+from DATA.assets.Chars.Poissonnier import *
 
 charobjects = {
     "Balan":Balan,
@@ -16,4 +17,5 @@ charobjects = {
     "Rey":Rey,
     "Pyro-Aubin":Pyro_Aubin,
     "Kebab":Kebab,
+    "Poissonnier":Poissonnier,
 }

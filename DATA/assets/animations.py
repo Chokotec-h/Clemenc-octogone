@@ -11,6 +11,7 @@ icons ={
     "Rey":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Pyro-Aubin":"./DATA/Images/Sprites/Chars/None/icon.png",
     "Kebab":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Poissonnier":"./DATA/Images/Sprites/Chars/None/icon.png",
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -77,4 +78,5 @@ animations = {
     "Rey":Nonesprite,
     "Pyro-Aubin":Nonesprite,
     "Kebab":Kebab,
+    "Poissonnier":Nonesprite,
 }
