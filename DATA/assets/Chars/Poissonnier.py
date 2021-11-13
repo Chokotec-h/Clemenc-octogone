@@ -1,4 +1,4 @@
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
 
@@ -78,6 +78,17 @@ class Poissonnier(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(50,50,72,32,4*pi/11,14,14.9,1/101,14,2,self,boum=7,deflect=True,modifier=1.3))
+            if self.frame == 11 :
+                self.active_hitboxes.append(Hitbox(30,-75,64,64,pi/2,9,9.9,1/101,12,3,self,boum=5,deflect=True,modifier=0.1))
+            if self.frame > 11 and self.frame < 14 :
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].sizex += 30
+                    if self.look_right :
+                        self.active_hitboxes[-1].relativex -= 30
+            if self.frame == 14 :
+                self.active_hitboxes.append(Hitbox(change_left(50,72),50,72,32,7*pi/11,14,14.9,1/101,14,2,self,boum=7,deflect=True,modifier=1.3))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
