@@ -143,11 +143,14 @@ class Poissonnier(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "ForwardSmash":
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 7
+            if self.frame > 4 and self.frame < 7 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 5
                 self.animeframe -= 1
                 self.charge = self.charge+1
-            if self.frame > 45: # 30 frames de lag
+            if self.frame == 24 :
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(42,42,64,64,pi/4,28+5*(self.charge/100),24.2,1/101,27+5*(self.charge/100),3,self,boum=12))
+            if self.frame > 55: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -158,12 +161,17 @@ class Poissonnier(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 5 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 4 and self.frame < 8  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.animeframe -= 1
-                self.frame = 6
+                self.frame = 5
                 self.charge = self.charge+1
+            if self.frame == 15 :
+                self.vy = -14
+                self.active_hitboxes.append(Hitbox(-2,-30,52,42,pi/2,22+2*(self.charge/100),20.4,1/101,19+8*(self.charge/100),10,self,boum=3))
+            if self.frame > 15 :
+                self.vy += 1
 
-            if self.frame > 40: # 25 frames de lag
+            if self.frame > 50: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -199,7 +207,11 @@ class Poissonnier(Char):
                     self.vx += self.dashspeed*signe(self.direction)
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)
-            if self.frame > 50: # 24 frames de lag
+            if self.frame > 9 and self.frame%3 == 1 and self.frame < 23:
+                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/4,3,2,1/1000,4,2,self,boum=3))
+            if self.frame == 25 :
+                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/5,10,4,1/101,9,2,self,boum=4))
+            if self.frame > 50: # 25 frames de lag
                 self.attack = None
 
         if attack == "UpTaunt":
