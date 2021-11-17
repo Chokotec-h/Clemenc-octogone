@@ -518,7 +518,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback*(self.damages*hitbox.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
-                        self.BOUM = hitbox.boum
+                        self.BOUM = hitbox.boum+4
                         self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                         self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
                         self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking+2)-(self.superarmor/5) # hitstun
@@ -537,6 +537,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.superarmor = max(self.superarmor - hitbox.damages,0)
                         self.damages += hitbox.damages
                 else :
+                    self.BOUM = 2
                     if self.parry :
                         self.parried = True
                         other.attack = None
@@ -556,6 +557,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if (not self.parry) and (not self.intangibility): # Parry
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
+                        self.BOUM = 4
                         self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                         self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                         self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
@@ -570,6 +572,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if abs(self.vx) + abs(self.vy) > 5 :
                             self.tumble = True
                     else :
+                        self.BOUM = 2
                         if self.superarmor != -1 :
                             self.superarmor = max(self.superarmor - projectile.damages,0)
                         self.damages += projectile.damages
