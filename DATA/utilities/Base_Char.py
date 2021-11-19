@@ -108,6 +108,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.airdodge = False
         self.can_airdodge = True
 
+        self.tech = 0
+
         self.intangibility = False
         self.dodgex = 0
         self.dodgey = 0
@@ -117,6 +119,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.smoke_dash = list()
         self.double_jump = list()
+
+        self.combo = 0
+        self.combodamages = 0
 
     def inputattack(self,attack):
         if self.attack != attack :
@@ -166,6 +171,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def get_inputs(self, inputs, stage, other, cancel): # Cancel spécial pour reignaud (pour pas avoir à tout copier coller)
         self.direction = 90 if self.look_right else -90
 
+        if self.tech > 0 :
+            self.tech -= 1
+            if self.tech == 0 :
+                self.tech = -20
+        if self.tech < 0 :
+            self.tech += 1
+
         left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         jump = fullhop or shorthop
 
@@ -178,13 +190,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if self.hitstun: # Directional Influence
             if self.totalhitstun-self.hitstun < 10 :
                 if right:
-                    self.vx += self.airspeed/5
+                    self.vx += self.airspeed/3
                 if left:
-                    self.vx -= self.airspeed/5
+                    self.vx -= self.airspeed/3
                 if up:
-                    self.vy -= self.fallspeed/5
+                    self.vy -= self.fallspeed/3
                 if down:
-                    self.vy += self.fallspeed/5
+                    self.vy += self.fallspeed/3
+            if shield and self.tech == 0:
+                self.tech = 5
         else :
             if (not shield) and self.parry :
                 self.lag = 3
@@ -460,8 +474,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.intangibility = False
             self.can_airdodge = True
             if self.tumble :
+                if self.airdodge :
+                    self.vx = self.airdodgespeed
+                elif self.tech > 0 :
+                    self.lag = 2
+                else :
+                    self.lag = 20
                 self.tumble = False
-                self.lag = 20
             for dj in range(len(self.doublejump)):
                 self.doublejump[dj] = False
         else :
@@ -511,6 +530,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
                 if (not self.parry) and (not self.intangibility): # Parry
+                    if not (self.lag or self.hitstun) :
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += hitbox.damages
                     if hitbox.position_relative : # Reverse hit
                         if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
@@ -555,6 +579,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
                 if (not self.parry) and (not self.intangibility): # Parry
+                    if not (self.lag or self.hitstun) :
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += projectile.damages
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
                     if self.superarmor < knockback or self.superarmor == -1 :
                         self.BOUM = 4

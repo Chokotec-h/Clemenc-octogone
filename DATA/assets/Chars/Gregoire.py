@@ -363,7 +363,7 @@ class Rayon():
     def update(self):
         nexty = self.y + sin(self.angle_fwd)*self.v + self.g
         if pygame.Rect(self.x,nexty,5,5).colliderect(self.stage.mainplat.rect):
-            self.g = -self.g*0.8
+            self.g = -6.74/4
             if self.rect.y < self.stage.mainplat.rect.y-self.g+abs(self.v)+5 :
                 self.angle_fwd = -self.angle_fwd
             else :
@@ -371,7 +371,7 @@ class Rayon():
 
 
         nextx = self.x + cos(self.angle_fwd)*self.v
-        self.g += 0.981
+        self.g += 0.0981*2
         self.x = nextx
         self.y = nexty
         self.rect = pygame.Rect(self.x,self.y,5,5)

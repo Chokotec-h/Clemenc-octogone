@@ -65,6 +65,16 @@ Kebab = {
 
 }
 
+
+Training = {
+    "idle":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+    "jump":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+    "fall":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Misc/Training/Training.png",((0,0,12,30),),1,True),
+
+}
 ### Lien Nom/animation
 
 animations = {
@@ -79,4 +89,5 @@ animations = {
     "Pyro-Aubin":Nonesprite,
     "Kebab":Kebab,
     "Poissonnier":Nonesprite,
+    "Training":Training
 }

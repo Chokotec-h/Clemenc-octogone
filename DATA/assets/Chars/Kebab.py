@@ -8,7 +8,7 @@ saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") 
 
 class Kebab(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.3, dashspeed=2.3, airspeed=1.9, deceleration=0.75, fallspeed=0.3, fastfallspeed=1.3, fullhop=9, shorthop=7,
+        super().__init__(speed=1.3, dashspeed=2.3, airspeed=1.95, deceleration=0.75, fallspeed=0.3, fastfallspeed=1.3, fullhop=9, shorthop=7,
                          doublejumpheight=8,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso

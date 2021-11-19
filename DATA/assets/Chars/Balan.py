@@ -8,7 +8,7 @@ exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprite
 
 class Balan(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.45, fastfallspeed=1, fullhop=14, shorthop=11,
+        super().__init__(speed=2, dashspeed=3, airspeed=0.8, deceleration=0.705, fallspeed=0.45, fastfallspeed=1, fullhop=14, shorthop=11,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
@@ -331,7 +331,7 @@ class Balan(Char):
                     self.vx -= self.dashspeed*signe(self.direction)
                 
             if self.frame < 21 and self.frame%5 == 0 and self.frame > 4: # active on 5/10/15/20
-                self.active_hitboxes.append(Hitbox(40,32,32,32,pi/12,abs(self.vx),1.5,0,12,2,self,False))
+                self.active_hitboxes.append(Hitbox(40,32,32,32,pi/12,abs(self.vx),1.5,0,12,2,self,False,boum=-1))
             if self.frame == 26: # active on 26
                 self.active_hitboxes.append(Hitbox(40,32,64,64,pi/4,9,3.5,1/250,10,3,self,False))
             if self.frame > 50: # 24 frames de lag

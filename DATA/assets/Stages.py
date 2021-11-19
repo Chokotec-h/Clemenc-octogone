@@ -45,3 +45,5 @@ class Platform():
 def create_stage(stage):
     if stage == "K201":
         return Stage("K201_plateforme",0,191*2)
+    if stage == "Pandadrome":
+        return Stage("Pandadrome_plateforme",0,186*2)

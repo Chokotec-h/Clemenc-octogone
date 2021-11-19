@@ -7,7 +7,7 @@ from math import pi,cos,sin
 
 class Reignaud(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
+        super().__init__(speed=2, dashspeed=3, airspeed=1, deceleration=0.51, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
                          doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso

@@ -8,7 +8,7 @@ from math import pi
 
 class Rey(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.9, dashspeed=2.8, airspeed=1.1, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.4, fullhop=15, shorthop=12,
+        super().__init__(speed=1.9, dashspeed=2.8, airspeed=1.1, deceleration=0.68, fallspeed=0.9, fastfallspeed=1.7, fullhop=15, shorthop=12,
                          doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
