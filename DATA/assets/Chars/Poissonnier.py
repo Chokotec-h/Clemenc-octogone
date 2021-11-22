@@ -6,8 +6,8 @@ from math import pi
 
 class Poissonnier(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=1.7, deceleration=0.78, fallspeed=1, fastfallspeed=1.8, fullhop=13, shorthop=10,
-                         doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=2, dashspeed=3, airspeed=1.7, deceleration=0.78, fallspeed=1, fastfallspeed=1.8, fullhop=19, shorthop=17,
+                         doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
@@ -54,15 +54,23 @@ class Poissonnier(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame == 4 :
+                self.active_hitboxes.append(Hitbox(64,32,64,64,pi/2,1,0.5,0,5,2,self))
+            if self.frame == 7 :
+                if attack_button :
+                    self.frame = 5
+                self.active_hitboxes.append(Hitbox(64,32,64,64,pi/2,1,0.5,0,5,2,self))
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(64,32,100,64,pi/4,4,8,1/200,10,2,self,boum=1))
 
-            if self.frame > 22: # 10 frames de lag
+            if self.frame > 30: # 20 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(50,100,84,32,pi/5,8,6.2,1/101,9,2,self,boum=7,deflect=True,modifier=0.5))
+                self.active_hitboxes.append(Hitbox(50,100,84,32,pi/5,8,6.2,1/256,9,2,self,boum=5,deflect=True,modifier=0.5))
 
-            if self.frame > 20: # 7 frames de lag
+            if self.frame > 20: # 12 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
@@ -72,23 +80,23 @@ class Poissonnier(Char):
                 if right :
                     self.look_right = True
             if self.frame == 12 :
-                self.active_hitboxes.append(Hitbox(50,50,84,32,pi/10,10,11.1,1/101,11,2,self,boum=7,deflect=True,modifier=1.01))
+                self.active_hitboxes.append(Hitbox(50,50,84,32,pi/10,10,11.1,1/111,11,2,self,boum=5,deflect=True,modifier=1.01))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(50,50,72,32,4*pi/11,14,14.9,1/101,14,2,self,boum=7,deflect=True,modifier=1.3))
+                self.active_hitboxes.append(Hitbox(50,50,72,32,4*pi/11,14,14.9,1/256,14,2,self,boum=5,deflect=True,modifier=1.3))
             if self.frame == 11 :
-                self.active_hitboxes.append(Hitbox(30,-75,64,64,pi/2,9,9.9,1/101,12,3,self,boum=5,deflect=True,modifier=0.1))
+                self.active_hitboxes.append(Hitbox(30,-75,64,64,pi/2,9,9.9,1/256,12,3,self,boum=3,deflect=True,modifier=0.1))
             if self.frame > 11 and self.frame < 14 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].sizex += 30
                     if self.look_right :
                         self.active_hitboxes[-1].relativex -= 30
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(change_left(50,72),50,72,32,7*pi/11,14,14.9,1/101,14,2,self,boum=7,deflect=True,modifier=1.3))
+                self.active_hitboxes.append(Hitbox(change_left(50,72),50,72,32,7*pi/11,14,14.9,1/256,14,2,self,boum=5,deflect=True,modifier=1.3))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
@@ -103,8 +111,10 @@ class Poissonnier(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(10,64,80,24,pi/3,5,5,1/256,17,2,self,boum=1))
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 20: # 12 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -114,7 +124,10 @@ class Poissonnier(Char):
 
         if attack == "BackAir":
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame == 12 :
+                self.active_hitboxes.append(Hitbox(-64,48,70,16,2*pi/3,18,12,1/256,17,2,self,boum=1))
+
+            if self.frame > 30: # 18 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -149,15 +162,15 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 24 :
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(42,42,64,64,pi/4,28+5*(self.charge/100),24.2,1/101,27+5*(self.charge/100),3,self,boum=12))
+                self.active_hitboxes.append(Hitbox(42,42,64,64,pi/4,24+5*(self.charge/100),24.2,1/256,23+5*(self.charge/100),3,self,boum=8))
             if self.frame > 55: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "UpSmash":
 
-            if self.frame < 5 :
-                if left : # peut reverse netre les frames 1 et 5
+            if self.frame < 3 :
+                if left : # peut reverse netre les frames 1 et 2
                     self.look_right = False
                 if right :
                     self.look_right = True
@@ -167,7 +180,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 15 :
                 self.vy = -14
-                self.active_hitboxes.append(Hitbox(-2,-30,52,42,pi/2,22+2*(self.charge/100),20.4,1/101,19+8*(self.charge/100),10,self,boum=3))
+                self.active_hitboxes.append(Hitbox(-2,-30,52,42,pi/2,22+2*(self.charge/100),20.4,1/256,19+8*(self.charge/100),10,self,boum=3))
             if self.frame > 15 :
                 self.vy += 1
 
@@ -178,7 +191,7 @@ class Poissonnier(Char):
         if attack == "DownSmash":
 
             if self.frame < 3 :
-                if left : # peut reverse netre les frames 1 et 2
+                if left : # peut reverse entre les frames 1 et 2
                     self.look_right = False
                 if right :
                     self.look_right = True
@@ -188,7 +201,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 30 :
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(10,-82,32,84,pi/9,22+8*(self.charge/100),22.2,1/101,24+9*(self.charge/100),6,self,boum=11,deflect=True,modifier=1.5))
+                self.active_hitboxes.append(Hitbox(10,-82,32,84,pi/9,18+8*(self.charge/100),22.2,1/256,24+9*(self.charge/100),6,self,boum=7,deflect=True,modifier=1.5))
             if self.frame > 30 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativex += 12*signe(self.direction)
                 self.active_hitboxes[-1].relativey += 24+(self.frame-30)*7
@@ -208,9 +221,9 @@ class Poissonnier(Char):
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)
             if self.frame > 9 and self.frame%3 == 1 and self.frame < 23:
-                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/4,3,2,1/1000,4,2,self,boum=3))
+                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/10,abs(self.vx),2,1/1000,4,2,self))
             if self.frame == 25 :
-                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/5,10,4,1/101,9,2,self,boum=4))
+                self.active_hitboxes.append(Hitbox(-20,5,88,88,pi/5,10,4,1/256,9,2,self,boum=1))
             if self.frame > 50: # 25 frames de lag
                 self.attack = None
 
