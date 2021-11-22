@@ -1,6 +1,7 @@
+from DATA.assets.Stages import Stage
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
-from math import pi, cos, sin
+from math import pi, cos, sin, sqrt
 from random import randint
 
 ##### Joueur de Air-Président
@@ -16,19 +17,43 @@ class Air_President(Char):
         self.x = x
         self.rect.y = y
         self.player = player
-        self.mao = False
-        self.mao_used = False
         self.basefallspeed = 0.8
         self.stylo = ["Bleu","Violet","Vert","Noir"]
         self.currentstylo = 0
+        self.poutre = False
+        self.stage = Stage
     
     def __str__(self) -> str:
         return "Joueur de air-president"
 
     def special(self): # Spécial
+        if self.poutre :
+            self.speed = 0.9
+            self.airspeed = 0.5
+            self.deceleration = 0.2
+            self.dashspeed = 1
+            self.fallspeed = 2
+            self.fastfallspeed = 3
+            self.fullhop = 13
+            self.shorthop = 10
+            if self.hitstun :
+                self.projectiles.append(Poutre(0,0,self.stage,self))
+                self.poutre = False
+        else :
+            self.speed = 1.9
+            self.airspeed = 1.4
+            self.deceleration = 0.6
+            self.dashspeed = 3.6
+            self.fallspeed = 0.5
+            self.fullhop = 15
+            self.shorthop = 12
         return False
 
     def animation_attack(self,attack,inputs,stage,other):
+        self.stage = stage
+        if self.poutre and attack != "DownB":
+            attack = None
+            self.attack = None
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
 
@@ -62,14 +87,15 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "DownB":
-            if self.frame == 5 :
-                self.mao = True
-                self.mao_used = False
-            if self.frame > 28 :
-                if self.mao and not self.mao_used :
-                    self.damages += 2
-                self.mao = False
-            if self.frame > 45 : # 18 frames de lag
+            if self.poutre :
+                if self.frame == 25 :
+                    self.poutre = False
+                    self.projectiles.append(Poutre(signe(self.direction)*15,-15,stage,self))
+            else :
+                if self.frame == 22 :
+                    self.poutre = True
+                    self.attack = None
+            if self.frame > 45 : # 20 frames de lag
                 self.attack = None
 
         if attack == "SideB":
@@ -307,58 +333,6 @@ class Air_President(Char):
                 self.attack = None
 
 
-    def collide(self,other):
-        self.parrying = False
-        for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
-            if self.rect.colliderect(hitbox.hit):
-                if (not self.parry) and (not self.intangibility) and not (self.mao): # Parry and counter
-                    self.tumble = True
-                    if hitbox.position_relative : # Reverse hit
-                        if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
-                            hitbox.angle = pi - hitbox.angle
-                        if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
-                            hitbox.angle = pi - hitbox.angle
-                        
-                    self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
-                    self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
-                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
-                    self.damages += hitbox.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None # cancel l'attacue en cours
-                else :
-                    if self.parry :
-                        self.parrying = True
-                    if self.mao :
-                        self.damages = max(0,self.damages - hitbox.damages) # heal
-                        self.mao_used = True
-                del other.active_hitboxes[i] # Supprime la hitbox
-                return
-        for i,projectile in enumerate(other.projectiles): # Détection des projectiles
-            for h in self.active_hitboxes :
-                if h.deflect and h.hit.colliderect(projectile.rect):
-                    projectile.deflect(h.modifier)
-                    self.projectiles.append(projectile)
-                    del other.projectiles[i] # Supprime la hitbox
-                    return
-
-            if self.rect.colliderect(projectile.rect) and not self.last_hit:
-                self.last_hit = 10 # invincibilité aux projectiles de 10 frames
-                if (not self.parry) and (not self.intangibility) and (not self.mao) : # Parry
-                    self.tumble = True
-                    self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
-                    self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
-                    self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
-                    self.damages += projectile.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None
-                else :
-                    if self.parry :
-                        self.parrying = True
-                    if self.mao :
-                        self.damages = max(0.,self.damages - projectile.damages) # heal
-                        self.mao_used = True
-                return
-
 ###################          
 """ Projectiles """
 ###################
@@ -467,3 +441,62 @@ class Stylo():
 
     def draw(self,window):
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+
+class Poutre():
+    def __init__(self,vx,vy,stage,own:Air_President) -> None:
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Poutre.png"),(48,48))
+        self.x = own.x
+        self.y = own.rect.y
+        self.vx = vx
+        self.vy = vy
+        self.angle = -signe(vy)*pi/4
+        if vx < 0 :
+            self.angle = pi-self.angle
+        if abs(vx) < 0.01 :
+            if vy > 0 :
+                self.angle = -pi/2
+            else :
+                self.angle = pi/2
+        self.knockback = sqrt(self.vx**2+self.vy**2)
+        self.damages = 24
+        self.stun = sqrt(self.vx**2+self.vy**2)
+        self.damages_stacking = 1/500
+        self.duration = 10
+        self.stage = stage
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+
+    def update(self):
+        self.knockback = sqrt(self.vx**2+self.vy**2)
+        self.damages = 24
+        self.stun = sqrt(self.vx**2+self.vy**2)/3
+        self.damages_stacking = 1/500
+        self.x += round(self.vx)
+        self.y += self.vy
+        self.vy += 1.8
+        self.vx *= 0.96
+        self.angle = -signe(self.vy)*pi/4
+        if self.vx < 0 :
+            self.angle = pi-self.angle
+        if abs(self.vx) < 0.01 :
+            if self.vy > 0 :
+                self.angle = -pi/2
+            else :
+                self.angle = pi/2
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        if self.y > 800 :
+            self.duration = 0
+        if self.rect.colliderect(self.stage.mainplat.rect) :
+            self.duration -= 1
+            self.vx = 0
+            self.vy = 0
+
+    def deflect(self,modifier):
+        self.vy = -self.vy*modifier
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
+
+    def draw(self,window):
+        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+    
