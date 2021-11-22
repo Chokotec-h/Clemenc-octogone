@@ -70,8 +70,10 @@ def main():
         Play = False
         musicplaying = False
         focusedbutton = 0
+        row = 0
         confirm = False
         musicstartedat = 0
+        commandconfig = None
 
         # Training
         TrainingHDI = 0
@@ -80,12 +82,15 @@ def main():
 
         ############################
         pygame.mixer.init()
+        pygame.mixer.music.set_volume(1.0)
+        
+
         pygame.mixer.music.load("DATA/Musics/menu.mp3")
         pygame.mixer.music.play()
         musicstartedat = time.time()
         while run:  # Boucle du programme
             actualize_repeating()
-            window.fill((153,102,255))
+            window.fill((0x55,0x22,0x66)) # Background color
 
             # Récupération des events
             events = pygame.event.get()
@@ -268,7 +273,7 @@ def main():
                                     inputget = i+13
                                     confirm = True
                             Bouton.draw(window)
-                        Bouton = Button("|_|",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                        Bouton = Button("Sauvegarder",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,850,250,60)
                         if focusedbutton == -1 and row%2 == 0:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
@@ -282,7 +287,7 @@ def main():
                                 confirm = True
                         Bouton.draw(window)
 
-                        Bouton = Button("Supprimer",("arial",50,True,False),"./DATA/Images/Menu/Button.png",1450,850,100,60)
+                        Bouton = Button("Supprimer",("arial",50,True,False),"./DATA/Images/Menu/Button.png",1450,850,200,60)
                         if focusedbutton == -1 and row%2 == 1:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
