@@ -18,8 +18,8 @@ class Air_President(Char):
         self.rect.y = y
         self.player = player
         self.basefallspeed = 0.8
-        self.stylo = ["Bleu","Violet","Vert","Noir"]
-        self.currentstylo = 0
+        self.blahaj = ["fatty","flat","flying","spiky"]
+        self.currentblahaj = 0
         self.poutre = False
         self.stage = Stage
     
@@ -231,8 +231,8 @@ class Air_President(Char):
 
         if attack == "NeutralAir":
             if self.frame == 9:
-                self.projectiles.append(Stylo(self.stylo[self.currentstylo],self,stage))
-                self.currentstylo = (self.currentstylo+1)%4
+                self.projectiles.append(Blahaj(self.blahaj[self.currentblahaj],self,stage))
+                self.currentblahaj = (self.currentblahaj+1)%4
             if self.frame > 24: # 15 frames de lag
                 self.attack = None
 
@@ -372,49 +372,50 @@ class Carte():
     def draw(self,window):
         window.blit(self.sprite,(self.x+self.own.x+800,self.y+self.own.rect.y+450))
 
-class Stylo():
+class Blahaj():
     def __init__(self,color,own:Air_President,stage):
-        # Stylos d'Elsa
-        self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Stylo/Stylo_"+color+".png")
+        # Blahaj
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Blahaj/Blahaj_"+color+".png"),(72,36))
+        self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
         self.color = color
-        if self.color == "Vert":
+        if self.color == "flying":
             self.vx = 15*signe(own.direction)
         else :
             self.vx = 10*signe(own.direction)
-        if self.color == "Vert" :
+        if self.color == "flying" :
             self.vy = -6
         else :
             self.vy = -4
         self.duration = 5
         self.stage = stage
-        if self.color == "Violet":
+        if self.color == "flat":
             self.damages_stacking=1/250
         else :
             self.damages_stacking=1/750
-        if self.color == "Bleu":
+        if self.color == "fatty":
             self.angle = -pi/2
         elif not own.look_right :
             self.angle = 3*pi/4
         else :
             self.angle = pi/4
-        if self.color == "Violet":
+        if self.color == "flat":
             self.knockback = 7
-        elif self.color == "Bleu" :
+        elif self.color == "fatty" :
             self.knockback = 5
         else :
             self.knockback = 3
-        if self.color == "Noir":
+        if self.color == "spiky":
             self.damages = 3.2
-        elif self.color == "Vert" :
+        elif self.color == "flying" :
             self.damages = 0.8
         else :
             self.damages = 1.2
-        if self.color == "Noir" :
+        if self.color == "spiky" :
             self.stun = 6
-        elif self.color == "Violet":
+        elif self.color == "flat":
             self.stun = 8
         else :
             self.stun = 3
@@ -424,7 +425,7 @@ class Stylo():
             self.duration = 0
         self.x += round(self.vx)
         self.y += self.vy
-        if self.color == "Bleu":
+        if self.color == "fatty":
             self.vy += 0.7
         else :
             self.vy += 0.4
