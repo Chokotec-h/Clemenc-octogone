@@ -1,10 +1,53 @@
 from DATA.utilities.Animations import get_sprite
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi,cos,sin
 
 ##### Kebab
 saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Ketchup")]
+
+
+
+
+def replacewhite(image,colorcoef):
+    """ Applique un coefficient à toutes les couleurs 
+    NE PAS UTILISER EN COURS D'EXECUTION, PRENDS BEAUCOUP DE TEMPS
+    Priviliégier une exécution avant le lancement
+    
+    Entrées : image / coefficients (3 ou 4 floats)
+    Sorties : image modifiée (modification de l'image entrée aussi)"""
+    for x in range(image.get_size()[0]):
+        for y in range(image.get_size()[1]):
+            newcolor = list(image.get_at((x,y)))
+            for i,c in enumerate(colorcoef):
+                newcolor[i]*=c
+            image.set_at((x,y),newcolor)
+    return image
+
+
+### Recoloring smashes sprites
+Smashes = {
+    "fsmash0":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.9,0.7,0.6)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(1,0.7,0.05)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash2":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash3":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.6,0.6,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash4":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.5,0.3,0)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash5":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.5,0.3,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash6":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.4,0,0)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash7":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.8,0.3,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash-1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2.png"),(0.2,0.2,0.2)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+
+    "fsmash0l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.9,0.7,0.6)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(1,0.7,0.05)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash2l":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash3l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.6,0.6,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash4l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.5,0.3,0)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash5l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.5,0.3,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash6l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.4,0,0)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash7l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.8,0.3,0.3)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+    "fsmash-1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Fsmash2_l.png"),(0.2,0.2,0.2)),((3,2,8,13),(12,2,12,13),(25,2,16,13),(42,3,21,13)),10,False),
+}
+
 
 class Kebab(Char):
     def __init__(self,x,y,player) -> None:
@@ -224,6 +267,8 @@ class Kebab(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
+            if self.frame == 24 :
+                self.active_hitboxes.append(Hitbox(32,0,64,64,pi/3,16*self.knockbackmodifier+5*(self.charge/100),19*self.damagemodifier,1/200,20+8*(self.charge/100),4,self,boum=1))
             if self.frame > 45 + self.changeframe: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -292,12 +337,22 @@ class Kebab(Char):
 
     def draw(self, window): # Dessine aussi les inputs du konami code et la jauge d'explosifs
         drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
-
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        
         size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
         pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
-        #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
+        
+        if self.attack == "ForwardSmash" and self.animeframe > 14:
+            t = "" if self.look_right else "l"
+            drawsmash = Smashes["fsmash"+str(self.current_sauce)+t]
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
+            size = drawsmash[1][(self.animeframe-14)//5]
+            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            if not self.look_right :
+                pos[0] -= size[2] - 48
+            window.blit(drawing_smash, pos,size) # on dessine le sprite
+
 
         for i,s in enumerate(self.smoke_dash):
                     s.draw(window)
