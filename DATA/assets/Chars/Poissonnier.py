@@ -15,6 +15,7 @@ class Poissonnier(Char):
         self.x = x
         self.rect.y = y
         self.player = player
+        self.chargeshot = 0
     
     def __str__(self) -> str:
         return "Poissonnier"
@@ -40,9 +41,33 @@ class Poissonnier(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
-            if self.frame > 15: # 10 frames de lag
+            if self.chargeshot < 200 and special and not (left or right or shield) and self.frame > 12 and self.frame < 16 :
+                self.frame = 13
+                self.chargeshot += 1
+            if self.chargeshot < 150 and self.frame == 16:
+                if not special :
+                    self.projectiles.append(Fireball(self.x,self.rect.y,max(self.chargeshot,1),self))
+                    self.chargeshot = 0
+                elif left :
+                    self.vx = -20
+                    self.lag = 5
+                    self.attack = None
+                elif right :
+                    self.vx = 20
+                    self.lag = 5
+                    self.attack = None
+                elif shield :
+                    self.lag = 5
+                    self.intangibility = 3
+
+            if self.chargeshot > 198 and self.frame == 16:
+                self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
+                self.chargeshot = 0
+                self.lag = 20
+
+
+            if self.frame > 30: # 15 frames de lag
                 self.attack = None
-                self.charge = 0
 
         if attack == "DownB":
             if self.frame > 20 : # 15 frames de lag
@@ -136,6 +161,10 @@ class Poissonnier(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(-2,-2,72,12,-pi/3,12,9,1/200,11,8,self))
+            if self.frame > 10 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativey += 30
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -250,5 +279,62 @@ class Poissonnier(Char):
 ###################          
 """ Projectiles """
 ###################
+
+class Fireball():
+    def __init__(self,x,y,charge,own):
+        self.x = x
+        self.y = y
+        self.vx = signe(own.direction)*20
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(30+charge),round(30+charge)))
+        self.damages_stacking=1/200
+        if not own.look_right :
+            self.angle = 5*pi/6
+        else :
+            self.angle = pi/6
+        
+        self.knockback = 2+22*(charge/150)
+        self.damages = 1+30*(charge/150)
+        self.stun = 3+25*(charge/150)
+        self.duration = 800
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+
+    def update(self):
+        self.x += self.vx
+        self.duration -= 1
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        
+    def draw(self,window):
+        window.blit(self.sprite,(self.x+800,self.y+450))
+
+class Surchauffe():
+    def __init__(self,x,y,own:Poissonnier):
+        self.x = x-150+own.rect.w/2
+        self.y = y-150+own.rect.h/2
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(300,300))
+        self.damages_stacking=1/180
+        if not own.look_right :
+            self.angle = 3*pi/4
+        else :
+            self.angle = pi/4
+        self.knockback = 29
+        self.damages = 35
+        self.stun = 28
+        self.duration = 16
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
+
+    def update(self):
+        spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
+        self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(300,300))
+        self.duration -= 1
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        
+    def draw(self,window):
+        window.blit(self.sprite,(self.x+800,self.y+450))
 
 ##### Autres skins
