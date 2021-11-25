@@ -82,7 +82,7 @@ def main():
 
         ############################
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(0.0)
+        pygame.mixer.music.set_volume(1.0)
         
 
         pygame.mixer.music.load("DATA/Musics/menu.mp3")
