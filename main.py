@@ -60,6 +60,8 @@ def main():
         # Déclaration des variables
         stages = ["K201"] # Add stages here
         chars = ["Balan","Millet","Gregoire","Poissonnier","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
+        # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
+        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True)]
 
         Menu = "main"
 
@@ -520,6 +522,7 @@ def main():
                         Play = True
                         Menu = "stage"
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](-350,0,0)
+
                         if training :
                             Char_P2 = Chars.Training(0,0,1)
                             basedamages = 0
@@ -531,6 +534,10 @@ def main():
                             Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0,1)
                         controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
                         background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[stage]}.png"),(1600,900))
+                        for m in musics :
+                            if m[2] == actualstages[stage] and m[3]:
+                                currentmusic = m[0]
+                                lenmusic = m[1]
                         stage = Stages.create_stage(actualstages[stage])
         
 
@@ -540,9 +547,13 @@ def main():
                 #""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""#
                 if not musicplaying :
                     pygame.mixer.music.stop()
-                    pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
+                    pygame.mixer.music.load(currentmusic)
                     pygame.mixer.music.play()
                     musicplaying = True
+                    musicstartedat = time.time()
+        
+                if time.time()-musicstartedat > lenmusic : # Loop
+                    musicplaying = False
 
                 window.fill((255, 255, 255)) # Réinitialisation de l'écran à chaque frame
                 window.blit(background,(0,0))
