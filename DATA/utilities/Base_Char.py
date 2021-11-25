@@ -123,6 +123,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.combo = 0
         self.combodamages = 0
 
+        self.immune_to_projectiles = []
+
     def inputattack(self,attack):
         if self.attack != attack :
             self.animeframe = 0
@@ -557,15 +559,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if abs(self.vx) + abs(self.vy) > 5 :
                             self.tumble = True
                     else :
+                        self.BOUM = 2
                         if self.superarmor != -1 :
                             self.superarmor = max(self.superarmor - hitbox.damages,0)
                         self.damages += hitbox.damages
                 else :
-                    self.BOUM = 2
                     if self.parry :
+                        other.BOUM = 8
                         self.parried = True
                         other.attack = None
-                        other.lag = max(hitbox.damages*hitbox.knockback/10,15)
+                        other.lag = min(hitbox.damages*hitbox.knockback/10,9)
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -578,7 +581,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
             if self.rect.colliderect(projectile.rect) and not self.last_hit:
                 self.last_hit = 10 # invincibilité aux projectiles de 10 frames
-                if (not self.parry) and (not self.intangibility): # Parry
+                if (not self.parry) and (not self.intangibility) and projectile not in self.immune_to_projectiles: # Parry
+                    self.immune_to_projectiles.append(projectile)
                     if not (self.lag or self.hitstun) :
                         self.combo = 0
                         self.combodamages = 0
@@ -607,7 +611,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.damages += projectile.damages
                 else :
                     if self.parry :
+                        other.BOUM = 8
+                        self.projectiles.append(projectile)
+                        projectile.deflect(1)
+                        del other.projectiles[i] # Supprime la hitbox
                         self.parried = True
                         other.attack = None
-                        other.lag = max(projectile.damages*projectile.knockback/10,15)
+                        other.lag = min(projectile.damages*projectile.knockback/10,9)
                 return
