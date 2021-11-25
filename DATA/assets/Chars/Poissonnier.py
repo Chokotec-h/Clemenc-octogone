@@ -308,7 +308,7 @@ class Poissonnier(Char):
         if self.player == 0 :
             x = 500
         else :
-            x = 1000
+            x = 1050
         pygame.draw.rect(window,(200,0,0),(x-1,798,5,50))
         pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
         Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
@@ -346,6 +346,12 @@ class Fireball():
         self.x += self.vx
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+    
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
         
     def draw(self,window):
         window.blit(self.sprite,(self.x+800,self.y+450))
@@ -375,6 +381,12 @@ class Smokeball():
         self.y += self.vy
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+    
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
+        self.vy = -self.vy
+        self.knockback = self.damages * modifier
+        self.angle = pi-self.angle
         
     def draw(self,window):
         window.blit(self.sprite,(self.x+800,self.y+450))
