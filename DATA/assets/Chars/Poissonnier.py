@@ -77,7 +77,7 @@ class Poissonnier(Char):
                 self.charge = 0
 
         if attack == "SideB":
-            if self.overheat > 50 and self.overheat < 150  and self.frame == 16:
+            if self.overheat > 50 and self.overheat < 199  and self.frame == 16:
                 self.projectiles.append(Fireball(self.x,self.rect.y,self.overheat,self))
                 self.overheat = 0
             if self.overheat < 50 and self.overheat > 10 and self.frame > 14 and self.frame < 18:
@@ -309,7 +309,7 @@ class Poissonnier(Char):
             x = 500
         else :
             x = 1050
-        pygame.draw.rect(window,(200,0,0),(x-1,798,5,50))
+        pygame.draw.rect(window,(self.overheat,100-self.overheat/2,200-self.overheat),(x-1,798,5,50))
         pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
         Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
 
@@ -327,18 +327,18 @@ class Poissonnier(Char):
 class Fireball():
     def __init__(self,x,y,charge,own):
         self.x = x
-        self.y = y
+        self.y = y-charge/4
         self.vx = signe(own.direction)*20
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(30+charge),round(30+charge)))
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(charge),round(charge)))
         self.damages_stacking=1/200
         if not own.look_right :
             self.angle = 5*pi/6
         else :
             self.angle = pi/6
         
-        self.knockback = 2+22*(charge/150)
-        self.damages = round(1+30*(charge/150),1)
-        self.stun = 3+25*(charge/150)
+        self.knockback = 2+16*(charge/200)
+        self.damages = round(1+15*(charge/150),1)
+        self.stun = 3+14*(charge/150)
         self.duration = 800
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
@@ -384,7 +384,7 @@ class Smokeball():
     
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
-        self.vy = -self.vy
+        self.damages = self.damages * modifier
         self.knockback = self.damages * modifier
         self.angle = pi-self.angle
         
