@@ -1,6 +1,10 @@
+
+from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
+
+from DATA.utilities.Interface import Texte
 
 ##### Poissonnier
 
@@ -15,13 +19,14 @@ class Poissonnier(Char):
         self.x = x
         self.rect.y = y
         self.player = player
-        self.chargeshot = 0
+        self.overheat = 0
     
     def __str__(self) -> str:
         return "Poissonnier"
 
     def special(self): 
-        pass
+        self.overheat = max(self.overheat-0.1,0)
+        return False
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -41,29 +46,26 @@ class Poissonnier(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
-            if self.chargeshot < 200 and special and not (left or right or shield) and self.frame > 12 and self.frame < 16 :
+            if self.overheat < 200 and special and not (left or right or shield) and self.frame > 12 and self.frame < 16 :
                 self.frame = 13
-                self.chargeshot += 1
-            if self.chargeshot < 150 and self.frame == 16:
-                if not special :
-                    self.projectiles.append(Fireball(self.x,self.rect.y,max(self.chargeshot,1),self))
-                    self.chargeshot = 0
-                elif left :
-                    self.vx = -20
-                    self.lag = 5
-                    self.attack = None
-                elif right :
-                    self.vx = 20
-                    self.lag = 5
-                    self.attack = None
-                elif shield :
-                    self.lag = 5
-                    self.intangibility = 3
+                self.overheat += 1
+            if left :
+                self.vx = -20
+                self.lag = 5
+                self.attack = None
+            elif right :
+                self.vx = 20
+                self.lag = 5
+                self.attack = None
+            elif shield :
+                self.lag = 5
+                self.intangibility = 3
 
-            if self.chargeshot > 198 and self.frame == 16:
+            if self.overheat > 198 and self.frame == 16:
                 self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
-                self.chargeshot = 0
-                self.lag = 20
+                self.overheat = 0
+                self.damages += 10
+                self.lag = 25
 
 
             if self.frame > 30: # 15 frames de lag
@@ -75,7 +77,15 @@ class Poissonnier(Char):
                 self.charge = 0
 
         if attack == "SideB":
-            if self.frame > 80 : # 20 frames de lag
+            if self.overheat > 50 and self.overheat < 150  and self.frame == 16:
+                self.projectiles.append(Fireball(self.x,self.rect.y,self.overheat,self))
+                self.overheat = 0
+            if self.overheat < 50 and self.overheat > 10 and self.frame > 14 and self.frame < 18:
+                self.projectiles.append(Smokeball(self.x,self.rect.y,self.frame,self))
+                self.overheat = 11
+            if self.frame > 19 and self.overheat > 10 :
+                self.overheat = 0
+            if self.frame > 24 : # 20 frames de lag
                 self.attack = None
 
         if attack == "Jab":
@@ -276,6 +286,40 @@ class Poissonnier(Char):
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
+    def draw(self, window): # Dessine aussi les inputs du konami code et la jauge d'explosifs
+        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
+        
+        size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+        pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
+        window.blit(drawing_sprite, pos,size) # on dessine le sprite
+
+
+        for i,s in enumerate(self.smoke_dash):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.smoke_dash[i]
+        
+        for i,s in enumerate(self.double_jump):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.double_jump[i]
+
+        if self.player == 0 :
+            x = 500
+        else :
+            x = 1000
+        pygame.draw.rect(window,(200,0,0),(x-1,798,5,50))
+        pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
+        Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
+
+        # debug
+        if self.parry:
+            pygame.draw.rect(window,(200,200,200),(pos[0],pos[1],self.rect.w,self.rect.h))
+
+        # draw projectiles
+        for p in self.projectiles :
+            p.draw(window)
 ###################          
 """ Projectiles """
 ###################
@@ -293,13 +337,42 @@ class Fireball():
             self.angle = pi/6
         
         self.knockback = 2+22*(charge/150)
-        self.damages = 1+30*(charge/150)
+        self.damages = round(1+30*(charge/150),1)
         self.stun = 3+25*(charge/150)
         self.duration = 800
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
     def update(self):
         self.x += self.vx
+        self.duration -= 1
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        
+    def draw(self,window):
+        window.blit(self.sprite,(self.x+800,self.y+450))
+
+
+class Smokeball():
+    def __init__(self,x,y,i,own):
+        self.x = x
+        self.y = y
+        self.vx = signe(own.direction)*20
+        self.vy = (i-16)*5
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/0.png"),(round(30),round(30)))
+        self.damages_stacking=1/200
+        if not own.look_right :
+            self.angle = 41*pi/42
+        else :
+            self.angle = pi/42
+        
+        self.knockback = 17
+        self.damages = 0
+        self.stun = 0
+        self.duration = 20
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
@@ -323,10 +396,9 @@ class Surchauffe():
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
     def deflect(self,modifier):
-        self.vx = -self.vx*modifier
-        self.damages = self.damages * modifier
-        self.knockback = self.damages * modifier
-        self.angle = pi-self.angle
+        self.damages = 0
+        self.knockback = 0
+        self.stun = 0
 
     def update(self):
         spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
