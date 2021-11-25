@@ -1,17 +1,17 @@
-
+import pygame
 
 
 
 icons ={
-    "Balan":"./DATA/Images/Sprites/Chars/Balan/icon.png",
-    "Joueur de air-president":"./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png",
-    "Millet":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Gregoire":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Reignaud":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Rey":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Pyro-Aubin":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Kebab":"./DATA/Images/Sprites/Chars/None/icon.png",
-    "Poissonnier":"./DATA/Images/Sprites/Chars/None/icon.png",
+    "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),
+    "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"),
+    "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Poissonnier":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)

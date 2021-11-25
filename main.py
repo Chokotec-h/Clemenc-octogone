@@ -82,7 +82,7 @@ def main():
 
         ############################
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.set_volume(0.0)
         
 
         pygame.mixer.music.load("DATA/Musics/menu.mp3")
@@ -364,19 +364,19 @@ def main():
                     Bouton.draw(window)
                     ### P1
                     for i in range(len(chars)):
-                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",0,105*(i-scroll1-len(chars)+4),384,100)
+                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1-len(chars)+4),384,100)
                         Bouton.draw(window)
-                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",0,105*(i-scroll1+len(chars)+4),384,100)
+                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1+len(chars)+4),384,100)
                         Bouton.draw(window)
-                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",0,105*(i-scroll1+4),384,100)
+                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1+4),384,100)
                         if selectchar_1 == i :
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             Bouton.resize(400,100)
                         Bouton.draw(window)
                     for i in range(len(chars)):
-                        window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(64,105*(i-scroll1+4)-32))
-                        window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(64,105*(i-scroll1+4-len(chars))-32))
-                        window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(64,105*(i-scroll1+4+len(chars))-32))
+                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4)-32))
+                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4-len(chars))-32))
+                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4+len(chars))-32))
                     # Arrows
                     if convert_inputs(controls[0],joysticks,0)[3] and not selected_1 and scroll1 == selectchar_1:
                         selectchar_1 += 1
@@ -393,10 +393,10 @@ def main():
                         if selectchar_1 < 0 :
                             selectchar_1 = len(chars) - 1
                     if round(scroll1,1) < selectchar_1 :
-                        scroll1 += 0.5
+                        scroll1 += 0.25
                         scroll1 = round(scroll1,3)
                     if round(scroll1,1) > selectchar_1 :
-                        scroll1 -= 0.5
+                        scroll1 -= 0.25
                         scroll1 = round(scroll1,3)
                     if round(scroll1,1) == selectchar_1 :
                         scroll1 = selectchar_1
@@ -409,26 +409,26 @@ def main():
 
                     ### P2
                     if training :
-                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button_focused.png",width,height/2,384,100)
+                        Bouton = Button("",("arial",50,True,False),standard,width,height/2,384,100)
                         Bouton.draw(window)
                         window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Misc/Training/Training_icon.png"),(64,64)),(width-128,height/2-32))
                     else :
                         for i in range(len(chars)):
                             # Buttons
-                            Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width,105*(i-scroll2-len(chars)+4),384,100)
+                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2-len(chars)+4),384,100)
                             Bouton.draw(window)
-                            Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width,105*(i-scroll2+len(chars)+4),384,100)
+                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2+len(chars)+4),384,100)
                             Bouton.draw(window)
-                            Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width,105*(i-scroll2+4),384,100)
+                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2+4),384,100)
                             if selectchar_2 == i :
                                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 Bouton.resize(400,100)
                             Bouton.draw(window)
                         # Sprites
                         for i in range(len(chars)):
-                            window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-128,105*(i-scroll2+4)-32))
-                            window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-128,105*(i-scroll2+4-len(chars))-32))
-                            window.blit(pygame.transform.scale(pygame.image.load(icons[chars[i]]),(64,64)),(width-128,105*(i-scroll2+4+len(chars))-32))
+                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4)-32))
+                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4-len(chars))-32))
+                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4+len(chars))-32))
                         # Arrows
                         if convert_inputs(controls[0],joysticks,0)[3] and not selected_2 and scroll2 == selectchar_2:
                             selectchar_2 += 1
@@ -445,10 +445,10 @@ def main():
                             if selectchar_2 < 0 :
                                 selectchar_2 = len(chars) - 1
                         if round(scroll2,1) < selectchar_2 :
-                            scroll2 += 0.5
+                            scroll2 += 0.25
                             scroll2 = round(scroll2,3)
                         if round(scroll2,1) > selectchar_2 :
-                            scroll2 -= 0.5
+                            scroll2 -= 0.25
                             scroll2 = round(scroll2,3)
                         if round(scroll2,1) == selectchar_2 :
                             scroll2 = selectchar_2
@@ -736,7 +736,7 @@ def main():
                                         deceleration = 0.5
                             equal = []
                             for p in Chars.decelerations :
-                                window.blit(pygame.transform.scale(pygame.image.load(icons[p]),(20,20)),((Chars.decelerations[p]-0.5)*500+30,8*height/12+15))
+                                window.blit(pygame.transform.scale(icons[p],(20,20)),((Chars.decelerations[p]-0.5)*500+30,8*height/12+15))
                                 if abs(deceleration - Chars.decelerations[p]) < 0.01 and (not (convert_inputs(controls[0],joysticks,0)[1] or convert_inputs(controls[0],joysticks,0)[0]) or focusedbutton != 5):
                                     deceleration = Chars.decelerations[p]
                                     equal.append(p)
@@ -762,7 +762,7 @@ def main():
                                         airspeed = 0.5
                             equal = []
                             for p in Chars.airspeeds :
-                                window.blit(pygame.transform.scale(pygame.image.load(icons[p]),(20,20)),((Chars.airspeeds[p]-0.5)/1.5*250+30,9*height/12+15))
+                                window.blit(pygame.transform.scale(icons[p],(20,20)),((Chars.airspeeds[p]-0.5)/1.5*250+30,9*height/12+15))
                                 if abs(airspeed - Chars.airspeeds[p]) < 0.03 and (not (convert_inputs(controls[0],joysticks,0)[1] or convert_inputs(controls[0],joysticks,0)[0]) or focusedbutton != 6):
                                     airspeed = Chars.airspeeds[p]
                                     equal.append(p)
@@ -788,7 +788,7 @@ def main():
                                         fallspeed = 0.25
                             equal = []
                             for p in Chars.fallspeeds :
-                                window.blit(pygame.transform.scale(pygame.image.load(icons[p]),(20,20)),((Chars.fallspeeds[p]-0.25)/1.25*250+30,10*height/12+15))
+                                window.blit(pygame.transform.scale(icons[p],(20,20)),((Chars.fallspeeds[p]-0.25)/1.25*250+30,10*height/12+15))
                                 if abs(fallspeed - Chars.fallspeeds[p]) < 0.03 and (not (convert_inputs(controls[0],joysticks,0)[1] or convert_inputs(controls[0],joysticks,0)[0]) or focusedbutton != 7):
                                     fallspeed = Chars.fallspeeds[p]
                                     equal.append(p)
@@ -814,7 +814,7 @@ def main():
                                         fastfallspeed = 0.5
                             equal = []
                             for p in Chars.fastfallspeeds :
-                                window.blit(pygame.transform.scale(pygame.image.load(icons[p]),(20,20)),((Chars.fastfallspeeds[p]-0.5)/1.5*250+30,11*height/12+15))
+                                window.blit(pygame.transform.scale(icons[p],(20,20)),((Chars.fastfallspeeds[p]-0.5)/1.5*250+30,11*height/12+15))
                                 if abs(fastfallspeed - Chars.fastfallspeeds[p]) < 0.03 and (not (convert_inputs(controls[0],joysticks,0)[1] or convert_inputs(controls[0],joysticks,0)[0]) or focusedbutton != 8):
                                     fastfallspeed = Chars.fastfallspeeds[p]
                                     equal.append(p)

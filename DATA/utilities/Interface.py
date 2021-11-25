@@ -1,5 +1,9 @@
 from typing import Text
 import pygame
+
+standard = pygame.image.load("./DATA/Images/Menu/Button.png")
+
+
 class Texte:
     def __init__(self,text,sysfont,color,x,y,show=True,format_ = "center"):
         self.x = x
