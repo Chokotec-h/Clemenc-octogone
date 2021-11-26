@@ -42,6 +42,11 @@ class Rey(Char):
                 self.can_act = True
 
         if attack == "NeutralB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 5 : # active on 5-25
                 self.active_hitboxes.append(Hitbox(50,42,32,32,pi/4,3,16,1/200,12,20,self,False))
                 self.foodvy = -14

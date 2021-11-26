@@ -45,6 +45,11 @@ class Pyro_Aubin(Char):
             #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right"] and not self.konamiadd:
                 self.konamiadd = True
                 print("B")

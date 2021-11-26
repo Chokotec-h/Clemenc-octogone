@@ -72,6 +72,11 @@ class Air_President(Char):
                 self.active_hitboxes[-1].sizey -= self.vy
 
         if attack == "NeutralB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 18 :
                 self.active_hitboxes.append(Hitbox(24,-32,256,256,0,0,0,0,0,6,self))
             if self.frame > 18 and self.frame < 22:

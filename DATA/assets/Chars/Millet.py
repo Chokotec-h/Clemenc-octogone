@@ -63,6 +63,11 @@ class Millet(Char):
                 self.lag += 1
 
         if attack == "NeutralB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame < 25 :
                 if up :
                     self.angle_rayon = pi/4

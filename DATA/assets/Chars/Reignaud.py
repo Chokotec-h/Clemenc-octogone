@@ -7,7 +7,7 @@ from math import pi,cos,sin
 
 class Reignaud(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3, airspeed=1, deceleration=0.51, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
+        super().__init__(speed=2, dashspeed=3.5, airspeed=1, deceleration=0.51, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
                          doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
@@ -49,6 +49,11 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "NeutralB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if not self.projectiles:
                 if self.frame < 5 :
                     self.cancelable = True
@@ -246,7 +251,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 20:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,29+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False))
+                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False))
             if self.frame > 45: # 21 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -266,7 +271,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 14:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,29+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
+                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,19+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
             if self.frame > 45: # 27 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -288,7 +293,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 15 :
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,15+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
                 self.active_hitboxes.append(Hitbox(change_left(35,64),52,64,64,5*pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
             if self.frame == 18:
                 if self.active_hitboxes :
@@ -353,7 +358,7 @@ class Reignaud(Char):
                     if self.parry :
                         self.parrying = True
                     if self.counter :
-                        self.active_hitboxes.append(Hitbox(32,48,64,64,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
+                        self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -378,7 +383,7 @@ class Reignaud(Char):
                     if self.parry :
                         self.parrying = True
                     if self.counter :
-                        self.active_hitboxes.append(Hitbox(32,48,64,64,pi-1,projectile.knockback,projectile.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else projectile.damages,1/250,projectile.stun,3,self,False))
+                        self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,projectile.knockback,projectile.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else projectile.damages,1/250,projectile.stun,3,self,False))
                 return
 ###################          
 """ Projectiles """
