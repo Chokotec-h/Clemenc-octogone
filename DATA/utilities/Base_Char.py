@@ -87,7 +87,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.totalhitstun = 0
         self.active_hitboxes = list() # Liste des hitbox actives
         self.projectiles = list()
-        self.last_hit = 0
         self.lag = 0
         self.charge = 0
         self.parry = False
@@ -151,7 +150,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.frame += 1
             self.animeframe += 1
             cancel = self.special()
-            self.last_hit = max(self.last_hit-1,0)
             self.get_inputs(inputs,stage,other,cancel)
             self.move(stage)
             for i,hitbox in enumerate(self.active_hitboxes) :
@@ -200,7 +198,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 if down:
                     self.vy += self.fallspeed/3
             if shield and self.tech == 0:
-                self.tech = 5
+                self.tech = 10
         else :
             if (not shield) and self.parry :
                 self.lag = 3
@@ -480,6 +478,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vx = self.airdodgespeed
                 elif self.tech > 0 :
                     self.lag = 2
+                    self.vx = self.direction/45
+                    self.vy = 0
                 else :
                     self.lag = 20
                 self.tumble = False
@@ -579,9 +579,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     del other.projectiles[i] # Supprime la hitbox
                     return
 
-            if self.rect.colliderect(projectile.rect) and not self.last_hit:
-                self.last_hit = 10 # invincibilité aux projectiles de 10 frames
-                if (not self.parry) and (not self.intangibility) and projectile not in self.immune_to_projectiles: # Parry
+            if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
+                if (not self.parry) and (not self.intangibility) : # Parry
                     self.immune_to_projectiles.append(projectile)
                     if not (self.lag or self.hitstun) :
                         self.combo = 0
