@@ -61,7 +61,7 @@ def main():
         stages = ["K201"] # Add stages here
         chars = ["Balan","Millet","Gregoire","Poissonnier","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
-        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True)]
+        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True),("DATA/Musics/intro_2.mp3",98,"Pandadrome",True)]
 
         Menu = "main"
 
@@ -432,14 +432,14 @@ def main():
                             window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4-len(chars))-32))
                             window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4+len(chars))-32))
                         # Arrows
-                        if convert_inputs(controls[0],joysticks,0)[3] and not selected_2 and scroll2 == selectchar_2:
+                        if convert_inputs(controls[1],joysticks,1)[3] and not selected_2 and scroll2 == selectchar_2:
                             selectchar_2 += 1
                             scroll2 += 1
                             scroll2 = scroll2%len(chars)
                             scroll2 -= 1
                             if selectchar_2 >= len(chars) :
                                 selectchar_2 = 0
-                        if convert_inputs(controls[0],joysticks,0)[2] and not selected_2 and scroll2 == selectchar_2:
+                        if convert_inputs(controls[1],joysticks,1)[2] and not selected_2 and scroll2 == selectchar_2:
                             selectchar_2 -= 1
                             scroll2 -= 1
                             scroll2 = scroll2%len(chars)
