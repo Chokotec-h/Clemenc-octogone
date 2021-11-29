@@ -1,7 +1,6 @@
 import pygame
 import traceback
 
-from pygame.constants import MOUSEBUTTONDOWN
 from DATA.assets.Chars.Training_Mob import Training
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
@@ -59,9 +58,9 @@ def main():
             controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
         # Déclaration des variables
         stages = ["K201"] # Add stages here
-        chars = ["Balan","Millet","Gregoire","Poissonnier","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
+        chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
-        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True),("DATA/Musics/intro_2.mp3",98,"Pandadrome",True)]
+        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
 
         Menu = "main"
 
@@ -84,7 +83,7 @@ def main():
 
         ############################
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(1.0)
+        pygame.mixer.music.set_volume(0.5)
         
 
         pygame.mixer.music.load("DATA/Musics/menu.mp3")
@@ -538,6 +537,7 @@ def main():
                             if m[2] == actualstages[stage] and m[3]:
                                 currentmusic = m[0]
                                 lenmusic = m[1]
+                        musicstartedat = time.time()
                         stage = Stages.create_stage(actualstages[stage])
         
 
