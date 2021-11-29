@@ -7,6 +7,7 @@ from DATA.assets.Chars.Pyro_Aubin import *
 from DATA.assets.Chars.Rey import *
 from DATA.assets.Chars.Kebab import *
 from DATA.assets.Chars.Poissonnier import *
+from DATA.assets.Chars.Renault import *
 from DATA.assets.Chars.Training_Mob import *
 
 pygame.mixer.init()
@@ -21,6 +22,7 @@ charobjects = {
     "Pyro-Aubin":Pyro_Aubin,
     "Kebab":Kebab,
     "Poissonnier":Poissonnier,
+    "Renault":Renault,
 }
 
 airspeeds = {
@@ -33,6 +35,7 @@ airspeeds = {
     "Pyro-Aubin":Pyro_Aubin(0,0,0).airspeed,
     "Kebab":Kebab(0,0,0).airspeed,
     "Poissonnier":Poissonnier(0,0,0).airspeed,
+    "Renault":Renault(0,0,0).airspeed,
 }
 
 decelerations = {
@@ -45,6 +48,7 @@ decelerations = {
     "Pyro-Aubin":Pyro_Aubin(0,0,0).deceleration,
     "Kebab":Kebab(0,0,0).deceleration,
     "Poissonnier":Poissonnier(0,0,0).deceleration,
+    "Renault":Renault(0,0,0).deceleration,
 }
 
 fallspeeds = {
@@ -57,6 +61,7 @@ fallspeeds = {
     "Pyro-Aubin":Pyro_Aubin(0,0,0).fallspeed,
     "Kebab":Kebab(0,0,0).fallspeed,
     "Poissonnier":Poissonnier(0,0,0).fallspeed,
+    "Renault":Renault(0,0,0).deceleration,
 }
 
 fastfallspeeds = {
@@ -69,4 +74,5 @@ fastfallspeeds = {
     "Pyro-Aubin":Pyro_Aubin(0,0,0).fastfallspeed,
     "Kebab":Kebab(0,0,0).fastfallspeed,
     "Poissonnier":Poissonnier(0,0,0).fastfallspeed,
+    "Renault":Renault(0,0,0).deceleration,
 }

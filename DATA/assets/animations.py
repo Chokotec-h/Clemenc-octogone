@@ -12,6 +12,7 @@ icons ={
     "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Poissonnier":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Renault":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -89,5 +90,6 @@ animations = {
     "Pyro-Aubin":Nonesprite,
     "Kebab":Kebab,
     "Poissonnier":Nonesprite,
+    "Renault":Nonesprite,
     "Training":Training
 }
