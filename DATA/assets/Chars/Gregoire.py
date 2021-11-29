@@ -355,7 +355,7 @@ class Rayon():
         else :
             self.angle = 3*pi/4
         self.knockback = 3
-        self.damages = incertitude(2)
+        self.damages = incertitude(0.2)
         self.stun = 4
         self.duration = 10
         self.g = -6.74/4
@@ -400,7 +400,7 @@ class Thunder():
         self.vx = 32*signe(own.direction)
         self.duration = 50
         self.knockback = 1
-        self.damages = incertitude(2.4)
+        self.damages = incertitude(0.2)
         self.stun = 12
         self.damages_stacking = 0
         if own.look_right :
@@ -431,7 +431,7 @@ class Sinusoide():
         self.v = 5*signe(own.direction)
         self.duration = 15
         self.knockback = 0.5
-        self.damages = incertitude(0.5)
+        self.damages = incertitude(0.05)
         self.stun = 3
         self.damages_stacking = 1/550
     

@@ -102,7 +102,7 @@ class Millet(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame%5 == 1 and self.frame > 15 and self.frame < 58:
+            if self.frame%4 == 1 and self.frame > 15 and self.frame < 58:
                 self.projectiles.append(Fire(self.x+24*signe(self.direction)-48,self.rect.y+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
@@ -346,8 +346,8 @@ class Rayon():
         else :
             self.angle = 3*pi/4
         self.knockback = 3
-        self.damages = incertitude(2)
-        self.stun = 4
+        self.damages = incertitude(0.2)
+        self.stun = 5
         self.duration = 10
         #self.g = -6.74/4
         nextx = self.x + cos(self.angle_fwd)*self.v
@@ -394,8 +394,8 @@ class Fire():
         self.vy = randint(-10,10)/10
         self.duration = 11
         self.knockback = 2
-        self.damages = incertitude(2)
-        self.stun = 4
+        self.damages = incertitude(0.8)
+        self.stun = 7
         self.damages_stacking = 0
         if own.look_right :
             self.angle = pi/4
@@ -425,7 +425,7 @@ class Sinusoide():
         self.v = 5*signe(own.direction)
         self.duration = 15
         self.knockback = 0.5
-        self.damages = incertitude(0.5)
+        self.damages = incertitude(0.05)
         self.stun = 3
         self.damages_stacking = 1/550
     
