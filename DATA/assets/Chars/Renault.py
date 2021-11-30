@@ -53,7 +53,16 @@ class Renault(Char):
                 self.charge = 0
 
         if attack == "DownB":
-            if self.frame > 20 : # 15 frames de lag
+            if self.frame > 15 and self.frame < 40 :
+                self.vx = (right-left)*12
+                self.vy = (down-up)*12
+                self.show = False
+                self.intangibility = 4
+            if self.frame == 40 :
+                self.show = True
+                self.active_hitboxes.append(Hitbox(0,0,48,120,pi/2,12,16,1/250,11,2,self,boum=2))
+                self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
+            if self.frame > 70 : # 30 frames de lag
                 self.attack = None
                 self.charge = 0
 

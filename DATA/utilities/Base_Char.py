@@ -98,6 +98,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.dash = False # Unused
 
         self.animeframe = 0
+        self.show = True
         self.animation = "idle"
         self.name = "Name"
 
@@ -505,7 +506,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
         size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
         pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
-        window.blit(drawing_sprite, pos,size) # on dessine le sprite
+        if self.show :
+            window.blit(drawing_sprite, pos,size) # on dessine le sprite
         #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
 
         for i,s in enumerate(self.smoke_dash):
