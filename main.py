@@ -58,7 +58,7 @@ def main():
             controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
         # Déclaration des variables
         stages = ["K201"] # Add stages here
-        chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
+        chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Isaac","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
         musics = [("DATA/Musics/chapelle.mp3",223,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
 
