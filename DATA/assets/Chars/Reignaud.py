@@ -369,9 +369,9 @@ class Reignaud(Char):
                     del other.projectiles[i] # Supprime la hitbox
                     return
 
-            if self.rect.colliderect(projectile.rect) and not self.last_hit:
-                self.last_hit = 10 # invincibilité aux projectiles de 10 frames
+            if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
                 if (not self.parry) and (not self.intangibility) and (not self.counter) : # Parry
+                    self.immune_to_projectiles.append(projectile)
                     self.tumble = True
                     self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                     self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
@@ -404,6 +404,7 @@ class Mot_invasif():
         self.stun = 0
         self.knockback = 0
         self.damages_stacking = 0
+        self.angle = 0
         self.projectile_immune = []
 
 
