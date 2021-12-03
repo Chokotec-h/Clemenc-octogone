@@ -40,12 +40,18 @@ class Poissonnier(Char):
             if self.frame < 12 :
                 self.vy -= self.fallspeed
             if self.frame == 12: # Hitbox frame 12-15
-                self.active_hitboxes.append(Hitbox(-5,90,58,50,-pi/2,20*(self.overheat/200),7,1/150,18*(self.overheat/200),3,self,False))
+                self.active_hitboxes.append(Hitbox(-5,90,58,50,-pi/2,20*(self.overheat/200),12*(self.overheat/200),1/150,18*(self.overheat/200),3,self,False))
                 self.can_act = False # ne peut pas agir après un grounded up B
                 self.vy = -15 - 15*(self.overheat/150)
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-                self.overheat = max(self.overheat-100,0)
+                self.overheat = min(self.overheat+40,200)
+                if self.overheat > 199 :
+                    self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
+                    self.overheat = 0
+                    self.damages += 20
+                    self.lag = 25
+                    self.vy = -42
 
         if attack == "NeutralB":
             if self.frame < 5 :
