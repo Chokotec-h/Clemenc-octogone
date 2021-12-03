@@ -1,6 +1,6 @@
 from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
-from math import pi
+from math import exp, pi
 
 ##### Copier
 
@@ -101,8 +101,13 @@ class Renault(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,14,exp(1),1/exp(3),14,10,self))
+            if self.frame > 8 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativex += signe(self.direction)*10
+                self.active_hitboxes[-1].relativey -= exp((8-self.frame)/5)*15
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 30: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
