@@ -111,14 +111,19 @@ class Renault(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame == 7 :
+                self.active_hitboxes.append(Hitbox(50,36,36,36,pi/3,12,6,1/200,7,5,self))
+            if self.frame > 7 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativex += signe(self.direction)*5
+                self.active_hitboxes[-1].relativey += 8
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 25: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+                if self.frame < 20 :
+                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
         if attack == "BackAir":
 
@@ -131,14 +136,21 @@ class Renault(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
+            if self.frame == 18 :
+                self.active_hitboxes.append(Hitbox(52,40,52,28,-pi/3,19,26.6,1/200,14,2,self,boum=5))
+            if self.frame == 19 and self.active_hitboxes:
+                self.active_hitboxes.append(Hitbox(52,72,42,42,-pi/2,2,2.6,1/800,2,8,self))
+            if self.frame > 19 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativex -= self.frame*signe(self.direction)/2
+                self.active_hitboxes[-1].relativey += 30-self.frame
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 50: # 29 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
+                if self.frame < 40 :
+                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "NeutralAir":
 
@@ -155,9 +167,20 @@ class Renault(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
-            if self.frame == 22 :
+                if self.charge%3 == 2 :
+                    self.active_hitboxes.append(Hitbox(48,48,36,36,pi/4,1,0.3,0,5,2,self))
+            if self.frame == 20 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(48,48,64,48,-pi/7,24+8*(self.charge/100),25,1/300,22+7*(self.charge/100),2,self,boum=6))
+            if self.frame == 22 :
+                self.active_hitboxes.append(Hitbox(48,48,36,36,pi/2,2,1,0,5,3,self,boum=-2))
+            if self.frame == 25 :
+                self.active_hitboxes.append(Hitbox(72,24,36,36,pi,2,1,0,5,3,self,boum=-2))
+            if self.frame == 28 :
+                self.active_hitboxes.append(Hitbox(96,48,36,36,-pi/2,2,1,0,5,3,self,boum=-2))
+            if self.frame == 31 :
+                self.active_hitboxes.append(Hitbox(72,72,36,36,0,2,1,0,5,3,self,boum=-2))
+            if self.frame == 34 :
+                self.active_hitboxes.append(Hitbox(50,34,64,64,pi/6,18+6*(self.charge/100),8,1/200,17+5*(self.charge/100),3,self))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -191,10 +214,10 @@ class Renault(Char):
                 self.charge = self.charge+1
             if self.frame > 20 and self.frame < 28 and self.frame%2 == 0 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/2,2,8,0,7,2,self,boum=1))
+                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/2,2,5,0,7,2,self,boum=-1))
             if self.frame == 30 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/3,20+8*(self.charge/100),8,1/300,18+7*(self.charge/100),2,self,boum=5))
+                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/3,20+8*(self.charge/100),8,1/300,18+7*(self.charge/100),2,self,boum=2))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
