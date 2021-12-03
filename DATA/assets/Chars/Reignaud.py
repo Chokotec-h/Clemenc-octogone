@@ -1,4 +1,4 @@
-from random import randint
+from random import choice, randint
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi,cos,sin
@@ -7,7 +7,7 @@ from math import pi,cos,sin
 
 class Reignaud(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=2, dashspeed=3.5, airspeed=1, deceleration=0.51, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
+        super().__init__(speed=2.2, dashspeed=4.1, airspeed=1, deceleration=0.5, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
                          doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
@@ -390,11 +390,13 @@ class Reignaud(Char):
 ###################
 
 class Mot_invasif():
+    # Mots invasifs à ajouter : Construction, Problématique, Prendre des notes,
     def __init__(self,x,y,other,own:Reignaud,stage) -> None:
         self.other = other
         self.own = own
         self.duration=5
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Mot_invasif.png"),(32,128))
+        Texte = choice(["Ressenti","Construction"])
+        self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),(32,128))
         self.rect = self.sprite.get_rect()
         self.rect.x = x
         self.rect.y = y

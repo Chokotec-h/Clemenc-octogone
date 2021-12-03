@@ -561,7 +561,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if abs(self.vx) + abs(self.vy) > 5 :
                             self.tumble = True
                     else :
-                        self.BOUM = 2
                         if self.superarmor != -1 :
                             self.superarmor = max(self.superarmor - hitbox.damages,0)
                         self.damages += hitbox.damages
