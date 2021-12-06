@@ -1,4 +1,6 @@
 from DATA.utilities.Gamepad_gestion import *
+from DATA.utilities.Interface import *
+import pygame
 
 keyrepeat = [[],[]]
 repeat = [[],[]]
@@ -56,3 +58,44 @@ def get_controler_input(events,joysticks):
             controls.pop(pop-popped)
             popped += 1
         return controls
+
+
+bouton = pygame.image.load("./DATA/Images/Menu/Controls/Button.png")
+dpad = {
+    (0,1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-R.png"),
+    (0,-1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-L.png"),
+    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-U.png"),
+    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-D.png"),
+}
+joy = {
+    (0,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Right.png"),
+    (0,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Left.png"),
+    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Up.png"),
+    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Down.png"),
+}
+text = ["Left","Right","Down","Up","Fullhop","Shorthop","Attack","Special","Shield","Smash (G)","Smash (D)","Smash (B)","Smash (H)","Taunt (G)","Taunt (D)","Taunt (B)","Taunt (H)","Pause"]
+def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n):
+    if row_n%2 == 0 :
+        Texte(text[number],("arial",24,True,False),(0,0,0),x-120,y,format_="right").draw(window)
+    if row_n%2 == 1 :
+        Texte(text[number],("arial",24,True,False),(0,0,0),x+120,y,format_="left").draw(window)
+    if select==number :
+        Bouton = Button("[input]",("arial",24,True,False),"./DATA/Images/Menu/Button.png",x,y,200,70)
+        if focusedbutton == line and row == row_n:
+            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+
+        Bouton.draw(window)
+    else :
+        Bouton = Button("",("arial",24,True,False),"./DATA/Images/Menu/Button.png",x,y,200,70)
+        if focusedbutton == line and row == row_n:
+            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+
+        Bouton.draw(window)
+        for j,i in enumerate(input_) :
+            if i[0] == "Button" :
+                window.blit(bouton,(x+j*64-32-(len(input_)-1)*32,y-32))
+                Texte(str(i[1]),("arial",55,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y).draw(window)
+            if i[0] == "D-Pad" :
+                window.blit(dpad[(i[1],i[2])],(x+j*64-32-(len(input_)-1)*32,y-32))
+            if i[0] == "Joy" :
+                window.blit(joy[(i[1]%2,i[2])],(x+j*64-32-(len(input_)-1)*32,y-32))

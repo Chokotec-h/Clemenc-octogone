@@ -5,7 +5,7 @@ from DATA.assets.Chars.Training_Mob import Training
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 from DATA.assets.Misc import *
-from DATA.assets.animations import icons
+from DATA.assets.animations import icons, icons64
 from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
@@ -233,56 +233,32 @@ def main():
 
                         # Stick
                         for i,k in enumerate(commands[commandconfig][0:4]):
-                            if inputget == i :
-                                text = "[input]"
-                            else :
-                                text = str(k)
-                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",width/6,(i+1)*80,200,60)
+                            draw_input(window,width/6,(i+1)*80,i,k,inputget,i,focusedbutton,row,0)
                             if focusedbutton == i and row == 0:
-                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                     inputget = i
                                     confirm = True
-                            Bouton.draw(window)
                         # Jump, Attack, Special, Shield
                         for i,k in enumerate(commands[commandconfig][4:9]):
-                            if inputget == i+4 :
-                                text = "[input]"
-                            else :
-                                text = str(k)
-                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",2*width/6,(i+1)*80,200,60)
+                            draw_input(window,2*width/6,(i+1)*80,i+4,k,inputget,i,focusedbutton,row,1)
                             if focusedbutton == i and row == 1:
-                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                     inputget = i+4
                                     confirm = True
-                            Bouton.draw(window)
                         # C-Stick
                         for i,k in enumerate(commands[commandconfig][9:13]):
-                            if inputget == i+9 :
-                                text = "[input]"
-                            else :
-                                text = str(k)
-                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",4*width/6,(i+1)*80,200,60)
+                            draw_input(window,4*width/6,(i+1)*80,i+9,k,inputget,i,focusedbutton,row,2)
                             if focusedbutton == i and row == 2:
-                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                     inputget = i+9
                                     confirm = True
-                            Bouton.draw(window)
                         # D-Pad + Pause
                         for i,k in enumerate(commands[commandconfig][13:]):
-                            if inputget == i+13 :
-                                text = "[input]"
-                            else :
-                                text = str(k)
-                            Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",5*width/6,(i+1)*80,200,60)
+                            draw_input(window,5*width/6,(i+1)*80,i+13,k,inputget,i,focusedbutton,row,3)
                             if focusedbutton == i and row == 3:
-                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                                 if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                     inputget = i+13
                                     confirm = True
-                            Bouton.draw(window)
                         Bouton = Button("Sauvegarder",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,850,250,60)
                         if focusedbutton == -1 and row%2 == 0:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
@@ -353,6 +329,8 @@ def main():
                                 selectchar_2 = 0
                                 selected_1 = False
                                 selected_2 = False
+                                movename1 = 1
+                                movename2 = 1
                                 stage = i
                                 names = [0,0]
                                 namelist = [k for k in commands]
@@ -384,9 +362,9 @@ def main():
                             Bouton.resize(400,100)
                         Bouton.draw(window)
                     for i in range(len(chars)):
-                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4)-32))
-                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4-len(chars))-32))
-                        window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(64,105*(i-scroll1+4+len(chars))-32))
+                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4)-32))
+                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4-len(chars))-32))
+                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4+len(chars))-32))
                     # Arrows
                     if convert_inputs(controls[0],joysticks,0)[3] and not selected_1 and scroll1 == selectchar_1:
                         selectchar_1 += 1
@@ -436,9 +414,9 @@ def main():
                             Bouton.draw(window)
                         # Sprites
                         for i in range(len(chars)):
-                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4)-32))
-                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4-len(chars))-32))
-                            window.blit(pygame.transform.scale(icons[chars[i]],(64,64)),(width-128,105*(i-scroll2+4+len(chars))-32))
+                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4)-32))
+                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4-len(chars))-32))
+                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4+len(chars))-32))
                         # Arrows
                         if convert_inputs(controls[1],joysticks,1)[3] and not selected_2 and scroll2 == selectchar_2:
                             selectchar_2 += 1
@@ -478,17 +456,19 @@ def main():
                     try :
                         convert_inputs(commands[namelist[names[0]]],joysticks,0)
                     except :
-                        names[0] += 1
+                        names[0] += movename1
                         if names[0] >= len(namelist):
                             names[0] = 0
                     if input_but_no_repeat(10,controls,joysticks,0):
                         names[0] += 1
+                        movename1 = 1
                         if names[0] == 1 : # Defaultkeyboard
                             names[0] += 1
                         if names[0] >= len(namelist):
                             names[0] = 0
                     if input_but_no_repeat(9,controls,joysticks,0):
                         names[0] -= 1
+                        movename1 = -1
                         if names[0] == 1 : # Defaultkeyboard
                             names[0] -= 1
                         if names[0] < 0:
@@ -503,17 +483,19 @@ def main():
                     try :
                         convert_inputs(commands[namelist[names[1]]],joysticks,1)
                     except :
-                        names[1] += 1
+                        names[1] += movename2
                         if names[1] >= len(namelist):
                             names[1] = 0
                     if input_but_no_repeat(10,controls,joysticks,1):
                         names[1] += 1
+                        movename2 = 1
                         if names[1] == 1 : # Defaultkeyboard
                             names[1] += 1
                         if names[1] >= len(namelist):
                             names[1] = 0
                     if input_but_no_repeat(9,controls,joysticks,1):
                         names[1] -= 1
+                        movename2 = -1
                         if names[1] == 1 : # Defaultkeyboard
                             names[1] -= 1
                         if names[1] < 0:
@@ -559,6 +541,7 @@ def main():
                             if m[2] == actualstages[stage] and m[3]:
                                 currentmusic = m[0]
                                 lenmusic = m[1]
+                        musicplaying = False
                         musicstartedat = time.time()
                         stage = Stages.create_stage(actualstages[stage])
         
@@ -696,8 +679,14 @@ def main():
                                     Play = False
                                     pause = False
                                     focusedbutton = 0
-                                    musicstartedat = 10000
+                                    musicstartedat = 1000
                                     stage = 0
+                                    if len(joysticks) > 1 :
+                                        controls = [commands["Menu"],commands["Menu"]]
+                                    elif len(joysticks) > 0 :
+                                        controls = [commands["Menu"],commands["DefaultKeyboard"]]
+                                    else :
+                                        controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
                                     clock.tick(10)
                             Bouton.draw(window)
 
