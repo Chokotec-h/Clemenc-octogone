@@ -76,6 +76,8 @@ class Renault(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(64,120-64,16,64,8*pi/17,8,6.4,1/200,12,8,self))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
@@ -102,7 +104,7 @@ class Renault(Char):
 
         if attack == "UpAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,14,exp(1),1/exp(3),14,10,self))
+                self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,10,exp(1),1/exp(3),14,10,self))
             if self.frame > 8 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativex += signe(self.direction)*10
                 self.active_hitboxes[-1].relativey -= exp((8-self.frame)/5)*15
@@ -201,6 +203,12 @@ class Renault(Char):
                 self.animeframe -= 1
                 self.frame = 6
                 self.charge = self.charge+1
+            if self.frame == 20 :
+                self.charge = min(100,self.charge)
+                self.active_hitboxes.append(Hitbox(54,100,48,22,pi/2,20+8*(self.frame/100),12,1/200,19,5,self))
+            if self.frame > 20 and self.active_hitboxes:
+                self.active_hitboxes[-1].relativey -= 20
+                self.active_hitboxes[-1].sizey += 20
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
