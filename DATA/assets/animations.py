@@ -15,6 +15,19 @@ icons ={
     "Renault":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Isaac":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
 }
+icons64 ={
+    "Balan":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),(64,64)),
+    "Joueur de air-president":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"),(64,64)),
+    "Millet":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Gregoire":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Reignaud":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Rey":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Pyro-Aubin":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Kebab":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Poissonnier":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Renault":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Isaac":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+}
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
 Balan = {
