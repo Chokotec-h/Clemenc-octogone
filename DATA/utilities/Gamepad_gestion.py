@@ -30,24 +30,28 @@ def get_inputs(joystick):
             get.append(["D-Pad",joystick,i,0,1])
         if hat[0] == -1 :
             get.append(["D-Pad",joystick,i,0,-1])
+    print(get)
     return list(get)
 
 def convert_inputs(controls,joystick,number):
     bool_list = list()
     keys = pygame.key.get_pressed()
     for c in controls:
-        if c[0] == "Keyboard":
-            bool_list.append(keys[c[1]])
-        if c[0] == "Joy":
-            if abs(joystick[number].get_axis(c[1])) > 0.6 and signe(joystick[number].get_axis(c[1])) == signe(c[-1]):
-                bool_list.append(abs(joystick[number].get_axis(c[1])))
-            else :
-                bool_list.append(False)
-        if c[0] == "Button":
-            bool_list.append(joystick[number].get_button(c[1]))
-        if c[0] == "D-Pad":
-            if joystick[number].get_hat(c[1])[c[2]] == c[-1]:
-                bool_list.append(True)
-            else :
-                bool_list.append(False)
+        returning = True
+        for i in c :
+            if i[0] == "Keyboard":
+                if not keys[i[1]] :
+                    returning = False
+            if i[0] == "Joy":
+                if abs(joystick[number].get_axis(i[1])) > 0.6 and signe(joystick[number].get_axis(i[1])) == signe(i[-1]) and returning:
+                    returning = abs(joystick[number].get_axis(i[1]))
+                else :
+                    returning = False
+            if i[0] == "Button":
+                if not joystick[number].get_button(i[1]):
+                    returning = False
+            if i[0] == "D-Pad":
+                if not joystick[number].get_hat(i[1])[i[2]] == i[-1]:
+                    returning = False
+        bool_list.append(returning)
     return bool_list

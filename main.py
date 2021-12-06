@@ -60,7 +60,7 @@ def main():
         stages = ["K201"] # Add stages here
         chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Isaac","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
-        musics = [("DATA/Musics/chapelle.mp3",223,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
+        musics = [("DATA/Musics/lets_fight.mp3",136,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
 
         Menu = "main"
 
@@ -75,6 +75,7 @@ def main():
         confirm = False
         musicstartedat = 0
         commandconfig = None
+        getting = list()
 
         # Training
         TrainingHDI = 0
@@ -91,7 +92,7 @@ def main():
         musicstartedat = time.time()
         while run:  # Boucle du programme
             actualize_repeating()
-            window.fill((0x55,0x22,0x66)) # Background color
+            window.fill((0x66,0x22,0x66)) # Background color
 
             # Récupération des events
             events = pygame.event.get()
@@ -189,23 +190,24 @@ def main():
                         name = Entry.get_text()
                         Texte("Enter name :  "+Entry.get_text(),("arial",30,False,False),(0,0,0),width/2,height/2).draw(window)
                         Texte("<A/Enter to confirm>",("arial",30,False,False),(0,0,0),width/2,50+height/2).draw(window)
-                        if enter or (len(joysticks) > 0 and convert_inputs(controls[0],joysticks,0)[6] and not confirm):
+                        if enter :
                             commands[name] = commands["Default"]
                             commandconfig = name
                             inputget = -1
                             confirm = True
                     else :
-                        if input_but_no_repeat(3,controls,joysticks,0):
-                            focusedbutton += 1
-                            
-                        if input_but_no_repeat(2,controls,joysticks,0):
-                            focusedbutton -= 1
-                            
-                        if input_but_no_repeat(0,controls,joysticks,0):
-                            row -= 1
-                            
-                        if input_but_no_repeat(1,controls,joysticks,0):
-                            row += 1
+                        if inputget <= -1 :
+                            if input_but_no_repeat(3,controls,joysticks,0):
+                                focusedbutton += 1
+                                
+                            if input_but_no_repeat(2,controls,joysticks,0):
+                                focusedbutton -= 1
+                                
+                            if input_but_no_repeat(0,controls,joysticks,0):
+                                row -= 1
+                                
+                            if input_but_no_repeat(1,controls,joysticks,0):
+                                row += 1
                             
                         if row == 0 :
                             focusedbutton = ((focusedbutton+1)%5)-1
@@ -219,9 +221,16 @@ def main():
                         if inputget > -1:
                             
                             if get_controler_input(events,joysticks) and not confirm:
-                                commands[commandconfig][inputget] = get_controler_input(events,joysticks)
+                                add = get_controler_input(events,joysticks)
+                                for i in add :
+                                    if i not in getting :
+                                        getting.append(i)
+                            if not get_controler_input(events,joysticks) and getting :
+                                commands[commandconfig][inputget] = getting
                                 inputget = -1
                                 confirm = True
+                                getting = list()
+
                         # Stick
                         for i,k in enumerate(commands[commandconfig][0:4]):
                             if inputget == i :
@@ -465,13 +474,20 @@ def main():
                         text = namelist[names[0]]
                     Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",3*width/10,height-150,200,32)
                     Bouton.draw(window)
-                    if input_but_no_repeat(11,controls,joysticks,0) or input_but_no_repeat(10,controls,joysticks,0):
+                    # Stop crash
+                    try :
+                        convert_inputs(commands[namelist[names[0]]],joysticks,0)
+                    except :
+                        names[0] += 1
+                        if names[0] >= len(namelist):
+                            names[0] = 0
+                    if input_but_no_repeat(10,controls,joysticks,0):
                         names[0] += 1
                         if names[0] == 1 : # Defaultkeyboard
                             names[0] += 1
                         if names[0] >= len(namelist):
                             names[0] = 0
-                    if input_but_no_repeat(9,controls,joysticks,0) or input_but_no_repeat(12,controls,joysticks,0):
+                    if input_but_no_repeat(9,controls,joysticks,0):
                         names[0] -= 1
                         if names[0] == 1 : # Defaultkeyboard
                             names[0] -= 1
@@ -484,13 +500,19 @@ def main():
                         text = namelist[names[1]]
                     Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",7*width/10,height-150,200,32)
                     Bouton.draw(window)
-                    if input_but_no_repeat(11,controls,joysticks,1) or input_but_no_repeat(10,controls,joysticks,1):
+                    try :
+                        convert_inputs(commands[namelist[names[1]]],joysticks,1)
+                    except :
+                        names[1] += 1
+                        if names[1] >= len(namelist):
+                            names[1] = 0
+                    if input_but_no_repeat(10,controls,joysticks,1):
                         names[1] += 1
                         if names[1] == 1 : # Defaultkeyboard
                             names[1] += 1
                         if names[1] >= len(namelist):
                             names[1] = 0
-                    if input_but_no_repeat(9,controls,joysticks,1) or input_but_no_repeat(12,controls,joysticks,1):
+                    if input_but_no_repeat(9,controls,joysticks,1):
                         names[1] -= 1
                         if names[1] == 1 : # Defaultkeyboard
                             names[1] -= 1

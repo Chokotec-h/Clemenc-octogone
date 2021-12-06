@@ -45,5 +45,14 @@ def get_controler_input(events,joysticks):
         if e.type == pygame.KEYDOWN:
             controls.append(["Keyboard","",e.key])
     if controls :
-        controls[0].pop(1)
-        return controls[0]
+        joy = False
+        pop = []
+        for i in range(len(controls)):
+            controls[i].pop(1)
+            if joy and controls[0] == "Joystick":
+                pop.append(i)
+        popped = 0
+        for i in pop :
+            controls.pop(pop-popped)
+            popped += 1
+        return controls
