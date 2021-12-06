@@ -77,18 +77,19 @@ class Air_President(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 18 :
+            if self.frame == 24 :
                 self.active_hitboxes.append(Hitbox(24,-32,256,256,0,0,0,0,0,6,self))
-            if self.frame > 18 and self.frame < 22:
-                if self.active_hitboxes and self.active_hitboxes[-1].hit.colliderect(other.rect):
+            if self.frame > 24 and self.frame < 30:
+                if not self.active_hitboxes:
                     if other.grounded :
                         other.can_act = True
                         other.inputattack("Jab")
+                        other.attack = "Jab"
                     else :
                         other.can_act = True
                         other.inputattack("NeutralAir")
-                    self.active_hitboxes.pop()
-            if self.frame > 25: # 3 frames de lag
+                        other.attack = "NeutralAir"
+            if self.frame > 33: # 3 frames de lag
                 self.attack = None
 
         if attack == "DownB":
@@ -193,7 +194,7 @@ class Air_President(Char):
             if self.frame == 9 : # Frame 9-10
                 self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,16,2,self,False))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
-                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/42,2,0.5,1/404,3,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/42,2,0.5,1/404,3,2,self,False,boum = -1))
             if self.frame > 45: # 25 frames de lag
                 self.attack = None
 
