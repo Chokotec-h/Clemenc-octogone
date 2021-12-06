@@ -198,6 +198,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vy -= self.fallspeed/3
                 if down:
                     self.vy += self.fallspeed/3
+            else :
+                if right:
+                    self.vx += self.airspeed/10
+                if left:
+                    self.vx -= self.airspeed/10
+                if up:
+                    self.vy -= self.fallspeed/10
+                if down:
+                    self.vy += self.fallspeed/10
             if shield and self.tech == 0:
                 self.tech = 10
         else :
