@@ -76,7 +76,7 @@ class Poissonnier(Char):
                     self.look_right = True
             if self.frame == 10 :
                 if self.overheat > 190 :
-                    self.overheat -= 40
+                    self.overheat -= 73
                     self.active_hitboxes.append(Hitbox(80,38,84,84,pi/4,18,22,1/180,21,2,self,boum=3))
                 else :
                     self.active_hitboxes.append(Hitbox(64,54,52,52,pi/4,11,12,1/200,13,2,self,boum=2))
