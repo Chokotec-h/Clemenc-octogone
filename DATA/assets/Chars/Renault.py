@@ -1,4 +1,4 @@
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import exp, pi
 
@@ -71,8 +71,20 @@ class Renault(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(64,60,48,48,pi/2,1,0.1,0,8,2,self))
+            if self.frame == 10 :
+                if attack_button :
+                    self.frame = 10
+                self.active_hitboxes.append(Hitbox(64,10,48,48,-pi/2,1,1,0,8,2,self))
+            if self.frame == 14 :
+                if attack_button :
+                    self.frame = 6
+                self.active_hitboxes.append(Hitbox(64,60,48,48,pi/2,1,0.1,0,8,2,self))
+            if self.frame == 20 :
+                self.active_hitboxes.append(Hitbox(64,32,64,64,pi/3,4,8,1/200,10,2,self,boum=1))
 
-            if self.frame > 22: # 10 frames de lag
+            if self.frame > 30: # 20 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
@@ -104,7 +116,7 @@ class Renault(Char):
 
         if attack == "UpAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,10,exp(1),1/exp(3),14,10,self))
+                self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,12,exp(1),exp(-6),14,10,self))
             if self.frame > 8 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativex += signe(self.direction)*10
                 self.active_hitboxes[-1].relativey -= exp((8-self.frame)/5)*15
@@ -133,6 +145,8 @@ class Renault(Char):
                     self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
         if attack == "BackAir":
+            if self.frame == 12 :
+                self.active_hitboxes.append(Hitbox(change_left(30,72),32,72,52,pi-(pi/1+pi),14,12,1/200,13,2,self))
 
             if self.frame > 25: # 14 frames de lag
                 self.attack = None
