@@ -85,7 +85,10 @@ class Renault(Char):
                     self.cling = False
                     self.projectiles.append(Drill(4*signe(self.direction),self))
                     self.frame = 10
-            if self.frame > 80 or (self.frame > 45 and not self.cling): # 20 frames de lag
+            if self.frame == 80 :
+                self.projectiles.append(Drill(4*signe(self.direction),self))
+                self.lag = 30
+            if self.frame > 80 or (self.frame > 45 and not self.cling): # 35 frames de lag
                 self.can_act = False
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump]
@@ -304,15 +307,16 @@ class Drill():
         self.direction = signe(own.direction)
         if own.look_right :
             self.x = own.x + 48
+            self.angle = pi/4
         else :
             self.x = own.x+change_left(48,64)-48
+            self.angle = 3*pi/4
         self.y = own.rect.y + 64
         self.duration = 120
         self.damages = 4
         self.stun = 12
         self.knockback = 10
         self.damages_stacking = 1/200
-        self.angle = pi/4
         self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Drill.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
     
