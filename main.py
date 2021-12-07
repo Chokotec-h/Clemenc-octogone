@@ -329,8 +329,8 @@ def main():
                                 selectchar_2 = 0
                                 selected_1 = False
                                 selected_2 = False
-                                movename1 = 1
-                                movename2 = 1
+                                movename1 = -1
+                                movename2 = -1
                                 stage = i
                                 names = [0,0]
                                 namelist = [k for k in commands]
