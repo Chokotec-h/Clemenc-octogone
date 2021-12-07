@@ -20,15 +20,36 @@ class Poissonnier(Char):
         self.rect.y = y
         self.player = player
         self.overheat = 0
+        self.damagesdealt = 0
+        self.damagestaken = 0
+        self.otherdamages = 0
     
     def __str__(self) -> str:
         return "Poissonnier"
 
     def special(self): 
-        self.overheat = max(self.overheat-0.1,0)
+        if self.damagesdealt < self.otherdamages :
+            self.overheat += (self.otherdamages - self.damagesdealt)*1.42
+            self.damagesdealt = self.otherdamages
+        if self.damagestaken < self.damages :
+            self.overheat -= (self.damages - self.damagestaken)*0.2
+            self.damagestaken = self.damages
+        if self.otherdamages <= 0 :
+            self.damagesdealt = 0
+        if self.damages <= 0 :
+            self.damagestaken = 0
+        if self.overheat > 199 :
+            self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
+            self.overheat = 0
+            self.damages += 20
+            self.lag = 25
+            self.vy = -50
+        self.overheat = min(200,max(0,self.overheat))
+
         return False
 
-    def animation_attack(self,attack,inputs,stage,other):
+    def animation_attack(self,attack,inputs,stage,other:Char):
+        self.otherdamages = other.damages
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
@@ -42,16 +63,10 @@ class Poissonnier(Char):
             if self.frame == 12: # Hitbox frame 12-15
                 self.active_hitboxes.append(Hitbox(-5,90,58,50,-pi/2,20*(self.overheat/200),12*(self.overheat/200),1/150,18*(self.overheat/200),3,self,False))
                 self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -15 - 15*(self.overheat/150)
+                self.vy = -20 - 15*(self.overheat/150)
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-                self.overheat = min(self.overheat+40,200)
-                if self.overheat > 199 :
-                    self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
-                    self.overheat = 0
-                    self.damages += 20
-                    self.lag = 25
-                    self.vy = -42
+                self.overheat = self.overheat-20
 
         if attack == "NeutralB":
             if self.frame < 5 :
@@ -59,32 +74,23 @@ class Poissonnier(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.overheat < 200 and special and not (left or right or shield) and self.frame > 12 and self.frame < 16 :
-                self.frame = 13
-                self.overheat += 1
-            if left :
-                self.vx = -20
-                self.lag = 5
-                self.attack = None
-            elif right :
-                self.vx = 20
-                self.lag = 5
-                self.attack = None
-            elif shield :
-                self.lag = 5
-                self.intangibility = 3
-
-            if self.overheat > 198 and self.frame == 16:
-                self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
-                self.overheat = 0
-                self.damages += 20
-                self.lag = 25
+            if self.frame == 10 :
+                if self.overheat > 190 :
+                    self.overheat -= 40
+                    self.active_hitboxes.append(Hitbox(80,38,84,84,pi/4,18,22,1/180,21,2,self,boum=3))
+                else :
+                    self.active_hitboxes.append(Hitbox(64,54,52,52,pi/4,11,12,1/200,13,2,self,boum=2))
 
 
-            if self.frame > 30: # 15 frames de lag
+            if self.frame > 20: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownB":
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 20 :
                 self.projectiles.append(Cerveau(self,other,stage))
             if self.frame > 40 : # 20 frames de lag
@@ -333,6 +339,7 @@ class Poissonnier(Char):
             x = 500
         else :
             x = 1050
+        self.overheat = min(200,max(0,self.overheat))
         pygame.draw.rect(window,(self.overheat,100-self.overheat/2,200-self.overheat),(x-1,798,5,50))
         pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
         Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
