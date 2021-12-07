@@ -16,6 +16,7 @@ class Renault(Char):
         self.rect.y = y
         self.player = player
         self.daccord = 0
+        self.cling = False
     
     def __str__(self) -> str:
         return "Renault"
@@ -29,18 +30,19 @@ class Renault(Char):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
-            if self.frame == 11: # Saute frame 11
+            if self.frame < 5 :
+                if left : # peut reverse netre les frames 1 et 5
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame > 7 and self.frame < 100 :
+                self.vy = -5-self.frame/20
+                if self.frame%8 == 0 :
+                    self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,8+abs(self.vy),3,0,9,4,self,position_relative=True))
+            if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -20
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-            #if self.frame < 6 :
-            #    if left : # peut reverse netre les frames 1 et 5
-            #        self.look_right = False
-            #    if right :
-            #        self.look_right = True
-            #if self.frame == 6: # Hitbox frame 6-11
-            #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
             if self.frame < 5 :
@@ -67,8 +69,26 @@ class Renault(Char):
                 self.charge = 0
 
         if attack == "SideB":
-            if self.frame > 80 : # 20 frames de lag
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame == 8 :
+                self.cling = True
+            if self.frame > 8 and self.frame < 80 and self.cling:
+                self.vx = (8+self.frame/10)*signe(self.direction)
+                self.vy = -self.fastfallspeed if self.fastfall else -self.fallspeed
+                if special and self.frame%3 == 0 :
+                    self.active_hitboxes.append(Hitbox(48,12,64,64,0,2,0.8,0,4,2,self,boum=-1))
+                if not special :
+                    self.cling = False
+                    self.projectiles.append(Drill(4*signe(self.direction),self))
+                    self.frame = 10
+            if self.frame > 80 or (self.frame > 45 and not self.cling): # 20 frames de lag
+                self.can_act = False
                 self.attack = None
+                self.doublejump = [True for _ in self.doublejump]
 
         if attack == "Jab":
             if self.frame == 5 :
@@ -276,5 +296,40 @@ class Renault(Char):
 ###################          
 """ Projectiles """
 ###################
+
+class Drill():
+    def __init__(self,vx,own:Char) -> None:
+        self.basevx = vx
+        self.vx = vx
+        self.direction = signe(own.direction)
+        if own.look_right :
+            self.x = own.x + 48
+        else :
+            self.x = own.x+change_left(48,64)-48
+        self.y = own.rect.y + 64
+        self.duration = 120
+        self.damages = 4
+        self.stun = 12
+        self.knockback = 10
+        self.damages_stacking = 1/200
+        self.angle = pi/4
+        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Drill.png")
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+    
+    def update(self):
+        self.duration -= 1
+        self.vx = self.basevx + (120-self.duration)/5*self.direction
+        self.x += self.vx
+    
+    def deflect(self,modifier):
+        self.basevx = -self.basevx*modifier
+        self.duration = 120
+        self.damages *= modifier
+        self.stun *= modifier
+        self.knockback *= modifier
+
+    def draw(self,window):
+        window.blit(pygame.transform.flip(self.sprite,self.direction<0,False),(self.x+800,self.y+450))
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
 ##### Autres skins
