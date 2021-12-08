@@ -23,7 +23,7 @@ class Renault(Char):
 
     def special(self):
         if self.dash and self.frame % 6 == 0 and self.grounded and self.attack is None:
-            self.active_hitboxes.append(Hitbox(0,0,70,48,pi/3,9,2,0,4,2,self,boum=-1))
+            self.active_hitboxes.append(Hitbox(0,80,70,40,pi/3,9,2,0,4,2,self,boum=-1))
         return False
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -45,12 +45,14 @@ class Renault(Char):
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
 
         if attack == "NeutralB":
-            if self.frame < 5 :
+            if self.frame < 10 :
                 if left :
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame > 15: # 10 frames de lag
+            if self.frame == 15 :
+                self.projectiles.append(Gear(15*signe(self.direction),self))
+            if self.frame > 42: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -311,7 +313,7 @@ class Drill():
         else :
             self.x = own.x+change_left(48,64)-48
             self.angle = 3*pi/4
-        self.y = own.rect.y + 64
+        self.y = own.rect.y + 42
         self.duration = 120
         self.damages = 4
         self.stun = 12
@@ -327,6 +329,41 @@ class Drill():
     
     def deflect(self,modifier):
         self.basevx = -self.basevx*modifier
+        self.vx = -self.vx*modifier
+        self.duration = 120
+        self.damages *= modifier
+        self.stun *= modifier
+        self.knockback *= modifier
+
+    def draw(self,window):
+        window.blit(pygame.transform.flip(self.sprite,self.direction<0,False),(self.x+800,self.y+450))
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+
+class Gear():
+    def __init__(self,vx,own:Char) -> None:
+        self.vx = vx
+        self.direction = signe(own.direction)
+        if own.look_right :
+            self.x = own.x + 48
+            self.angle = pi/4
+        else :
+            self.x = own.x+change_left(48,64)-48
+            self.angle = 3*pi/4
+        self.y = own.rect.y + 42
+        self.duration = 120
+        self.damages = 5
+        self.stun = 11
+        self.knockback = 10
+        self.damages_stacking = 1/200
+        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Gear.png")
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+    
+    def update(self):
+        self.duration -= 1
+        self.x += self.vx
+    
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
         self.duration = 120
         self.damages *= modifier
         self.stun *= modifier
