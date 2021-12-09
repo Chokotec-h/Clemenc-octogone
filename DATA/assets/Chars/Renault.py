@@ -136,7 +136,17 @@ class Renault(Char):
             self.daccord = 0
 
         if attack == "UpTilt":
-            if self.frame > 25: # 11 Frames de lag
+            if self.frame == 9 :
+                self.active_hitboxes.append(Hitbox(48,120,66,0,5/3,3,3.3,1/333,9,6,self))
+            if self.frame < 12 and self.active_hitboxes :
+                self.active_hitboxes[-1].sizey += 22
+                self.active_hitboxes[-1].relativey -= 22
+            if self.frame == 15 :
+                self.active_hitboxes.append(Hitbox(48,54,66,66,5/3,12,6.7,1/333,15,3,self))
+            if self.frame > 15 and self.active_hitboxes :
+                self.active_hitboxes[-1].sizey += 22
+                self.active_hitboxes[-1].relativey -= 22
+            if self.frame > 40: # 22 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
@@ -199,6 +209,12 @@ class Renault(Char):
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "NeutralAir":
+            if self.frame > 6 and self.frame < 16 :
+                self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
+            if self.frame > 16 and self.frame < 20 :
+                self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
+            if self.frame == 22 :
+                self.active_hitboxes.append(Hitbox(-44,-8,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
