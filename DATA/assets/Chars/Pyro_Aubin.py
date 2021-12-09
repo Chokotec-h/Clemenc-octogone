@@ -3,6 +3,8 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
+from DATA.utilities.Interface import Texte
+
 
 ##### Aubin
 
@@ -19,6 +21,7 @@ class Pyro_Aubin(Char):
         self.rect.y = y
         self.konami = []
         self.player = player
+        self.explosifs = 25
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
@@ -26,6 +29,7 @@ class Pyro_Aubin(Char):
     def special(self): 
         if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right","B","A"]:
             self.inputattack("Superspecial")
+        self.explosifs = min(self.explosifs+0.4/60,50)
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -265,10 +269,16 @@ class Pyro_Aubin(Char):
 
         if attack == "Superspecial":
             if self.frame == 8 :
-                print("boum")
-                self.konami = []
-                self.konamiadd = False
-                self.active_hitboxes.append(Hitbox(-140,-100,328,320,pi/4,35,120,1/100,40,10,self,True))
+                if self.explosifs > 49.5 :
+                    self.explosifs = 0
+                    print("boum")
+                    self.konami = []
+                    self.konamiadd = False
+                    self.active_hitboxes.append(Hitbox(-140,-100,328,320,pi/4,35,120,1/100,40,10,self,True))
+                else :
+                    self.konami = []
+                    self.konamiadd = False
+                    self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/4,2,2,0,2,2,self,True))
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
 
@@ -290,13 +300,16 @@ class Pyro_Aubin(Char):
                         s.draw(window)
                         if s.life_time < 0:
                             del self.double_jump[i]
+            if self.player == 0 :
+                x = 533
+            else :
+                x = 1066
             
             for i,key in enumerate(self.konami) :
-                if self.player == 0 :
-                    x = 533
-                else :
-                    x = 1066
                 window.blit(pygame.image.load(f"./DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
+            pygame.draw.rect(window,(0,0,0),(x,770,100,20))
+            pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
+            Texte(str(round(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
 ###################          
 """ Projectiles """
 ###################
