@@ -118,7 +118,7 @@ def main():
 
             if not Play :
         
-                if time.time()-musicstartedat > 59 : # Loop
+                if time.time()-musicstartedat > 59 and Menu != "title": # Loop
                     pygame.mixer.music.load("DATA/Musics/menu.mp3")
                     pygame.mixer.music.play()
                     musicstartedat = time.time()
