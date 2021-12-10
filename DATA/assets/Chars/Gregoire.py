@@ -104,9 +104,9 @@ class Gregoire(Char):
                     self.look_right = True
             if self.frame > 23 and self.frame < 48:
                 self.projectiles.append(Thunder(self.x+24*signe(self.direction)-48,self.rect.y+24,self)) 
-            if self.frame == 47 :
+            if self.frame == 49 :
                 self.active_hitboxes.append(Hitbox(32,32,32,64,pi/4,14,incertitude(7),1/150,15,3,self,False))
-            if self.frame > 48 and self.frame < 90 :
+            if self.frame > 50 and self.frame < 90 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].duration += 1
                     self.active_hitboxes[-1].relativex += 32*signe(self.direction)
@@ -398,13 +398,13 @@ class Rayon():
         self.v *= -modifier
 
 
-thundersprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Thunder.png"),(64,64))
+thundersprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Thunder.png"),(48,48))
 
 class Thunder():
     def __init__(self,x,y,own:Gregoire) -> None:
         self.size = 2
         self.x = x
-        self.y = y
+        self.y = y+8
         self.vx = 32*signe(own.direction)
         self.duration = 50
         self.knockback = 1
