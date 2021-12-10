@@ -22,6 +22,7 @@ class MainPlat:
         self.sprite = pygame.transform.scale(self.sprite,(self.sprite.get_size()[0]*4,self.sprite.get_size()[1]*4))
         # Rectangle
         self.rect = self.sprite.get_rect(midtop=(x,y))
+        self.rect.height += 250
 
     def draw(self, window):
         # Position réelle
