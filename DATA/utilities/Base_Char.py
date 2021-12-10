@@ -427,7 +427,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.vy *= 0.8
         
         # détection de collisions à la frame suivante
-        nextframe = self.rect.move(self.vx,-signe(self.vy))
+        nextframe = self.rect.move(self.vx+signe(self.vx),-signe(self.vy))
         if nextframe.colliderect(stage.mainplat.rect):
             i = 0
             previousrect = deepcopy(self.rect)
@@ -439,7 +439,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.rect = previousrect
             self.x -= signe(self.vx)
             self.vx = 0
-        nextframe = self.rect.move(0,self.vy)
+        nextframe = self.rect.move(signe(self.vx),self.vy)
         if self.touch_stage(stage,nextframe):
             i = 0
             previousrect = deepcopy(self.rect)
