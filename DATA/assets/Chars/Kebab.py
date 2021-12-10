@@ -171,6 +171,8 @@ class Kebab(Char):
                 else :
                     self.sauce = -1
             if self.frame == 7 :
+                self.current_sauce = -1
+            if self.frame == 9 :
                 if self.sauce != self.current_sauce and self.sauces[self.sauce] >= 599:
                     self.current_sauce = self.sauce
             if self.frame > 15: # 10 frames de lag
