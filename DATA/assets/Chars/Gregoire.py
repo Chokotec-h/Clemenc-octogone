@@ -179,9 +179,17 @@ class Gregoire(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame == 7 :
+                if shield :
+                    self.strongfair = True
+                else :
+                    self.strongfair = False
+                    self.active_hitboxes.append(Hitbox(48,32,36,16,pi/4,12,9,1/200,13,3,self))
+            if self.frame < 10 and self.active_hitboxes :
+                self.active_hitboxes[-1].sizey += 16
             if self.frame == 45:
                 self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,95.45,1/1000,25,3,self,False,boum=30))
-            if self.frame > 69: # 24 frames de lag
+            if self.frame > 69 or (self.frame > 40 and not self.strongfair): # 24 frames de lag
                 self.attack = None
             
             # Pas d'auto cancel. Agit même après avoir atterri
