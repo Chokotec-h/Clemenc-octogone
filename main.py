@@ -58,11 +58,11 @@ def main():
             controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
         # Déclaration des variables
         stages = ["K201"] # Add stages here
-        chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Isaac","Kebab"] # Add characters here
+        chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
         musics = [("DATA/Musics/lets_fight.mp3",136,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
 
-        Menu = "main"
+        Menu = "title"
 
         smoke = list()
         smokeframe  = 0
@@ -84,15 +84,31 @@ def main():
 
         ############################
         pygame.mixer.init()
-        pygame.mixer.music.set_volume(0.5)
+        pygame.mixer.music.set_volume(1)
         
 
-        pygame.mixer.music.load("DATA/Musics/menu.mp3")
+        pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
         pygame.mixer.music.play()
         musicstartedat = time.time()
         while run:  # Boucle du programme
             actualize_repeating()
-            window.fill((0x66,0x22,0x66)) # Background color
+            if Menu == "title" :
+                window.fill((0x99,0x55,0x99)) # Background color
+                pygame.draw.rect(window,(60,60,60),(0,0,width,128))
+                pygame.draw.rect(window,(60,60,60),(0,height-128,width,128))
+                Texte("Beta version",("Arial",15,True,True),(0,0,0),100,64,format_="left").draw(window)
+
+                Texte("Appuyez sur A / Espace",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
+                window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/logo.png"),(512,512)),(width/2-256,height/2-256-64))
+                Texte("OCTOGONE",("Comic",128,True,False),(40,40,40),width/2+5,height/2 + 256+5).draw(window)
+                Texte("OCTOGONE",("Comic",128,True,False),(128,0,128),width/2,height/2 + 256).draw(window)
+                if convert_inputs(controls[0],joysticks,0)[6] :
+                    confirm = True
+                    Menu = "main"
+                    pygame.mixer.music.load("DATA/Musics/menu.mp3")
+                    pygame.mixer.music.play()
+            else :
+                window.fill((0x66,0x22,0x66)) # Background color
 
             # Récupération des events
             events = pygame.event.get()
