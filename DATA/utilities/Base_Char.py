@@ -145,6 +145,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         return False # cancel, pour Reignaud
 
     def act(self, inputs,stage,other,continuer):
+        if self.die > 0 and continuer:
+            self.move(stage)
+            return
         if continuer :
             if self.attack is None :
                 self.lag = max(0,self.lag-1)
@@ -505,6 +508,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if self.rect.y > 1000 or self.rect.y < -1000 or self.x < -1000 or self.x > 1000 :
             if self.die < 1 :
                 self.die = 30
+                self.damages = 0.
             if self.die == 1 :
                 self.rect.y = -200
                 self.x = 0
