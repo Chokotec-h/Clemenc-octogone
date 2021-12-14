@@ -124,6 +124,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.combodamages = 0
 
         self.immune_to_projectiles = []
+        self.die = 0
 
     def inputattack(self,attack):
         if self.attack != attack :
@@ -500,13 +501,17 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.rect.x = self.x - self.rect.w/2
         # respawn
+        self.die = max(0,self.die-1)
         if self.rect.y > 1000 or self.rect.y < -1000 or self.x < -1000 or self.x > 1000 :
-            self.rect.y = -200
-            self.x = 0
-            self.damages = 0.
-            self.vy = 0
-            self.vx = 0
-            self.hitstun = 0
+            if self.die < 1 :
+                self.die = 30
+            if self.die == 1 :
+                self.rect.y = -200
+                self.x = 0
+                self.damages = 0.
+                self.vy = 0
+                self.vx = 0
+                self.hitstun = 0
 
 
     def draw(self, window):
