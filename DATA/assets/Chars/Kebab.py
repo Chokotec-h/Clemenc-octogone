@@ -56,7 +56,7 @@ class Kebab(Char):
 
         self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso
         self.doublejump = [False,False,False]   # Possède 3 double sauts
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
         self.name = "Kebab"
         self.x = x
         self.rect.y = y

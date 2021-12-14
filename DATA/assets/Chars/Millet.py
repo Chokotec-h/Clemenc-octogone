@@ -15,7 +15,7 @@ class Millet(Char):
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
         self.name = "Millet"
         self.x = x
         self.rect.y = y

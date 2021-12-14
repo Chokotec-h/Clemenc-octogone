@@ -60,7 +60,7 @@ def main():
         stages = ["K201"] # Add stages here
         chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"] # Add characters here
         # Ajouter les musiques : (Nom de fichier,durée,stage,musique par defaut?)
-        musics = [("DATA/Musics/lets_fight.mp3",136,"K201",True),("DATA/Musics/Panda_Ball.mp3",166,"Pandadrome",True)]
+        musics = [("DATA/Musics/BGM/lets_fight.mp3",136,"K201",True),("DATA/Musics/BGM/Panda_Ball.mp3",166,"Pandadrome",True)]
 
         Menu = "title"
 
@@ -94,7 +94,7 @@ def main():
         pygame.mixer.music.set_volume(1)
         
 
-        pygame.mixer.music.load("DATA/Musics/intro_2.mp3")
+        pygame.mixer.music.load("DATA/Musics/BGM/intro_2.mp3")
         pygame.mixer.music.play()
         musicstartedat = time.time()
         while run:  # Boucle du programme
@@ -112,7 +112,7 @@ def main():
                 if convert_inputs(controls[0],joysticks,0)[6] :
                     confirm = True
                     Menu = "main"
-                    pygame.mixer.music.load("DATA/Musics/menu.mp3")
+                    pygame.mixer.music.load("DATA/Musics/BGM/menu.mp3")
                     pygame.mixer.music.play()
             else :
                 window.fill((0x66,0x22,0x66)) # Background color
@@ -126,7 +126,7 @@ def main():
             if not Play :
         
                 if time.time()-musicstartedat > 59 and Menu != "title": # Loop
-                    pygame.mixer.music.load("DATA/Musics/menu.mp3")
+                    pygame.mixer.music.load("DATA/Musics/BGM/menu.mp3")
                     pygame.mixer.music.play()
                     musicstartedat = time.time()
                 
