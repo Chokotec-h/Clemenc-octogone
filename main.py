@@ -82,6 +82,13 @@ def main():
         TrainingVDI = 0
         Tech = 0
 
+        # Ending
+        stock = [0,0]
+        time_game = 0
+        begin_game = 0
+        pause_time = 0
+        game_running = -1
+
         ############################
         pygame.mixer.init()
         pygame.mixer.music.set_volume(1)
@@ -404,7 +411,7 @@ def main():
                         scroll1 = round(scroll1,3)
                     if round(scroll1,1) == selectchar_1 :
                         scroll1 = selectchar_1
-                    
+
                     # OK Buttons
                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                         selected_1 = True
@@ -542,6 +549,13 @@ def main():
                         Menu = "stage"
                         Char_P1 = Chars.charobjects[chars[selectchar_1]](-350,0,0)
 
+                        stock = [5,5]
+                        time_game = 0.3*60
+                        begin_game = time.time()
+                        pause_time = 0
+                        pausefrom = 0
+                        game_running = -1
+
                         if training :
                             Char_P2 = Chars.Training(0,0,1)
                             basedamages = 0
@@ -560,6 +574,8 @@ def main():
                         musicplaying = False
                         musicstartedat = time.time()
                         stage = Stages.create_stage(actualstages[stage])
+                if Menu == "results":
+                    Menu = "stage"
         
 
             else :
@@ -580,14 +596,15 @@ def main():
                 window.blit(background,(0,0))
 
                 # Recuperation des touches
-                if (convert_inputs(controls[0],joysticks,0)[-1] or convert_inputs(controls[1],joysticks,1)[-1]):
+                if game_running < 0 and (convert_inputs(controls[0],joysticks,0)[-1] or convert_inputs(controls[1],joysticks,1)[-1]):
                     if not hold_pause:
                         pause = not pause
                         hold_pause  = True
                 else :
                     hold_pause = False
 
-                if not pause:
+                if game_running < 0 and not pause:
+                    pausefrom = time.time()
                     
                     # P1
                     inputs_1 = convert_inputs(controls[0],joysticks,0)[0:-1]
@@ -596,6 +613,8 @@ def main():
 
                     # Transmission des inputs à l'objet Palyer 1
                     Char_P1.act(inputs_1, stage, Char_P2,not(pause or Char_P1.BOUM or Char_P2.BOUM))
+                    if Char_P1.die == 30 and not training:
+                        stock[0] -= 1
 
                     # P2
                     inputs_2 = convert_inputs(controls[1],joysticks,1)[0:-1]
@@ -628,11 +647,15 @@ def main():
                         Char_P2.act(traininginputs, stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
                     else :
                         Char_P2.act(inputs_2, stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
+                    if Char_P2.die == 30 and not training:
+                        stock[1] -= 1
                     ########
 
                     Char_P2.collide(Char_P1)
                     Char_P1.collide(Char_P2)
-                else :
+                elif pause :
+                    pause_time += time.time() - pausefrom
+                    pausefrom = time.time()
                     Texte(f"Pause",("Arial",60,False,False),(0,0,0),width//2,height//2,800).draw(window)
 
                 """ Affichage des éléments """
@@ -662,11 +685,42 @@ def main():
                 Char_P1.damages = float(Char_P1.damages)
                 Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
+                for s in range(stock[0]):
+                    window.blit(pygame.transform.scale(icons[Char_P1.name],(16,16)),(width/3-10+20*s,height - 100))
 
                 Char_P2.damages = float(Char_P2.damages)
                 Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
+                for s in range(stock[1]):
+                    window.blit(pygame.transform.scale(icons[Char_P2.name],(16,16)),(2*width/3-10+20*s,height - 100))
 
+                if not training :
+                    s = time_game+(begin_game-time.time()) + pause_time
+                    ms = str(round(s*100)/100).split(".")[1]
+                    if len(ms) == 1 :
+                        ms = ms+"0"
+                    s = str(round(s*100)/100).split(".")[0]
+                    m = int(s)//60
+                    s = int(s) - m*60
+                    if m*60+s > 0 and game_running < 0:
+                        if m*60+s > 5 :
+                            Texte(f"{str(m)}:{str(s)}'{str(ms)}",("Arial",60,True,False),(255,255,255),width/2,75).draw(window)
+                        else :
+                            Texte(f"{str(s)}",("Arial",180,True,False),(100,0,0),width/2,height/2).draw(window)
+
+                    if (m*60+s < 1 or min(stock) <= 0) and game_running < 0 :
+                        game_running = 180
+                    if game_running > 0 :
+                        Texte("FIN DU MATCH",("Arial",200,True,False),(150,0,0),width/2,height/2).draw(window)
+                        game_running -= 1
+                        if game_running < 1 :
+                            Play = False
+                            Menu = "results"
+                
+
+                """"""""""""""""""""""""""""""""""""""""""
+                ########  INTERFACE ENTRAINEMENT  ########
+                """"""""""""""""""""""""""""""""""""""""""
                 if training :
                     pygame.draw.rect(window,(250,250,250),(width-120,height/2,120,60))
                     Texte(str(Char_P2.combo),("Arial",40,False,False),(0,0,0),width-80,height/2+25).draw(window)
