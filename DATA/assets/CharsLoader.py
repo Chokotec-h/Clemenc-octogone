@@ -11,6 +11,9 @@ from DATA.assets.Chars.Renault import *
 from DATA.assets.Chars.Isaac import *
 from DATA.assets.Chars.Training_Mob import *
 
+# Nom des personnages
+chars = ["Balan","Millet","Gregoire","Poissonnier","Renault","Reignaud","Rey","Joueur de air-president","Pyro-Aubin","Kebab"]
+
 pygame.mixer.init()
 
 charobjects = {

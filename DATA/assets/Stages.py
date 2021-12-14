@@ -1,4 +1,10 @@
 import pygame
+from random import randint
+
+# Nom des stages
+stages = ["K201"]
+# Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon condition)
+musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/digital_autority.mp3","K201",randint(0,1)==1)]
 
 class Stage():
     def __init__(self,sprite,mainx,mainy,platforms=[]) -> None:
