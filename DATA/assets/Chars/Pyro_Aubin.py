@@ -88,8 +88,12 @@ class Pyro_Aubin(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(48,80,48,48,-pi/3,10,6,1/200,8,15,self))
+            if self.frame > 8 and self.active_hitboxes:
+                self.active_hitboxes[-1].relativey += self.frame
 
-            if self.frame > 20: # 7 frames de lag
+            if self.frame > 33: # 10 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
