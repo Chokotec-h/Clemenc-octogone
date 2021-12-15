@@ -105,9 +105,13 @@ def main():
         pause_time = 0
         game_running = -1
 
+        # Animation de l'ecran titre
+        titleframe = 0
+        titleanimation = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Logo/{i}.png"),(512,512)) for i in range(37)]
+
         ################################################################################################################       
 
-        pygame.mixer.music.load("DATA/Musics/BGM/intro_2.mp3")
+        pygame.mixer.music.load("DATA/Musics/BGM/intro_2.mp3") # musique de l'écran titre
         pygame.mixer.music.play()
 
 
@@ -126,19 +130,22 @@ def main():
             ##########################################  Ecran titre  ##########################################
 
             if Menu == "title" :
-                window.fill((0x99,0x55,0x99)) # Background color
+                window.fill((0x99,0x55,0x99)) # Arrière plan
                 pygame.draw.rect(window,(60,60,60),(0,0,width,128))
                 pygame.draw.rect(window,(60,60,60),(0,height-128,width,128))
-                Texte("Beta version",("Arial",15,True,True),(0,0,0),100,64,format_="left").draw(window)
+                # Affichage de la version
+                Texte("1.0.0 beta",("Arial",15,True,True),(0,0,0),100,64,format_="left").draw(window)
                 
                 key = "A" if controls[0] == commands["Menu"] else "Espace"
                 Texte(f"Appuyez sur {key}",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
-                window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/logo.png"),(512,512)),(width/2-256,height/2-256-64))
+                #window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/logo.png"),(512,512)),(width/2-256,height/2-256-64))
+                window.blit(titleanimation[titleframe],(width/2-256,height/2-256-64))
                 Texte("OCTOGONE",("Comic",128,True,False),(40,40,40),width/2+5,height/2 + 256+5).draw(window)
                 Texte("OCTOGONE",("Comic",128,True,False),(128,0,128),width/2,height/2 + 256).draw(window)
                 if convert_inputs(controls[0],joysticks,0)[6] :
                     confirm = True
                     Menu = "main"
+                titleframe = min(titleframe+1,36)
 
             ###################################################################################################
 
