@@ -10,7 +10,7 @@ class Isaac(Char):
                          doublejumpheight=11,airdodgespeed=7,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
         self.name = "Isaac"
         self.x = x
         self.rect.y = y
@@ -231,7 +231,7 @@ class Isaac(Char):
             if self.frame > 4 and self.frame < 21 : # Windbox frame 5-20
                 self.active_hitboxes.append(Hitbox(-216,-180,480,480,0,0,0,0,0,2,self,boum=-20))
                 if self.active_hitboxes[-1].hit.colliderect(other.rect):
-                    force = min(6.67*2*200/max(((sqrt(self.rect.x**2+self.rect.y**2))-sqrt(other.rect.x**2+other.rect.y**2))**2,0.1),12)
+                    force = min(-6.67*2*200/max(((sqrt(self.rect.x**2+self.rect.y**2))-sqrt(other.rect.x**2+other.rect.y**2))**2,0.1),12)
                     if (sqrt(self.rect.x**2+self.rect.y**2))-sqrt(other.rect.x**2+other.rect.y**2) == 0 :
                         fx = 0
                         fy = 0

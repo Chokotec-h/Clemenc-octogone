@@ -441,8 +441,7 @@ def main():
 
                 if Menu == "char":
                     # retour
-                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
-                    Texte("(B)",("arial",50,True,False),(0,0,0),width/2,80).draw(window)
+                    Bouton = Button("",("arial",30,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
                     # le retour se fait en maintenant le bouton B
                     if not convert_inputs(controls[0],joysticks,0)[7]: 
                         b = 0
@@ -453,6 +452,8 @@ def main():
                     if b >= 10:
                         Menu = "stage"
                     Bouton.draw(window)
+                    Texte("<--",("arial",30,True,False),(0,0,0),width/2,25).draw(window)
+                    Texte("(B)",("arial",30,True,False),(0,0,0),width/2,50).draw(window)
 
 
                     ### Interface personnages P1
