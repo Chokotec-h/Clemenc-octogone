@@ -1,7 +1,7 @@
 from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
-from math import pi
+from math import atan, degrees, floor, pi, sqrt, sin, cos
 
 from DATA.utilities.Interface import Texte
 
@@ -22,6 +22,7 @@ class Pyro_Aubin(Char):
         self.konami = []
         self.player = player
         self.explosifs = 25
+        self.angle_fusee = 0
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
@@ -29,24 +30,35 @@ class Pyro_Aubin(Char):
     def special(self): 
         if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right","B","A"]:
             self.inputattack("Superspecial")
-        self.explosifs = min(self.explosifs+0.4/60,50)
+        self.explosifs = min(self.explosifs+0.5/60,50)
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
-            if self.frame == 11: # Saute frame 11
+            if self.frame == 2 :
+                self.angle_fusee = pi/2
+            if self.angle_fusee > -1 and self.frame > 5: # Saute frame 11
+                if special :
+                    self.frame -= 1
+                    if self. explosifs > 0.08 :
+                        self.explosifs -= 0.08
+                    else :
+                        self.frame = 20
+                    if left :
+                        self.angle_fusee += 0.05
+                        if self.angle_fusee < 0 :
+                            self.angle_fusee = 2*pi
+                    if right :
+                        self.angle_fusee -= 0.05
+                        if self.angle_fusee > 2*pi :
+                            self.angle_fusee = 0
+                self.vx = cos(self.angle_fusee) * 10
+                self.vy = -sin(self.angle_fusee) * 10
+            if self.frame > 18 :
                 self.can_act = False # ne peut pas agir après un grounded up B
-                self.vy = -20
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-            #if self.frame < 6 :
-            #    if left : # peut reverse netre les frames 1 et 5
-            #        self.look_right = False
-            #    if right :
-            #        self.look_right = True
-            #if self.frame == 6: # Hitbox frame 6-11
-            #    self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
 
         if attack == "NeutralB":
             if self.frame < 5 :
@@ -58,8 +70,21 @@ class Pyro_Aubin(Char):
                 self.konamiadd = True
                 print("B")
                 self.konami.append("B")
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
+            if self.frame == 5 :
+                launch = False
+                for p in self.projectiles :
+                    if isinstance(p,Fusee) and not p.done:
+                        launch = True
+                if launch :
+                    for p in self.projectiles:
+                        if isinstance(p,Fusee) and not p.done and self.explosifs > 4.5 and not p.homing :
+                            self.explosifs -= 4.5
+                            p.homing = True
+                elif self.explosifs > 0.5:
+                    self.explosifs -= 0.5
+                    self.projectiles.append(Fusee(stage,self,other))
 
             if self.frame > 15: # 10 frames de lag
                 self.attack = None
@@ -81,8 +106,8 @@ class Pyro_Aubin(Char):
                 print("A")
                 self.konami.append("A")
                 self.attack = None
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
 
             if self.frame > 22: # 10 frames de lag
                 self.attack = None
@@ -156,8 +181,8 @@ class Pyro_Aubin(Char):
                 print("A")
                 self.konami.append("A")
                 self.attack = None
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
 
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
@@ -172,6 +197,13 @@ class Pyro_Aubin(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
+            if self.frame == 40 :
+                self.charge = min(100,self.charge,self.explosifs*12)
+                if self.explosifs > 5:
+                    self.explosifs -= max(self.charge/12,3)
+                    self.projectiles.append(Boulet(self.charge,stage,self))
+                self.vx = -signe(self.direction)*self.charge*0.5
+                self.active_hitboxes.append(Hitbox(-10,0,24,120,5*pi/6,8,3,1/200,8,self.charge/10,self))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -224,8 +256,8 @@ class Pyro_Aubin(Char):
                 self.konamiadd = True
                 self.konami.append("Up")
                 self.attack = None
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
             
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
@@ -236,8 +268,8 @@ class Pyro_Aubin(Char):
                 self.konamiadd = True
                 print("Down")
                 self.konami.append("Down")
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
             
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
@@ -248,8 +280,8 @@ class Pyro_Aubin(Char):
                 self.konamiadd = True
                 print("Left")
                 self.konami.append("Left")
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
             
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
@@ -260,8 +292,8 @@ class Pyro_Aubin(Char):
                 self.konamiadd = True
                 print("Right")
                 self.konami.append("Right")
-            elif not self.konamiadd :
-                self.konami = []
+            #elif not self.konamiadd :
+            #    self.konami = []
             
             if self.frame > 30: # Durée de 30 frames
                 self.attack = None
@@ -295,6 +327,9 @@ class Pyro_Aubin(Char):
             window.blit(drawing_sprite, pos,size) # on dessine le sprite
             #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
 
+            for p in self.projectiles :
+                p.draw(window)
+
             for i,s in enumerate(self.smoke_dash):
                         s.draw(window)
                         if s.life_time < 0:
@@ -313,9 +348,119 @@ class Pyro_Aubin(Char):
                 window.blit(pygame.image.load(f"./DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
             pygame.draw.rect(window,(0,0,0),(x,770,100,20))
             pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
-            Texte(str(round(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
+            Texte(str(floor(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
 ###################          
 """ Projectiles """
 ###################
+
+boulet = pygame.image.load("./DATA/Images/Sprites/Projectiles/Boulet.png")
+
+class Boulet():
+    def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
+        self.x = own.x + 48*signe(own.direction)
+        self.y = own.rect.y + 48
+        self.charge = charge
+        self.vx = (10+charge)*signe(own.direction)*0.2
+        self.vy = -5-charge*0.1
+        self.damages = 28
+        self.stun = 19+8*(self.charge/100)
+        self.knockback = sqrt(abs(self.vy)+abs(self.vx))/2
+        self.damages_stacking = 1/200
+        if not own.look_right :
+            self.angle = 3*pi/4
+        else :
+            self.angle = pi/4
+        self.rect = pygame.Rect((0,0,0,0))
+        self.stage = stage
+        self.duration = 80
+
+    def update(self):
+        self.knockback = (abs(self.vy)+abs(self.vx))/2
+        self.x += self.vx
+        self.y += self.vy
+        self.rect = boulet.get_rect(topleft=(self.x,self.y))
+        if self.rect.colliderect(self.stage.mainplat.rect) :
+            self.vy = -1
+            self.vx *= 0.9
+        else :
+            self.vy += 3
+        self.duration -= 1
+
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
+        self.damages = self.damages * modifier
+        self.angle = pi-self.angle
+
+    def draw(self,window):
+        window.blit(boulet, (self.x+800,self.y+450)) # on dessine le sprite
+
+fusee = pygame.image.load("./DATA/Images/Sprites/Projectiles/Fusee.png")
+
+class Fusee():
+    def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
+        self.x = own.x + signe(own.direction)*48
+        self.y = own.rect.y + 86
+        self.vx = 0.5*signe(own.direction)
+        self.vy = -10
+        self.damages = 5
+        self.stun = 12
+        self.knockback = 12
+        self.damages_stacking = 1/200
+        self.angle = pi/2
+        self.rect = pygame.Rect((0,0,0,0))
+        self.stage = stage
+        self.duration = 20
+        self.frame = 1
+        self.homing = False
+        self.other = other
+        self.done = False
+    
+    def update(self):
+        self.x += self.vx
+        self.y += self.vy
+        self.frame += 1
+        if not self.done :
+            if not self.homing :
+                self.vy += 0.005*self.frame
+            else :
+                dx = (self.x - self.other.x)
+                dy = (self.y - self.other.rect.y)
+                angle = atan(dy/dx)
+                self.vx = -abs(cos(angle))*5*signe(dx) - 0.005*self.frame*signe(dx)
+                self.vy = -abs(sin(angle))*5*signe(dy) - 0.005*self.frame*signe(dy)
+                self.duration -= 0.01
+        else:
+            self.frame += 1
+            self.vy += 0.005*self.frame
+        if self.rect.colliderect(self.stage.mainplat.rect) or abs(self.y) > 1000 or abs(self.x) > 1000:
+            self.done = True
+            self.vy = 0
+            self.duration -= 1
+        if self.rect.colliderect(self.other.rect):
+            self.done = True
+            self.frame = 0
+            self.homing = False
+    
+    def draw(self,window):
+        if self.vy == 0 :
+            self.vx = 0.000001
+        if self.vx < 0 :
+            sprite = pygame.transform.rotate(fusee,degrees(pi-atan(self.vy/self.vx)))
+        else :
+            sprite = pygame.transform.rotate(fusee,degrees(pi-atan(self.vy/self.vx))+180)
+        self.rect = sprite.get_rect(topleft=(self.x,self.y))
+        if self.rect.colliderect(self.stage.mainplat.rect):
+            sprite = fusee
+        window.blit(sprite, (self.x+800,self.y+450)) # on dessine le sprite
+
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
+        self.vy = -self.vy*modifier
+        self.damages = self.damages * modifier
+        self.angle = pi-self.angle
+        self.homing = False
+        self.done = True
+        self.frame = 0
+
 
 ##### Autres skins
