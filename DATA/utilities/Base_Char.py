@@ -147,6 +147,14 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def act(self, inputs,stage,other,continuer):
         if self.die > 0 and continuer:
             self.move(stage)
+            self.special()
+            for i,projectile in enumerate(self.projectiles) :
+                self.projectiles[i].update()
+                if projectile.duration <= 0:
+                    del self.projectiles[i]
+            self.attack = None
+            self.charge = 0
+            self.active_hitboxes = list()
             return
         if continuer :
             if self.attack is None :
