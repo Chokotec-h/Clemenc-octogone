@@ -833,13 +833,14 @@ def main():
                 Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
                 
                 # Affichage des vies
-                for s in range(stock[0]//5+1): # colonnes de 5 icones à côté des dégâts
-                    for k in range(min(stock[0]-5*s,5)):
-                        window.blit(pygame.transform.scale(icons[Char_P1.name],(16,16)),(width/3-25-20*s,height - 40 - 20*k))
+                if not training :
+                    for s in range(stock[0]//5+1): # colonnes de 5 icones à côté des dégâts
+                        for k in range(min(stock[0]-5*s,5)):
+                            window.blit(pygame.transform.scale(icons[Char_P1.name],(16,16)),(width/3-25-20*s,height - 40 - 20*k))
 
-                for s in range(stock[1]//5+1):
-                    for k in range(min(stock[1]-5*s,5)):
-                        window.blit(pygame.transform.scale(icons[Char_P2.name],(16,16)),(2*width/3-25-20*s,height - 40 - 20 * k))
+                    for s in range(stock[1]//5+1):
+                        for k in range(min(stock[1]-5*s,5)):
+                            window.blit(pygame.transform.scale(icons[Char_P2.name],(16,16)),(2*width/3-25-20*s,height - 40 - 20 * k))
 
                 #########################################################
 
@@ -907,7 +908,7 @@ def main():
                                     Menu = "stage"
                                     Play = False
                                     pause = False
-                                    focusedbutton = stage
+                                    focusedbutton = 0
                                     musicplaying = False
                                     stage = 0
                                     # reinitialisation des controles
