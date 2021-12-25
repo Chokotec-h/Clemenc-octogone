@@ -62,7 +62,7 @@ def main():
             controls = [commands["Menu"],commands["DefaultKeyboard"]]
         else :
             controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
-        
+
         ################################################################################################################
 
         """ Déclaration des variables """
@@ -139,13 +139,13 @@ def main():
                 key = "A" if controls[0] == commands["Menu"] else "Espace"
                 Texte(f"Appuyez sur {key}",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
                 #window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/logo.png"),(512,512)),(width/2-256,height/2-256-64))
-                window.blit(titleanimation[titleframe],(width/2-256,height/2-256-64))
+                window.blit(titleanimation[titleframe//2],(width/2-256,height/2-256-64))
                 Texte("OCTOGONE",("Comic",128,True,False),(40,40,40),width/2+5,height/2 + 256+5).draw(window)
                 Texte("OCTOGONE",("Comic",128,True,False),(128,0,128),width/2,height/2 + 256).draw(window)
                 if convert_inputs(controls[0],joysticks,0)[6] :
                     confirm = True
                     Menu = "main"
-                titleframe = min(titleframe+1,36)
+                titleframe = min(titleframe+1,72)
 
             ###################################################################################################
 
