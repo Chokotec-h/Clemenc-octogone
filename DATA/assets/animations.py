@@ -71,8 +71,8 @@ Nonesprite = {
 }
 
 Kebab = {
-    "idle":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
-    "walk":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "idle":("./DATA/Images/Sprites/Chars/Kebab/Kebab_idle.png",((2,2,12,12),(16,1,12,13),(30,2,12,12),(44,3,12,11),(58,2,12,12),),6,True),
+    "walk":("./DATA/Images/Sprites/Chars/Kebab/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(30,2,12,12),(43,2,12,12),(57,2,12,12),(70,2,12,12)),8,True),
     "run":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
     "jump":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
     "fall":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
