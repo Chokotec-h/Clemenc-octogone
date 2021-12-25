@@ -10,23 +10,23 @@ icons ={
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
-    "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/icon.png"),
     "Poissonnier":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Renault":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Isaac":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
 }
 icons64 ={
-    "Balan":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),(64,64)),
-    "Joueur de air-president":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"),(64,64)),
-    "Millet":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Gregoire":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Reignaud":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Rey":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Pyro-Aubin":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Kebab":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Poissonnier":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Renault":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
-    "Isaac":pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),(64,64)),
+    "Balan":pygame.transform.scale(icons["Balan"],(64,64)),
+    "Joueur de air-president":pygame.transform.scale(icons["Joueur de air-president"],(64,64)),
+    "Millet":pygame.transform.scale(icons["Millet"],(64,64)),
+    "Gregoire":pygame.transform.scale(icons["Gregoire"],(64,64)),
+    "Reignaud":pygame.transform.scale(icons["Reignaud"],(64,64)),
+    "Rey":pygame.transform.scale(icons["Rey"],(64,64)),
+    "Pyro-Aubin":pygame.transform.scale(icons["Pyro-Aubin"],(64,64)),
+    "Kebab":pygame.transform.scale(icons["Kebab"],(64,64)),
+    "Poissonnier":pygame.transform.scale(icons["Poissonnier"],(64,64)),
+    "Renault":pygame.transform.scale(icons["Renault"],(64,64)),
+    "Isaac":pygame.transform.scale(icons["Isaac"],(64,64)),
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -51,12 +51,12 @@ for s in Balan:
     BalanJ[s] = (Balan[s][0].replace("Default","Jedi"),Balan[s][1],Balan[s][2],Balan[s][3])
 
 Air_President = {
-    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "idle":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "walk":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "run":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "jump":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "fall":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Default/Joueur_de_Air_President/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
 
 }
 
@@ -71,12 +71,12 @@ Nonesprite = {
 }
 
 Kebab = {
-    "idle":("./DATA/Images/Sprites/Chars/Kebab/Kebab_idle.png",((2,2,12,12),(16,1,12,13),(30,2,12,12),(44,3,12,11),(58,2,12,12),),6,True),
-    "walk":("./DATA/Images/Sprites/Chars/Kebab/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(30,2,12,12),(43,2,12,12),(57,2,12,12),(70,2,12,12)),8,True),
-    "run":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
-    "jump":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Kebab/KebabNone.png",((0,0,12,15),),1,True),
+    "idle":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,2,12,12),(16,1,12,13),(30,2,12,12),(44,3,12,11),(58,2,12,12),),6,True),
+    "walk":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(30,2,12,12),(43,2,12,12),(57,2,12,12),(70,2,12,12)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(43,2,12,12),(57,2,12,12)),10,True),
+    "jump":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
 
 }
 
