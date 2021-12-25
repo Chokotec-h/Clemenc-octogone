@@ -269,8 +269,10 @@ class Kebab(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
 
         if attack == "ForwardSmash":
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
-                self.frame = 7
+            if self.frame == 10 :
+                self.animeframe = 0
+            if self.frame > 12 and self.frame < 16 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 14
                 self.animeframe -= 1
                 self.charge = self.charge+1
             if self.frame == 24 :
@@ -353,7 +355,7 @@ class Kebab(Char):
             t = "" if self.look_right else "l"
             drawsmash = Smashes["fsmash"+str(self.current_sauce)+t]
             drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
-            size = drawsmash[1][(self.animeframe-14)//5]
+            size = drawsmash[1][min((self.animeframe-14)//5,len(drawsmash[1])-1)]
             size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
             if not self.look_right :
                 pos[0] -= size[2] - 48
