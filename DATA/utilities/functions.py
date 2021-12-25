@@ -70,10 +70,98 @@ dpad = {
 joy = {
     (0,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Right.png"),
     (0,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Left.png"),
-    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Up.png"),
-    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Down.png"),
+    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Up.png"),
+    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Down.png"),
 }
-text = ["Left","Right","Down","Up","Fullhop","Shorthop","Attack","Special","Shield","Smash (G)","Smash (D)","Smash (B)","Smash (H)","Taunt (G)","Taunt (D)","Taunt (B)","Taunt (H)","Pause"]
+text = ["Gauche","Droite","Haut","Bas","Fullhop","Shorthop","Attaque","Special","Garde","Smash (G)","Smash (D)","Smash (H)","Smash (B)","Taunt (G)","Taunt (D)","Taunt (H)","Taunt (B)","Pause"]
+
+def specialkeysgestion(t,window,x,y,input_,j):
+    size = 55
+    if t == "LEFT" :
+        t = "<   "
+        Texte("__",("arial",38,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        size = 38
+    if t == "RIGHT" :
+        t = "   >"
+        Texte("__",("arial",38,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        size = 38
+    if t == "DOWN" :
+        Texte("|",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        t = "|"
+        Texte("v",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        size = 40
+    if t == "UP" :
+        Texte("^",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-10).draw(window)
+        t = "|"
+        Texte("|",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+10).draw(window)
+        size = 40
+    if t == "SPACE" :
+        pygame.draw.rect(window,(200,200,200),(x+j*64-42-(len(input_)-1)*32,y-32,84,64))
+        size = 30
+    if t == "RETURN" :
+        t = "__|"
+        Texte("<",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32-24,y+15).draw(window)
+        size = 35
+    if t == "ENTER" :
+        t = "[ __|]"
+        Texte("<",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32-24,y+15).draw(window)
+        size = 35
+    if t == "BACKSPACE" :
+        t = "[<   ]"
+        Texte("__",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        size = 35
+    if t == "LEFT CTRL" :
+        t = "L_Ctrl"
+        size = 25
+    if t == "RIGHT CTRL" :
+        t = "R_Ctrl"
+        size = 25
+    if t == "LEFT ALT" :
+        t = "L_Alt"
+        size = 25
+    if t == "RIGHT ALT" :
+        t = "R_Alt"
+        size = 25
+    if t == "LEFT SHIFT" :
+        t = "L_Shift"
+        size = 20
+    if t == "RIGHT SHIFT" :
+        t = "R_Shift"
+        size = 20
+    if t == "ESCAPE" :
+        t = "Esc."
+        size = 30
+    if t == "TAB" :
+        size = 35
+    if t == "COMPOSE" :
+        t = "Comp."
+        size = 25
+    if t == "PRINT SCREEN" :
+        t = "Impecr."
+        size = 30
+    if t == "DELETE" :
+        t = "Suppr."
+        size = 30
+    if t == "BREAK" :
+        t = "Pause"
+        size = 30
+    if t == "CAPS LOCK" :
+        Texte("Caps",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("lock",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        t = ""
+        size = 0
+    if t == "NUMLOCK" :
+        Texte("Num",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("lock",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        t = ""
+        size = 0
+    if t == "HOME" :
+        t = "Fin"
+        size = 36
+
+
+    return size,t
+
 def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n):
     if row_n%2 == 0 :
         Texte(text[number],("arial",24,True,False),(0,0,0),x-120,y,format_="right").draw(window)
@@ -96,6 +184,11 @@ def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n):
                 window.blit(bouton,(x+j*64-32-(len(input_)-1)*32,y-32))
                 Texte(str(i[1]),("arial",55,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y).draw(window)
             if i[0] == "D-Pad" :
-                window.blit(dpad[(i[1],i[2])],(x+j*64-32-(len(input_)-1)*32,y-32))
+                window.blit(dpad[(i[2],i[3])],(x+j*64-32-(len(input_)-1)*32,y-32))
             if i[0] == "Joy" :
                 window.blit(joy[(i[1]%2,i[2])],(x+j*64-32-(len(input_)-1)*32,y-32))
+            if i[0] == "Keyboard" :
+                pygame.draw.rect(window,(200,200,200),(x+j*64-30-(len(input_)-1)*32,y-32,60,64))
+                t = pygame.key.name(i[1]).upper()
+                size,t = specialkeysgestion(t,window,x,y,input_,j)
+                Texte(t,("arial",size,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y).draw(window)
