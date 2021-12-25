@@ -4,7 +4,7 @@ import pygame
 from math import pi,cos,sin
 
 ##### Kebab
-saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Ketchup")]
+saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
 
 
 
@@ -14,7 +14,7 @@ def replacewhite(image,colorcoef):
     NE PAS UTILISER EN COURS D'EXECUTION, PRENDS BEAUCOUP DE TEMPS
     Priviliégier une exécution avant le lancement
     
-    Entrées : image / coefficients (3 ou 4 floats)
+    Entrées : image ; coefficients (3 ou 4 floats)
     Sorties : image modifiée (modification de l'image entrée aussi)"""
     for x in range(image.get_size()[0]):
         for y in range(image.get_size()[1]):
@@ -73,7 +73,9 @@ class Kebab(Char):
     def __str__(self) -> str:
         return "Kebab du dimanche soir"
 
-    def special(self):
+    def special(self,inputs):
+        if self.die :
+            self.eatleft = 3
         for i in range(len(self.sauces)):
             self.sauces[i] = min(self.sauces[i]+0.3,600)
         if self.current_sauce < 0 : # Reset stats
@@ -92,18 +94,19 @@ class Kebab(Char):
             self.knockbackmodifier = 1
             self.changeframe = 0
             self.superarmor = 0
+            self.stunmodifier = 0
         else :
             self.sauces[self.current_sauce] -= 1.3
-            if self.sauces[self.current_sauce] <= 0 : # Resete sauce
+            if self.sauces[self.current_sauce] <= 0 : # Reset sauce
                 self.current_sauce = -1
 
         if self.current_sauce == 0 : # Algérienne : damages x2
             print("Algerienne")
             self.damagemodifier = 2
 
-        if self.current_sauce == 1 : # Samouraï : knockback x2
+        if self.current_sauce == 1 : # Samouraï : knockback x1.5
             print("Samourai")
-            self.knockbackmodifier = 2
+            self.knockbackmodifier = 1.5
 
         if self.current_sauce == 2 : # Blanche : superarmor
             print("Blanche")
@@ -114,7 +117,7 @@ class Kebab(Char):
             print("Moutarde")
             self.changeframe = -5
 
-        if self.current_sauce == 4 : # Américaine : Better Air stats
+        if self.current_sauce == 4 : # Américaine : Meilleures caractéristiques aériennes
             print("Americaine")
             self.airspeed = 3
             self.fallspeed = 0.8
@@ -123,21 +126,22 @@ class Kebab(Char):
             self.shorthop = 14
             self.doublejumpheight = 16
 
-        if self.current_sauce == 5 : # Harissa : Better Ground Speed
+        if self.current_sauce == 5 : # Harissa : Meilleure Vitesse au sol
             print("Harissa")
             self.speed = 3
             self.dashspeed = 5.5
 
-        if self.current_sauce == 6 : # BBQ : Better Airdodge Speed
+        if self.current_sauce == 6 : # BBQ : Airdodge plus rapide et moins de frictions
             print("BBQ")
             self.airdodgespeed = 11
             self.airdodgetime = 1
-
-        if self.current_sauce == 7 : # Ketchup : Less frictions
-            print("Ketchup")
             self.deceleration = 0.9
             self.speed = 1
             self.dashspeed = 2
+
+        if self.current_sauce == 7 : # "Tabasco : Meilleur stun
+            print("Tabasco")
+            self.stunmodifier = 1.8
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -270,7 +274,7 @@ class Kebab(Char):
                 self.animeframe -= 1
                 self.charge = self.charge+1
             if self.frame == 24 :
-                self.active_hitboxes.append(Hitbox(32,0,64,64,pi/3,16*self.knockbackmodifier+5*(self.charge/100),19*self.damagemodifier,1/200,20+8*(self.charge/100),4,self,boum=1))
+                self.active_hitboxes.append(Hitbox(32,0,64,64,pi/3,16*self.knockbackmodifier+5*(self.charge/100),19*self.damagemodifier,1/200,20*self.stunmodifier+8*(self.charge/100),4,self,boum=1))
             if self.frame > 45 + self.changeframe: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
