@@ -30,7 +30,6 @@ def get_inputs(joystick):
             get.append(["D-Pad",joystick,i,0,1])
         if hat[0] == -1 :
             get.append(["D-Pad",joystick,i,0,-1])
-    print(get)
     return list(get)
 
 def convert_inputs(controls,joystick,number):
