@@ -26,7 +26,7 @@ class Air_President(Char):
     def __str__(self) -> str:
         return "Joueur de air-president"
 
-    def special(self): # Spécial
+    def special(self,inputs): # Spécial
         if self.poutre :
             self.speed = 0.9
             self.airspeed = 0.5
@@ -346,7 +346,7 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
-            self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/Revolution.png")
+            self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/Revolution.png")
             self.knockback = 0
             self.damages = 999
             self.stun = 0
@@ -355,7 +355,7 @@ class Carte():
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
-            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Cartes/{self.number}.png"),(48,64))
+            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/{self.number}.png"),(48,64))
             self.number = number
             self.angle = angle
             self.knockback = (self.number/2+1)*3
@@ -381,7 +381,7 @@ class Carte():
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Blahaj/Blahaj_"+color+".png"),(72,36))
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
@@ -451,7 +451,7 @@ class Blahaj():
 
 class Poutre():
     def __init__(self,vx,vy,stage,own:Air_President) -> None:
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Poutre.png"),(48,48))
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(48,48))
         self.x = own.x
         self.y = own.rect.y
         self.vx = vx

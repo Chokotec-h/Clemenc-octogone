@@ -22,7 +22,7 @@ class Isaac(Char):
     def __str__(self) -> str:
         return "Isaac"
 
-    def special(self):
+    def special(self,inputs):
         pass
 
     def animation_attack(self,attack,inputs,stage,other:Char):

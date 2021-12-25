@@ -19,7 +19,7 @@ class Nom_Personnage(Char):
     def __str__(self) -> str:
         return "Name"
 
-    def special(self): 
+    def special(self,inputs): 
         pass
 
     def animation_attack(self,attack,inputs,stage,other):

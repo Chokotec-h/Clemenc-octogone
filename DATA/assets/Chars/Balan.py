@@ -2,7 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 
-exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Exposants/{i}.png"),(36,36)) for i in range(5)]
+exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"),(36,36)) for i in range(5)]
 
 ##### Balan
 
@@ -21,7 +21,7 @@ class Balan(Char):
     def __str__(self) -> str:
         return "Balan"
 
-    def special(self): # Spécial à Balan, pour son upB
+    def special(self,inputs): # Spécial à Balan, pour son upB
         if self.upB: # Vitesse de merde après upB
             self.vx *= 0.3
         return False
@@ -365,7 +365,7 @@ class Projo_Craie():
     def __init__(self,id,own,stage):
         # Craies de M Balan
         self.id = id+1
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
+        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h//2
@@ -384,7 +384,7 @@ class Projo_Craie():
 
     def update(self):
         if self.rect.colliderect(self.stage.mainplat.rect) :
-            self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
+            self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Balan/Craies/Explosion_"+["blanche","rouge","bleue","verte","jaune"][self.id-1]+".png"),(33,50))
             self.y -= 3
             self.duration -= 1
             self.vx = 0

@@ -26,7 +26,7 @@ class Gregoire(Char):
     def __str__(self) -> str:
         return "Gregoire"
 
-    def special(self):
+    def special(self,inputs):
         if self.attack is None :
             self.angle_rayon = -pi/300000
         if self.attack == "ForwardAir":
@@ -398,7 +398,7 @@ class Rayon():
         self.v *= -modifier
 
 
-thundersprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Thunder.png"),(48,48))
+thundersprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"),(48,48))
 
 class Thunder():
     def __init__(self,x,y,own:Gregoire) -> None:
