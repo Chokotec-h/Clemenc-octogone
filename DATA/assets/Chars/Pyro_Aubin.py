@@ -1,5 +1,5 @@
 from DATA.utilities.Animations import get_sprite
-from DATA.utilities.Base_Char import Char, Hitbox, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import atan, degrees, floor, pi, sqrt, sin, cos
 
@@ -20,14 +20,61 @@ class Pyro_Aubin(Char):
         self.x = x
         self.rect.y = y
         self.konami = []
+        self.backspecial = []
         self.player = player
         self.explosifs = 25
         self.angle_fusee = 0
+        self.hold = 0
+        self.turnaround = 0
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
 
-    def special(self): 
+    def special(self,inputs):
+        if self.attack == "DashAttack":
+            self.deceleration = 0.9
+        else :
+            self.deceleration = 0.8
+        left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs
+        special = inputs[7]
+
+        # Annule backspecial si input trop long ou si d'autres inputs
+        if self.backspecial :
+            self.backspecial[-1] -= 1
+            if self.backspecial [-1] < 0:
+                self.backspecial = []
+        if up or fullhop or shorthop or attack_button or shield or C_Left or C_Down or C_Right or C_Up or D_Down or D_Left or D_Right or D_Up :
+            self.backspecial = []
+
+        if down :
+            self.backspecial = [8]
+        if left :
+            if self.look_right :
+                if len(self.backspecial) == 1 :
+                    self.backspecial.append(8)
+                    inputs[0] = False
+                elif len(self.backspecial) > 1 :
+                    self.look_right = True
+                    inputs[0] = False
+            else :
+                self.backspecial = []
+        if right:
+            if not self.look_right :
+                if len(self.backspecial) == 1 :
+                    self.backspecial.append(8)
+                    inputs[1] = False
+                elif len(self.backspecial) > 1 :
+                    self.look_right = False
+                    inputs[1] = False
+            else :
+                self.backspecial = []
+        if special :
+            if len(self.backspecial) == 2 :
+                self.backspecial = []
+                self.inputattack("BackSpecial")
+            else :
+                self.backspecial = []
+
         if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right","B","A"]:
             self.inputattack("Superspecial")
         self.explosifs = min(self.explosifs+0.5/60,50)
@@ -41,8 +88,8 @@ class Pyro_Aubin(Char):
             if self.angle_fusee > -1 and self.frame > 5: # Saute frame 11
                 if special :
                     self.frame -= 1
-                    if self. explosifs > 0.08 :
-                        self.explosifs -= 0.08
+                    if self. explosifs > 0.1 :
+                        self.explosifs -= 0.1
                     else :
                         self.frame = 20
                     if left :
@@ -79,11 +126,11 @@ class Pyro_Aubin(Char):
                         launch = True
                 if launch :
                     for p in self.projectiles:
-                        if isinstance(p,Fusee) and not p.done and self.explosifs > 4.5 and not p.homing :
-                            self.explosifs -= 4.5
+                        if isinstance(p,Fusee) and not p.done and self.explosifs > 5 and not p.homing :
+                            self.explosifs -= 5
                             p.homing = True
-                elif self.explosifs > 0.5:
-                    self.explosifs -= 0.5
+                elif self.explosifs > 1:
+                    self.explosifs -= 1
                     self.projectiles.append(Fusee(stage,self,other))
 
             if self.frame > 15: # 10 frames de lag
@@ -92,11 +139,87 @@ class Pyro_Aubin(Char):
                 self.charge = 0
 
         if attack == "DownB":
+            if self.frame == 10:
+                if self.explosifs > 6 :
+                    if left :
+                        if self.look_right :
+                            v = 0.5
+                        else :
+                            v = -10
+                    elif right :
+                        if self.look_right :
+                            v = 10
+                        else :
+                            v = -0.5
+                    else :
+                        v = 5*signe(self.direction)
+                    self.projectiles.append(Grenade(self,other,v,stage))
+                    self.explosifs -= 6
             if self.frame > 20 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "SideB":
+            if self.frame < 5:
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame == 10 :
+                self.hold = 0
+                self.turnaround = 0
+            if self.frame > 14 and self.frame < 17 :
+                self.vy = -self.fallspeed
+                self.fastfall = False
+                if self.explosifs > 0.5 :
+                    if special :
+                        self.frame = 14
+                        self.explosifs -= 0.1
+                        self.hold += 1
+                    if self.hold % 5 == 0:
+                        self.active_hitboxes.append(Hitbox(-10,100,100,20,3*pi/4,abs(self.vx),10,1/200,7,5,self))
+
+                    if ((left and self.look_right) or (right and not self.look_right)) and self.turnaround == 0:
+                        self.turnaround = 1
+                    self.vx += signe(self.direction)*4
+                else :
+                    self.frame = 18
+                    self.hold = -1
+
+            if self.turnaround > 0 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.1
+                    
+                    self.vx *= 0.65
+                    self.turnaround += 1
+                    self.hold = 1
+                    if self.turnaround == 5 :
+                        self.active_hitboxes.append(Hitbox(36,80,46,46,pi/4,4,7,1/500,8,15,self))
+                    if self.turnaround > 25 :
+                        self.turnaround = 0
+                        self.look_right = not self.look_right
+                        self.vx = 0
+                else :
+                    self.look_right = not self.look_right
+                    self.hold = -1
+
+            
+            if self.hold == -1 :
+                if self.frame > 20 and self.frame < 25 :
+                    self.vx *= 0.8
+                if self.frame > 80 :
+                    self.attack = None
+            else :
+                if self.frame == 22 and special:
+                    if self.explosifs > 4 :
+                        self.explosifs -= 4
+                        self.active_hitboxes.append(Hitbox(-31,5,110,110,pi/2,20,18,1/100,19,2,self,boum=5))
+                        self.vy = -20
+                        self.can_act = False
+                if self.frame > 30 :
+                    self.attack = None
+
+
             if self.frame > 80 : # 20 frames de lag
                 self.attack = None
 
@@ -109,12 +232,15 @@ class Pyro_Aubin(Char):
             #elif not self.konamiadd :
             #    self.konami = []
 
-            if self.frame > 22: # 10 frames de lag
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(50,85,30,30,pi/6,7,9,1/200,10,4,self))
+
+            if self.frame > 20: # 11 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(48,80,48,48,-pi/3,10,6,1/200,8,15,self))
+                self.active_hitboxes.append(Hitbox(48,80,48,48,-pi/3,10,6,1/200,8,17,self))
             if self.frame > 8 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativey += self.frame
 
@@ -127,15 +253,35 @@ class Pyro_Aubin(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
+            if self.frame == 8 :
+                if self.explosifs > 5 :
+                    self.explosifs -= 5
+                    self.vx = -signe(self.direction)*10
+                    self.active_hitboxes.append(Hitbox(48,60,60,60,pi/6,15,13,1/150,17,2,self,boum=2))
+                else :
+                    self.active_hitboxes.append(Hitbox(48,60,32,32,pi/5,10,3,1/220,8,3,self))
 
             if self.frame > 30: # 8 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(50,60,30,30,pi/2,15,4,1/300,12,4,self,deflect=True,modifier=0.5))
+            if self.frame == 10 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativey -= 20
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 6 :
+                self.active_hitboxes.append(Hitbox(45,-30,60,60,pi/3,9,9,1/200,16,4,self))
+            if self.frame > 6 and self.active_hitboxes:
+                self.active_hitboxes[-1].relativex -= 30*signe(self.direction)
+                if self.frame == 8 :
+                    if self.look_right :
+                        self.active_hitboxes[-1].angle = 2*pi/3
+                    else :
+                        self.active_hitboxes[-1].angle = pi/3
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -146,8 +292,14 @@ class Pyro_Aubin(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame == 8 :
+                if self.explosifs > 5:
+                    self.explosifs -= 5
+                    self.active_hitboxes.append(Hitbox(50,30,64,64,-pi/6,15,15,1/180,15,2,self))
+                else :
+                    self.active_hitboxes.append(Hitbox(50,30,32,32,0,7,5,1/220,6,4,self))
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 35: # 29 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -156,6 +308,11 @@ class Pyro_Aubin(Char):
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "BackAir":
+            if self.frame == 12 :
+                if self.explosifs > 4 :
+                    self.explosifs -= 4
+                    self.active_hitboxes.append(Hitbox(-60,30,60,60,pi-0.01,13,15,1/130,12,2,self,boum=2))
+                    self.vx += signe(self.direction)*15
 
             if self.frame > 25: # 14 frames de lag
                 self.attack = None
@@ -166,8 +323,10 @@ class Pyro_Aubin(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
+            if self.frame == 13 :
+                self.active_hitboxes.append(Hitbox(-1,100,50,50,-pi/2,12,14,1/190,15,3,self))
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 40: # 25 frames de lag
                 self.attack = None
 
             if self.grounded :
@@ -183,6 +342,32 @@ class Pyro_Aubin(Char):
                 self.attack = None
             #elif not self.konamiadd :
             #    self.konami = []
+            if self.frame == 4 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(48,30,60,60,pi/2,12,11,1/100,20,2,self))
+                else :
+                    self.active_hitboxes.append(Hitbox(48,48,32,32,pi/2,10,9,1/250,10,2,self))
+            if self.frame == 8 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(12,130,60,60,pi/2,12,11,1/100,20,2,self))
+            if self.frame == 12 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(-72,130,60,60,pi/2,12,11,1/100,20,2,self))
+            if self.frame == 16 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(change_left(48,60),30,60,60,pi/2,12,11,1/100,20,2,self))
+            if self.frame == 20 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(-72,-70,60,60,pi/2,12,11,1/100,20,2,self))
+            if self.frame == 24 :
+                if self.explosifs > 0.5 :
+                    self.explosifs -= 0.5
+                    self.active_hitboxes.append(Hitbox(12,-70,60,60,pi/2,12,11,1/100,20,2,self))
 
             if self.frame > 40: # 17 frames de lag
                 self.attack = None
@@ -220,6 +405,14 @@ class Pyro_Aubin(Char):
                 self.frame = 6
                 self.charge = self.charge+1
 
+            if self.frame == 11 :
+                self.charge = min(self.charge,100)
+                if self.explosifs > 7 :
+                    self.explosifs -= 7
+                    self.active_hitboxes.append(Hitbox(-15,-30,78,48,pi/2,20+8*(self.charge/100),25,1/200,20+8*(self.charge/100),2,self))
+                else :
+                    self.active_hitboxes.append(Hitbox(4,-30,32,32,pi/2,14+3*(self.charge/100),12,1/200,12+3*(self.charge/100),4,self))
+
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -235,18 +428,30 @@ class Pyro_Aubin(Char):
                 self.animeframe -= 1
                 self.frame = 4
                 self.charge = self.charge+1
+            if self.frame == 14 :
+                self.charge = min(self.charge,100)
+                if self.explosifs > 7 :
+                    self.explosifs -= 7
+                    self.active_hitboxes.append(Hitbox(-32,80,110,42,pi/6,15+9*(self.charge/100),18,1/150,19+9*(self.charge/100),2,self,position_relative=True,boum=3))
+                else :
+                    self.active_hitboxes.append(Hitbox(-32,80,32,32,5*pi/6,7+3*(self.charge/100),6,1/150,8+3*(self.charge/100),4,self))
+                    self.active_hitboxes.append(Hitbox(48,80,32,32,pi/6,7+3*(self.charge/100),6,1/150,8+3*(self.charge/100),4,self))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "DashAttack":
-            if self.frame < 26 :
-                self.vy = 0
-                if self.grounded :
-                    self.vx += self.dashspeed*signe(self.direction)
-                else :
-                    self.vx -= self.dashspeed*signe(self.direction)
+            if self.frame == 2 :
+                self.hold = 0
+            if self.frame > 10 and self.frame < 14 :
+                if attack_button and self.explosifs > 1 :
+                    self.explosifs -= 0.1
+                    if self.hold%8 == 0:
+                        self.vx += 10*self.dashspeed*signe(self.direction)
+                        self.active_hitboxes.append(Hitbox(-10,0,40,100,3*pi/4,12,7,1/200,14,8,self))
+                    self.hold += 1
+                    self.frame = 11
             if self.frame > 50: # 24 frames de lag
                 self.attack = None
         
@@ -303,6 +508,14 @@ class Pyro_Aubin(Char):
             or (self.attack == "NeutralB" and attack_button)):
                 self.frame = 150
 
+        if attack == "BackSpecial":
+            if self.frame > 4 and self.frame < 7 :
+                if special :
+                    self.frame = 5
+                    self.explosifs += 3/60
+            if self.frame > 10 :
+                self.attack = None
+
         if attack == "Superspecial":
             if self.frame == 8 :
                 if self.explosifs > 49.5 :
@@ -353,7 +566,7 @@ class Pyro_Aubin(Char):
 """ Projectiles """
 ###################
 
-boulet = pygame.image.load("./DATA/Images/Sprites/Projectiles/Boulet.png")
+boulet = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
@@ -394,7 +607,7 @@ class Boulet():
     def draw(self,window):
         window.blit(boulet, (self.x+800,self.y+450)) # on dessine le sprite
 
-fusee = pygame.image.load("./DATA/Images/Sprites/Projectiles/Fusee.png")
+fusee = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
@@ -425,7 +638,10 @@ class Fusee():
             else :
                 dx = (self.x - self.other.x)
                 dy = (self.y - self.other.rect.y)
+                if dx == 0 :
+                    dx = 0.001
                 angle = atan(dy/dx)
+                self.angle = angle
                 self.vx = -abs(cos(angle))*5*signe(dx) - 0.005*self.frame*signe(dx)
                 self.vy = -abs(sin(angle))*5*signe(dy) - 0.005*self.frame*signe(dy)
                 self.duration -= 0.01
@@ -461,6 +677,56 @@ class Fusee():
         self.homing = False
         self.done = True
         self.frame = 0
+
+grenade = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
+
+class Grenade():
+    def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
+        self.vx = speed
+        self.vy = -15
+        self.basevy = self.vy
+        self.x = own.x
+        self.y = own.rect.y + 48
+        self.other = other
+        self.duration = 80
+        self.stage = stage
+        self.rect = pygame.Rect((0,0,0,0))
+        self.rotate = 0
+        self.angle = 0
+        self.damages = 2
+        self.stun = 3
+        self.knockback = 2
+        self.damages_stacking = 1/200
+
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+3:
+                return True
+        return False
+    
+    def update(self):
+        dx = (self.x - self.other.x)
+        dy = (self.y - self.other.rect.y)
+        if dx == 0 :
+            dx = 0.001
+        self.angle = atan(dy/dx)
+        self.rect = grenade.get_rect(topleft=(self.x,self.y))
+        self.x += self.vx
+        self.y += self.vy
+        self.vy += 0.8
+        if self.touch_stage(self.stage,self.rect):
+            self.basevy *= 0.8
+            self.vy = self.basevy
+        self.duration -= 1
+    
+    def draw(self,window):
+        self.rotate += self.vx
+        sprite = pygame.transform.rotate(grenade,degrees(self.rotate))
+        window.blit(sprite, (self.x+800,self.y+450)) # on dessine le sprite
+
+
 
 
 ##### Autres skins
