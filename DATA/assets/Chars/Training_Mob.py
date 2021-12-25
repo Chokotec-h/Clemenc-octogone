@@ -19,7 +19,7 @@ class Training(Char):
     def __str__(self) -> str:
         return ""
 
-    def special(self): 
+    def special(self,inputs): 
         pass
 
     def animation_attack(self,attack,inputs,stage,other):

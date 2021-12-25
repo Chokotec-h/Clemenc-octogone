@@ -27,7 +27,7 @@ class Millet(Char):
     def __str__(self) -> str:
         return "Millet"
 
-    def special(self):
+    def special(self,inputs):
         if self.attack is None :
             self.angle_rayon = -pi/300000
         if self.attack == "ForwardAir":

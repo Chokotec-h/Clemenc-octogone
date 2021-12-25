@@ -141,13 +141,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def animation_attack(self,attack,inputs,stage,other):
         pass # à modifier pour chaque personnage dans <Personnage>.py
 
-    def special(self):
+    def special(self,inputs):
         return False # cancel, pour Reignaud
 
     def act(self, inputs,stage,other,continuer):
         if self.die > 0 and continuer:
             self.move(stage)
-            self.special()
+            self.special(inputs)
             for i,projectile in enumerate(self.projectiles) :
                 self.projectiles[i].update()
                 if projectile.duration <= 0:
@@ -162,7 +162,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.hitstun = max(0, self.hitstun-1)
             self.frame += 1
             self.animeframe += 1
-            cancel = self.special()
+            cancel = self.special(inputs)
             self.get_inputs(inputs,stage,other,cancel)
             self.move(stage)
             for i,hitbox in enumerate(self.active_hitboxes) :

@@ -23,7 +23,7 @@ class Reignaud(Char):
     def __str__(self) -> str:
         return "Reignaud"
 
-    def special(self):
+    def special(self,inputs):
         if self.attack is None :
             self.cancelable = False
         return self.cancelable

@@ -23,7 +23,7 @@ class Rey(Char):
     def __str__(self) -> str:
         return "Rey"
 
-    def special(self): 
+    def special(self,inputs): 
         pass
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -340,7 +340,7 @@ class Rey(Char):
 """ Projectiles """
 ###################
 
-doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey_Porte/Open{6-i}.png") for i in range(6)]
+doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
@@ -353,7 +353,7 @@ class Door():
         self.knockback = 0
         self.damages_stacking = 0
         self.angle = 0
-        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey_Porte/Close.png")
+        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
         self.duration = 7
         self.rect = pygame.Rect(0,0,0,0)
 

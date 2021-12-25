@@ -27,7 +27,7 @@ class Poissonnier(Char):
     def __str__(self) -> str:
         return "Poissonnier"
 
-    def special(self): 
+    def special(self,inputs): 
         if self.damagesdealt < self.otherdamages :
             self.overheat += (self.otherdamages - self.damagesdealt)*1.42
             self.damagesdealt = self.otherdamages
@@ -454,7 +454,7 @@ class Surchauffe():
 
 class Cerveau():
     def __init__(self,own:Poissonnier,other:Char,stage) -> None:
-        self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Cerveau.png")
+        self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
         self.x = own.x
         self.y = own.rect.y
         self.own = own
