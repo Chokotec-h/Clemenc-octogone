@@ -294,7 +294,10 @@ class Kebab(Char):
                 self.frame = 4
                 self.charge = self.charge+1
 
-            if self.frame > 40 + self.changeframe: # 23 frames de lag
+            if self.frame == 24 :
+                self.charge = min(100,self.charge)
+                self.active_hitboxes.append(Hitbox(50,0,64,64,-pi/2,22*self.knockbackmodifier+5*(self.charge/100),17*self.damagemodifier,1/200,18*self.stunmodifier+8*(self.charge/100),4,self,boum=1))
+            if self.frame > 40 + self.changeframe: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
 
