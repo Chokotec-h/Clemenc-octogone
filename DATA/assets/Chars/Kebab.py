@@ -167,8 +167,11 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(20,10,40,40,pi/3,6*self.knockbackmodifier,6*self.damagemodifier,1/300,15*self.stunmodifier,10,self))
+                self.vx = 22*signe(self.direction)
 
-            if self.frame > 20 + self.changeframe: # 7 frames de lag
+            if self.frame > 25 + self.changeframe: # 7 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
