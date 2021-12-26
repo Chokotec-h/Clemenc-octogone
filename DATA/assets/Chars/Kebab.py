@@ -182,6 +182,11 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(0,0,48,52,pi/2,10*self.knockbackmodifier,9*self.damagemodifier,1/220,14*self.stunmodifier,7,self))
+            if self.frame > 8 and self.active_hitboxes :
+                self.active_hitboxes[-1].sizey += 8
+                self.active_hitboxes[-1].relativey -= 8
             if self.frame > 25 + self.changeframe: # 11 Frames de lag
                 self.attack = None
 
@@ -200,8 +205,10 @@ class Kebab(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
 
         if attack == "ForwardAir":
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(40,30,24,24,pi/6,4*self.knockbackmodifier,5*self.damagemodifier,1/230,12*self.stunmodifier,10,self))
 
-            if self.frame > 50 + self.changeframe: # 29 frames de lag
+            if self.frame > 30 + self.changeframe: # 15 frames de lag
                 self.attack = None
 
             if self.grounded :
