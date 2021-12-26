@@ -151,6 +151,11 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "SideB":
+            if self.frame == 10 :
+                for p in self.projectiles :
+                    if isinstance(p,Flaque):
+                        p.duration = 0
+                self.projectiles.append(Flaque(self,other,stage))
             if self.frame > 80 + self.changeframe : # 20 frames de lag
                 self.attack = None
 
@@ -179,6 +184,10 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 5 :
+                self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,8,3,1/200,15,8,self))
+            if self.frame > 5 and self.active_hitboxes :
+                self.active_hitboxes[-1].relativey -= 20
 
             if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
@@ -317,7 +326,7 @@ class Kebab(Char):
         
         if self.attack == "ForwardSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
-            drawsmash = Smashes["fsmash"+str(self.current_sauce)+t]
+            drawsmash = Attacks["fsmash"+str(self.current_sauce)+t]
             drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
             size = drawsmash[1][min((self.animeframe-14)//4,len(drawsmash[1])-1)]
             size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
@@ -328,7 +337,7 @@ class Kebab(Char):
         
         if self.attack == "UpSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
-            drawsmash = Smashes["usmash"+str(self.current_sauce)+t]
+            drawsmash = Attacks["usmash"+str(self.current_sauce)+t]
             drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
             size = drawsmash[1][min((self.animeframe-14)//4,len(drawsmash[1])-1)]
             size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
@@ -348,6 +357,8 @@ class Kebab(Char):
                     s.draw(window)
                     if s.life_time < 0:
                         del self.double_jump[i]
+        for p in self.projectiles :
+            p.draw(window)
         
         if self.current_sauce != -1 :
             if self.player == 0 :
@@ -367,4 +378,48 @@ class Kebab(Char):
 """ Projectiles """
 ###################
 
+class Flaque():
+    def __init__(self,own:Kebab,other:Char,stage) -> None:
+        self.sauce = str(own.sauce)
+        self.sprite = Sauce[self.sauce]
+        self.x = own.x
+        self.y = own.rect.y
+        self.own = own
+        self.other = other
+        self.stage = stage
+        self.vx = 8*signe(own.direction)
+        self.vy = -9
+        self.knockback = 3*own.knockbackmodifier
+        self.damages = 9*own.damagemodifier
+        self.stun = 5*own.stunmodifier
+        self.angle = pi/2
+        self.duration = 1000
+        self.damages_stacking = 0
+        self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
+    
+    def update(self):
+        self.duration -= 1
+        self.y += self.vy
+        self.x += self.vx
+        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        if self.rect.colliderect(self.stage.mainplat.rect):
+            if self.y < self.stage.mainplat.y :
+                self.sprite = Sauce[self.sauce+"f"]
+                self.vy = 0
+                self.vx = 0
+            else :
+                self.vx = -self.vx
+        else :
+            self.vy += 1
+        
+        if self.rect.colliderect(self.other.rect):
+            self.other.vx *= 2-self.other.deceleration
+            self.other.hitstun = max(4,self.other.hitstun)
+    
+    def deflect(self):
+        self.vx = -self.vx
+        self.own,self.other = self.other,self.own
+
+    def draw(self,window):
+        window.blit(self.sprite, (self.rect.x+800,self.rect.y+450)) # on dessine le sprite
 ##### Autres skins
