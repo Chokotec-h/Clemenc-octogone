@@ -111,6 +111,7 @@ class Kebab(Char):
                 self.vy = self.fallspeed
             if self.frame == 11: # Saute frame 11
                 self.attack = None
+                self.can_act = True
                 self.doublejump = [False for _ in self.doublejump] # Récupère tout les sauts
 
         if attack == "NeutralB":
@@ -185,9 +186,9 @@ class Kebab(Char):
 
         if attack == "UpAir":
             if self.frame == 5 :
-                self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,8,3,1/200,15,8,self))
+                self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,7*self.knockbackmodifier,3*self.damagemodifier,1/100,15*self.stunmodifier,6,self))
             if self.frame > 5 and self.active_hitboxes :
-                self.active_hitboxes[-1].relativey -= 20
+                self.active_hitboxes[-1].relativey -= 15
 
             if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
