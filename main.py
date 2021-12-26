@@ -33,7 +33,7 @@ for j in joysticks:
     j.init()
 
 pygame.mixer.init() # Initialisation du module de musique
-pygame.mixer.music.set_volume(0)
+pygame.mixer.music.set_volume(1)
 
 ############################################################################################################
 ############################################################################################################
