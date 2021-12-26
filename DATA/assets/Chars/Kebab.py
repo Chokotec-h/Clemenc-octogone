@@ -1,3 +1,4 @@
+from random import random
 from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
@@ -52,9 +53,9 @@ class Kebab(Char):
             self.airdodgetime = 3
             self.damagemodifier = 1
             self.knockbackmodifier = 1
+            self.stunmodifier = 1
             self.changeframe = 0
             self.superarmor = 0
-            self.stunmodifier = 0
         else :
             self.sauces[self.current_sauce] -= 1.3
             if self.sauces[self.current_sauce] <= 0 : # Reset sauce
@@ -209,6 +210,8 @@ class Kebab(Char):
                     self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
 
         if attack == "BackAir":
+            if self.frame == 12 :
+                self.active_hitboxes.append(Hitbox(-40,20,40,12,5*pi/6,13*self.knockbackmodifier,10*self.damagemodifier,1/150,14*self.stunmodifier,2,self))
 
             if self.frame > 25 + self.changeframe: # 14 frames de lag
                 self.attack = None
@@ -219,6 +222,12 @@ class Kebab(Char):
                     self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
 
         if attack == "DownAir":
+            if self.frame == 4 :
+                self.active_hitboxes.append(Hitbox(10,30,28,30,pi/2,2,1*self.damagemodifier,0,8*self.stunmodifier,2,self))
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(10,30,28,30,pi/2,2,1*self.damagemodifier,0,8*self.stunmodifier,2,self))
+            if self.frame == 12 :
+                self.active_hitboxes.append(Hitbox(10,30,28,30,-pi/2,10*self.knockbackmodifier,4*self.damagemodifier,1/200,16*self.stunmodifier,2,self))
 
             if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
@@ -229,6 +238,8 @@ class Kebab(Char):
                     self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
 
         if attack == "NeutralAir":
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(-20,-20,88,88,(random()-0.5)*2*pi,12*self.knockbackmodifier,10*self.damagemodifier,1/200,14*self.stunmodifier,3,self))
 
             if self.frame > 40 + self.changeframe: # 17 frames de lag
                 self.attack = None
