@@ -111,7 +111,7 @@ class Air_President(Char):
                 if right :
                     self.look_right = True
             if self.frame == 9 :
-                if randint(1,208) == 1:
+                if randint(1,65) == 1:
                     self.rect.y = 10000
                 else :
                     if not self.look_right:
@@ -120,15 +120,11 @@ class Air_President(Char):
                     else:
                         angle = pi/4
                         x = 24
-                    self.active_hitboxes.append(Hitbox(24,20,68,48,0,0,0,0,0,8,self))
-                    self.active_hitboxes[-1].update()
-                    if self.active_hitboxes[-1].hit.colliderect(other.rect):
-                        if randint(1,208) == 1:
-                            other.rect.y = 10000
-                            self.projectiles.append(Carte(x,20,pi/42,"R",self))
-                            self.BOUM = 30
-                        else :
-                            self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
+                    if randint(1,65) == 1:
+                        self.projectiles.append(Carte(x,20,pi/42,"R",self))
+                        self.BOUM = 30
+                    else :
+                        self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
 
             if self.frame > 30 : # 21 frames de lag
                 self.attack = None
@@ -346,11 +342,11 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
-            self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/Revolution.png")
-            self.knockback = 0
+            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
+            self.knockback = 1000
             self.damages = 999
-            self.stun = 0
-            self.damages_stacking = 0
+            self.stun = 1000
+            self.damages_stacking = 1
         else :
             self.number = number + 2
             if self.number > 13 :
