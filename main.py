@@ -688,7 +688,7 @@ def main():
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[stage]}.png"),(1600,900))
                         for m in musics :
-                            if m[1] == actualstages[stage] and m[2]:
+                            if m[1] == actualstages[stage] and (str(Char_P1) == m[2] or str(Char_P2) == m[2] or m[2] == True):
                                 currentmusic = m[0]
                         musicplaying = False
                         # création du stage
