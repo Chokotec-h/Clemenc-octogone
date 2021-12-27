@@ -445,7 +445,7 @@ def main():
                                 confirm = True
                         Bouton.draw(window)
                         # image du stage
-                        window.blit(pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[i]}.png"),(90,90)),((i%9*150)+205,(i//9*150)+55))
+                        window.blit(pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[i]}/{actualstages[i]}.png"),(90,90)),((i%9*150)+205,(i//9*150)+55))
                             
                 ######################################################################################################
                 #########################################  Menu personnages  #########################################

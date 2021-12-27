@@ -3,8 +3,8 @@ from random import randint
 
 # Nom des stages
 stages = ["K201"]
-# Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon condition)
-musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/digital_autority.mp3","K201",True)]
+# Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
+musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/chapelle.mp3","Chapelle",True),("DATA/Musics/BGM/digital_autority.mp3","Salle d'info",True)]
 
 class Stage():
     def __init__(self,sprite,mainx,mainy,platforms=[]) -> None:
@@ -51,6 +51,6 @@ class Platform():
 
 def create_stage(stage):
     if stage == "K201":
-        return Stage("K201_plateforme",0,191*1.65)
+        return Stage(f"{stage}/K201_plateforme",0,191*1.65)
     if stage == "Pandadrome":
-        return Stage("Pandadrome_plateforme",0,186*1.6)
+        return Stage(f"{stage}/Pandadrome_plateforme",0,186*1.6)
