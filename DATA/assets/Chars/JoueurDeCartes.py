@@ -183,8 +183,8 @@ class Air_President(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 24 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 24+
+                if self.frame < 22 and self.frame > 2 :
+                    self.lag = 8 # Auto cancel frame 1-2 et 22+, 8 frames de landing lag
 
         if attack == "ForwardAir":
             if self.frame == 9 : # Frame 9-10
@@ -196,8 +196,8 @@ class Air_President(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 25 :
-                    self.lag = self.frame # Auto cancel frame 25+
+                if self.frame < 30 and self.frame > 4 :
+                    self.lag = 14 # Auto cancel frame 1-4 et 30+, 14 frames de landing lag
 
         if attack == "BackAir":
             if self.frame == 10: # Active on 10-12
@@ -207,8 +207,8 @@ class Air_President(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 20 and self.frame > 2 :
+                    self.lag = 9 # Auto cancel frame 1-2 et 20+, 9 frames de landing lag
 
         if attack == "DownAir":
             self.vy -= 0.2
@@ -228,8 +228,8 @@ class Air_President(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 45 :
-                    self.lag = self.frame-4 # Auto cancel frame 1-4 et 45+
+                if self.frame < 45 and self.frame > 2 :
+                    self.lag = 13 # Auto cancel frame 1-2 et 45+, 13 frames de landing lag
 
         if attack == "NeutralAir":
             if self.frame == 9:
@@ -240,8 +240,8 @@ class Air_President(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 20 and self.frame > 2 :
+                    self.lag = 3 # Auto cancel frame 1-2 et 20+, 3 frames de landing lag
 
         if attack == "ForwardSmash":
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames

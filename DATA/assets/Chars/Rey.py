@@ -162,13 +162,13 @@ class Rey(Char):
                 if self.active_hitboxes :
                     self.active_hitboxes[-1] = Hitbox(24,-30,32,48,pi/3,10,9,1/250,14,4,self,False)
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 22: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 15 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+                if self.frame < 18 and self.frame > 2 :
+                    self.lag = 9 # Auto cancel frame 1-2 et 18+, 9 frames de landing lag
 
         if attack == "ForwardAir":
             if self.frame == 14 :
@@ -184,8 +184,8 @@ class Rey(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+                if self.frame < 38 and self.frame > 3 :
+                    self.lag = 14 # Auto cancel frame 1-3 et 38+, 14 frames de landing lag
 
         if attack == "BackAir":
             if self.frame == 8 :
@@ -204,8 +204,8 @@ class Rey(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 35 and self.frame > 2 :
+                    self.lag = 12 # Auto cancel frame 1-2 et 35+, 12 frames de landing lag
 
         if attack == "DownAir":
             if self.frame > 15 :
@@ -216,9 +216,9 @@ class Rey(Char):
                 self.active_hitboxes.append(Hitbox(24,70,72,72,-pi/3,15,8,1/190,15,40,self,False))
 
 
-            if self.grounded :
+            if self.grounded or self.frame > 60 :
                 self.attack = None
-                self.lag = 5 # Finishes only on ground
+                self.lag = 12 # Ne s'arrète qu'au sol ou au bout de 60 frames
                 if self.active_hitboxes :
                     self.active_hitboxes.pop()
 
@@ -230,13 +230,13 @@ class Rey(Char):
             if self.frame == 20 :
                 self.active_hitboxes.append(Hitbox(-20,-20,88,140,pi/4,10,8,0,12,2,self,True))
 
-            if self.frame > 40: # 17 frames de lag
+            if self.frame > 38: # 18 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 30 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+                if self.frame < 30 and self.frame > 2 :
+                    self.lag = 8 # Auto cancel frame 1-2 et 30+, 8 frames de landing lag
 
         if attack == "DownSmash":
 

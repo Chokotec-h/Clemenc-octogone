@@ -156,13 +156,13 @@ class Renault(Char):
                 self.active_hitboxes[-1].relativex += signe(self.direction)*10
                 self.active_hitboxes[-1].relativey -= exp((8-self.frame)/5)*15
 
-            if self.frame > 30: # 10 frames de lag
+            if self.frame > 30: # 22 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 15 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+                if self.frame < 24 and self.frame > 3 :
+                    self.lag = 7 # Auto cancel frame 1-3 et 24+, 7 frames de landing lag
 
         if attack == "ForwardAir":
             if self.frame == 7 :
@@ -171,25 +171,25 @@ class Renault(Char):
                 self.active_hitboxes[-1].relativex += signe(self.direction)*5
                 self.active_hitboxes[-1].relativey += 8
 
-            if self.frame > 25: # 10 frames de lag
+            if self.frame > 25: # 13 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-5 # Auto cancel frame 1-5 et 20+
+                if self.frame < 20 and self.frame > 2 :
+                    self.lag = 9 # Auto cancel frame 1-2 et 22+, 9 frames de landing lag
 
         if attack == "BackAir":
             if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(change_left(30,72),32,72,52,pi-(pi/1+pi),14,12,1/200,13,2,self))
 
-            if self.frame > 25: # 14 frames de lag
+            if self.frame > 25: # 13 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 22 and self.frame > 2 :
+                    self.lag = 8 # Auto cancel frame 1-2 et 22+, 8 frames de landing lag
 
         if attack == "DownAir":
             if self.frame == 18 :
@@ -200,13 +200,13 @@ class Renault(Char):
                 self.active_hitboxes[-1].relativex -= self.frame*signe(self.direction)/2
                 self.active_hitboxes[-1].relativey += 30-self.frame
 
-            if self.frame > 50: # 29 frames de lag
+            if self.frame > 50: # 23 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+                if self.frame < 40 and self.frame > 8 :
+                    self.lag = 17 # Auto cancel frame 1-8 et 40+, 17 frames de landing lag
 
         if attack == "NeutralAir":
             if self.frame > 6 and self.frame < 16 :
@@ -221,8 +221,8 @@ class Renault(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 30 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+                if self.frame < 30 and self.frame > 2 :
+                    self.lag = 9 # Auto cancel frame 1-2 et 30+, 9 frames de landing lag
 
         if attack == "ForwardSmash":
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames

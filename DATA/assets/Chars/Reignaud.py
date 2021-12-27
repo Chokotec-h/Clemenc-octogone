@@ -165,9 +165,8 @@ class Reignaud(Char):
 
             if self.grounded :
                 self.attack = None
-                self.cancelable = False
-                if self.frame < 15 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+                if self.frame < 23 and self.frame > 8 :
+                    self.lag = 10 # Auto cancel frame 1-8 et 23+, 8 frames de landing lag
 
         if attack == "ForwardAir":
             if self.frame < 8 :
@@ -181,10 +180,9 @@ class Reignaud(Char):
                 self.attack = None
 
             if self.grounded :
-                self.cancelable = False
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 40+
+                if self.frame < 26 and self.frame > 8 :
+                    self.lag = 11 # Auto cancel frame 1-8 et 26+, 11 frames de landing lag
 
         if attack == "BackAir":
             if self.frame < 10 :
@@ -199,10 +197,9 @@ class Reignaud(Char):
                 self.attack = None
 
             if self.grounded :
-                self.cancelable = False
                 self.attack = None
-                if self.frame < 22 :
-                    self.lag = self.frame-6 # Auto cancel frame 1-6 et 22+
+                if self.frame < 28 and self.frame > 10 :
+                    self.lag = 16 # Auto cancel frame 1-10 et 28+, 16 frames de landing lag
 
         if attack == "DownAir":
             if self.frame < 16 :
@@ -212,14 +209,13 @@ class Reignaud(Char):
             if self.frame == 16 :
                 self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,15,19,1/150,10,3,self,False))
 
-            if self.frame > 44: # 10 frames de lag
+            if self.frame > 44: # 28 frames de lag
                 self.attack = None
 
             if self.grounded :
-                self.cancelable = False
                 self.attack = None
-                if self.frame < 32 :
-                    self.lag = self.frame-3 # Auto cancel frame 1-3 et 32+
+                if self.frame < 30 and self.frame > 16 :
+                    self.lag = 19 # Auto cancel frame 1-16 et 30+, 19 frames de landing lag
 
         if attack == "NeutralAir":
             if self.frame < 10 :
@@ -232,13 +228,13 @@ class Reignaud(Char):
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].relativex += signe(self.direction)*sin(pi*self.frame/10)*176/11
                     self.active_hitboxes[-1].relativey += -cos(pi*self.frame/10)*30
-            if self.frame > 40: # 17 frames de lag
+            if self.frame > 40: # 10 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 30 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+                if self.frame < 38 and self.frame > 2 :
+                    self.lag = 10 # Auto cancel frame 1-2 et 38+, 10 frames de landing lag
 
         if attack == "ForwardSmash":
             if self.frame < 8 :

@@ -29,7 +29,7 @@ class Gregoire(Char):
     def special(self,inputs):
         if self.attack is None :
             self.angle_rayon = -pi/300000
-        if self.attack == "ForwardAir":
+        if self.strongfair:
             self.superarmor = -1
         else :
             self.superarmor = 14
@@ -175,8 +175,8 @@ class Gregoire(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 40 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 15+
+                if self.frame < 30 and self.frame > 2 :
+                    self.lag = 6 # Auto cancel frame 1-2 et 30+, 6 frames de landing lag
 
         if attack == "ForwardAir":
             if self.frame == 7 :
@@ -197,13 +197,13 @@ class Gregoire(Char):
         if attack == "BackAir":
             if self.frame == 13:
                 self.active_hitboxes.append(Hitbox(-48,64,32,32,pi/6,25,incertitude(13),1/200,14,5,self,False))
-            if self.frame > 27: #  frames de lag
+            if self.frame > 27: # 11 frames de lag
                 self.attack = None
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 20 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 20+
+                if self.frame < 22 and self.frame > 2 :
+                    self.lag = 5 # Auto cancel frame 1-2 et 22+, 5 frames de landing lag
 
         if attack == "DownAir":
             self.vx = min(self.frame/10,15)*signe(self.direction)
@@ -240,8 +240,8 @@ class Gregoire(Char):
 
             if self.grounded :
                 self.attack = None
-                if self.frame < 30 :
-                    self.lag = self.frame-2 # Auto cancel frame 1-2 et 30+
+                if self.frame < 28 and self.frame > 3 :
+                    self.lag = 12 # Auto cancel frame 1-3 et 28+, 12 frames de landing lag
 
         if attack == "ForwardSmash":
             if self.frame > 3 and self.frame < 6 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
