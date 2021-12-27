@@ -162,13 +162,25 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame == 3 :
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self))
+            if self.frame > 6 and attack_button :
+                self.attack = "Jab2"
+                self.frame = 0
 
-            if self.frame > 22 + self.changeframe: # 10 frames de lag
+            if self.frame > 15: # 18 frames de lag
+                self.attack = None
+
+        if attack == "Jab2":
+            if self.frame == 3 :
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self))
+
+            if self.frame > 21: # 18 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 5 :
-                self.active_hitboxes.append(Hitbox(20,10,40,40,pi/3,6*self.knockbackmodifier,6*self.damagemodifier,1/300,15*self.stunmodifier,10,self))
+                self.active_hitboxes.append(Hitbox(20,15,40,40,pi/3,6*self.knockbackmodifier,6*self.damagemodifier,1/300,15*self.stunmodifier,10,self))
                 self.vx = 22*signe(self.direction)
 
             if self.frame > 25 + self.changeframe: # 7 frames de lag
@@ -180,6 +192,8 @@ class Kebab(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
+            if self.frame == 7 :
+                self.active_hitboxes.append(Hitbox(30,10,55,40,pi/6,8*self.knockbackmodifier,8*self.knockbackmodifier,1/160,16*self.stunmodifier,3,self))
 
             if self.frame > 30 + self.changeframe: # 8 frames de lag
                 self.attack = None
@@ -312,12 +326,15 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
-            if self.frame < 26 :
-                self.vy = 0
-                if self.grounded :
-                    self.vx += self.dashspeed*signe(self.direction)
-                else :
-                    self.vx -= self.dashspeed*signe(self.direction)
+            if self.frame == 5 :
+                self.vx = 23*signe(self.direction)
+                self.vy = -10
+                self.fastfall = True
+                self.active_hitboxes.append(Hitbox(0,0,50,50,pi/4,13*self.knockbackmodifier,7*self.damagemodifier,1/220,14*self.stunmodifier,20,self))
+            if self.frame > 5 and self.frame < 18 :
+                self.vx = (23-self.frame)*signe(self.direction)
+            if self.frame == 18 :
+                self.fastfall = False
             if self.frame > 50 + self.changeframe: # 24 frames de lag
                 self.attack = None
 
