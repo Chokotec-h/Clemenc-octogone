@@ -43,7 +43,7 @@ class Reignaud(Char):
                 self.vy = -self.charge - 10
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
                 if self.charge // 6 == 4 :
-                    self.active_hitboxes.append(Hitbox(0,0,48,120,3*pi/4,12,15,1/200,14,10,self,True))
+                    self.active_hitboxes.append(Hitbox(0,0,48,120,3*pi/4,12,15,1/200,14,10,self,True,sound="hits and slap/cool hit.wav"))
                 self.charge = 0
             if self.frame > 25 :
                 self.attack = None
@@ -92,8 +92,8 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 16 :
-                self.vx = signe(self.direction)*25
-                self.active_hitboxes.append(Hitbox(24,32,64,32,pi/4,20 if other.look_right == self.look_right else 10,16 if other.look_right == self.look_right else 8,1/250,22 if other.look_right == self.look_right else 11,6,self,False))
+                self.vx = signe(self.direction)*30
+                self.active_hitboxes.append(Hitbox(24,32,64,32,pi/4,20 if other.look_right == self.look_right else 10,16 if other.look_right == self.look_right else 8,1/250,22 if other.look_right == self.look_right else 11,6,self,False,sound="hits and slap/mini hit.wav"))
             if self.frame < 25 :
                 self.vy = -self.fallspeed
             if self.frame > 66 : # 44 frames de lag
@@ -105,7 +105,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 7 :
-                self.active_hitboxes.append(Hitbox(40,42,50,42,pi/4,10,10,1/300,12,3,self,False))
+                self.active_hitboxes.append(Hitbox(40,42,50,42,pi/4,10,10,1/300,12,3,self,False,sound="hits and slap/punch.mp3"))
 
             if self.frame > 20: # 14 frames de lag
                 self.attack = None
@@ -116,7 +116,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 6 :
-                self.active_hitboxes.append(Hitbox(40,62,60,42,pi/6,11,9,1/250,17,4,self,False))
+                self.active_hitboxes.append(Hitbox(40,62,60,42,pi/6,11,9,1/250,17,4,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 20: # 15 frames de lag
                 self.attack = None
@@ -136,7 +136,7 @@ class Reignaud(Char):
             else :
                 self.intangibility = False
             if self.frame == 24:
-                self.active_hitboxes.append(Hitbox(32,8,48,70,pi/4,13,10,1/240,13,8,self,False))
+                self.active_hitboxes.append(Hitbox(32,8,48,70,pi/4,13,10,1/240,13,8,self,False,sound="hits and slap/punch1.mp3"))
 
             if self.frame > 52: # 20 frames de lag
                 self.attack = None
@@ -159,7 +159,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(20,-5,68,80,2*pi/5,14,11,1/200,13,7,self,False))
+                self.active_hitboxes.append(Hitbox(20,-5,68,80,2*pi/5,14,11,1/200,13,7,self,False,sound="hits and slap/punch1.mp3"))
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
 
@@ -174,7 +174,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 8:
-                self.active_hitboxes.append(Hitbox(22,42,64,64,-pi/6,11,9,1/250,12,8,self,False))
+                self.active_hitboxes.append(Hitbox(22,42,64,64,-pi/6,11,9,1/250,12,8,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 28: # 12 frames de lag
                 self.attack = None
@@ -190,7 +190,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(-50,42,60,48,-3*pi/4,16,18,1/200,15,3,self,False))
+                self.active_hitboxes.append(Hitbox(-50,42,60,48,-3*pi/4,16,18,1/200,15,3,self,False,sound="hits and slap/punch2.mp3"))
 
             if self.frame > 30: # 17 frames de lag
                 self.cancelable = False
@@ -207,7 +207,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,15,19,1/150,10,3,self,False))
+                self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,15,19,1/150,10,3,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 44: # 28 frames de lag
                 self.attack = None
@@ -223,7 +223,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False))
+                self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False,sound="hits and slap/hit.wav"))
             if self.frame > 10 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].relativex += signe(self.direction)*sin(pi*self.frame/10)*176/11
@@ -247,7 +247,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 20:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False))
+                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False,sound="hits and slap/punch.mp3"))
             if self.frame > 45: # 21 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -267,7 +267,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 14:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,19+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False))
+                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,19+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False,sound="hits and slap/punch1.mp3"))
             if self.frame > 45: # 27 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -289,8 +289,8 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 15 :
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,15+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
-                self.active_hitboxes.append(Hitbox(change_left(35,64),52,64,64,5*pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,15+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False,sound="hits and slap/punch2.mp3"))
+                self.active_hitboxes.append(Hitbox(change_left(35,64),52,64,64,5*pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False,sound="hits and slap/punch2.mp3"))
             if self.frame == 18:
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.75

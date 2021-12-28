@@ -67,7 +67,8 @@ class Air_President(Char):
             if self.frame == 6: # Hitbox frame 6-15
                 self.vx = 0
                 self.vy = -24
-                self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False))
+                pygame.mixer.Sound(f"DATA/Musics/SE/boings/boing ({randint(2,8)}).mp3").play()
+                self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False,sound="boings/boing (1).wav"))
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
 
@@ -131,13 +132,13 @@ class Air_President(Char):
 
         if attack == "Jab":
             if self.frame == 2 : # Frame 2-3
-                self.active_hitboxes.append(Hitbox(32,20,44,48,3*pi/4,0.7,0.3,1/1000,3,2,self,False))
-            if self.frame > 5: #  2 frames de lag
+                self.active_hitboxes.append(Hitbox(32,20,44,48,3*pi/4,0.7,0.3,1/1000,5,2,self,False,boum=-2,sound="hits and slap/hit.wav"))
+            if self.frame > 4: #  2 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 5 : # Frames 5-10
-                self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/750,9,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/750,9,2,self,False,sound="hits and slap/mini hit.wav"))
             if self.frame > 15: # 5 frames de lag
                 self.attack = None
 
@@ -162,13 +163,13 @@ class Air_President(Char):
                         self.active_hitboxes[-1].relativey -= 24
                     self.active_hitboxes[-1].relativex += -7*signe(self.direction)
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(24,0,32,32,pi/2,9,8.5,1/500,13,11,self,False))
+                self.active_hitboxes.append(Hitbox(24,0,32,32,pi/2,9,8.5,1/500,13,11,self,False,sound="wooshs/mini woosh.wav"))
             if self.frame > 25: # 17 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
             if self.frame == 5 : #frames 5-11
-                self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self,True))
+                self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self,True,sound="wooshs/mini woosh.wav"))
                 if not self.look_right :
                     self.active_hitboxes[-1].sizex *= -1
                     self.active_hitboxes[-1].relativex += 10
@@ -188,7 +189,7 @@ class Air_President(Char):
 
         if attack == "ForwardAir":
             if self.frame == 9 : # Frame 9-10
-                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,16,2,self,False))
+                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,16,2,self,False,sound="other/electric cable sound.wav"))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
                 self.active_hitboxes.append(Hitbox(24,28,64,12,pi/42,2,0.5,1/404,3,2,self,False,boum = -1))
             if self.frame > 45: # 25 frames de lag
@@ -222,7 +223,7 @@ class Air_President(Char):
             if self.frame == 34 :
                 self.active_hitboxes.append(Hitbox(0,128,48,48,pi/2,1,1.3,0,14,2,self,False))
             if self.frame == 42 :
-                self.active_hitboxes.append(Hitbox(-8,128,64,64,-pi/2,5,6.5,1/200,20,2,self,False))
+                self.active_hitboxes.append(Hitbox(-8,128,64,64,-pi/2,5,6.5,1/200,20,2,self,False,sound="hits and slap/cool hit.wav"))
             if self.frame > 55: # 17 frames de lag
                 self.attack = None
 
@@ -250,7 +251,7 @@ class Air_President(Char):
 
             elif self.frame == 19 : # Active on 19-24
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-26,0,52,52,pi/3,15+12.5*(self.charge/250),17,1/250,20+9*(self.charge/150),5,self,False))
+                self.active_hitboxes.append(Hitbox(-26,0,52,52,pi/3,15+12.5*(self.charge/250),17,1/250,20+9*(self.charge/150),5,self,False,sound="hits and slap/punch1.mp3"))
             if self.frame > 18 and self.frame < 23 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].relativex += (60-self.frame*2)*signe(self.direction)
@@ -274,7 +275,7 @@ class Air_President(Char):
                 self.active_hitboxes.append(Hitbox(42,50,32,32,3*pi/4,9,3,0,7,4,self,False))
             elif self.frame == 15 : # Active on 15-28
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(0,-50,48,48,pi/3,9+7*(self.charge/150),14,1/80,13+7*(self.charge/100),13,self,False))
+                self.active_hitboxes.append(Hitbox(0,-50,48,48,pi/3,9+7*(self.charge/150),14,1/80,13+7*(self.charge/100),13,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 49: # 21 frames de lag
                 self.attack = None
@@ -296,7 +297,7 @@ class Air_President(Char):
             
             elif self.frame == 19 : # Active on 19-27
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-10,100,100,32,5*pi/13,12+10*(self.charge/200),10.5,1/250,12+8*(self.charge/300+1),8,self,False))
+                self.active_hitboxes.append(Hitbox(-10,100,100,32,5*pi/13,12+10*(self.charge/200),10.5,1/250,12+8*(self.charge/300+1),8,self,False,sound="hits and slap/punch2.mp3"))
 
             if self.frame > 50: # 23 frames de lag
                 self.attack = None
@@ -309,7 +310,7 @@ class Air_President(Char):
                     self.vx += self.dashspeed*signe(self.direction)*5
                 else :
                     self.vx -= self.dashspeed*signe(self.direction)*5
-                self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,8,3.5,1/350,7,3,self,False))
+                self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,8,3.5,1/350,7,3,self,False,sound="hits and slap/mini hit.wav"))
 
             if self.frame > 66: # 15 frames de lag
                 self.attack = None
@@ -342,12 +343,15 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
+            pygame.mixer.Sound("DATA/Musics/SE/other/Its-pronounced-rules.mp3").play()
+            self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/cool hit.wav")
             self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
             self.knockback = 1000
             self.damages = 999
             self.stun = 1000
             self.damages_stacking = 1
         else :
+            self.sound = pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3")
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
@@ -377,6 +381,8 @@ class Carte():
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
+        pygame.mixer.Sound("DATA/Musics/SE/wooshs/encore un woosh.mp3").play()
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/boings/boing.mp3")
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
@@ -467,6 +473,7 @@ class Poutre():
         self.duration = 10
         self.stage = stage
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav")
 
     def update(self):
         self.knockback = sqrt(self.vx**2+self.vy**2)

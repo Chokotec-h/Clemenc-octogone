@@ -43,7 +43,7 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame == 6: # Hitbox frame 6-11
-                self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,18,32,1/150,40,5,self,False))
+                self.active_hitboxes.append(Hitbox(-1.5,88.5,51,48,2*pi/3,20,32,1/150,40,5,self,False,sound="hits and slap/cool hit.wav"))
 
         if attack == "NeutralB":
             #self.can_act = False
@@ -102,8 +102,10 @@ class Balan(Char):
         if attack == "Jab":
             self.animation = "jab"
             if self.frame == 3 : # 1er hit frame 3-6
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
                 self.active_hitboxes.append(Hitbox(40,36,48,24,3*pi/4,2,0.6,0,10,4,self,True))
             if self.frame == 9 : # 2e hit frame 9-12
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3").play()
                 self.active_hitboxes.append(Hitbox(20,20,68,48,pi/4,4.5,1.4,1/1000,15,4,self,False))
 
             if self.frame > 22: # 10 frames de lag
@@ -111,6 +113,7 @@ class Balan(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
                 self.active_hitboxes.append(Hitbox(35,80,24,10,2*pi/5,8,3.8,1/200,14,5,self,False))
 
             if self.frame > 20: # 7 frames de lag
@@ -123,8 +126,10 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame == 6 : # 1er hit frame 6-12
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3").play()
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/2,2,0.6,0,9,6,self,True))
             if self.frame == 14 : # 2e hit frame 14-22
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3").play()
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/4,6,8,1/150,15,6,self,False))
 
             if self.frame > 30: # 8 frames de lag
@@ -133,6 +138,7 @@ class Balan(Char):
         if attack == "UpTilt":
             self.animation = "uptilt"
             if self.frame == 6 : # Frame 6-14
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3").play()
                 self.active_hitboxes.append(Hitbox(78,-5,-16,16,pi/2,13,8.2,1/250,25,8,self,False))
                 if not self.look_right :
                     self.active_hitboxes[-1].sizex *= -1
@@ -154,6 +160,7 @@ class Balan(Char):
         if attack == "UpAir":
             if self.frame == 5 : # Frame 5-10
                 self.active_hitboxes.append(Hitbox(-1,-10,50,10,pi/2,0,2.5,1/1000,8,5,self,True))
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
             if self.frame == 10 : # Frame 10-15
                 self.active_hitboxes.append(Hitbox(15,-20,16,25,pi/3,10,5,1/80,18,5,self,True))
 
@@ -167,7 +174,7 @@ class Balan(Char):
 
         if attack == "ForwardAir":
             if self.frame == 15 : # Frame 15-16
-                self.active_hitboxes.append(Hitbox(40,32,16,32,-pi/4,10,14,1/150,22,6,self,False))
+                self.active_hitboxes.append(Hitbox(40,32,16,32,-pi/4,10,14,1/150,22,6,self,False,sound="hits and slap/punch1.mp3"))
             if self.frame == 17 : # Frame 17-21
                 if not self.look_right:
                     angle = 2*pi/3
@@ -191,7 +198,7 @@ class Balan(Char):
 
         if attack == "BackAir":
             if self.frame == 6 : # Frame 6-8
-                self.active_hitboxes.append(Hitbox(-40,32,16,16,49*pi/50,10,12,1/150,20,6,self,False))
+                self.active_hitboxes.append(Hitbox(-40,32,16,16,49*pi/50,10,12,1/150,20,6,self,False,sound="hits and slap/cool hit.wav"))
             if self.frame == 9 : # Frame 9-11
                 if not self.look_right:
                     angle = pi/25
@@ -214,7 +221,7 @@ class Balan(Char):
 
         if attack == "DownAir":
             if self.frame == 10 : # Frame 10
-                self.active_hitboxes.append(Hitbox(16,90,24,32,-2*pi/3,2,12,1/20,6,5,self,False))
+                self.active_hitboxes.append(Hitbox(16,90,24,32,-2*pi/3,2,12,1/20,6,5,self,False,sound="lasers/laser3.wav"))
             if self.frame == 11 : # Frame 11-15
                 if not self.look_right:
                     angle = 4*pi/6
@@ -264,7 +271,7 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 12 : # Active on 12-18
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(60,16,52,64,pi/4,12+6*(self.charge/150),14,1/120,24+4*(self.charge/100),4,self,True,True,1.2))
+                self.active_hitboxes.append(Hitbox(60,16,52,64,pi/4,12+6*(self.charge/150),14,1/120,24+4*(self.charge/100),4,self,True,True,1.2,sound="hits and slap/cool hit.wav"))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -293,7 +300,7 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-15
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(30,10,32,32,2*pi/3,18+10*(self.charge/100),13,1/100,22+6*(self.charge/100),6,self,False))
+                self.active_hitboxes.append(Hitbox(30,10,32,32,2*pi/3,18+10*(self.charge/100),13,1/100,22+6*(self.charge/100),6,self,False,sound="hits and slap/mini hit.wav"))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
@@ -312,11 +319,11 @@ class Balan(Char):
                 self.charge = self.charge+1
             elif self.frame == 7 : # Active on 7-9
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,19+5*(self.charge/100),3,self,False))
+                self.active_hitboxes.append(Hitbox(40,60,32,32,pi/6,7*(self.charge/200+1),12.5,1/250,19+5*(self.charge/100),3,self,False,sound="hits and slap/cool hit.wav"))
             
             elif self.frame == 15 : # Active on 15-17
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,19+5*(self.charge/100),3,self,False))
+                self.active_hitboxes.append(Hitbox(-40,60,32,32,5*pi/6,9*(self.charge/200+1),14.5,1/250,19+5*(self.charge/100),3,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
@@ -364,6 +371,7 @@ class Balan(Char):
 class Projo_Craie():
     def __init__(self,id,own,stage):
         # Craies de M Balan
+        pygame.mixer.Sound("DATA/Musics/SE/wooshs/mini woosh.wav").play()
         self.id = id+1
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
         self.rect = self.sprite.get_rect()

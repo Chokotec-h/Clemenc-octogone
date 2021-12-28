@@ -1,4 +1,4 @@
-from random import random
+from random import random, choice
 from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
@@ -158,12 +158,12 @@ class Kebab(Char):
                     if isinstance(p,Flaque):
                         p.duration = 0
                 self.projectiles.append(Flaque(self,other,stage))
-            if self.frame > 80 + self.changeframe : # 20 frames de lag
+            if self.frame > 20 + self.changeframe : # 10 frames de lag
                 self.attack = None
 
         if attack == "Jab":
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self))
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch.mp3"))
             if self.frame > 6 and attack_button :
                 self.attack = "Jab2"
                 self.frame = 0
@@ -173,7 +173,7 @@ class Kebab(Char):
 
         if attack == "Jab2":
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self))
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch2.mp3"))
 
             if self.frame > 21: # 18 frames de lag
                 self.attack = None
@@ -200,7 +200,7 @@ class Kebab(Char):
 
         if attack == "UpTilt":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(0,0,48,52,pi/2,10*self.knockbackmodifier,9*self.damagemodifier,1/220,14*self.stunmodifier,7,self))
+                self.active_hitboxes.append(Hitbox(0,0,48,52,pi/2,10*self.knockbackmodifier,9*self.damagemodifier,1/220,14*self.stunmodifier,7,self,sound="hits and slap/punch2.mp3"))
             if self.frame > 8 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey += 8
                 self.active_hitboxes[-1].relativey -= 8
@@ -209,7 +209,7 @@ class Kebab(Char):
 
         if attack == "UpAir":
             if self.frame == 5 :
-                self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,7*self.knockbackmodifier,3*self.damagemodifier,1/100,15*self.stunmodifier,6,self))
+                self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,7*self.knockbackmodifier,3*self.damagemodifier,1/100,15*self.stunmodifier,6,self,sound="wooshs/mini woosh.wav"))
             if self.frame > 5 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativey -= 15
 
@@ -223,7 +223,7 @@ class Kebab(Char):
 
         if attack == "ForwardAir":
             if self.frame == 5 :
-                self.active_hitboxes.append(Hitbox(40,30,24,24,pi/6,4*self.knockbackmodifier,5*self.damagemodifier,1/230,12*self.stunmodifier,10,self))
+                self.active_hitboxes.append(Hitbox(40,30,24,24,pi/6,4*self.knockbackmodifier,5*self.damagemodifier,1/230,12*self.stunmodifier,10,self,sound="hits and slap/mini hit.wav"))
 
             if self.frame > 30 + self.changeframe: # 15 frames de lag
                 self.attack = None
@@ -235,7 +235,7 @@ class Kebab(Char):
 
         if attack == "BackAir":
             if self.frame == 12 :
-                self.active_hitboxes.append(Hitbox(-40,20,40,12,5*pi/6,13*self.knockbackmodifier,10*self.damagemodifier,1/150,14*self.stunmodifier,2,self))
+                self.active_hitboxes.append(Hitbox(-40,20,40,12,5*pi/6,13*self.knockbackmodifier,10*self.damagemodifier,1/150,14*self.stunmodifier,2,self,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 25 + self.changeframe: # 14 frames de lag
                 self.attack = None
@@ -251,7 +251,7 @@ class Kebab(Char):
             if self.frame == 8 :
                 self.active_hitboxes.append(Hitbox(10,30,28,30,pi/2,2,1*self.damagemodifier,0,8*self.stunmodifier,2,self))
             if self.frame == 12 :
-                self.active_hitboxes.append(Hitbox(10,30,28,30,-pi/2,10*self.knockbackmodifier,4*self.damagemodifier,1/200,16*self.stunmodifier,2,self))
+                self.active_hitboxes.append(Hitbox(10,30,28,30,-pi/2,10*self.knockbackmodifier,4*self.damagemodifier,1/200,16*self.stunmodifier,2,self,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
@@ -263,7 +263,7 @@ class Kebab(Char):
 
         if attack == "NeutralAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(-20,-20,88,88,(random()-0.5)*2*pi,12*self.knockbackmodifier,10*self.damagemodifier,1/200,14*self.stunmodifier,3,self))
+                self.active_hitboxes.append(Hitbox(-20,-20,88,88,(random()-0.5)*2*pi,12*self.knockbackmodifier,10*self.damagemodifier,1/200,14*self.stunmodifier,3,self,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 40 + self.changeframe: # 17 frames de lag
                 self.attack = None
@@ -282,7 +282,7 @@ class Kebab(Char):
                 self.charge = self.charge+1
             if self.frame == 24 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(32,0,64,64,pi/3,16*self.knockbackmodifier+5*(self.charge/100),19*self.damagemodifier,1/200,20*self.stunmodifier+8*(self.charge/100),4,self,boum=1))
+                self.active_hitboxes.append(Hitbox(32,0,64,64,pi/3,16*self.knockbackmodifier+5*(self.charge/100),19*self.damagemodifier,1/200,20*self.stunmodifier+8*(self.charge/100),4,self,boum=1,sound=f"hits and slap/punch{choice(('1','2',''))}.mp3"))
             if self.frame > 45 + self.changeframe: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -301,7 +301,7 @@ class Kebab(Char):
                 self.charge = self.charge+1
             if self.frame == 24 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(32,-48,64,80,pi/2,17*self.knockbackmodifier+5*(self.charge/100),15*self.damagemodifier,1/200,21*self.stunmodifier+8*(self.charge/100),4,self,boum=1))
+                self.active_hitboxes.append(Hitbox(32,-48,64,80,pi/2,17*self.knockbackmodifier+5*(self.charge/100),15*self.damagemodifier,1/200,21*self.stunmodifier+8*(self.charge/100),4,self,boum=1,sound=f"hits and slap/punch{choice(('1','2',''))}.mp3"))
             if self.frame > 40 + self.changeframe: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -320,7 +320,7 @@ class Kebab(Char):
 
             if self.frame == 24 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(50,0,64,64,-pi/2,22*self.knockbackmodifier+5*(self.charge/100),17*self.damagemodifier,1/200,18*self.stunmodifier+8*(self.charge/100),4,self,boum=1))
+                self.active_hitboxes.append(Hitbox(50,0,64,64,-pi/2,22*self.knockbackmodifier+5*(self.charge/100),17*self.damagemodifier,1/200,18*self.stunmodifier+8*(self.charge/100),4,self,boum=1,sound=f"hits and slap/punch{choice(('1','2',''))}.mp3"))
             if self.frame > 40 + self.changeframe: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -330,7 +330,7 @@ class Kebab(Char):
                 self.vx = 23*signe(self.direction)
                 self.vy = -10
                 self.fastfall = True
-                self.active_hitboxes.append(Hitbox(0,0,50,50,pi/4,13*self.knockbackmodifier,7*self.damagemodifier,1/220,14*self.stunmodifier,20,self))
+                self.active_hitboxes.append(Hitbox(0,0,50,50,pi/4,abs(self.vx)*0.5*self.knockbackmodifier,7*self.damagemodifier,1/220,14*self.stunmodifier,20,self,sound="hits and slap/cool hit.wav"))
             if self.frame > 5 and self.frame < 18 :
                 self.vx = (23-self.frame)*signe(self.direction)
             if self.frame == 18 :
@@ -422,6 +422,7 @@ class Kebab(Char):
 
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/other hit.mp3")
         self.sauce = str(own.sauce)
         self.sprite = Sauce[self.sauce]
         self.x = own.x
@@ -434,7 +435,7 @@ class Flaque():
         self.knockback = 3*own.knockbackmodifier
         self.damages = 9*own.damagemodifier
         self.stun = 5*own.stunmodifier
-        self.angle = pi/2
+        self.angle = -pi/2
         self.duration = 1000
         self.damages_stacking = 0
         self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))

@@ -14,7 +14,6 @@ class Poissonnier(Char):
                          doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
         self.name = "Poissonnier"
         self.x = x
         self.rect.y = y
@@ -39,6 +38,7 @@ class Poissonnier(Char):
         if self.damages <= 0 :
             self.damagestaken = 0
         if self.overheat > 199 :
+            pygame.mixer.Sound("DATA/Musics/SE/BOOM !!!/Explosion.wav").play()
             self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
             self.overheat = 0
             self.damages += 20
@@ -124,7 +124,7 @@ class Poissonnier(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(50,100,64,32,pi/5,8,6.2,1/256,9,2,self,boum=5,deflect=True,modifier=0.5))
+                self.active_hitboxes.append(Hitbox(50,100,64,32,pi/5,8,6.2,1/256,9,2,self,boum=5,deflect=True,modifier=0.5,sound="hits and slap/hit.wav"))
 
             if self.frame > 20: # 12 frames de lag
                 self.attack = None
@@ -136,31 +136,31 @@ class Poissonnier(Char):
                 if right :
                     self.look_right = True
             if self.frame == 12 :
-                self.active_hitboxes.append(Hitbox(50,50,84,32,pi/10,10,11.1,1/111,11,2,self,boum=5,deflect=True,modifier=1.01))
+                self.active_hitboxes.append(Hitbox(50,50,84,32,pi/10,10,11.1,1/111,11,2,self,boum=5,deflect=True,modifier=1.01,sound="hits and slap/other hit.mp3"))
 
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
 
         if attack == "UpTilt":
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(50,50,48,24,7*pi/11,14,4,1/256,14,2,self,boum=5,deflect=True,modifier=1.3))
+                self.active_hitboxes.append(Hitbox(50,50,48,24,7*pi/11,14,4,1/256,14,2,self,boum=5,deflect=True,modifier=1.3,sound="hits and slap/cool hit.wav"))
             if self.frame == 11 :
-                self.active_hitboxes.append(Hitbox(32,-42,24,24,pi/2,9,6,1/256,12,3,self,boum=3,deflect=True,modifier=0.1))
+                self.active_hitboxes.append(Hitbox(32,-42,24,24,pi/2,9,6,1/256,12,3,self,boum=3,deflect=True,modifier=0.1,sound="hits and slap/other hit.mp3"))
             if self.frame > 11 and self.frame < 15 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].sizex += 24
                     if self.look_right :
                         self.active_hitboxes[-1].relativex -= 24
             if self.frame == 15 :
-                self.active_hitboxes.append(Hitbox(change_left(50,72),50,48,24,4*pi/11,14,4,1/256,14,2,self,boum=5,deflect=True,modifier=1.3))
+                self.active_hitboxes.append(Hitbox(change_left(50,72),50,48,24,4*pi/11,14,4,1/256,14,2,self,boum=5,deflect=True,modifier=1.3,sound="hits and slap/cool hit.wav"))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
             if self.frame == 10 :
-                self.active_hitboxes.append(Hitbox(42,42,64,24,3*pi/4,8,4,1/300,8,2,self,boum=1))
+                self.active_hitboxes.append(Hitbox(42,42,64,24,3*pi/4,8,4,1/300,8,2,self,boum=1,sound="hits and slap/cool hit.wav"))
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(0,-42,48,24,pi/5,14,12,1/200,12,2,self,boum=2))
+                self.active_hitboxes.append(Hitbox(0,-42,48,24,pi/5,14,12,1/200,12,2,self,boum=2,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 25: # 10 frames de lag
                 self.attack = None
@@ -185,7 +185,7 @@ class Poissonnier(Char):
         if attack == "BackAir":
 
             if self.frame == 12 :
-                self.active_hitboxes.append(Hitbox(-64,48,70,16,2*pi/3,18,12,1/256,17,2,self,boum=1))
+                self.active_hitboxes.append(Hitbox(-64,48,70,16,2*pi/3,18,12,1/256,17,2,self,boum=1,sound="lasers/cool lazer.mp3"))
 
             if self.frame > 30: # 18 frames de lag
                 self.attack = None
@@ -197,7 +197,7 @@ class Poissonnier(Char):
 
         if attack == "DownAir":
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(-2,-2,72,12,-pi/3,12,9,1/200,11,8,self))
+                self.active_hitboxes.append(Hitbox(-2,-2,72,12,-pi/3,12,9,1/200,11,8,self,sound="hits and slap/hit.wav"))
             if self.frame > 14 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativey += 30
 
@@ -211,8 +211,10 @@ class Poissonnier(Char):
 
         if attack == "NeutralAir":
             if self.frame == 4 :
+                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/punch2.mp3").play()
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,2,8,0,8,2,self))
             if self.frame == 7 :
+                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/punch2.mp3").play()
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/3,12,12,1/200,14,2,self))
                 self.damages += 0.1
 
@@ -231,7 +233,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 24 :
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(42,42,64,64,pi/4,24+5*(self.charge/100),24.2,1/256,23+5*(self.charge/100),3,self,boum=8))
+                self.active_hitboxes.append(Hitbox(42,42,64,64,pi/4,24+5*(self.charge/100),24.2,1/256,23+5*(self.charge/100),3,self,boum=8,sound="hits and slap/slap.mp3"))
             if self.frame > 55: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -249,7 +251,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 15 :
                 self.vy = -14
-                self.active_hitboxes.append(Hitbox(-2,-30,52,42,pi/2,22+2*(self.charge/100),20.4,1/256,19+8*(self.charge/100),10,self,boum=3))
+                self.active_hitboxes.append(Hitbox(-2,-30,52,42,pi/2,22+2*(self.charge/100),20.4,1/256,19+8*(self.charge/100),10,self,boum=3,sound="hits and slap/cool hit.wav"))
             if self.frame > 15 :
                 self.vy += 1
 
@@ -270,6 +272,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 30 :
                 self.charge = min(self.charge,100)
+                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav").play()
                 self.active_hitboxes.append(Hitbox(10,-82,32,84,pi/9,18+8*(self.charge/100),22.2,1/256,24+9*(self.charge/100),6,self,boum=7,deflect=True,modifier=1.5))
             if self.frame > 30 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativex += 12*signe(self.direction)

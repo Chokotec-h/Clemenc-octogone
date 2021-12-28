@@ -30,6 +30,7 @@ class Millet(Char):
     def special(self,inputs):
         if self.attack is None :
             self.angle_rayon = -pi/300000
+            self.strongfair = False
         if self.strongfair:
             self.superarmor = -1
         else :
@@ -79,6 +80,8 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame > 25 and self.frame < 45:
+                if self.frame == 26 :
+                    pygame.mixer.Sound("DATA/Musics/SE/lasers/laser3.wav").play()
                 self.vy = 0
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
@@ -92,7 +95,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame == 70 :
-                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,25,5,self,False))
+                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,25,5,self,False,sound="BOOM !!!/Cannon.wav"))
             if self.frame > 120 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -130,7 +133,7 @@ class Millet(Char):
 
         if attack == "DownTilt":
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(6),1/200,18,3,self,False))
+                self.active_hitboxes.append(Hitbox(32,64,48,48,-2*pi/5,15,incertitude(6),1/200,18,3,self,False,sound="hits and slap/mini hit.wav"))
             if self.frame > 30: # 14 frames de lag
                 self.attack = None
 
@@ -141,7 +144,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame == 6 :
-                self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,25,3,self,False))
+                self.active_hitboxes.append(Hitbox(48,64,32,32,pi/4,10,incertitude(8),1/250,25,3,self,False,sound="hits and slap/cool hit.wav"))
             if self.frame > 33: # 27 frames de lag
                 self.attack = None
 
@@ -149,7 +152,7 @@ class Millet(Char):
             if self.frame == 8:
                 self.vy = -6
                 angle = pi/2
-                self.active_hitboxes.append(Hitbox(-5,-25,58,58,angle,9,incertitude(10),1/300,20,3,self,False))
+                self.active_hitboxes.append(Hitbox(-5,-25,58,58,angle,9,incertitude(10),1/300,20,3,self,False,sound="hits and slap/punch2.mp3"))
             if self.frame > 25: # 17 Frames de lag
                 self.attack = None
 
@@ -163,7 +166,7 @@ class Millet(Char):
                 self.active_hitboxes.append(Hitbox(24,64,64,16,3*pi/5,10,incertitude(5),0,12,3,self,False))
                 self.active_hitboxes.append(Hitbox(-40,64,64,16,2*pi/5,10,incertitude(5),0,12,3,self,False))
             if self.frame == 15: # 15-23
-                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,12,incertitude(7),1/90,19,8,self,False))
+                self.active_hitboxes.append(Hitbox(8,-64,32,64,pi/2,12,incertitude(7),1/90,19,8,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 45: # 22 frames de lag
                 self.attack = None
@@ -179,11 +182,11 @@ class Millet(Char):
                     self.strongfair = True
                 else :
                     self.strongfair = False
-                    self.active_hitboxes.append(Hitbox(48,32,36,16,pi/4,12,9,1/200,13,3,self))
+                    self.active_hitboxes.append(Hitbox(48,32,36,16,pi/4,12,9,1/200,13,3,self,sound="hits and slap/8bit hit reverse.mp3"))
             if self.frame < 10 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey += 16
             if self.frame == 45:
-                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self,False,boum=30))
+                self.active_hitboxes.append(Hitbox(48,45,16,16,pi/2,3,incertitude(2),1/3,1,3,self,False,boum=30,sound="hits and slap/slap.mp3"))
             if self.frame > 69 or (self.frame > 40 and not self.strongfair): # 24 frames de lag
                 self.attack = None
             
@@ -191,7 +194,7 @@ class Millet(Char):
 
         if attack == "BackAir":
             if self.frame == 10:
-                self.active_hitboxes.append(Hitbox(-48,64,32,32,5*pi/6,8,incertitude(13),1/200,14,5,self,False))
+                self.active_hitboxes.append(Hitbox(-48,64,32,32,5*pi/6,8,incertitude(13),1/200,14,5,self,False,sound="hits and slap/punch.mp3"))
             if self.frame > 25: # 15 frames de lag
                 self.attack = None
 
@@ -206,7 +209,7 @@ class Millet(Char):
                 self.vy = 0
             self.vy *= 1.1
             if self.frame == 17 :
-                self.active_hitboxes.append(Hitbox(-26,64,100,48,-pi/2,15,incertitude(10),1/200,25,4096,self,False))
+                self.active_hitboxes.append(Hitbox(-26,64,100,48,-pi/2,15,incertitude(10),1/200,25,4096,self,False,sound="hits and slap/other hit.mp3"))
             if self.frame == 19 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback = 4
@@ -223,9 +226,9 @@ class Millet(Char):
 
         if attack == "NeutralAir":
             if self.frame == 9 :
-                self.active_hitboxes.append(Hitbox(48,48,32,32,0,0,incertitude(6),0,20,3,self,False))
+                self.active_hitboxes.append(Hitbox(48,48,32,32,2,0,incertitude(6),0,20,3,self,False,sound="hits and slap/punch2.mp3"))
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,12,incertitude(10),1/250,18,3,self,False))
+                self.active_hitboxes.append(Hitbox(48,48,48,48,2*pi/5,12,incertitude(10),1/250,18,3,self,False,sound="hits and slap/punch1.mp3"))
 
             if self.frame > 40: # 26 frames de lag
                 self.attack = None
@@ -243,7 +246,7 @@ class Millet(Char):
             elif self.frame == 22 : # Active on 22-27
                 self.vx = 20*signe(self.direction)
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(48,16,64,64,pi/4,19+12*(self.charge/200),incertitude(20),1/250,22+18*(self.charge/100),5,self,True))
+                self.active_hitboxes.append(Hitbox(48,16,64,64,pi/4,19+12*(self.charge/200),incertitude(20),1/250,22+18*(self.charge/100),5,self,True,sound="hits and slap/punch1.mp3"))
             elif self.frame == 24: # Late hitbox
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].knockback *= 0.5
@@ -277,7 +280,7 @@ class Millet(Char):
 
             elif self.frame == 11 : # Active on 11-13
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-50,-16,64,64,pi/4,13+10*(self.charge/200),13,1/90,15+8*(self.charge/100),5,self,False))
+                self.active_hitboxes.append(Hitbox(-50,-16,64,64,pi/4,13+10*(self.charge/200),13,1/90,15+8*(self.charge/100),5,self,False,sound="hits and slap/punch2.mp3"))
 
             if self.frame > 57: # 44 frames de lag
                 self.attack = None
@@ -295,7 +298,7 @@ class Millet(Char):
                 self.charge = self.charge+1
             elif self.frame == 10 : # Active on 10-16
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(30,60,60,32,pi/6,12+7*(self.charge/200),incertitude(13),1/250,13+8*(self.charge/50),6,self,False))
+                self.active_hitboxes.append(Hitbox(30,60,60,32,pi/6,12+7*(self.charge/200),incertitude(13),1/250,13+8*(self.charge/50),6,self,False,sound="hits and slap/cool hit.wav"))
             
 
             if self.frame > 35: # 19 frames de lag
@@ -306,7 +309,7 @@ class Millet(Char):
             if self.frame == 9 :
                 self.active_hitboxes.append(Hitbox(0,32,64,48,pi/5,9,incertitude(9),1/250,8,15,self,False))
             if self.frame == 24 :
-                self.active_hitboxes.append(Hitbox(48,32,48,48,-2*pi/5,12,incertitude(12),1/150,15,2,self,False))
+                self.active_hitboxes.append(Hitbox(48,32,48,48,-2*pi/5,12,incertitude(12),1/150,15,2,self,False,sound="hits and slap/cool hit.wav"))
             if self.frame < 21 :
                 self.vy = 0
                 if self.grounded :
@@ -343,6 +346,7 @@ class Millet(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own:Millet) -> None:
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/lasers/cool lazer.mp3")
         self.stage = stage
         self.x = x
         self.y = y
@@ -380,7 +384,7 @@ class Rayon():
         self.x = nextx
         self.y = nexty
         self.rect = pygame.Rect(self.x,self.y,5,5)
-        if self.x < -800 or self.x > 800:
+        if self.x < -2000 or self.x > 2000:
             self.duration = 0
 
     def draw(self,window):
@@ -429,6 +433,7 @@ class Fire():
 
 class Sinusoide():
     def __init__(self,x,y,angle,own:Millet) -> None:
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hit.wav")
         self.rect = pygame.Rect(x,y,5,5)
         self.angle = angle
         self.v = 5*signe(own.direction)

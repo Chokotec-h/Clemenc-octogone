@@ -16,7 +16,7 @@ def change_left(x,size):
     return -x-size+48
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1,boum=0) -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1,boum=0,sound="hits and slap/8bit hit.mp3") -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -32,6 +32,7 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/"+sound)
         if not own.look_right :
             self.relativex = change_left(x,sizex)
             self.angle = pi - angle
@@ -596,6 +597,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.parried = True
                         other.attack = None
                         other.lag = min(hitbox.damages*hitbox.knockback/10,9)
+                hitbox.sound.play()
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -633,6 +635,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if self.superarmor != -1 :
                             self.superarmor = max(self.superarmor - projectile.damages,0)
                         self.damages += projectile.damages
+                    try :
+                        projectile.sound.play()
+                    except:
+                        pygame.mixer.Sound("DATA/Musics/SE/hits and slap/8bit hit.mp3").play()
                 else :
                     if self.parry :
                         other.BOUM = 8

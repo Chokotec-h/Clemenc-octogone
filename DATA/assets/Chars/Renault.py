@@ -38,6 +38,7 @@ class Renault(Char):
             if self.frame > 7 and self.frame < 100 :
                 self.vy = -5-self.frame/20
                 if self.frame%8 == 0 :
+                    pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3").play()
                     self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,8+abs(self.vy),3,0,9,4,self,position_relative=True))
             if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -64,6 +65,7 @@ class Renault(Char):
                 self.intangibility = 4
             if self.frame == 40 :
                 self.show = True
+                pygame.mixer.Sound("DATA/Musics/SE/wooshs/other woosh.wav").play()
                 self.active_hitboxes.append(Hitbox(0,0,48,120,pi/2,12,16,1/250,11,2,self,boum=2))
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             if self.frame > 70 : # 30 frames de lag
@@ -82,6 +84,7 @@ class Renault(Char):
                 self.vx = (8+self.frame/10)*signe(self.direction)
                 self.vy = -self.fastfallspeed if self.fastfall else -self.fallspeed
                 if special and self.frame%3 == 0 :
+                    pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav").play()
                     self.active_hitboxes.append(Hitbox(48,12,64,64,0,2,0.8,0,4,2,self,boum=-1))
                 if not special :
                     self.cling = False
@@ -193,9 +196,9 @@ class Renault(Char):
 
         if attack == "DownAir":
             if self.frame == 18 :
-                self.active_hitboxes.append(Hitbox(52,40,52,28,-pi/3,19,26.6,1/200,14,2,self,boum=5))
+                self.active_hitboxes.append(Hitbox(52,40,52,28,-pi/3,19,26.6,1/200,14,2,self,boum=5,sound="hits and slap/slap.mp3"))
             if self.frame == 19 and self.active_hitboxes:
-                self.active_hitboxes.append(Hitbox(52,72,42,42,-pi/2,2,2.6,1/800,2,8,self))
+                self.active_hitboxes.append(Hitbox(52,72,42,42,-pi/2,2,2.6,1/800,2,8,self,sound="hits and slap/punch.mp3"))
             if self.frame > 19 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativex -= self.frame*signe(self.direction)/2
                 self.active_hitboxes[-1].relativey += 30-self.frame
@@ -210,10 +213,13 @@ class Renault(Char):
 
         if attack == "NeutralAir":
             if self.frame > 6 and self.frame < 16 :
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
             if self.frame > 16 and self.frame < 20 :
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
             if self.frame == 22 :
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-44,-8,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag
@@ -234,15 +240,15 @@ class Renault(Char):
             if self.frame == 20 :
                 self.charge = min(100,self.charge)
             if self.frame == 22 :
-                self.active_hitboxes.append(Hitbox(48,48,36,36,pi/2,2,1,0,5,3,self,boum=-2))
+                self.active_hitboxes.append(Hitbox(48,48,36,36,pi/2,2,1,0,5,3,self,boum=-2,sound="hits and slap/cool hit.wav"))
             if self.frame == 25 :
-                self.active_hitboxes.append(Hitbox(72,24,36,36,pi,2,1,0,5,3,self,boum=-2))
+                self.active_hitboxes.append(Hitbox(72,24,36,36,pi,2,1,0,5,3,self,boum=-2,sound="hits and slap/cool hit.wav"))
             if self.frame == 28 :
-                self.active_hitboxes.append(Hitbox(96,48,36,36,-pi/2,2,1,0,5,3,self,boum=-2))
+                self.active_hitboxes.append(Hitbox(96,48,36,36,-pi/2,2,1,0,5,3,self,boum=-2,sound="hits and slap/cool hit.wav"))
             if self.frame == 31 :
-                self.active_hitboxes.append(Hitbox(72,72,36,36,0,2,1,0,5,3,self,boum=-2))
+                self.active_hitboxes.append(Hitbox(72,72,36,36,0,2,1,0,5,3,self,boum=-2,sound="hits and slap/cool hit.wav"))
             if self.frame == 34 :
-                self.active_hitboxes.append(Hitbox(50,34,64,64,pi/6,18+6*(self.charge/100),8,1/200,17+5*(self.charge/100),3,self))
+                self.active_hitboxes.append(Hitbox(50,34,64,64,pi/6,18+6*(self.charge/100),8,1/200,17+5*(self.charge/100),3,self,sound="hits and slap/cool hit.wav"))
             if self.frame > 45: # 30 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -260,7 +266,7 @@ class Renault(Char):
                 self.charge = self.charge+1
             if self.frame == 20 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(54,100,48,22,pi/2,20+8*(self.frame/100),12,1/200,19,5,self))
+                self.active_hitboxes.append(Hitbox(54,100,48,22,pi/2,20+8*(self.frame/100),12,1/200,19,5,self,sound="hits and slap/punch.mp3"))
             if self.frame > 20 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativey -= 20
                 self.active_hitboxes[-1].sizey += 20
@@ -282,10 +288,10 @@ class Renault(Char):
                 self.charge = self.charge+1
             if self.frame > 20 and self.frame < 28 and self.frame%2 == 0 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/2,2,5,0,7,2,self,boum=-1))
+                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/2,2,5,0,7,2,self,boum=-1,sound="hits and slap/cool hit.wav"))
             if self.frame == 30 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/3,20+8*(self.charge/100),8,1/300,18+7*(self.charge/100),2,self,boum=2))
+                self.active_hitboxes.append(Hitbox(52,90,48,48,-pi/3,20+8*(self.charge/100),8,1/300,18+7*(self.charge/100),2,self,boum=2,sound="hits and slap/hitting metal.wav"))
 
             if self.frame > 40: # 23 frames de lag
                 self.attack = None
@@ -373,6 +379,7 @@ class Gear():
         self.damages_stacking = 1/200
         self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Renault/Gear.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav")
     
     def update(self):
         self.duration -= 1
