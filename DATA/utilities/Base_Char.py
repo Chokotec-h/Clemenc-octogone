@@ -122,6 +122,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.double_jump = list()
 
         self.combo = 0
+        self.truecombo = 0
         self.combodamages = 0
 
         self.immune_to_projectiles = []
@@ -158,6 +159,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.active_hitboxes = list()
             return
         if continuer :
+            if not (self.lag or self.hitstun) :
+                self.truecombo = 0
             if self.attack is None :
                 self.lag = max(0,self.lag-1)
             self.hitstun = max(0, self.hitstun-1)
@@ -561,9 +564,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
                 if (not self.parry) and (not self.intangibility): # Parry
-                    if not (self.lag or self.hitstun) :
+                    if self.truecombo == 0:
                         self.combo = 0
                         self.combodamages = 0
+                    self.truecombo += 1
                     self.combo += 1
                     self.combodamages += hitbox.damages
                     if hitbox.position_relative : # Reverse hit
@@ -611,9 +615,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
                 if (not self.parry) and (not self.intangibility) : # Parry
                     self.immune_to_projectiles.append(projectile)
-                    if not (self.lag or self.hitstun) :
+                    if self.truecombo == 0:
                         self.combo = 0
                         self.combodamages = 0
+                    self.truecombo += 1
                     self.combo += 1
                     self.combodamages += projectile.damages
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
