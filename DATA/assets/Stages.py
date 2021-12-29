@@ -2,9 +2,9 @@ import pygame
 from random import randint
 
 # Nom des stages
-stages = ["K201"]
+stages = ["Cour d'honneur","K201"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
-musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/chapelle.mp3","Chapelle",True),("DATA/Musics/BGM/digital_autority.mp3","Salle d'info",True)]
+musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/chapelle.mp3","Cour d'honneur",True),("DATA/Musics/BGM/digital_autority.mp3","Salle d'info",True)]
 
 class Stage():
     def __init__(self,sprite,mainx,mainy,platforms=[]) -> None:
@@ -41,7 +41,7 @@ class MainPlat:
 class Platform():
     def __init__(self,x,y,l,h,color) -> None:
         # Rectangle
-        self.rect = pygame.Rect(x,y,l,h)
+        self.rect = pygame.Rect(x-l//2,y-h//2,l,h)
         self.color = color
 
     def draw(self, window):
@@ -54,3 +54,5 @@ def create_stage(stage):
         return Stage(f"{stage}/K201_plateforme",0,191*1.65)
     if stage == "Pandadrome":
         return Stage(f"{stage}/Pandadrome_plateforme",0,186*1.6)
+    if stage == "Cour d'honneur":
+        return Stage(f"{stage}/Cour d'honneur_plateforme",-6,220*1.65,[(2,186*1.7+8,436,4,(97,87,77)),(2,186*1.7-226,332,4,(97,87,77))])
