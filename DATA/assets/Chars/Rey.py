@@ -3,6 +3,7 @@ import DATA.utilities.Animations as Animations
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi
+from DATA.utilities.Sound_manager import playsound
 
 ##### Rey
 
@@ -37,8 +38,8 @@ class Rey(Char):
                     self.vx -= self.airspeed
                 if right :
                     self.vx += self.airspeed
-                if self.frame%5 == 0 :
-                    pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3").play()
+                if self.frame%10 == 0 :
+                    playsound("DATA/Musics/SE/wooshs/woosh.mp3")
             if self.frame > 51 :
                 self.attack = None
                 self.can_act = True
@@ -67,11 +68,11 @@ class Rey(Char):
         if attack == "DownB":
             if self.frame == 6 :
                 if self.door is None :
-                    pygame.mixer.Sound("DATA/Musics/SE/other/Door-Slam.wav").play()
+                    playsound("DATA/Musics/SE/other/Door-Slam.wav")
                     self.door = Door(self.rect.x,self.rect.y,self)
                     self.projectiles.append(self.door)
                 else :
-                    pygame.mixer.Sound("DATA/Musics/SE/other/Door-Slam.wav").play()
+                    playsound("DATA/Musics/SE/other/Door-Slam.wav")
                     self.door.in_use = True
                     self.x = self.door.x + self.rect.w/2
                     self.rect.y = self.door.y

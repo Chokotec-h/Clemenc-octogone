@@ -4,6 +4,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
+from DATA.utilities.Sound_manager import playsound
 
 ##### Kebab
 saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]

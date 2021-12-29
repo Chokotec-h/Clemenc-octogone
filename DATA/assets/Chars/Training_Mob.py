@@ -1,6 +1,5 @@
 from DATA.utilities.Base_Char import Char
 import pygame
-from math import pi
 
 ##### Training Mob
 

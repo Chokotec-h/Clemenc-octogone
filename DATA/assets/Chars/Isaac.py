@@ -1,6 +1,7 @@
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi, sqrt
+from DATA.utilities.Sound_manager import playsound
 
 ##### Isaac Newton
 

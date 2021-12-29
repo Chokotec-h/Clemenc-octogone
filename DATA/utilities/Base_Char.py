@@ -3,6 +3,7 @@ from math import cos,sin,pi
 from copy import deepcopy
 
 from DATA.utilities.Animations import get_sprite
+from DATA.utilities.Sound_manager import playsound
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
@@ -32,7 +33,7 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/"+sound)
+        self.sound = "DATA/Musics/SE/"+sound
         if not own.look_right :
             self.relativex = change_left(x,sizex)
             self.angle = pi - angle
@@ -76,7 +77,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle() # Groupe de collision (spécial à pygame)
         self.collidegroup.add(self)
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav")  # Son test, peut être modifié via <Personnage>.py
+        self.jumpsound = "DATA/Musics/SE/jump.wav"  # Son test, peut être modifié via <Personnage>.py
 
         self.frame = 0              # Frames écoulées depuis le début de la précédente action
         self.attack = None          # Attaque en cours
@@ -327,7 +328,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.vy = -self.fullhop # il utilise son premier saut
                         else :
                             self.vy = -self.shorthop # il utilise son premier saut
-                        self.jumpsound.play() # joli son
+                        playsound(self.jumpsound) # joli son
 
                     else:  # Si le personnage est en l'air
                         self.fastfall = False  # il cesse de fastfall
@@ -335,7 +336,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.animeframe = 0
                             self.tumble = False
                             self.jumping = True
-                            self.jumpsound.play()  # joli son
+                            playsound(self.jumpsound)  # joli son
                             self.vy = -self.doublejumpheight # il saute
                             self.double_jump.append(Double_Jump(self.rect.x+self.rect.w/2,self.rect.y+self.rect.h/2))
 
@@ -601,7 +602,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.parried = True
                         other.attack = None
                         other.lag = min(hitbox.damages*hitbox.knockback/10,9)
-                hitbox.sound.play()
+                playsound(hitbox.sound)
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
@@ -643,7 +644,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     try :
                         projectile.sound.play()
                     except:
-                        pygame.mixer.Sound("DATA/Musics/SE/hits and slap/8bit hit.mp3").play()
+                        playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
                 else :
                     if self.parry :
                         other.BOUM = 8

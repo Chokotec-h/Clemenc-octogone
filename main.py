@@ -16,6 +16,7 @@ from DATA.utilities.functions import *
 from DATA.utilities.Entry import TextInput
 from commands import *
 from random import randint
+from DATA.utilities.Sound_manager import musicvolume
 
 import time
 
@@ -33,7 +34,7 @@ for j in joysticks:
     j.init()
 
 pygame.mixer.init() # Initialisation du module de musique
-pygame.mixer.music.set_volume(1)
+pygame.mixer.music.set_volume(musicvolume)
 
 ############################################################################################################
 ############################################################################################################

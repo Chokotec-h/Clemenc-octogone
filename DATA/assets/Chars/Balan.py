@@ -1,6 +1,7 @@
 from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
+from DATA.utilities.Sound_manager import playsound
 
 exposant_sprite = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"),(36,36)) for i in range(5)]
 
@@ -102,10 +103,10 @@ class Balan(Char):
         if attack == "Jab":
             self.animation = "jab"
             if self.frame == 3 : # 1er hit frame 3-6
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3")
                 self.active_hitboxes.append(Hitbox(40,36,48,24,3*pi/4,2,0.6,0,10,4,self,True))
             if self.frame == 9 : # 2e hit frame 9-12
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3")
                 self.active_hitboxes.append(Hitbox(20,20,68,48,pi/4,4.5,1.4,1/1000,15,4,self,False))
 
             if self.frame > 22: # 10 frames de lag
@@ -113,7 +114,7 @@ class Balan(Char):
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3")
                 self.active_hitboxes.append(Hitbox(35,80,24,10,2*pi/5,8,3.8,1/200,14,5,self,False))
 
             if self.frame > 20: # 7 frames de lag
@@ -126,10 +127,10 @@ class Balan(Char):
                 if right :
                     self.look_right = True
             if self.frame == 6 : # 1er hit frame 6-12
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 2.mp3")
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/2,2,0.6,0,9,6,self,True))
             if self.frame == 14 : # 2e hit frame 14-22
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3")
                 self.active_hitboxes.append(Hitbox(40,58,24,24,pi/4,6,8,1/150,15,6,self,False))
 
             if self.frame > 30: # 8 frames de lag
@@ -138,7 +139,7 @@ class Balan(Char):
         if attack == "UpTilt":
             self.animation = "uptilt"
             if self.frame == 6 : # Frame 6-14
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 3.mp3")
                 self.active_hitboxes.append(Hitbox(78,-5,-16,16,pi/2,13,8.2,1/250,25,8,self,False))
                 if not self.look_right :
                     self.active_hitboxes[-1].sizex *= -1
@@ -160,7 +161,7 @@ class Balan(Char):
         if attack == "UpAir":
             if self.frame == 5 : # Frame 5-10
                 self.active_hitboxes.append(Hitbox(-1,-10,50,10,pi/2,0,2.5,1/1000,8,5,self,True))
-                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
+                playsound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3")
             if self.frame == 10 : # Frame 10-15
                 self.active_hitboxes.append(Hitbox(15,-20,16,25,pi/3,10,5,1/80,18,5,self,True))
 
@@ -371,7 +372,7 @@ class Balan(Char):
 class Projo_Craie():
     def __init__(self,id,own,stage):
         # Craies de M Balan
-        pygame.mixer.Sound("DATA/Musics/SE/wooshs/mini woosh.wav").play()
+        playsound("DATA/Musics/SE/wooshs/mini woosh.wav")
         self.id = id+1
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_"+["blanche","rouge","bleue","verte","jaune"][id]+".png"),(30,9))
         self.rect = self.sprite.get_rect()
