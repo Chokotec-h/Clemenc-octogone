@@ -424,7 +424,7 @@ class Kebab(Char):
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
         self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/other hit.mp3")
-        self.sauce = str(own.sauce)
+        self.sauce = str(own.current_sauce)
         self.sprite = Sauce[self.sauce]
         self.x = own.x
         self.y = own.rect.y
@@ -441,15 +441,23 @@ class Flaque():
         self.damages_stacking = 0
         self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
     
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
+
     def update(self):
         self.duration -= 1
         self.y += self.vy
         self.x += self.vx
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,self.rect):
             if self.y < self.stage.mainplat.y :
                 self.sprite = Sauce[self.sauce+"f"]
-                self.vy = 0
+                self.vy = -0.1
                 self.vx = 0
             else :
                 self.vx = -self.vx

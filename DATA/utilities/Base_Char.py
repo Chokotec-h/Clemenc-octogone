@@ -428,7 +428,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if rect.colliderect(stage.mainplat.rect):
             return True
         for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+3:
+            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+4:
                 return True
         return False
 
