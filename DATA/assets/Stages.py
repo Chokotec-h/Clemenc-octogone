@@ -50,6 +50,7 @@ class Platform():
         pygame.draw.rect(window,self.color,(pos[0],pos[1],self.rect.w,self.rect.h))
 
 def create_stage(stage):
+    # Le placement des plateformes, c'est du bidouillage 👍
     if stage == "K201":
         return Stage(f"{stage}/K201_plateforme",0,191*1.65)
     if stage == "Pandadrome":
