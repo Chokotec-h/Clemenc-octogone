@@ -16,7 +16,8 @@ from DATA.utilities.functions import *
 from DATA.utilities.Entry import TextInput
 from commands import *
 from random import randint
-from DATA.utilities.Sound_manager import musicvolume
+from DATA.utilities.Sound_manager import musicvolume, playsound,soundvolume
+import DATA.utilities.Sound_manager
 
 import time
 
@@ -34,7 +35,6 @@ for j in joysticks:
     j.init()
 
 pygame.mixer.init() # Initialisation du module de musique
-pygame.mixer.music.set_volume(musicvolume)
 
 ############################################################################################################
 ############################################################################################################
@@ -114,6 +114,8 @@ def main():
 
         pygame.mixer.music.load("DATA/Musics/BGM/intro_2.mp3") # musique de l'écran titre
         pygame.mixer.music.play()
+        global musicvolume
+        global soundvolume
 
 
         ################################################################################################################       
@@ -125,6 +127,8 @@ def main():
 
         # Boucle du programme
         while run:
+            # actualisation du volum
+            pygame.mixer.music.set_volume(musicvolume)
             # gestion de répétition des touches lorsqu'elles sont maintenues (toutes les 10 frames)
             actualize_repeating()
 
@@ -198,7 +202,7 @@ def main():
                     if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "commands"
+                            Menu = "settings"
                             focusedbutton = 0
                             confirm = True
                     Bouton.draw(window)
@@ -215,6 +219,129 @@ def main():
                     Bouton.draw(window)
                     Texte("Pandaball",("arial",45,True,False),(0,0,0),width/2,3*height/4-20).draw(window)
                     Texte("(Entraînement)",("arial",30,True,False),(0,0,0),width/2,3*height/4+20).draw(window)
+
+                ######################################################################################################
+                ##########################################  Menu paramètres  ##########################################
+
+                if Menu == "settings":
+                    # inputs haut et bas pour se déplacer dans le menu
+                    if input_but_no_repeat(3,controls,joysticks,0):
+                        focusedbutton += 1
+                        
+                    if input_but_no_repeat(2,controls,joysticks,0):
+                        focusedbutton -= 1
+                        
+                    focusedbutton = focusedbutton%3
+
+                    # Bouton "Paramètres audio"
+                    Bouton = Button("Paramètres audio",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/3,600,100)
+                    if focusedbutton == 0:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "musics"
+                            oldmusicvolume = musicvolume
+                            oldsoundvolume = soundvolume
+                            focusedbutton = 0
+                            confirm = True
+                    Bouton.draw(window)
+
+                    # Bouton "Controles"
+                    Bouton = Button("Configuration des contrôles",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,2*height/3,600,100)
+                    if focusedbutton == 1:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "commands"
+                            focusedbutton = 0
+                            confirm = True
+                    Bouton.draw(window)
+
+                    # Retour
+                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                    if focusedbutton == 2:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "main"
+                            confirm = True
+                    Bouton.draw(window)
+
+                ######################################################################################################
+                ##########################################  Menu commandes  ##########################################
+
+                if Menu == "musics":
+                    # inputs haut et bas pour se déplacer dans le menu
+                    if input_but_no_repeat(3,controls,joysticks,0):
+                        focusedbutton += 1
+                        
+                    if input_but_no_repeat(2,controls,joysticks,0):
+                        focusedbutton -= 1
+                        
+                    focusedbutton = focusedbutton%4
+
+                    #### Musique 
+
+                    Texte(f"Volume musique : {round(musicvolume*100)}%",("Arial",20,True,False),(0,0,0),width/2,height/3-25).draw(window)
+                    pygame.draw.rect(window,(10,10,10),(width/2-122,height/3,254,4))
+                    Bouton = Button(f"",("Arial",20,False,False),"./DATA/Images/Menu/Slider.png",(musicvolume)*250+width/2-125,height/3,12,12)
+                    if focusedbutton == 0 :
+                        # Compris entre 0.5 et 1
+                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[1] :
+                            musicvolume += 0.01
+                            if musicvolume > 1 :
+                                musicvolume = 1
+                        if convert_inputs(controls[0],joysticks,0)[0] :
+                            musicvolume -= 0.01
+                            if musicvolume < 0 :
+                                musicvolume = 0
+                    Bouton.draw(window)
+
+                    #### Sons 
+
+                    Texte(f"Volume sons : {round(soundvolume*100)}%",("Arial",20,True,False),(0,0,0),width/2,2*height/3-25).draw(window)
+                    pygame.draw.rect(window,(10,10,10),(width/2-122,2*height/3,254,4))
+                    Bouton = Button(f"",("Arial",20,False,False),"./DATA/Images/Menu/Slider.png",(soundvolume)*250+width/2-125,2*height/3,12,12)
+                    if focusedbutton == 1 :
+                        # Compris entre 0.5 et 1
+                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[1] :
+                            soundvolume += 0.01
+                            if soundvolume > 1 :
+                                soundvolume = 1
+                            if round(soundvolume,1) == round(soundvolume,2):
+                                playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                        if convert_inputs(controls[0],joysticks,0)[0] :
+                            soundvolume -= 0.01
+                            if soundvolume < 0 :
+                                soundvolume = 0
+                            if round(soundvolume,1) == round(soundvolume,2):
+                                playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                        # Raffraichissement du volume du module qui exécute les sons
+                        DATA.utilities.Sound_manager.soundvolume = soundvolume
+                    Bouton.draw(window)
+
+                    # Sauvegarder
+                    Bouton = Button("Sauvegarder",("arial",40,True,False),"./DATA/Images/Menu/Button.png",150,750,200,60)
+                    if focusedbutton == 2:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            with open("DATA/utilities/Settings.txt","w") as settings :
+                                settings.write(f"Music :\nmusicvolume={round(musicvolume,2)}\nsoundvolume={round(soundvolume,2)}\n")
+                            Menu = "settings"
+                            confirm = True
+                    Bouton.draw(window)
+
+                    # Annuler
+                    Bouton = Button("Annuler",("arial",40,True,False),"./DATA/Images/Menu/Button.png",150,850,200,60)
+                    if focusedbutton == 3:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            soundvolume = oldsoundvolume
+                            musicvolume = oldmusicvolume
+                            DATA.utilities.Sound_manager.soundvolume = soundvolume
+                            Menu = "settings"
+                            confirm = True
+                    Bouton.draw(window)
+
 
                 ######################################################################################################
                 ##########################################  Menu commandes  ##########################################
@@ -261,7 +388,7 @@ def main():
                         if focusedbutton == -1:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                Menu = "main"
+                                Menu = "settings"
                                 confirm = True
                         Bouton.draw(window)
 
