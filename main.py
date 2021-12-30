@@ -14,7 +14,7 @@ from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
 from DATA.utilities.Entry import TextInput
-from commands import *
+from DATA.utilities.commands import *
 from random import randint
 from DATA.utilities.Sound_manager import musicvolume, playsound,soundvolume
 import DATA.utilities.Sound_manager
@@ -483,7 +483,7 @@ def main():
                         if focusedbutton == -1 and row%2 == 0:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                with open("./commands.py","w") as commandfile :
+                                with open("./DAT/utilities/commands.py","w") as commandfile :
                                     commandfile.write("commands = {\n")
                                     for k in commands :
                                         commandfile.write(f'\t"{k}":{commands[k]},\n')
@@ -499,7 +499,7 @@ def main():
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                                 del commands[commandconfig]
-                                with open("./commands.py","w") as commandfile :
+                                with open("./DATA/utilities/commands.py","w") as commandfile :
                                     commandfile.write("commands = {\n")
                                     for k in commands :
                                         commandfile.write(f'\t"{k}":{commands[k]},\n')
