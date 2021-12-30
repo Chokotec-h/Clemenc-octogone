@@ -129,6 +129,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.immune_to_projectiles = []
         self.die = 0
 
+        self.crouch = 0
+
     def inputattack(self,attack):
         if self.attack != attack :
             self.animeframe = 0
@@ -188,6 +190,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def get_inputs(self, inputs, stage, other, cancel): # Cancel spécial pour reignaud (pour pas avoir à tout copier coller)
         self.direction = 90 if self.look_right else -90
+        if self.crouch > -10 and self.crouch != 0:
+            self.crouch -= 1
+        else :
+            self.crouch = 0
 
         if self.tech > 0 :
             self.tech -= 1
@@ -351,8 +357,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("DownTilt")
                         else :
                             self.inputattack("DownAir")
-                    if special :
+                    elif special :
                         self.inputattack("DownB")
+                    else :
+                        if self.crouch == 0 :
+                            self.crouch = -1
+                        if self.crouch > 1 :
+                            self.crouch = 16
+                else :
+                    if self.crouch <= -1 :
+                        self.crouch = 8
 
                 if not (left or right or up or down):
                     if special :
@@ -428,7 +442,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if rect.colliderect(stage.mainplat.rect):
             return True
         for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+4:
+            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+4 and self.crouch < 9:
                 return True
         return False
 
