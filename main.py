@@ -167,7 +167,10 @@ def main():
         
                 # Musique du menu
                 if not musicplaying and Menu != "title":
-                    pygame.mixer.music.load("DATA/Musics/BGM/menu.mp3")
+                    if Menu == "credits":
+                        pygame.mixer.music.load("DATA/Musics/BGM/intro_.mp3")
+                    else:
+                        pygame.mixer.music.load("DATA/Musics/BGM/menu.mp3")
                     pygame.mixer.music.play(-1)
                     musicplaying = True
                 
@@ -184,10 +187,10 @@ def main():
                     if input_but_no_repeat(2,controls,joysticks,0):
                         focusedbutton -= 1
                         
-                    focusedbutton = focusedbutton%3
+                    focusedbutton = ((focusedbutton+1)%4)-1
 
                     # Bouton "Combat"
-                    Bouton = Button("Combat",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/4,250,100)
+                    Bouton = Button("Combat",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/8,250,100)
                     if focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
@@ -197,19 +200,9 @@ def main():
                             confirm = True
                     Bouton.draw(window)
 
-                    # Bouton "Paramètres"
-                    Bouton = Button("Paramètres",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/2,250,100)
-                    if focusedbutton == 1:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "settings"
-                            focusedbutton = 0
-                            confirm = True
-                    Bouton.draw(window)
-
                     # Bouton "Pandaball"
-                    Bouton = Button("",("arial",45,True,False),"./DATA/Images/Menu/Button.png",width/2,3*height/4,250,100)
-                    if focusedbutton == 2:
+                    Bouton = Button("",("arial",45,True,False),"./DATA/Images/Menu/Button.png",width/2,2*height/8,250,100)
+                    if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "stage"
@@ -217,8 +210,28 @@ def main():
                             focusedbutton = 0
                             confirm = True
                     Bouton.draw(window)
-                    Texte("Pandaball",("arial",45,True,False),(0,0,0),width/2,3*height/4-20).draw(window)
-                    Texte("(Entraînement)",("arial",30,True,False),(0,0,0),width/2,3*height/4+20).draw(window)
+                    Texte("Pandaball",("arial",45,True,False),(0,0,0),width/2,2*height/8-20).draw(window)
+                    Texte("(Entraînement)",("arial",30,True,False),(0,0,0),width/2,2*height/8+20).draw(window)
+
+                    # Bouton "Paramètres"
+                    Bouton = Button("Paramètres",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,3*height/8,250,100)
+                    if focusedbutton == 2:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "settings"
+                            focusedbutton = 0
+                            confirm = True
+                    Bouton.draw(window)
+
+                    # Bouton "Credits"
+                    Bouton = Button("Credits",("arial",40,True,False),"./DATA/Images/Menu/Button.png",width/4,7*height/8,120,80)
+                    if focusedbutton == -1:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "credits"
+                            musicplaying = False
+                            confirm = True
+                    Bouton.draw(window)
 
                 ######################################################################################################
                 ##########################################  Menu paramètres  ##########################################
@@ -821,6 +834,38 @@ def main():
                         musicplaying = False
                         # création du stage
                         stage = Stages.create_stage(actualstages[stage])
+
+                ##########################################  Credits  ##########################################
+
+                if Menu == "credits":
+                    Texte("CREDITS",("Arial",55,True,False),(0,0,0),width/2,50).draw(window)
+
+                    Texte("Game Director :",("Arial",40,True,False),(0,0,0),width/3,height/6,format_="left").draw(window)
+                    Texte("Elsa RUFFIN",("Arial",40,False,False),(0xBC,0x79,0xE4),2*width/3,height/6).draw(window)
+                    
+                    Texte("Graphismes :",("Arial",40,True,False),(0,0,0),width/3,2*height/6,format_="left").draw(window)
+                    Texte("Loic JERMAN",("Arial",40,False,False),(0x50,0x50,0xFF),2*width/3,2*height/6-50).draw(window)
+                    Texte("Elsa RUFFIN",("Arial",40,False,False),(0xBC,0x79,0xE4),2*width/3,2*height/6).draw(window)
+                    Texte("Nicolas VINCENT",("Arial",40,False,False),(0x80,0x80,0x80),2*width/3,2*height/6+50).draw(window)
+                    
+                    Texte("Musiques & Sons :",("Arial",40,True,False),(0,0,0),width/3,3*height/6,format_="left").draw(window)
+                    Texte("Iwan DEROUET",("Arial",40,False,False),(0xF0,0xF0,0x20),2*width/3,3*height/6).draw(window)
+                    
+                    Texte("Programmation :",("Arial",40,True,False),(0,0,0),width/3,4*height/6,format_="left").draw(window)
+                    Texte("Iwan DEROUET",("Arial",40,False,False),(0xF0,0xF0,0x20),2*width/3,4*height/6-25).draw(window)
+                    Texte("Nicolas VINCENT",("Arial",40,False,False),(0x80,0x80,0x80),2*width/3,4*height/6+25).draw(window)
+                    
+                    Texte("Chara-design :",("Arial",40,True,False),(0,0,0),width/3,5*height/6,format_="left").draw(window)
+                    Texte("Elsa RUFFIN",("Arial",40,False,False),(0xBC,0x79,0xE4),2*width/3,5*height/6-25).draw(window)
+                    Texte("Nicolas VINCENT",("Arial",40,False,False),(0x80,0x80,0x80),2*width/3,5*height/6+25).draw(window)
+
+                    # retour
+                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button_focused.png",100,850,100,60)
+                    if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                        Menu = "main"
+                        confirm = True
+                        musicplaying = False
+                    Bouton.draw(window)
 
                 ######################################################################################################
                 ########################################  Ecran de résultats  ########################################
