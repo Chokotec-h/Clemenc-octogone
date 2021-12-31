@@ -369,9 +369,17 @@ class Rayon():
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
     def update(self):
-        if pygame.Rect(self.x,self.y,5,5).colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,5,5)):
             #self.g = -self.g*2
             if self.rect.y < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd

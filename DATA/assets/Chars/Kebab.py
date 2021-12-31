@@ -154,6 +154,11 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "SideB":
+            if self.frame < 3  + self.changeframe:
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 10 :
                 for p in self.projectiles :
                     if isinstance(p,Flaque):

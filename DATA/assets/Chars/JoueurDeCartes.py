@@ -428,9 +428,17 @@ class Blahaj():
             self.stun = 8
         else :
             self.stun = 3
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
     def update(self):
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        if self.touch_stage(self.stage,self.rect):
             self.duration = 0
         self.x += round(self.vx)
         self.y += self.vy

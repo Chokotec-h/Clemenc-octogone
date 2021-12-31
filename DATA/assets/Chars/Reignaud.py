@@ -405,6 +405,14 @@ class Mot_invasif():
         self.damages_stacking = 0
         self.angle = 0
         self.projectile_immune = []
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
 
     def touch_stage(self,stage,rect):

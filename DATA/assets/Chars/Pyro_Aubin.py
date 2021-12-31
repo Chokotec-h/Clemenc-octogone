@@ -646,6 +646,14 @@ class Fusee():
         self.other = other
         self.done = False
     
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
+    
     def update(self):
         self.x += self.vx
         self.y += self.vy
@@ -667,7 +675,7 @@ class Fusee():
             self.frame += 1
             self.vy += 0.005*self.frame
             self.duration -= 1
-        if self.rect.colliderect(self.stage.mainplat.rect) or abs(self.y) > 1000 or abs(self.x) > 1000:
+        if self.touch_stage(self.stage,self.rect) or abs(self.y) > 1000 or abs(self.x) > 1000:
             self.done = True
             self.vy = 0
         if self.rect.colliderect(self.other.rect):
@@ -718,6 +726,14 @@ class Grenade():
         self.stun = 3
         self.knockback = 2
         self.damages_stacking = 1/200
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
     def touch_stage(self,stage,rect):
         if rect.colliderect(stage.mainplat.rect):

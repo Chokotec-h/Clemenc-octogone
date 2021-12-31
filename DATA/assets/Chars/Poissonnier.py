@@ -473,12 +473,20 @@ class Cerveau():
         self.damages_stacking = 0
         self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
     
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
+    
     def update(self):
         self.duration -= 1
         self.y += self.vy
         self.x += self.vx
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,self.rect):
             if self.y < self.stage.mainplat.y :
                 self.vy = 0
                 self.vx = 0
