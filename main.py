@@ -746,9 +746,8 @@ def main():
 
                 # musique
                 if not musicplaying:
-                    pygame.mixer.music.stop()
-                    pygame.mixer.music.load(currentmusic)
-                    pygame.mixer.music.play(-1)
+                    SoundSystem.stop_inst(embient.instance)
+                    embient.instance = SoundSystem.play_sound(currentmusic)
                     musicplaying = True
 
                 # Réinitialisation de l'écran à chaque frame
