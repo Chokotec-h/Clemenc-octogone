@@ -1,11 +1,10 @@
 from ctypes import *
-import time
 
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
 VERSION = 0x00020114
-BANK_FILES = ["Master.bank", "Master.strings.bank", "SFX.bank"]
+BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank"]
 
-BANK_PATH = "FMOD examples/media/"
+BANK_PATH = "DATA/SoundSystem/"
 
 core_dll = WinDLL("FMOD/api/core/lib/x64/fmodL.dll")
 studio_dll = WinDLL("FMOD/api/studio/lib/x64/fmodstudioL.dll")
@@ -23,7 +22,7 @@ def studio_init():
     check_result(core_dll.FMOD_Debug_Initialize(0x00000002, 1, 0, "log.txt".encode('ascii')))
     check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
     # Call System init
-    check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0, 0, c_void_p()))
+    check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0, c_void_p()))
     # Load banks
     for bankname in BANK_FILES:
         print("Loading bank: " + bankname)

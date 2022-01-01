@@ -34,17 +34,11 @@ for j in joysticks:
     j.init()
 
 ##########################################################################################################
-"""
-system = pyfmodex.System()
-system.init()
-intro = system.create_sound("DATA/Musics/BGM/intro_2.mp3")
-menu = system.create_sound("DATA/Musics/BGM/menu.mp3")
-
-soundTrack = intro.play()
-"""
 SoundSystem.studio_init()
 embient = SoundSystem.instance()
-embient.instance = SoundSystem.play_sound("event:/Ambience/Country")
+embient.instance = SoundSystem.play_sound("event:/BGM/clemenc'octogone")
+
+
 ############################################################################################################
 
 
@@ -57,7 +51,6 @@ def main():
     width = 1600
     height = 900
     window = pygame.display.set_mode((width, height))
-
 
     #######################################################"""
     try:
@@ -165,7 +158,7 @@ def main():
                 # Musique du menu
                 if not musicplaying and Menu != "title":
                     SoundSystem.stop_inst(embient.instance)
-                    embient.instance = SoundSystem.play_sound("event:/Ambience/Country")
+                    embient.instance = SoundSystem.play_sound("event:/BGM/menu")
                     musicplaying = True
 
                 if not convert_inputs(controls[0], joysticks, 0)[6]:
@@ -1194,7 +1187,7 @@ def main():
 
             pygame.display.flip()  # actualisation de l'écran
             clock.tick(60)  # FPS
-            SoundSystem.tick_update() #NE PAS TOUCHER !!!!!!
+            SoundSystem.tick_update()  # NE PAS TOUCHER !!!!!!
 
     except:
         traceback.print_exc()
