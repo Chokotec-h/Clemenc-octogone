@@ -150,6 +150,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         return False # cancel, pour Reignaud
 
     def act(self, inputs,stage,other,continuer):
+        print("before",self.animation)
         if self.die > 0 and continuer:
             self.move(stage)
             self.special(inputs)
@@ -185,6 +186,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.charge = 0
         else :
             self.BOUM = max(0,self.BOUM-1)
+        print("after",self.animation)
         
 
 
@@ -256,6 +258,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.lenght_parry = 0
             if shield and (not self.grounded) and (self.can_airdodge) and self.attack is None and self.can_act and not self.jumping:
                 self.animation = "airdodge"
+                self.animeframe = 0
                 self.can_airdodge = False
                 self.airdodge = True
                 self.dodgex = (right-left)*self.airdodgespeed
