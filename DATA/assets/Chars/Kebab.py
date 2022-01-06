@@ -332,6 +332,9 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
+            if self.frame == 2:
+                self.animation = "dashattack"
+                self.animeframe = 0
             if self.frame == 5 :
                 self.vx = 23*signe(self.direction)
                 self.vy = -10
