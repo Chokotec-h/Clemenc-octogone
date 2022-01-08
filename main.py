@@ -34,9 +34,9 @@ for j in joysticks:
     j.init()
 
 ##########################################################################################################
-SoundSystem.studio_init()
+#SoundSystem.studio_init()
 embient = SoundSystem.instance()
-embient.instance = SoundSystem.play_sound("event:/BGM/clemenc'octogone")
+embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
 
 ############################################################################################################
@@ -158,7 +158,7 @@ def main():
                 # Musique du menu
                 if not musicplaying and Menu != "title":
                     SoundSystem.stop_inst(embient.instance)
-                    embient.instance = SoundSystem.play_sound("event:/BGM/menu")
+                    embient.instance = SoundSystem.play_event("event:/BGM/menu")
                     musicplaying = True
 
                 if not convert_inputs(controls[0], joysticks, 0)[6]:
@@ -747,7 +747,7 @@ def main():
                 # musique
                 if not musicplaying:
                     SoundSystem.stop_inst(embient.instance)
-                    embient.instance = SoundSystem.play_sound(currentmusic)
+                    embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
 
                 # Réinitialisation de l'écran à chaque frame
