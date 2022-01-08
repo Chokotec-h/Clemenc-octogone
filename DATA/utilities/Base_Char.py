@@ -1,6 +1,7 @@
 import pygame
 from math import cos,sin,pi
 from copy import deepcopy
+import SoundSystem
 
 from DATA.utilities.Animations import get_sprite
 
@@ -76,7 +77,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle() # Groupe de collision (spécial à pygame)
         self.collidegroup.add(self)
-        self.jumpsound = SoundSystem.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
+        #self.jumpsound = SoundSystem.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
 
         self.frame = 0              # Frames écoulées depuis le début de la précédente action
         self.attack = None          # Attaque en cours

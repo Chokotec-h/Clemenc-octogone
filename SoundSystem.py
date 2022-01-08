@@ -16,20 +16,6 @@ def check_result(r):
         print("ERROR: Got FMOD_RESULT {0}".format(r))
 
 
-print("Initializing FMOD Studio")
-# Write debug log to file
-check_result(core_dll.FMOD_Debug_Initialize(0x00000002, 1, 0, "log.txt".encode('ascii')))
-check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
-# Call System init
-check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0, c_void_p()))
-# Load banks
-for bankname in BANK_FILES:
-    print("Loading bank: " + bankname)
-    bank = c_void_p()
-    temp = BANK_PATH + bankname
-    check_result(studio_dll.FMOD_Studio_System_LoadBankFile(studio_sys, temp.encode('ascii'), 0, byref(bank)))
-
-"""
 def studio_init():
     print("Initializing FMOD Studio")
     # Write debug log to file
@@ -43,7 +29,6 @@ def studio_init():
         bank = c_void_p()
         temp = BANK_PATH + bankname
         check_result(studio_dll.FMOD_Studio_System_LoadBankFile(studio_sys, temp.encode('ascii'), 0, byref(bank)))
-"""
 
 
 def play_event(soundname: str) -> c_void_p:

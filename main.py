@@ -36,7 +36,7 @@ for j in joysticks:
     j.init()
 
 ##########################################################################################################
-#SoundSystem.studio_init()
+SoundSystem.studio_init()
 embient = SoundSystem.instance()
 embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
@@ -162,11 +162,12 @@ def main():
                 # Musique du menu
                 if not musicplaying and Menu != "title":
                     if Menu == "credits":
-                        pygame.mixer.music.load("DATA/Musics/BGM/intro_.mp3")
+                        SoundSystem.stop_inst(embient.instance)
+                        embient.instance = SoundSystem.play_event("event:/BGM/intro")
                     else:
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
-                    pygame.mixer.music.play(-1)
+                    #pygame.mixer.music.play(-1)
                     musicplaying = True
                 
                 if not convert_inputs(controls[0],joysticks,0)[6]:
@@ -1227,6 +1228,7 @@ def main():
             ######################################################################################################
 
             pygame.display.flip() # actualisation de l'écran
+            SoundSystem.tick_update()
             clock.tick(60)  # FPS
 
 
