@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi,cos,sin,asin, sqrt
 import DATA.utilities.Animations as Animations
+from DATA.utilities.Sound_manager import playsound
 
 def incertitude(x):
     return x + randint(round(-x/(2*sqrt(3)))*10,round(x/(2*sqrt(3)))*10)/10
@@ -81,7 +82,7 @@ class Millet(Char):
                     self.look_right = True
             if self.frame > 25 and self.frame < 45:
                 if self.frame == 26 :
-                    pygame.mixer.Sound("DATA/Musics/SE/lasers/laser3.wav").play()
+                    playsound("DATA/Musics/SE/lasers/laser3.wav")
                 self.vy = 0
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
@@ -368,9 +369,17 @@ class Rayon():
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
     def update(self):
-        if pygame.Rect(self.x,self.y,5,5).colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,5,5)):
             #self.g = -self.g*2
             if self.rect.y < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd

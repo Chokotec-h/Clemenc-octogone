@@ -74,9 +74,10 @@ Kebab = {
     "idle":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,2,12,12),(16,1,12,13),(30,2,12,12),(44,3,12,11),(58,2,12,12),),6,True),
     "walk":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(30,2,12,12),(43,2,12,12),(57,2,12,12),(70,2,12,12)),8,True),
     "run":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(43,2,12,12),(57,2,12,12)),10,True),
-    "jump":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,0,12,15),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Jump.png",((2,3,12,11),(16,1,12,14),(30,1,12,14),(44,1,12,11),(57,3,12,11)),10,False),
+    "fall":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Jump.png",((57,3,12,11),),1,False),
+    "airdodge":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Airdodge.png",((2,3,12,11),(16,1,12,14),(29,1,12,14),(43,1,9,14),(54,1,12,14),(67,1,12,14),(80,1,12,14),(93,1,9,14),(104,1,12,14),(117,1,12,14)),20,False),
+    "dashattack":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_DashAttack.png",((2,2,12,12),(16,1,12,14),(29,1,12,14),(42,2,14,12),(57,2,14,12),(72,2,14,12),(89,1,12,14),(102,1,12,14),(116,2,14,12),(131,2,12,12)),12,True),
 
 }
 
