@@ -5,8 +5,8 @@ from random import randint
 stages = ["K201"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [("event:/BGM/let's_fight_!", "K201", True), ("event:/BGM/Panda_Ball", "Pandadrome", True),
-          ("DATA/Musics/BGM/chapelle.mp3", "Chapelle", True),
-          ("DATA/Musics/BGM/digital_autority.mp3", "Salle d'info", True)]
+          ("event:/chapelle", "Chapelle", True),
+          ("event:/digital_autority", "Salle d'info", True)]
 
 
 class Stage():

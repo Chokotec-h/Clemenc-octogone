@@ -1,6 +1,7 @@
 import pygame
 from math import cos, sin, pi
 from copy import deepcopy
+import SoundSystem
 
 from DATA.utilities.Animations import get_sprite
 
@@ -83,7 +84,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle()  # Groupe de collision (spécial à pygame)
         self.collidegroup.add(self)
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav")  # Son test, peut être modifié via <Personnage>.py
+        self.jumpsound = SoundSystem.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
 
         self.frame = 0  # Frames écoulées depuis le début de la précédente action
         self.attack = None  # Attaque en cours
@@ -254,7 +255,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.parried = False
                     self.lenght_parry = 0
             if shield and (not self.grounded) and (
-            self.can_airdodge) and self.attack is None and self.can_act and not self.jumping:
+                    self.can_airdodge) and self.attack is None and self.can_act and not self.jumping:
                 self.animation = "airdodge"
                 self.can_airdodge = False
                 self.airdodge = True
@@ -269,7 +270,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.hitstun:
                 self.active_hitboxes = list()
             if (self.attack is None or cancel) and not self.lag and not (
-            self.airdodge):  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
+                    self.airdodge):  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if self.grounded:
                     self.animation = "idle"
                 elif self.vy > 0:
@@ -543,7 +544,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         drawing_sprite, size, self.animeframe = get_sprite(self.animation, self.name, self.animeframe, self.look_right)
 
         drawing_sprite = pygame.transform.scale(drawing_sprite, (
-        round(drawing_sprite.get_size()[0] * 4), round(drawing_sprite.get_size()[1] * 4)))  # Rescale
+            round(drawing_sprite.get_size()[0] * 4), round(drawing_sprite.get_size()[1] * 4)))  # Rescale
         size = [size[0] * 4, size[1] * 4, size[2] * 4, size[3] * 4]  # Rescale
         pos = [self.x + 800 - size[2] / 2, self.rect.y - size[3] + self.rect.h + 449]  # Position réelle du sprite
         if self.show:
@@ -586,11 +587,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if self.superarmor < knockback or self.superarmor == -1:
                         self.BOUM = hitbox.boum + 4
                         self.vx = (hitbox.knockback) * cos(hitbox.angle) * (
-                                    self.damages * hitbox.damages_stacking + 1)  # éjection x
+                                self.damages * hitbox.damages_stacking + 1)  # éjection x
                         self.vy = -(hitbox.knockback) * sin(hitbox.angle) * (
-                                    self.damages * hitbox.damages_stacking + 1)  # éjection y
+                                self.damages * hitbox.damages_stacking + 1)  # éjection y
                         self.hitstun = hitbox.stun * (self.damages * hitbox.damages_stacking + 2) - (
-                                    self.superarmor / 5)  # hitstun
+                                self.superarmor / 5)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages  # dommages
                         self.rect.y -= 1
@@ -633,9 +634,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     knockback = projectile.knockback * (self.damages * projectile.damages_stacking + 1)
                     if self.superarmor < knockback or self.superarmor == -1:
                         self.vx = projectile.knockback * cos(projectile.angle) * (
-                                    self.damages * projectile.damages_stacking + 1)  # éjection x
+                                self.damages * projectile.damages_stacking + 1)  # éjection x
                         self.vy = -projectile.knockback * sin(projectile.angle) * (
-                                    self.damages * projectile.damages_stacking + 1)  # éjection y
+                                self.damages * projectile.damages_stacking + 1)  # éjection y
                         self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += projectile.damages  # dommages
