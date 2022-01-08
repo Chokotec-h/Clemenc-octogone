@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi, cos, sin, sqrt
 from random import randint
+from DATA.utilities.Sound_manager import playsound
 
 ##### Joueur de Air-Président
 
@@ -67,7 +68,7 @@ class Air_President(Char):
             if self.frame == 6: # Hitbox frame 6-15
                 self.vx = 0
                 self.vy = -24
-                pygame.mixer.Sound(f"DATA/Musics/SE/boings/boing ({randint(2,8)}).mp3").play()
+                playsound(f"DATA/Musics/SE/boings/boing ({randint(2,8)}).mp3")
                 self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False,sound="boings/boing (1).wav"))
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
@@ -343,7 +344,7 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
-            pygame.mixer.Sound("DATA/Musics/SE/other/Its-pronounced-rules.mp3").play()
+            playsound("DATA/Musics/SE/other/Its-pronounced-rules.mp3")
             self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/cool hit.wav")
             self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
             self.knockback = 1000
@@ -381,7 +382,7 @@ class Carte():
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
-        pygame.mixer.Sound("DATA/Musics/SE/wooshs/encore un woosh.mp3").play()
+        playsound("DATA/Musics/SE/wooshs/encore un woosh.mp3")
         self.sound = pygame.mixer.Sound("DATA/Musics/SE/boings/boing.mp3")
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
@@ -427,9 +428,17 @@ class Blahaj():
             self.stun = 8
         else :
             self.stun = 3
+    
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
 
     def update(self):
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        if self.touch_stage(self.stage,self.rect):
             self.duration = 0
         self.x += round(self.vx)
         self.y += self.vy

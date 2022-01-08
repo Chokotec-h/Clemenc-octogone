@@ -1,0 +1,3 @@
+Music :
+musicvolume=1
+soundvolume=0.5

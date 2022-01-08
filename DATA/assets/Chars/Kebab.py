@@ -4,6 +4,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
+from DATA.utilities.Sound_manager import playsound
 
 ##### Kebab
 saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
@@ -153,6 +154,11 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "SideB":
+            if self.frame < 3  + self.changeframe:
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
             if self.frame == 10 :
                 for p in self.projectiles :
                     if isinstance(p,Flaque):
@@ -326,6 +332,9 @@ class Kebab(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
+            if self.frame == 2:
+                self.animation = "dashattack"
+                self.animeframe = 0
             if self.frame == 5 :
                 self.vx = 23*signe(self.direction)
                 self.vy = -10
@@ -423,7 +432,7 @@ class Kebab(Char):
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
         self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/other hit.mp3")
-        self.sauce = str(own.sauce)
+        self.sauce = str(own.current_sauce)
         self.sprite = Sauce[self.sauce]
         self.x = own.x
         self.y = own.rect.y
@@ -440,15 +449,23 @@ class Flaque():
         self.damages_stacking = 0
         self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
     
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
+
     def update(self):
         self.duration -= 1
         self.y += self.vy
         self.x += self.vx
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,self.rect):
             if self.y < self.stage.mainplat.y :
                 self.sprite = Sauce[self.sauce+"f"]
-                self.vy = 0
+                self.vy = -0.1
                 self.vx = 0
             else :
                 self.vx = -self.vx

@@ -3,6 +3,7 @@ from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import pi, sin
+from DATA.utilities.Sound_manager import playsound
 
 from DATA.utilities.Interface import Texte
 
@@ -38,7 +39,7 @@ class Poissonnier(Char):
         if self.damages <= 0 :
             self.damagestaken = 0
         if self.overheat > 199 :
-            pygame.mixer.Sound("DATA/Musics/SE/BOOM !!!/Explosion.wav").play()
+            playsound("DATA/Musics/SE/BOOM !!!/Explosion.wav")
             self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
             self.overheat = 0
             self.damages += 20
@@ -211,10 +212,10 @@ class Poissonnier(Char):
 
         if attack == "NeutralAir":
             if self.frame == 4 :
-                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/punch2.mp3").play()
+                playsound("DATA/Musics/SE/hits and slap/punch2.mp3")
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,2,8,0,8,2,self))
             if self.frame == 7 :
-                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/punch2.mp3").play()
+                playsound("DATA/Musics/SE/hits and slap/punch2.mp3")
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/3,12,12,1/200,14,2,self))
                 self.damages += 0.1
 
@@ -272,7 +273,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 30 :
                 self.charge = min(self.charge,100)
-                pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav").play()
+                playsound("DATA/Musics/SE/hits and slap/hitting metal.wav")
                 self.active_hitboxes.append(Hitbox(10,-82,32,84,pi/9,18+8*(self.charge/100),22.2,1/256,24+9*(self.charge/100),6,self,boum=7,deflect=True,modifier=1.5))
             if self.frame > 30 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativex += 12*signe(self.direction)
@@ -472,12 +473,20 @@ class Cerveau():
         self.damages_stacking = 0
         self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
     
+    def touch_stage(self,stage,rect):
+        if rect.colliderect(stage.mainplat.rect):
+            return True
+        for p in stage.plats:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+                return True
+        return False
+    
     def update(self):
         self.duration -= 1
         self.y += self.vy
         self.x += self.vx
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
+        if self.touch_stage(self.stage,self.rect):
             if self.y < self.stage.mainplat.y :
                 self.vy = 0
                 self.vx = 0
