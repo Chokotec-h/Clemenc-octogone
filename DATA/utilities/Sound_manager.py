@@ -1,4 +1,3 @@
-from pygame.mixer import Sound
 
 with open("DATA/utilities/Settings.txt","r") as settings :
     r = settings.read()
