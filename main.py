@@ -28,6 +28,8 @@ import time
 
 pygame.init()  # Initialisation de pygame
 clock = pygame.time.Clock()  # Horloge
+icon = pygame.image.load("DATA/Images/logo.ico")
+pygame.display.set_icon(icon)
 
 pygame.joystick.init()  # Initialisation des manettes
 joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
@@ -195,6 +197,19 @@ def main():
                             focusedbutton = 0
                             confirm = True
                     Bouton.draw(window)
+
+                    # Bouton "Pandaball"
+                    Bouton = Button("",("arial",45,True,False),"./DATA/Images/Menu/Button.png",width/2,2*height/8,250,100)
+                    if focusedbutton == 1:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "stage"
+                            training = True
+                            focusedbutton = 0
+                            confirm = True
+                    Bouton.draw(window)
+                    Texte("Pandaball",("arial",45,True,False),(0,0,0),width/2,2*height/8-20).draw(window)
+                    Texte("(Entraînement)",("arial",30,True,False),(0,0,0),width/2,2*height/8+20).draw(window)
 
                     # Bouton "Paramètres"
                     Bouton = Button("Paramètres",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,3*height/8,250,100)
@@ -838,9 +853,8 @@ def main():
 
                 # musique
                 if not musicplaying :
-                    pygame.mixer.music.stop()
-                    pygame.mixer.music.load(currentmusic)
-                    pygame.mixer.music.play(-1)
+                    SoundSystem.stop_inst(embient.instance)
+                    embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
 
                 # Réinitialisation de l'écran à chaque frame

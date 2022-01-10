@@ -17,7 +17,7 @@ def change_left(x,size):
     return -x-size+48
 
 class Hitbox():
-    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1,boum=0,sound="hits and slap/8bit hit.mp3") -> None:
+    def __init__(self,x,y,sizex,sizey,angle,knockback,damages,damage_stacking,stun,duration,own,position_relative=False,deflect=False,modifier=1,boum=0,sound="/SE/hits and slap/8bit hit") -> None:
         self.relativex = x # Position relative 
         self.relativey = y
         self.sizex = sizex
@@ -33,7 +33,7 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
-        self.sound = "DATA/Musics/SE/"+sound
+        self.sound = SoundSystem.instance("event:"+sound)
         if not own.look_right :
             self.relativex = change_left(x,sizex)
             self.angle = pi - angle
@@ -149,7 +149,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         return False # cancel, pour Reignaud
 
     def act(self, inputs,stage,other,continuer):
-        print("before",self.animation)
         if self.die > 0 and continuer:
             self.move(stage)
             self.special(inputs)
@@ -185,7 +184,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.charge = 0
         else :
             self.BOUM = max(0,self.BOUM-1)
-        print("after",self.animation)
 
 
 
@@ -605,7 +603,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.parried = True
                         other.attack = None
                         other.lag = min(hitbox.damages*hitbox.knockback/10,9)
-                playsound(hitbox.sound)
+                hitbox.sound.play()
                 del other.active_hitboxes[i] # Supprime la hitbox
                 return
         for i,projectile in enumerate(other.projectiles): # Détection des projectiles
