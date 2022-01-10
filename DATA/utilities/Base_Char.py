@@ -184,7 +184,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.charge = 0
         else :
             self.BOUM = max(0,self.BOUM-1)
-
+        
 
 
     def get_inputs(self, inputs, stage, other, cancel): # Cancel spécial pour reignaud (pour pas avoir à tout copier coller)
@@ -578,7 +578,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback*(self.damages*hitbox.damages_stacking+1)
-                    if self.superarmor < knockback or self.superarmor == -1 :
+                    if self.superarmor < knockback and not(self.superarmor == -1) :
                         self.BOUM = hitbox.boum+4
                         self.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
                         self.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
@@ -623,7 +623,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.combo += 1
                     self.combodamages += projectile.damages
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
-                    if self.superarmor < knockback or self.superarmor == -1 :
+
+                    if self.superarmor < knockback and (self.superarmor == -1) :
                         self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                         self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                         self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
@@ -641,16 +642,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if self.superarmor != -1 :
                             self.superarmor = max(self.superarmor - projectile.damages,0)
                         self.damages += projectile.damages
-                    try :
-                        projectile.sound.play()
-                    except:
-                        playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                    #try :
+                    #    projectile.sound.play()
+                    #except:
+                    #    playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
                 else :
                     if self.parry :
                         other.BOUM = 8
-                        self.projectiles.append(projectile)
+                        self.projectiles.append(projectile) # Renvoie le projectile
                         projectile.deflect(1)
-                        del other.projectiles[i] # Supprime la hitbox
+                        del other.projectiles[i]
                         self.parried = True
                         other.attack = None
                         other.lag = min(projectile.damages*projectile.knockback/10,9)

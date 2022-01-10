@@ -2,7 +2,6 @@ from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import atan, degrees, floor, pi, sqrt, sin, cos
-from DATA.utilities.Sound_manager import playsound
 
 from DATA.utilities.Interface import Texte
 
@@ -155,7 +154,7 @@ class Pyro_Aubin(Char):
                     else :
                         v = 5*signe(self.direction)
                     self.projectiles.append(Grenade(self,other,v,stage))
-                    playsound("DATA/Musics/SE/wooshs/mini woosh.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/wooshs/mini woosh.wav").play()
                     self.explosifs -= 6
             if self.frame > 20 : # 15 frames de lag
                 self.attack = None
@@ -258,7 +257,7 @@ class Pyro_Aubin(Char):
             if self.frame == 8 :
                 if self.explosifs > 5 :
                     self.explosifs -= 5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.vx = -signe(self.direction)*10
                     self.active_hitboxes.append(Hitbox(48,60,60,60,pi/6,15,13,1/150,17,2,self,boum=2))
                 else :
@@ -298,7 +297,7 @@ class Pyro_Aubin(Char):
             if self.frame == 8 :
                 if self.explosifs > 5:
                     self.explosifs -= 5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(50,30,64,64,-pi/6,15,15,1/180,15,2,self))
                     self.vy -= 8
                 else :
@@ -316,7 +315,7 @@ class Pyro_Aubin(Char):
             if self.frame == 12 :
                 if self.explosifs > 4 :
                     self.explosifs -= 4
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(-60,30,60,60,pi-0.01,13,15,1/130,12,2,self,boum=2))
                     self.vx += signe(self.direction)*15
 
@@ -351,34 +350,34 @@ class Pyro_Aubin(Char):
             if self.frame == 4 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(48,30,60,60,pi/2,12,11,1/100,20,2,self))
                 else :
                     self.active_hitboxes.append(Hitbox(48,48,32,32,pi/2,10,9,1/250,10,2,self))
             if self.frame == 8 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(12,130,60,60,pi/2,12,11,1/100,20,2,self))
             if self.frame == 12 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(-72,130,60,60,pi/2,12,11,1/100,20,2,self))
             if self.frame == 16 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(change_left(48,60),30,60,60,pi/2,12,11,1/100,20,2,self))
             if self.frame == 20 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(-72,-70,60,60,pi/2,12,11,1/100,20,2,self))
             if self.frame == 24 :
                 if self.explosifs > 0.5 :
                     self.explosifs -= 0.5
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.active_hitboxes.append(Hitbox(12,-70,60,60,pi/2,12,11,1/100,20,2,self))
 
             if self.frame > 40: # 17 frames de lag
@@ -398,7 +397,7 @@ class Pyro_Aubin(Char):
                 self.charge = min(100,self.charge,self.explosifs*12)
                 if self.explosifs > 5:
                     self.explosifs -= max(self.charge/12,3)
-                    playsound("DATA/Musics/SE/BOOM !!!/Cannon.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/BOOM !!!/Cannon.wav").play()
                     self.projectiles.append(Boulet(self.charge,stage,self))
                 self.vx = -signe(self.direction)*self.charge*0.5
                 self.active_hitboxes.append(Hitbox(-10,0,24,120,5*pi/6,8,3,1/200,8,self.charge/10,self))
@@ -445,7 +444,7 @@ class Pyro_Aubin(Char):
                 self.charge = min(self.charge,100)
                 if self.explosifs > 7 :
                     self.explosifs -= 7
-                    playsound("DATA/Musics/SE/other/gun shot.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                     self.vy = -10
                     self.active_hitboxes.append(Hitbox(-32,80,110,42,pi/6,15+9*(self.charge/100),18,1/150,19+9*(self.charge/100),2,self,position_relative=True,boum=3))
                 else :
@@ -463,7 +462,7 @@ class Pyro_Aubin(Char):
                 if attack_button and self.explosifs > 1 :
                     self.explosifs -= 0.1
                     if self.hold%8 == 0:
-                        playsound("DATA/Musics/SE/other/gun shot.wav")
+                        pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
                         self.vx += 10*self.dashspeed*signe(self.direction)
                         self.active_hitboxes.append(Hitbox(-10,0,40,100,3*pi/4,12,7,1/200,14,8,self))
                     self.hold += 1
@@ -539,7 +538,7 @@ class Pyro_Aubin(Char):
                     print("boum")
                     self.konami = []
                     self.konamiadd = False
-                    playsound("DATA/Musics/SE/BOOM !!!/Explosion.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/BOOM !!!/Explosion.wav").play()
                     self.active_hitboxes.append(Hitbox(-140,-100,328,320,pi/4,35,120,1/100,40,10,self,True,sound="other/gun shot.wav"))
                 else :
                     self.konami = []
@@ -767,7 +766,7 @@ class Grenade():
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
-        playsound("DATA/Musics/SE/other/gun shot.wav")
+        pygame.mixer.Sound("DATA/Musics/SE/other/gun shot.wav").play()
         self.x = x
         self.y = y
         self.damages = damages

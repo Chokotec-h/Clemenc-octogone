@@ -1,7 +1,6 @@
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
 import pygame
 from math import exp, pi
-from DATA.utilities.Sound_manager import playsound
 
 ##### Copier
 
@@ -39,7 +38,7 @@ class Renault(Char):
             if self.frame > 7 and self.frame < 100 :
                 self.vy = -5-self.frame/20
                 if self.frame%8 == 0 :
-                    playsound("DATA/Musics/SE/wooshs/woosh.mp3")
+                    pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3").play()
                     self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,8+abs(self.vy),3,0,9,4,self,position_relative=True))
             if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -66,7 +65,7 @@ class Renault(Char):
                 self.intangibility = 4
             if self.frame == 40 :
                 self.show = True
-                playsound("DATA/Musics/SE/wooshs/other woosh.wav")
+                pygame.mixer.Sound("DATA/Musics/SE/wooshs/other woosh.wav").play()
                 self.active_hitboxes.append(Hitbox(0,0,48,120,pi/2,12,16,1/250,11,2,self,boum=2))
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             if self.frame > 70 : # 30 frames de lag
@@ -85,7 +84,7 @@ class Renault(Char):
                 self.vx = (8+self.frame/10)*signe(self.direction)
                 self.vy = -self.fastfallspeed if self.fastfall else -self.fallspeed
                 if special and self.frame%3 == 0 :
-                    playsound("DATA/Musics/SE/hits and slap/hitting metal.wav")
+                    pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav").play()
                     self.active_hitboxes.append(Hitbox(48,12,64,64,0,2,0.8,0,4,2,self,boum=-1))
                 if not special :
                     self.cling = False
@@ -214,13 +213,13 @@ class Renault(Char):
 
         if attack == "NeutralAir":
             if self.frame > 6 and self.frame < 16 :
-                playsound("DATA/Musics/SE/other/electric cable sound.wav")
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
             if self.frame > 16 and self.frame < 20 :
-                playsound("DATA/Musics/SE/other/electric cable sound.wav")
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
             if self.frame == 22 :
-                playsound("DATA/Musics/SE/other/electric cable sound.wav")
+                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-44,-8,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag

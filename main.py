@@ -17,7 +17,7 @@ from DATA.utilities.functions import *
 from DATA.utilities.Entry import TextInput
 from DATA.utilities.commands import *
 from random import randint
-from DATA.utilities.Sound_manager import musicvolume, playsound,soundvolume
+from DATA.utilities.Sound_manager import musicvolume,soundvolume
 import DATA.utilities.Sound_manager
 
 import time
@@ -313,14 +313,14 @@ def main():
                             soundvolume += 0.01
                             if soundvolume > 1 :
                                 soundvolume = 1
-                            if round(soundvolume,1) == round(soundvolume,2):
-                                playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                            #if round(soundvolume,1) == round(soundvolume,2):
+                                #playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
                         if convert_inputs(controls[0],joysticks,0)[0] :
                             soundvolume -= 0.01
                             if soundvolume < 0 :
                                 soundvolume = 0
-                            if round(soundvolume,1) == round(soundvolume,2):
-                                playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                            #if round(soundvolume,1) == round(soundvolume,2):
+                                #playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
                         # Raffraichissement du volume du module qui exécute les sons
                         DATA.utilities.Sound_manager.soundvolume = soundvolume
                     Bouton.draw(window)

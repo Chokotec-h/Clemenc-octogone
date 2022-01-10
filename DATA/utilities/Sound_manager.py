@@ -5,8 +5,3 @@ with open("DATA/utilities/Settings.txt","r") as settings :
     r = r.split("=")
     musicvolume = float(r[1].split("\n")[0])
     soundvolume = float(r[2].split("\n")[0])
-
-def playsound(sound):
-    play = Sound(sound)
-    play.set_volume(soundvolume)
-    play.play()

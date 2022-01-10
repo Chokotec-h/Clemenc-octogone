@@ -160,7 +160,7 @@ class Balan(Char):
         if attack == "UpAir":
             if self.frame == 5:  # Frame 5-10
                 self.active_hitboxes.append(Hitbox(-1, -10, 50, 10, pi / 2, 0, 2.5, 1 / 1000, 8, 5, self, True))
-                playsound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3")
+                pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
             if self.frame == 10:  # Frame 10-15
                 self.active_hitboxes.append(Hitbox(15, -20, 16, 25, pi / 3, 10, 5, 1 / 80, 18, 5, self, True))
 
