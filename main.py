@@ -45,7 +45,6 @@ embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 pygame.mixer.init() # Initialisation du module de musique
 ############################################################################################################
 
-
 def main():
     """"""""""""""""""""""""""""""""""""
     """""""""Progamme Principal"""""""""
@@ -60,15 +59,10 @@ def main():
     # test de music et de bruitages
 
     try:
+        controls = reset_commands(joysticks,commands)
         
         # Initialisation des contrôles
         run = True
-        if len(joysticks) > 1 :
-            controls = [commands["Menu"],commands["Menu"]]
-        elif len(joysticks) > 0 :
-            controls = [commands["Menu"],commands["DefaultKeyboard"]]
-        else :
-            controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
 
         ################################################################################################################
 
@@ -138,15 +132,16 @@ def main():
                 Texte("1.0.0 beta",("Arial",15,True,True),(0,0,0),100,64,format_="left").draw(window)
                 
                 key = "A" if controls[0] == commands["Menu"] else "Espace"
-                Texte(f"Appuyez sur {key}",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
-                #window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/logo.png"),(512,512)),(width/2-256,height/2-256-64))
-                window.blit(titleanimation[titleframe//2],(width/2-256,height/2-256-64))
+                if titleframe % 60 < 30 : # Clignotement toutes les demi-secondes
+                    Texte(f"Appuyez sur {key}",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
+
+                window.blit(titleanimation[round(min(titleframe,54)/1.5)],(width/2-256,height/2-256-64))
                 Texte("OCTOGONE",("Comic",128,True,False),(40,40,40),width/2+5,height/2 + 256+5).draw(window)
                 Texte("OCTOGONE",("Comic",128,True,False),(128,0,128),width/2,height/2 + 256).draw(window)
                 if convert_inputs(controls[0],joysticks,0)[6] :
                     confirm = True
                     Menu = "main"
-                titleframe = min(titleframe+1,72)
+                titleframe += 1
 
             ###################################################################################################
 
@@ -494,7 +489,7 @@ def main():
                         if focusedbutton == -1 and row%2 == 0:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                with open("./DAT/utilities/commands.py","w") as commandfile :
+                                with open("./DATA/utilities/commands.py","w") as commandfile :
                                     commandfile.write("commands = {\n")
                                     for k in commands :
                                         commandfile.write(f'\t"{k}":{commands[k]},\n')
@@ -838,12 +833,7 @@ def main():
 
                 if Menu == "results":
                     # réinitialisation des contrôles
-                    if len(joysticks) > 1 :
-                        controls = [commands["Menu"],commands["Menu"]]
-                    elif len(joysticks) > 0 :
-                        controls = [commands["Menu"],commands["DefaultKeyboard"]]
-                    else :
-                        controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
+                    controls = reset_commands(joysticks,commands)
                     Menu = "stage"
         
             ######################################################################################################
@@ -1050,12 +1040,7 @@ def main():
                                     musicplaying = False
                                     stage = 0
                                     # reinitialisation des controles
-                                    if len(joysticks) > 1 :
-                                        controls = [commands["Menu"],commands["Menu"]]
-                                    elif len(joysticks) > 0 :
-                                        controls = [commands["Menu"],commands["DefaultKeyboard"]]
-                                    else :
-                                        controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
+                                    controls = reset_commands(joysticks,commands)
                                     clock.tick(10)
                             Bouton.draw(window)
 

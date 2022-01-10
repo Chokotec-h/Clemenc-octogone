@@ -60,6 +60,35 @@ def get_controler_input(events,joysticks):
         return controls
 
 
+def reset_commands(joysticks,commands):
+    if len(joysticks) > 1 :
+        controls = [commands["Menu"],commands["Menu"]]
+        try :
+            controls[0][-2] = [['Button', 9]]
+            controls[0][-1] = [['Button', 10]]
+            convert_inputs(controls[0],joysticks,0)
+        except :
+            print("coucou")
+            controls[0] = commands["Menu"]
+        try :
+            controls[1][-2] = [['Button', 9]]
+            controls[1][-1] = [['Button', 10]]
+            convert_inputs(controls[1],joysticks,1)
+        except :
+            controls[0] = commands["Menu"]
+    elif len(joysticks) > 0 :
+        controls = [commands["Menu"],commands["DefaultKeyboard"]]
+        try :
+            controls[0][-2] = [['Button', 9]]
+            controls[0][-1] = [['Button', 10]]
+            convert_inputs(controls[0],joysticks,0)
+        except :
+            print("coucou1")
+            controls[0] = commands["Menu"]
+    else :
+        controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
+    return controls
+
 bouton = pygame.image.load("./DATA/Images/Menu/Controls/Button.png")
 dpad = {
     (0,1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-R.png"),

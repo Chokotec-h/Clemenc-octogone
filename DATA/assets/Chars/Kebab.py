@@ -73,7 +73,7 @@ class Kebab(Char):
         if self.current_sauce == 2 : # Blanche : superarmor
             print("Blanche")
             self.superarmor = -1
-            self.sauces[self.current_sauce] -= 2
+            self.sauces[self.current_sauce] -= 1
 
         if self.current_sauce == 3 : # Moutarde : -5 frames de lag
             print("Moutarde")
@@ -185,6 +185,9 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 1 :
+                self.animation = "dtilt"
+                self.animeframe = 0
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(20,15,40,40,pi/3,6*self.knockbackmodifier,6*self.damagemodifier,1/300,15*self.stunmodifier,10,self))
                 self.vx = 22*signe(self.direction)
@@ -205,6 +208,9 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 6 :
+                self.animation = "utilt"
+                self.animeframe = 0
             if self.frame == 8 :
                 self.active_hitboxes.append(Hitbox(0,0,48,52,pi/2,10*self.knockbackmodifier,9*self.damagemodifier,1/220,14*self.stunmodifier,7,self,sound="hits and slap/punch2.mp3"))
             if self.frame > 8 and self.active_hitboxes :
@@ -228,6 +234,9 @@ class Kebab(Char):
                     self.lag = 9 + self.changeframe # Auto cancel frame 1-2 et 20+, 15 frames de landing lag
 
         if attack == "ForwardAir":
+            if self.frame == 1 :
+                self.animation = "fair"
+                self.animeframe = 0
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(40,30,24,24,pi/6,4*self.knockbackmodifier,5*self.damagemodifier,1/230,12*self.stunmodifier,10,self,sound="hits and slap/mini hit.wav"))
 
