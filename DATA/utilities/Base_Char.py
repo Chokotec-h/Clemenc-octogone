@@ -346,7 +346,19 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             while self.doublejump[i]:  # cette boucle a une fin, qui est testée ligne 70
                                 i += 1
                             self.doublejump[i] = True
-
+                
+                # Traversée des plateformes :
+                # self.crouch == 0 : normal
+                # self.crouch < 0 : appuie une fois sur bas
+                # 0 < self.crouch < 9 : appuie une fois sur bas, puis relâche
+                # self.crouch > 9 : appuie deux fois sur bas, traverse les plateformes
+                if self.crouch < 0 :
+                    self.crouch += 1
+                else :
+                    if self.crouch > 0 :
+                        self.crouch -= 1
+                    if self.crouch == 9 : 
+                        self.crouch = 0
                 if down : # Si on input vers le bas
                     if attack :
                         if self.grounded :
@@ -355,6 +367,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.inputattack("DownAir")
                     elif special :
                         self.inputattack("DownB")
+                    if self.crouch == 0 :
+                        self.crouch = -8
+                    if self.crouch > 0 :
+                         self.crouch = 16
+                else :
+                    if self.crouch < 0 :
+                        self.crouch = 8
 
                 if not (left or right or up or down):
                     if special :
@@ -430,7 +449,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if rect.colliderect(stage.mainplat.rect):
             return True
         for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+4 and self.crouch < 9:
+            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+4 and self.crouch < 9 :
                 return True
         return False
 
@@ -624,7 +643,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.combodamages += projectile.damages
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
 
-                    if self.superarmor < knockback and (self.superarmor == -1) :
+                    if self.superarmor < knockback and not(self.superarmor == -1) :
                         self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
                         self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
                         self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
