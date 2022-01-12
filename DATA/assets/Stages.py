@@ -2,11 +2,11 @@ import pygame
 from random import randint
 
 # Nom des stages
-stages = ["K201"]
+stages = ["Cour d'honneur","K201","Chapelle"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [("event:/BGM/let's_fight_!", "K201", True), ("event:/BGM/Panda_Ball", "Pandadrome", True),
-          ("event:/chapelle", "Chapelle", True),
-          ("event:/digital_autority", "Salle d'info", True)]
+          ("event:/BGM/chapelle", "Chapelle", True),("event:/", "Cour d'honneur", True),
+          ("event:/BGM/digital_autority", "Salle d'info", True)]
 
 #musics = [("DATA/Musics/BGM/lets_fight.mp3","K201",True),("DATA/Musics/BGM/Panda_Ball.mp3","Pandadrome",True),("DATA/Musics/BGM/chapelle.mp3","Cour d'honneur",True),("DATA/Musics/BGM/digital_autority.mp3","Salle d'info",True)]
 
@@ -61,3 +61,5 @@ def create_stage(stage):
         return Stage(f"{stage}/Pandadrome_plateforme",0,186*1.6)
     if stage == "Cour d'honneur":
         return Stage(f"{stage}/Cour d'honneur_plateforme",-6,220*1.65,[(2,186*1.7+8,436,4,(97,87,77)),(2,186*1.7-226,332,4,(97,87,77))])
+    if stage == "Chapelle":
+        return Stage(f"{stage}/Chapelle_plateforme",0,235*1.65,[(-202,376-49*4+21,45*4,12,(67,14,6)),(206,376-49*4+21,45*4,12,(67,14,6)),(0,60,72*4,12,(67,14,6))])
