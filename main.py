@@ -17,8 +17,6 @@ from DATA.utilities.functions import *
 from DATA.utilities.Entry import TextInput
 from DATA.utilities.commands import *
 from random import randint
-from DATA.utilities.Sound_manager import musicvolume,soundvolume
-import DATA.utilities.Sound_manager
 
 import time
 
@@ -28,8 +26,6 @@ import time
 
 pygame.init()  # Initialisation de pygame
 clock = pygame.time.Clock()  # Horloge
-icon = pygame.image.load("DATA/Images/logo.ico")
-pygame.display.set_icon(icon)
 
 pygame.joystick.init()  # Initialisation des manettes
 joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_count())]
@@ -54,13 +50,15 @@ def main():
     width = 1600
     height = 900
     window = pygame.display.set_mode((width, height))
-    
+    icon = pygame.image.load("DATA/Images/logo.ico")
+    pygame.display.set_icon(icon)
+    pygame.display.set_caption("clemenc'octogone", "DATA/Images/logo.ico")
 
     # test de music et de bruitages
 
     try:
         controls = reset_commands(joysticks,commands)
-        
+
         # Initialisation des contrôles
         run = True
 
@@ -130,7 +128,7 @@ def main():
                 pygame.draw.rect(window,(60,60,60),(0,height-128,width,128))
                 # Affichage de la version
                 Texte("1.0.0 beta",("Arial",15,True,True),(0,0,0),100,64,format_="left").draw(window)
-                
+
                 key = "A" if controls[0] == commands["Menu"] else "Espace"
                 if titleframe % 60 < 30 : # Clignotement toutes les demi-secondes
                     Texte(f"Appuyez sur {key}",("Arial black",50,True,False),(0,0,0),width/2,height-64).draw(window)
@@ -155,7 +153,7 @@ def main():
                     run = False
 
             if not Play :
-        
+
                 # Musique du menu
                 if not musicplaying and Menu != "title":
                     if Menu == "credits":
@@ -166,7 +164,7 @@ def main():
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
                     #pygame.mixer.music.play(-1)
                     musicplaying = True
-                
+
                 if not convert_inputs(controls[0],joysticks,0)[6]:
                     confirm = False
 
@@ -176,10 +174,10 @@ def main():
                     # inputs haut et bas pour se déplacer dans le menu
                     if input_but_no_repeat(3,controls,joysticks,0):
                         focusedbutton += 1
-                        
+
                     if input_but_no_repeat(2,controls,joysticks,0):
                         focusedbutton -= 1
-                        
+
                     focusedbutton = ((focusedbutton+1)%4)-1
 
                     # Bouton "Combat"
@@ -322,7 +320,7 @@ def main():
                             #if round(soundvolume,1) == round(soundvolume,2):
                                 #playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
                         # Raffraichissement du volume du module qui exécute les sons
-                        DATA.utilities.Sound_manager.soundvolume = soundvolume
+                        # DATA.utilities.Sound_manager.soundvolume = soundvolume
                     Bouton.draw(window)
 
                     # Sauvegarder
@@ -343,7 +341,7 @@ def main():
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             soundvolume = oldsoundvolume
                             musicvolume = oldmusicvolume
-                            DATA.utilities.Sound_manager.soundvolume = soundvolume
+                            # DATA.utilities.Sound_manager.soundvolume = soundvolume
                             Menu = "settings"
                             confirm = True
                     Bouton.draw(window)
@@ -360,7 +358,7 @@ def main():
                         # Haut/Bas pour se déplacer dans le menu
                         if input_but_no_repeat(3,controls,joysticks,0):
                             focusedbutton += 1
-                            
+
                         if input_but_no_repeat(2,controls,joysticks,0):
                             focusedbutton -= 1
                         # bouclage du bouton
@@ -368,7 +366,7 @@ def main():
                         # liste des commandes
                         for i,n in enumerate(commands) :
                             # on ne paramètre pas les configurations par défaut et du menu
-                            if n not in ["Default","Menu","DefaultKeyboard"]: 
+                            if n not in ["Default","Menu","DefaultKeyboard"]:
                                 Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",width/2,(i+1)*60-180,120,50)
                                 Bouton.resize(Bouton.textobject.width+20,50)
                                 if focusedbutton == i-3:
@@ -420,13 +418,13 @@ def main():
                             # Haut/Bas/Gauche/Droite pour naviguer dans le menu
                             if input_but_no_repeat(3,controls,joysticks,0):
                                 focusedbutton += 1
-                                
+
                             if input_but_no_repeat(2,controls,joysticks,0):
                                 focusedbutton -= 1
-                                
+
                             if input_but_no_repeat(0,controls,joysticks,0):
                                 row -= 1
-                                
+
                             if input_but_no_repeat(1,controls,joysticks,0):
                                 row += 1
                         # Bouclage de la sélection selon la colonne (donc le nombre de boutons dans la colonne)
@@ -442,7 +440,7 @@ def main():
 
                         # Paramétrage des inputs
                         if inputget > -1:
-                            
+
                             # attente de l'input
                             if get_controler_input(events,joysticks) and not confirm:
                                 add = get_controler_input(events,joysticks)
@@ -514,7 +512,7 @@ def main():
                                 commandconfig = None
                                 confirm = True
                         Bouton.draw(window)
-                            
+
                 ######################################################################################################
                 ############################################  Menu stage  ############################################
 
@@ -528,16 +526,16 @@ def main():
                     # haut/bas/gauche/droite pour naviguer dans le menu
                     if input_but_no_repeat(3,controls,joysticks,0):
                         focusedbutton += 9
-                        
+
                     if input_but_no_repeat(2,controls,joysticks,0):
                         focusedbutton -= 9
-                        
+
                     if input_but_no_repeat(0,controls,joysticks,0):
                         focusedbutton -= 1
-                        
+
                     if input_but_no_repeat(1,controls,joysticks,0):
                         focusedbutton += 1
-                        
+
                     # bouclage de la navigation
                     focusedbutton = ((focusedbutton+1)%(len(actualstages)+1))-1
 
@@ -580,7 +578,7 @@ def main():
                         Bouton.draw(window)
                         # image du stage
                         window.blit(pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[i]}/{actualstages[i]}.png"),(90,90)),((i%9*150)+205,(i//9*150)+55))
-                            
+
                 ######################################################################################################
                 #########################################  Menu personnages  #########################################
 
@@ -588,7 +586,7 @@ def main():
                     # retour
                     Bouton = Button("",("arial",30,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
                     # le retour se fait en maintenant le bouton B
-                    if not convert_inputs(controls[0],joysticks,0)[7]: 
+                    if not convert_inputs(controls[0],joysticks,0)[7]:
                         b = 0
                     else :
                         b += 1
@@ -772,7 +770,7 @@ def main():
                     if selected_2 :
                         pygame.draw.rect(window,(230,230,230),(5*width/8,height-120,width/4,30))
                         Texte("PRET",("arial",24,True,False),(0,0,0),3*width/4,height-110,format_="center").draw(window)
-                    
+
                     ## Affichage des noms
                     pygame.draw.rect(window,(200,200,200),(0,height-90,width,90))
                     Texte(str(Chars.charobjects[chars[selectchar_1]](0,0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
@@ -835,7 +833,7 @@ def main():
                     # réinitialisation des contrôles
                     controls = reset_commands(joysticks,commands)
                     Menu = "stage"
-        
+
             ######################################################################################################
             ############################################  En  combat  ############################################
 
@@ -848,7 +846,7 @@ def main():
                     musicplaying = True
 
                 # Réinitialisation de l'écran à chaque frame
-                window.fill((255, 255, 255)) 
+                window.fill((255, 255, 255))
                 window.blit(background,(0,0))
 
                 # Recuperation des touches
@@ -862,7 +860,7 @@ def main():
                 # hors pause, si le jeu continue
                 if game_running < 0 and not pause:
                     pausefrom = time.time() # gestion du chrono en pause
-                    
+
 
                     #### récupération des inputs du joueur 1
 
@@ -904,7 +902,7 @@ def main():
                                 Char_P2.tech = 5
                         else :
                             Char_P2.tech = 0
-                            
+
                         Char_P2.act(traininginputs, stage, Char_P1,not(pause or Char_P1.BOUM or Char_P2.BOUM))
                         ######################################################################################
                     else :
@@ -943,7 +941,7 @@ def main():
                     s.draw(window)
                     if s.duration <= 0:
                         del smoke[i]
-                
+
                 # Affichage du stage
                 stage.draw(window)
 
@@ -955,11 +953,11 @@ def main():
                 Char_P1.damages = float(Char_P1.damages)
                 Texte(f"{str(round(Char_P1.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P1.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P1.damages/5),max(255-Char_P1.damages,0),max(255-Char_P1.damages*2,0)),width//3+len(str(round(Char_P1.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
-                
+
                 Char_P2.damages = float(Char_P2.damages)
                 Texte(f"{str(round(Char_P2.damages,2)).split('.')[0]}  %",("Arial",60,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3,height-50,800,format_="left").draw(window)
                 Texte(f".{str(round(Char_P2.damages,2)).split('.')[1]}",("Arial",30,False,False),(255-(Char_P2.damages/5),max(255-Char_P2.damages,0),max(255-Char_P2.damages*2,0)),2*width//3+len(str(round(Char_P2.damages,2)).split('.')[0])*25,height-30,800,format_="left").draw(window)
-                
+
                 # Affichage des vies
                 if not training :
                     for s in range(stock[0]//5+1): # colonnes de 5 icones à côté des dégâts
@@ -999,7 +997,7 @@ def main():
                             Play = False
                             musicplaying = False
                             Menu = "results"
-                
+
 
                 ############################################ Interface Entraînement ############################################
 
@@ -1023,10 +1021,10 @@ def main():
                             focusedbutton = (focusedbutton+1)%10-1
                             if input_but_no_repeat(2,controls,joysticks,0):
                                 focusedbutton -= 1
-                                
+
                             if input_but_no_repeat(3,controls,joysticks,0):
                                 focusedbutton += 1
-                                
+
                             # Quitter
                             Bouton = Button(f"Quitter",("Arial",20,False,False),"./DATA/Images/Menu/Button.png",150,height/12,200,60)
                             if focusedbutton == -1 :
@@ -1072,7 +1070,7 @@ def main():
                                     TrainingVDI += 1
                                     TrainingVDI = (TrainingVDI+1)%3 - 1
                             Bouton.draw(window)
-                            
+
                             # Bouton de probabilité de tech
                             Bouton = Button(f"Tech : {['Jamais','1/2','Toujours'][Tech]}",("Arial",20,False,False),"./DATA/Images/Menu/Button.png",150,5.5*height/12,200,60)
                             if focusedbutton == 3 :
