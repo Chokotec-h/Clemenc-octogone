@@ -34,7 +34,7 @@ class Game():
 
         if training :
             self.Char_P2 = Chars.Training(0,0,1)
-            # gestion des statistiques en entreînement
+            # gestion des statistiques en entraînement
             self.basedamages = 0
             self.airspeed=1.25
             self.deceleration=0.75
