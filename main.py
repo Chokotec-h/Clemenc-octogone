@@ -200,6 +200,9 @@ def main():
                             musicplaying = False
                             confirm = True
                     Bouton.draw(window)
+
+                #####################################################################################################
+                #############################################  Credits  #############################################
                 
                 if Menu == "credits" :
                     Texte("CREDITS",("arial",45,True,False),(0,0,0),width/2,40).draw(window)
@@ -228,7 +231,7 @@ def main():
                     Bouton.draw(window)
 
 
-                ######################################################################################################
+                #######################################################################################################
                 ##########################################  Menu paramètres  ##########################################
 
                 if Menu == "settings":
@@ -257,21 +260,23 @@ def main():
                     Menu = Menu_Chars.update(window,width,height,controls,joysticks)
                     confirm = Menu_Chars.confirm
 
+                ######################################################################################################
+                ######################################  Démarrage de la partie  ######################################
+
                 if Menu == "game":
-                    #### Démarrage de la partie
                     names = Menu_Chars.names
                     # Jeu clavier
                     if names[0] == 0 and controls[0] == commands["DefaultKeyboard"]:
                         names[0] = 1
                     if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
                         names[1] = 1
-                    Play = True
-                    Menu = "stage"
-
-                    Game = GameObject.Game(training,chars,Menu_Chars.selectchar_1,Menu_Chars.selectchar_2)
 
                     # conversion des contrôles
                     controls = [commands[Menu_Chars.namelist[names[0]]],commands[Menu_Chars.namelist[names[1]]]]
+                    del names
+
+
+                    Game = GameObject.Game(training,chars,Menu_Chars.selectchar_1,Menu_Chars.selectchar_2)
 
                     # importation de l'arrière-plan et de la musique
                     background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),(1600,900))
@@ -279,8 +284,11 @@ def main():
                         if m[1] == Menu_Stages.actualstages[stage] and (str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
                             currentmusic = m[0]
                     musicplaying = False
+
                     # création du stage
                     stage = Stages.create_stage(Menu_Stages.actualstages[stage])
+
+                    Play = True
 
                 ######################################################################################################
                 ########################################  Ecran de résultats  ########################################
