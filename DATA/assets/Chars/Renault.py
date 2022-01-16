@@ -196,9 +196,9 @@ class Renault(Char):
 
         if attack == "DownAir":
             if self.frame == 18 :
-                self.active_hitboxes.append(Hitbox(52,40,52,28,-pi/3,19,26.6,1/200,14,2,self,boum=5,sound="hits and slap/slap.mp3"))
+                self.active_hitboxes.append(Hitbox(52,40,52,28,-pi/3,19,31.1,1/200,14,2,self,boum=5,sound="hits and slap/slap.mp3"))
             if self.frame == 19 and self.active_hitboxes:
-                self.active_hitboxes.append(Hitbox(52,72,42,42,-pi/2,2,2.6,1/800,2,8,self,sound="hits and slap/punch.mp3"))
+                self.active_hitboxes.append(Hitbox(52,72,42,42,-pi/2,2,3.1,1/800,2,8,self,sound="hits and slap/punch.mp3"))
             if self.frame > 19 and self.active_hitboxes :
                 self.active_hitboxes[-1].relativex -= self.frame*signe(self.direction)/2
                 self.active_hitboxes[-1].relativey += 30-self.frame

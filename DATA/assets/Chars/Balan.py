@@ -90,7 +90,7 @@ class Balan(Char):
                     self.intangibility = True
             if self.frame == 8 :
                 self.intangibility = False
-                self.active_hitboxes.append(Hitbox(16,30,32,32,pi/4,30,10,0,12,3,self,False))
+                self.active_hitboxes.append(Hitbox(16,30,32,32,pi/4,28,10,0,12,3,self,False))
             if self.frame == 10 : # Active on 10-60
                 self.active_hitboxes.append(Hitbox(8,82,32,10,pi/4,3,4,1/250,3,50,self,False))
             if self.frame > 9 and self.frame < 60: # Déplacement
