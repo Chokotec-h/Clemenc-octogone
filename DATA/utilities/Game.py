@@ -433,4 +433,4 @@ class Game():
                     Bouton.draw(window)
         #########################################################
 
-        return Play,musicplaying,Menu
+        return Play,musicplaying,Menu,controls
