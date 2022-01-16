@@ -313,7 +313,7 @@ def main():
                 window.fill((255, 255, 255))
                 window.blit(background,(0,0))
 
-                Play, musicplaying, Menu = Game.play(controls,joysticks,stage,width,height,window,clock)
+                Play, musicplaying, Menu, controls = Game.play(controls,joysticks,stage,width,height,window,clock)
 
             ######################################################################################################
 
