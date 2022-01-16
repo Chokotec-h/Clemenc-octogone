@@ -4,17 +4,18 @@
 
 import pygame
 import traceback
+from DATA.utilities.Menu_Settings import SettingsMenu
+from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 import SoundSystem
 
 from DATA.assets.Chars.Training_Mob import Training
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 from DATA.assets.Misc import *
-from DATA.assets.animations import icons, icons64
+from DATA.assets.animations import icons
 from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
-from DATA.utilities.Entry import TextInput
 from DATA.utilities.commands import *
 from random import randint
 
@@ -68,7 +69,6 @@ def main():
 
         # Noms des personnages et des stages
         chars = Chars.chars
-        stages = Stages.stages
         # Config des musiques
         musics = Stages.musics
         musicplaying = False
@@ -77,10 +77,7 @@ def main():
         Menu = "title"
         Play = False
         focusedbutton = 0 # numéro de bouton
-        row = 0 # numéro de colonne (menu)
         confirm = False # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
-        commandconfig = None # gestion des configs de commandes
-        getting = list() # gestion des inputs multiples pour les commandes
 
         # Gestion de la fumee de hitstun
         smoke = list()
@@ -103,6 +100,10 @@ def main():
         begin_game = 0
         pause_time = 0
         game_running = -1
+
+        Menu_Settings = SettingsMenu()
+        Menu_Stages = StagesMenu(False)
+        Menu_Chars = CharsMenu(False)
 
         # Animation de l'ecran titre
         titleframe = 0
@@ -186,8 +187,8 @@ def main():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "stage"
+                            Menu_Stages = StagesMenu(False)
                             training = False
-                            focusedbutton = 0
                             confirm = True
                     Bouton.draw(window)
 
@@ -197,8 +198,8 @@ def main():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "stage"
+                            Menu_Stages = StagesMenu(True)
                             training = True
-                            focusedbutton = 0
                             confirm = True
                     Bouton.draw(window)
                     Texte("Pandaball",("arial",45,True,False),(0,0,0),width/2,2*height/8-20).draw(window)
@@ -210,7 +211,7 @@ def main():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "settings"
-                            focusedbutton = 0
+                            Menu_Settings = SettingsMenu()
                             confirm = True
                     Bouton.draw(window)
 
@@ -223,608 +224,108 @@ def main():
                             musicplaying = False
                             confirm = True
                     Bouton.draw(window)
+                
+                if Menu == "credits" :
+                    Texte("CREDITS",("arial",45,True,False),(0,0,0),width/2,40).draw(window)
+
+                    Texte("Game director",("arial",28,True,False),(0,0,0),width/3,height/8).draw(window)
+                    Texte("Elsa",("arial",28,False,False),(0xBC,0x79,0xE4),2*width/3,height/8).draw(window)
+
+                    Texte("Graphics",("arial",28,True,False),(0,0,0),width/3,2*height/8).draw(window)
+                    Texte("Loïc",("arial",28,False,False),(0x20,0x50,0xF0),2*width/3,2*height/8-30).draw(window)
+                    Texte("Elsa",("arial",28,False,False),(0xBC,0x79,0xE4),2*width/3,2*height/8).draw(window)
+                    Texte("Nicolas",("arial",28,False,False),(120,120,120),2*width/3,2*height/8+30).draw(window)
+
+                    Texte("Musics & Sounds",("arial",28,True,False),(0,0,0),width/3,3*height/8).draw(window)
+                    Texte("Iwan",("arial",28,False,False),(0xBC,0xBC,0x10),2*width/3,3*height/8).draw(window)
+
+                    Texte("Programation",("arial",28,True,False),(0,0,0),width/3,4*height/8).draw(window)
+                    Texte("Nicolas",("arial",28,False,False),(120,120,120),2*width/3,4*height/8-20).draw(window)
+                    Texte("Iwan",("arial",28,False,False),(0xBC,0xBC,0x10),2*width/3,4*height/8+20).draw(window)
+
+                    # retour
+                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
+                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                        Menu = "main"
+                        confirm = True
+                    Bouton.draw(window)
+
 
                 ######################################################################################################
                 ##########################################  Menu paramètres  ##########################################
 
                 if Menu == "settings":
-                    # inputs haut et bas pour se déplacer dans le menu
-                    if input_but_no_repeat(3,controls,joysticks,0):
-                        focusedbutton += 1
+                    Menu = Menu_Settings.update(window,width,height,events,controls,joysticks,0,0)
+                    confirm = Menu_Settings.confirm
 
-                    if input_but_no_repeat(2,controls,joysticks,0):
-                        focusedbutton -= 1
-
-                    focusedbutton = focusedbutton%3
-
-                    # Bouton "Paramètres audio"
-                    Bouton = Button("Paramètres audio",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/3,600,100)
-                    if focusedbutton == 0:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "musics"
-                            oldmusicvolume = musicvolume
-                            oldsoundvolume = soundvolume
-                            focusedbutton = 0
-                            confirm = True
-                    Bouton.draw(window)
-
-                    # Bouton "Controles"
-                    Bouton = Button("Configuration des contrôles",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,2*height/3,600,100)
-                    if focusedbutton == 1:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "commands"
-                            focusedbutton = 0
-                            confirm = True
-                    Bouton.draw(window)
-
-                    # Retour
-                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
-                    if focusedbutton == 2:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "main"
-                            confirm = True
-                    Bouton.draw(window)
-
-                ######################################################################################################
-                ##########################################  Menu commandes  ##########################################
-
-                if Menu == "musics":
-                    # inputs haut et bas pour se déplacer dans le menu
-                    if input_but_no_repeat(3,controls,joysticks,0):
-                        focusedbutton += 1
-
-                    if input_but_no_repeat(2,controls,joysticks,0):
-                        focusedbutton -= 1
-
-                    focusedbutton = focusedbutton%4
-
-                    #### Musique
-
-                    Texte(f"Volume musique : {round(musicvolume*100)}%",("Arial",20,True,False),(0,0,0),width/2,height/3-25).draw(window)
-                    pygame.draw.rect(window,(10,10,10),(width/2-122,height/3,254,4))
-                    Bouton = Button(f"",("Arial",20,False,False),"./DATA/Images/Menu/Slider.png",(musicvolume)*250+width/2-125,height/3,12,12)
-                    if focusedbutton == 0 :
-                        # Compris entre 0.5 et 1
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[1] :
-                            musicvolume += 0.01
-                            if musicvolume > 1 :
-                                musicvolume = 1
-                        if convert_inputs(controls[0],joysticks,0)[0] :
-                            musicvolume -= 0.01
-                            if musicvolume < 0 :
-                                musicvolume = 0
-                    Bouton.draw(window)
-
-                    #### Sons
-
-                    Texte(f"Volume sons : {round(soundvolume*100)}%",("Arial",20,True,False),(0,0,0),width/2,2*height/3-25).draw(window)
-                    pygame.draw.rect(window,(10,10,10),(width/2-122,2*height/3,254,4))
-                    Bouton = Button(f"",("Arial",20,False,False),"./DATA/Images/Menu/Slider.png",(soundvolume)*250+width/2-125,2*height/3,12,12)
-                    if focusedbutton == 1 :
-                        # Compris entre 0.5 et 1
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[1] :
-                            soundvolume += 0.01
-                            if soundvolume > 1 :
-                                soundvolume = 1
-                            #if round(soundvolume,1) == round(soundvolume,2):
-                                #playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
-                        if convert_inputs(controls[0],joysticks,0)[0] :
-                            soundvolume -= 0.01
-                            if soundvolume < 0 :
-                                soundvolume = 0
-                            #if round(soundvolume,1) == round(soundvolume,2):
-                                #playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
-                        # Raffraichissement du volume du module qui exécute les sons
-                        # DATA.utilities.Sound_manager.soundvolume = soundvolume
-                    Bouton.draw(window)
-
-                    # Sauvegarder
-                    Bouton = Button("Sauvegarder",("arial",40,True,False),"./DATA/Images/Menu/Button.png",150,750,200,60)
-                    if focusedbutton == 2:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            with open("DATA/utilities/Settings.txt","w") as settings :
-                                settings.write(f"Music :\nmusicvolume={round(musicvolume,2)}\nsoundvolume={round(soundvolume,2)}\n")
-                            Menu = "settings"
-                            confirm = True
-                    Bouton.draw(window)
-
-                    # Annuler
-                    Bouton = Button("Annuler",("arial",40,True,False),"./DATA/Images/Menu/Button.png",150,850,200,60)
-                    if focusedbutton == 3:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            soundvolume = oldsoundvolume
-                            musicvolume = oldmusicvolume
-                            # DATA.utilities.Sound_manager.soundvolume = soundvolume
-                            Menu = "settings"
-                            confirm = True
-                    Bouton.draw(window)
-
-
-                ######################################################################################################
-                ##########################################  Menu commandes  ##########################################
-
-                if Menu == "commands":
-
-                    #### Aucun profil sélectionné
-
-                    if commandconfig is None:
-                        # Haut/Bas pour se déplacer dans le menu
-                        if input_but_no_repeat(3,controls,joysticks,0):
-                            focusedbutton += 1
-
-                        if input_but_no_repeat(2,controls,joysticks,0):
-                            focusedbutton -= 1
-                        # bouclage du bouton
-                        focusedbutton = (focusedbutton+2)%(len(commands)-1)-2
-                        # liste des commandes
-                        for i,n in enumerate(commands) :
-                            # on ne paramètre pas les configurations par défaut et du menu
-                            if n not in ["Default","Menu","DefaultKeyboard"]:
-                                Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",width/2,(i+1)*60-180,120,50)
-                                Bouton.resize(Bouton.textobject.width+20,50)
-                                if focusedbutton == i-3:
-                                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                                    if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                        commandconfig = n
-                                        inputget = -3
-                                        confirm = True
-                                Bouton.draw(window)
-
-                        # Ajout d'un profil
-                        Bouton = Button("+",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,800,50,50)
-                        if focusedbutton == -2:
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                commandconfig = 0
-                                name = "Player"
-                                confirm = True
-                        Bouton.draw(window)
-
-                        # Retour
-                        Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
-                        if focusedbutton == -1:
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                Menu = "settings"
-                                confirm = True
-                        Bouton.draw(window)
-
-                    #### Création d'un nouveau profil
-
-                    elif commandconfig == 0:
-                        # entrée texte pour créer le nom
-                        Entry = TextInput(name)
-                        enter = Entry.update(events)
-                        name = Entry.get_text()
-                        Texte("Enter name :  "+Entry.get_text(),("arial",30,False,False),(0,0,0),width/2,height/2).draw(window)
-                        Texte("<A/Enter to confirm>",("arial",30,False,False),(0,0,0),width/2,50+height/2).draw(window)
-                        if enter :
-                            commands[name] = commands["Default"]
-                            commandconfig = name
-                            inputget = -1
-                            confirm = True
-
-                    #### Modification d'un profil
-
-                    else :
-                        if inputget <= -1 :
-                            # Haut/Bas/Gauche/Droite pour naviguer dans le menu
-                            if input_but_no_repeat(3,controls,joysticks,0):
-                                focusedbutton += 1
-
-                            if input_but_no_repeat(2,controls,joysticks,0):
-                                focusedbutton -= 1
-
-                            if input_but_no_repeat(0,controls,joysticks,0):
-                                row -= 1
-
-                            if input_but_no_repeat(1,controls,joysticks,0):
-                                row += 1
-                        # Bouclage de la sélection selon la colonne (donc le nombre de boutons dans la colonne)
-                        if row == 0 :
-                            focusedbutton = ((focusedbutton+1)%5)-1
-                        if row == 1 :
-                            focusedbutton = ((focusedbutton+1)%6)-1
-                        if row == 2 :
-                            focusedbutton = ((focusedbutton+1)%5)-1
-                        if row == 3 :
-                            focusedbutton = ((focusedbutton+1)%6)-1
-                        row = row%4 # bouclage de la colonne
-
-                        # Paramétrage des inputs
-                        if inputget > -1:
-
-                            # attente de l'input
-                            if get_controler_input(events,joysticks) and not confirm:
-                                add = get_controler_input(events,joysticks)
-                                for i in add :
-                                    if i not in getting :
-                                        getting.append(i)
-                            # enregistrement de l'input
-                            if not get_controler_input(events,joysticks) and getting :
-                                commands[commandconfig][inputget] = getting
-                                inputget = -1
-                                confirm = True
-                                getting = list()
-
-                        # Stick
-                        for i,k in enumerate(commands[commandconfig][0:4]):
-                            draw_input(window,width/6,(i+1)*80,i,k,inputget,i,focusedbutton,row,0)
-                            if focusedbutton == i and row == 0:
-                                if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                    inputget = i
-                                    confirm = True
-                        # Jump, Attack, Special, Shield
-                        for i,k in enumerate(commands[commandconfig][4:9]):
-                            draw_input(window,2*width/6,(i+1)*80,i+4,k,inputget,i,focusedbutton,row,1)
-                            if focusedbutton == i and row == 1:
-                                if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                    inputget = i+4
-                                    confirm = True
-                        # C-Stick
-                        for i,k in enumerate(commands[commandconfig][9:13]):
-                            draw_input(window,4*width/6,(i+1)*80,i+9,k,inputget,i,focusedbutton,row,2)
-                            if focusedbutton == i and row == 2:
-                                if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                    inputget = i+9
-                                    confirm = True
-                        # D-Pad + Pause
-                        for i,k in enumerate(commands[commandconfig][13:]):
-                            draw_input(window,5*width/6,(i+1)*80,i+13,k,inputget,i,focusedbutton,row,3)
-                            if focusedbutton == i and row == 3:
-                                if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                    inputget = i+13
-                                    confirm = True
-                        # Sauvegarde
-                        Bouton = Button("Sauvegarder",("arial",50,True,False),"./DATA/Images/Menu/Button.png",200,850,250,60)
-                        if focusedbutton == -1 and row%2 == 0:
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                with open("./DATA/utilities/commands.py","w") as commandfile :
-                                    commandfile.write("commands = {\n")
-                                    for k in commands :
-                                        commandfile.write(f'\t"{k}":{commands[k]},\n')
-                                    commandfile.write("}")
-
-                                commandconfig = None
-                                confirm = True
-                        Bouton.draw(window)
-
-                        # Suppression
-                        Bouton = Button("Supprimer",("arial",50,True,False),"./DATA/Images/Menu/Button.png",1450,850,200,60)
-                        if focusedbutton == -1 and row%2 == 1:
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                del commands[commandconfig]
-                                with open("./DATA/utilities/commands.py","w") as commandfile :
-                                    commandfile.write("commands = {\n")
-                                    for k in commands :
-                                        commandfile.write(f'\t"{k}":{commands[k]},\n')
-                                    commandfile.write("}")
-
-                                commandconfig = None
-                                confirm = True
-                        Bouton.draw(window)
+                    
 
                 ######################################################################################################
                 ############################################  Menu stage  ############################################
 
 
                 if Menu == "stage":
-                    # ajout du pandadrome (terrain d'entraînement)
-                    if training :
-                        actualstages = ["Pandadrome"] + stages
-                    else :
-                        actualstages = stages
-                    # haut/bas/gauche/droite pour naviguer dans le menu
-                    if input_but_no_repeat(3,controls,joysticks,0):
-                        focusedbutton += 9
-
-                    if input_but_no_repeat(2,controls,joysticks,0):
-                        focusedbutton -= 9
-
-                    if input_but_no_repeat(0,controls,joysticks,0):
-                        focusedbutton -= 1
-
-                    if input_but_no_repeat(1,controls,joysticks,0):
-                        focusedbutton += 1
-
-                    # bouclage de la navigation
-                    focusedbutton = ((focusedbutton+1)%(len(actualstages)+1))-1
-
-                    # retour
-                    Bouton = Button("<--",("arial",50,True,False),"./DATA/Images/Menu/Button.png",100,850,100,60)
-                    if focusedbutton == -1:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                            Menu = "main"
-                            confirm = True
-                    else :
-                        # Affichage du nom du stage sélectionné
-                        Texte(actualstages[focusedbutton],("arial",50,True,False),(0,0,0),30,height//2,format_="left").draw(window)
-                    Bouton.draw(window)
-
-                    # Boutons de sélection du stage
-                    for i in range(len(actualstages)):
-                        Bouton = Button("",("arial",50,True,False),"./DATA/Images/Menu/Button.png",((i%9)*150)+250,(i//9*150)+100,100,100)
-                        if focusedbutton == i :
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-
-                            # setup du mennu personnage
-                            if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                                Menu = "char"
-                                stage = i
-                                scroll1 = 0 # permet un scroll continu
-                                scroll2 = 0
-                                selectchar_1 = 0 # numéro du personnage sélectionné
-                                selectchar_2 = 0
-                                selected_1 = False # le joueur a-t-il choisi ?
-                                selected_2 = False
-                                # sens dans lequel le joueur défile les noms (gestion de la compatibilité entre la configuration et la manette)
-                                movename1 = -1
-                                movename2 = -1
-                                names = [0,0] # numéro des configurations
-                                namelist = [k for k in commands] # nom des configurations
-                                namelist.pop(0)
-                                b = 0 # temps de maintien du bouton B pour le retour
-                                confirm = True
-                        Bouton.draw(window)
-                        # image du stage
-                        window.blit(pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[i]}/{actualstages[i]}.png"),(90,90)),((i%9*150)+205,(i//9*150)+55))
-
+                    Menu = Menu_Stages.update(window,controls,joysticks,width,height)
+                    confirm = Menu_Stages.confirm
+                    
                 ######################################################################################################
                 #########################################  Menu personnages  #########################################
 
+                if Menu == "to chars" :
+                    stage = Menu_Stages.stage
+                    Menu_Chars = CharsMenu(training)
+                    Menu = "char"
+
                 if Menu == "char":
-                    # retour
-                    Bouton = Button("",("arial",30,True,False),"./DATA/Images/Menu/Button.png",width/2,40,100,60)
-                    # le retour se fait en maintenant le bouton B
-                    if not convert_inputs(controls[0],joysticks,0)[7]:
-                        b = 0
-                    else :
-                        b += 1
-                    if b > 0:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                    if b >= 10:
-                        Menu = "stage"
-                    Bouton.draw(window)
-                    Texte("<--",("arial",30,True,False),(0,0,0),width/2,25).draw(window)
-                    Texte("(B)",("arial",30,True,False),(0,0,0),width/2,50).draw(window)
+                    Menu = Menu_Chars.update(window,width,height,controls,joysticks)
+                    confirm = Menu_Chars.confirm
 
-
-                    ### Interface personnages P1
-                    for i in range(len(chars)):
-                        # Roulette
-                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1-len(chars)+4),384,100)
-                        Bouton.draw(window)
-                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1+len(chars)+4),384,100)
-                        Bouton.draw(window)
-                        Bouton = Button("",("arial",50,True,False),standard,0,105*(i-scroll1+4),384,100)
-                        if selectchar_1 == i :
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                            Bouton.resize(400,100)
-                        Bouton.draw(window)
-                    for i in range(len(chars)):
-                        # icones sur la roulette
-                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4)-32))
-                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4-len(chars))-32))
-                        window.blit(icons64[chars[i]],(64,105*(i-scroll1+4+len(chars))-32))
-
-                    # Haut/Bas pour choisir un personnage
-                    if convert_inputs(controls[0],joysticks,0)[3] and not selected_1 and scroll1 == selectchar_1:
-                        selectchar_1 += 1
-                        scroll1 += 1
-                        scroll1 = scroll1%len(chars)
-                        scroll1 -= 1
-                        if selectchar_1 >= len(chars) :
-                            selectchar_1 = 0
-                    if convert_inputs(controls[0],joysticks,0)[2] and not selected_1 and scroll1 == selectchar_1:
-                        selectchar_1 -= 1
-                        scroll1 -= 1
-                        scroll1 = scroll1%len(chars)
-                        scroll1 += 1
-                        if selectchar_1 < 0 :
-                            selectchar_1 = len(chars) - 1
-                    # scroll continu
-                    if round(scroll1,1) < selectchar_1 :
-                        scroll1 += 0.25
-                        scroll1 = round(scroll1,3)
-                    if round(scroll1,1) > selectchar_1 :
-                        scroll1 -= 0.25
-                        scroll1 = round(scroll1,3)
-                    if round(scroll1,1) == selectchar_1 :
-                        scroll1 = selectchar_1
-
-                    # Confirmation / Annulation
-                    if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
-                        selected_1 = True
-                    if convert_inputs(controls[0],joysticks,0)[7]:
-                        selected_1 = False
-
-                    ### Interface personnages P2
-                    if training :
-                        # Pandapluche (Peluche Panda des A-L)
-                        Bouton = Button("",("arial",50,True,False),standard,width,height/2,384,100)
-                        Bouton.draw(window)
-                        window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Misc/Training/Training_icon.png"),(64,64)),(width-128,height/2-32))
-                    else :
-                        for i in range(len(chars)):
-                            # Roulette
-                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2-len(chars)+4),384,100)
-                            Bouton.draw(window)
-                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2+len(chars)+4),384,100)
-                            Bouton.draw(window)
-                            Bouton = Button("",("arial",50,True,False),standard,width,105*(i-scroll2+4),384,100)
-                            if selectchar_2 == i :
-                                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                                Bouton.resize(400,100)
-                            Bouton.draw(window)
-                        for i in range(len(chars)):
-                            # Icones de la roulette
-                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4)-32))
-                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4-len(chars))-32))
-                            window.blit(icons64[chars[i]],(width-128,105*(i-scroll2+4+len(chars))-32))
-
-                        # Haut/Bas pour choisir un personnage
-                        if convert_inputs(controls[1],joysticks,1)[3] and not selected_2 and scroll2 == selectchar_2:
-                            selectchar_2 += 1
-                            scroll2 += 1
-                            scroll2 = scroll2%len(chars)
-                            scroll2 -= 1
-                            if selectchar_2 >= len(chars) :
-                                selectchar_2 = 0
-                        if convert_inputs(controls[1],joysticks,1)[2] and not selected_2 and scroll2 == selectchar_2:
-                            selectchar_2 -= 1
-                            scroll2 -= 1
-                            scroll2 = scroll2%len(chars)
-                            scroll2 += 1
-                            if selectchar_2 < 0 :
-                                selectchar_2 = len(chars) - 1
-                        # scroll continu
-                        if round(scroll2,1) < selectchar_2 :
-                            scroll2 += 0.25
-                            scroll2 = round(scroll2,3)
-                        if round(scroll2,1) > selectchar_2 :
-                            scroll2 -= 0.25
-                            scroll2 = round(scroll2,3)
-                        if round(scroll2,1) == selectchar_2 :
-                            scroll2 = selectchar_2
-
-                        # Confirmation / Annulation
-                        if convert_inputs(controls[1],joysticks,1)[6] and not confirm:
-                            selected_2 = True
-                        if convert_inputs(controls[1],joysticks,1)[7]:
-                            selected_2 = False
-
-                    # Choix du nom
-                    if names[0] == 0 :
-                        text = "Player 1"
-                    else :
-                        text = namelist[names[0]]
-                    Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",3*width/10,height-150,200,32)
-                    Bouton.draw(window)
-                    # Test de compatibilité entre le nom et la manette
-                    try :
-                        convert_inputs(commands[namelist[names[0]]],joysticks,0)
-                    except :
-                        names[0] += movename1
-                        if names[0] >= len(namelist):
-                            names[0] = 0
-                    # Choix du nom avec les gâchettes
-                    if input_but_no_repeat(10,controls,joysticks,0):
-                        names[0] += 1
-                        movename1 = 1
-                        if names[0] == 1 : # Configuration du menu
-                            names[0] += 1
-                        if names[0] >= len(namelist):
-                            names[0] = 0
-                    if input_but_no_repeat(9,controls,joysticks,0):
-                        names[0] -= 1
-                        movename1 = -1
-                        if names[0] == 1 : # Configuration du menu
-                            names[0] -= 1
-                        if names[0] < 0:
-                            names[0] = len(namelist)-1
-
-                    # Choix du nom
-                    if names[1] == 0 :
-                        text = "Player 2"
-                    else :
-                        text = namelist[names[1]]
-                    Bouton = Button(text,("arial",24,True,False),"./DATA/Images/Menu/Button.png",7*width/10,height-150,200,32)
-                    Bouton.draw(window)
-                    # Test de compatibilité entre le nom et la manette
-                    try :
-                        convert_inputs(commands[namelist[names[1]]],joysticks,1)
-                    except :
-                        names[1] += movename2
-                        if names[1] >= len(namelist):
-                            names[1] = 0
-                    # Choix du nom avec les gâchettes
-                    if input_but_no_repeat(10,controls,joysticks,1):
-                        names[1] += 1
-                        movename2 = 1
-                        if names[1] == 1 : # Configuration du menu
-                            names[1] += 1
-                        if names[1] >= len(namelist):
-                            names[1] = 0
-                    if input_but_no_repeat(9,controls,joysticks,1):
-                        names[1] -= 1
-                        movename2 = -1
-                        if names[1] == 1 : # Configuration du menu
-                            names[1] -= 1
-                        if names[1] < 0:
-                            names[1] = len(namelist)-1
-
-                    # Affichage si le joueur est prêt
-                    if selected_1 :
-                        pygame.draw.rect(window,(230,230,230),(width/8,height-120,width/4,30))
-                        Texte("PRET",("arial",24,True,False),(0,0,0),width/4,height-110,format_="center").draw(window)
-                    if selected_2 :
-                        pygame.draw.rect(window,(230,230,230),(5*width/8,height-120,width/4,30))
-                        Texte("PRET",("arial",24,True,False),(0,0,0),3*width/4,height-110,format_="center").draw(window)
-
-                    ## Affichage des noms
-                    pygame.draw.rect(window,(200,200,200),(0,height-90,width,90))
-                    Texte(str(Chars.charobjects[chars[selectchar_1]](0,0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
-                    if training :
-                        Texte("Pandapluche",("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
-                    else :
-                        Texte(str(Chars.charobjects[chars[selectchar_2]](0,0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
-                    Texte("|",("arial",80,True,False),(0,0,0),width/2,height-50,format_="center").draw(window)
-                    ##
-
+                if Menu == "game":
                     #### Démarrage de la partie
-                    if (selected_2 or training) and selected_1 :
-                        # Jeu clavier
-                        if names[0] == 0 and controls[0] == commands["DefaultKeyboard"]:
-                            names[0] = 1
-                        if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
-                            names[1] = 1
-                        Play = True
-                        Menu = "stage"
+                    names = Menu_Chars.names
+                    # Jeu clavier
+                    if names[0] == 0 and controls[0] == commands["DefaultKeyboard"]:
+                        names[0] = 1
+                    if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
+                        names[1] = 1
+                    Play = True
+                    Menu = "stage"
 
-                        ### Création des objets parsonnages
-                        Char_P1 = Chars.charobjects[chars[selectchar_1]](-350,0,0)
+                    ### Création des objets parsonnages
+                    Char_P1 = Chars.charobjects[chars[Menu_Chars.selectchar_1]](-350,0,0)
 
-                        if training :
-                            Char_P2 = Chars.Training(0,0,1)
-                            # gestion des statistiques en entreînement
-                            basedamages = 0
-                            airspeed=1.25
-                            deceleration=0.75
-                            fallspeed=0.85
-                            fastfallspeed=1.25
-                        else :
-                            Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0,1)
-                        ###
+                    if training :
+                        Char_P2 = Chars.Training(0,0,1)
+                        # gestion des statistiques en entreînement
+                        basedamages = 0
+                        airspeed=1.25
+                        deceleration=0.75
+                        fallspeed=0.85
+                        fastfallspeed=1.25
+                    else :
+                        Char_P2 = Chars.charobjects[chars[Menu_Chars.selectchar_2]](350,0,1)
+                    ###
 
-                        # initialisation des vies et du temps
-                        stock = [7,7]
-                        time_game = 7*60
-                        begin_game = time.time()
-                        pause_time = 0
-                        pausefrom = 0
-                        game_running = -1
+                    # initialisation des vies et du temps
+                    stock = [7,7]
+                    time_game = 7*60
+                    begin_game = time.time()
+                    pause_time = 0
+                    pausefrom = 0
+                    game_running = -1
 
-                        # conversion des contrôles
-                        controls = [commands[namelist[names[0]]],commands[namelist[names[1]]]]
+                    # conversion des contrôles
+                    controls = [commands[Menu_Chars.namelist[names[0]]],commands[Menu_Chars.namelist[names[1]]]]
 
-                        # importation de l'arrière-plan et de la musique
-                        background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{actualstages[stage]}/{actualstages[stage]}.png"),(1600,900))
-                        for m in musics :
-                            if m[1] == actualstages[stage] and (str(Char_P1) == m[2] or str(Char_P2) == m[2] or m[2] == True):
-                                currentmusic = m[0]
-                        musicplaying = False
-                        # création du stage
-                        stage = Stages.create_stage(actualstages[stage])
+                    # importation de l'arrière-plan et de la musique
+                    background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),(1600,900))
+                    for m in musics :
+                        if m[1] == Menu_Stages.actualstages[stage] and (str(Char_P1) == m[2] or str(Char_P2) == m[2] or m[2] == True):
+                            currentmusic = m[0]
+                    musicplaying = False
+                    # création du stage
+                    stage = Stages.create_stage(Menu_Stages.actualstages[stage])
 
                 ######################################################################################################
                 ########################################  Ecran de résultats  ########################################
