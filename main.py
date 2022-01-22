@@ -227,6 +227,7 @@ def main():
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                         Menu = "main"
+                        musicplaying = False
                         confirm = True
                     Bouton.draw(window)
 

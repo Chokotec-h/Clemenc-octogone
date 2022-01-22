@@ -195,6 +195,9 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame == 3 :
+                self.animation = "ftilt"
+                self.animeframe = 0
             if self.frame < 3  + self.changeframe:
                 if left :
                     self.look_right = False
