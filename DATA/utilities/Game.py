@@ -30,7 +30,7 @@ class Game():
         self.training = training
 
         ### Création des objets parsonnages
-        self.Char_P1 = Chars.charobjects[chars[selectchar_1]](-350,0,0)
+        self.Char_P1 = Chars.charobjects[chars[selectchar_1]](0,0,0)
 
         if training :
             self.Char_P2 = Chars.Training(0,0,1)
@@ -41,7 +41,7 @@ class Game():
             self.fallspeed=0.85
             self.fastfallspeed=1.25
         else :
-            self.Char_P2 = Chars.charobjects[chars[selectchar_2]](350,0,1)
+            self.Char_P2 = Chars.charobjects[chars[selectchar_2]](0,0,1)
         ###
 
         # initialisation des vies et du temps

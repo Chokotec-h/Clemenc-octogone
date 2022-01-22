@@ -287,7 +287,7 @@ def main():
                     musicplaying = False
 
                     # création du stage
-                    stage = Stages.create_stage(Menu_Stages.actualstages[stage])
+                    stage, [(Game.Char_P1.x,Game.Char_P1.rect.y),(Game.Char_P2.x,Game.Char_P2.rect.y)] = Stages.create_stage(Menu_Stages.actualstages[stage])
 
                     Play = True
 

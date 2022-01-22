@@ -1,5 +1,4 @@
 import pygame
-from random import randint
 
 # Nom des stages
 stages = ["Cour d'honneur","K201","Chapelle"]
@@ -60,10 +59,14 @@ class Platform():
 
 def create_stage(stage):
     if stage == "K201":
-        return Stage(f"{stage}/K201_plateforme",0,191*1.65)
+        return (Stage(f"{stage}/K201_plateforme",0,191*1.65), 
+                [(-350,0),(350,0)]) # Coordonnées de départ
     if stage == "Pandadrome":
-        return Stage(f"{stage}/Pandadrome_plateforme",0,186*1.6)
+        return (Stage(f"{stage}/Pandadrome_plateforme",0,186*1.6), 
+        [(-350,0),(0,0)])  # Coordonnées de départ
     if stage == "Cour d'honneur":
-        return Stage(f"{stage}/Cour d'honneur_plateforme",-6,220*1.65,[(2,186*1.7+8,436,4,(97,87,77)),(2,186*1.7-226,332,4,(97,87,77))])
+        return (Stage(f"{stage}/Cour d'honneur_plateforme",-6,220*1.65,[(2,186*1.7+8,436,4,(97,87,77)),(2,186*1.7-226,332,4,(97,87,77))]), 
+        [(-200,0),(200,0)])
     if stage == "Chapelle":
-        return Stage(f"{stage}/Chapelle_plateforme",0,235*1.65,[(-202,376-49*4+21,45*4,12,(67,14,6)),(206,376-49*4+21,45*4,12,(67,14,6)),(0,60,72*4,12,(67,14,6))])
+        return (Stage(f"{stage}/Chapelle_plateforme",0,235*1.65,[(-202,376-49*4+21,45*4,12,(67,14,6)),(206,376-49*4+21,45*4,12,(67,14,6)),(0,60,72*4,12,(67,14,6))]),
+        [(-200,-50),(200,-50)])
