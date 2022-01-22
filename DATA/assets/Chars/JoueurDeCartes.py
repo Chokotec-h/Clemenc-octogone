@@ -24,9 +24,11 @@ class Air_President(Char):
         self.stage = Stage
     
     def __str__(self) -> str:
-        return "Joueur de air-president"
+        return "Joueur de Air-President"
 
     def special(self,inputs): # Spécial
+        if self.die :
+            self.poutre = False
         if self.poutre :
             self.speed = 0.9
             self.airspeed = 0.5
