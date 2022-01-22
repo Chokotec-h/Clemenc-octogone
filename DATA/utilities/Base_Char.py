@@ -124,6 +124,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.combo = 0
         self.combodamages = 0
+        self.truecombo = 0
 
         self.immune_to_projectiles = []
         self.die = 0
@@ -591,6 +592,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.combodamages = 0
                     self.combo += 1
                     self.combodamages += hitbox.damages
+                    self.truecombo += 1
                     if hitbox.position_relative : # Reverse hit
                         if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
@@ -641,6 +643,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.combodamages = 0
                     self.combo += 1
                     self.combodamages += projectile.damages
+                    self.truecombo += 1
                     knockback = projectile.knockback*(self.damages*projectile.damages_stacking+1)
 
                     if self.superarmor < knockback and not(self.superarmor == -1) :
