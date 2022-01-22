@@ -37,6 +37,7 @@ class Kebab(Char):
     def special(self,inputs):
         if self.die :
             self.eatleft = 3
+            self.sauces = [600,600,600,600,600,600,600,600]
         for i in range(len(self.sauces)):
             self.sauces[i] = min(self.sauces[i]+0.3,600)
         if self.current_sauce < 0 : # Reset stats
