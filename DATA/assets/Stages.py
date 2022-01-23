@@ -6,7 +6,7 @@ stages = ["Cour d'honneur","K201","Chapelle"]
 musics =    [("event:/BGM/let's_fight_!", "K201", True), 
             ("event:/BGM/Panda_Ball", "Pandadrome", True),
             ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIG_SHOT", "Chapelle", "Spamton"),
-            ("event:/", "Cour d'honneur", True),
+            ("event:/BGM/Honor_winds", "Cour d'honneur", True),
             ("event:/BGM/digital_autority", "Salle d'info", True),
             ("event:/BGM/City_night", "BDE", True),
             ("event:/BGM/opticmind", "TP d'optique", True), ("event:/BGM/opticmind_but_gregoire_remake_the_song", "TP d'optique", "Gregoire")]
