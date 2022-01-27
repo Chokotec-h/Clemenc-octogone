@@ -264,6 +264,9 @@ class Kebab(Char):
                     self.lag = 11 + self.changeframe # Auto cancel frame 1-2 et 22+, 8 frames de landing lag
 
         if attack == "DownAir":
+            if self.frame == 1 :
+                self.animation = "dair"
+                self.animeframe = 0
             if self.frame == 4 :
                 self.active_hitboxes.append(Hitbox(10,30,28,30,pi/2,2,1*self.damagemodifier,0,8*self.stunmodifier,2,self))
             if self.frame == 8 :
