@@ -11,13 +11,11 @@ import SoundSystem
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 import DATA.utilities.Game as GameObject
-from DATA.assets.animations import icons
 from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
 from DATA.utilities.commands import *
 
-import time
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
@@ -113,7 +111,7 @@ def main():
                 window.blit(titleanimation[round(min(titleframe,54)/1.5)],(width/2-256,height/2-256-64))
                 Texte("OCTOGONE",("Comic",128,True,False),(40,40,40),width/2+5,height/2 + 256+5).draw(window)
                 Texte("OCTOGONE",("Comic",128,True,False),(128,0,128),width/2,height/2 + 256).draw(window)
-                if convert_inputs(controls[0],joysticks,0)[6] :
+                if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                     confirm = True
                     Menu = "main"
                 titleframe += 1
@@ -155,7 +153,7 @@ def main():
                     if input_but_no_repeat(2,controls,joysticks,0):
                         focusedbutton -= 1
 
-                    focusedbutton = ((focusedbutton+1)%4)-1
+                    focusedbutton = ((focusedbutton+2)%5)-2
 
                     # Bouton "Combat"
                     Bouton = Button("Combat",("arial",50,True,False),"./DATA/Images/Menu/Button.png",width/2,height/8,250,100)
@@ -193,13 +191,29 @@ def main():
 
                     # Bouton "Credits"
                     Bouton = Button("Credits",("arial",40,True,False),"./DATA/Images/Menu/Button.png",width/4,7*height/8,120,80)
-                    if focusedbutton == -1:
+                    if focusedbutton == -2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
                             Menu = "credits"
                             musicplaying = False
                             confirm = True
                     Bouton.draw(window)
+
+                    # Bouton "Title"
+                    Bouton = Button("Ecran titre",("arial",30,True,False),"./DATA/Images/Menu/Button.png",3*width/4,7*height/8,120,80)
+                    if focusedbutton == -1:
+                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0],joysticks,0)[6] and not confirm:
+                            Menu = "title"
+                            titleframe = 0
+                            musicplaying = False
+                            SoundSystem.stop_inst(embient.instance)
+                            embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
+                            confirm = True
+                            focusedbutton = 0
+                    Bouton.draw(window)
+
+                    
 
                 #####################################################################################################
                 #############################################  Credits  #############################################
