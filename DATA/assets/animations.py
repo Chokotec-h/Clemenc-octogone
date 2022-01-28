@@ -4,7 +4,7 @@ import pygame
 
 icons ={
     "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),
-    "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"),
+    "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/icon.png"),
     "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
@@ -17,7 +17,7 @@ icons ={
 }
 icons64 ={
     "Balan":pygame.transform.scale(icons["Balan"],(64,64)),
-    "Joueur de air-president":pygame.transform.scale(icons["Joueur de air-president"],(64,64)),
+    "Joueur de air-president":pygame.transform.scale(icons["Joueur de air-president"],(64,64)), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/icon.png"),
     "Millet":pygame.transform.scale(icons["Millet"],(64,64)),
     "Gregoire":pygame.transform.scale(icons["Gregoire"],(64,64)),
     "Reignaud":pygame.transform.scale(icons["Reignaud"],(64,64)),
@@ -57,6 +57,16 @@ Air_President = {
     "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
     "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
     "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+
+}
+
+Spamton = {
+    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
+    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
+    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
+    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
+    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
 
 }
 
@@ -102,7 +112,7 @@ animations = {
     "Balan":Balan,
     "BalanM":BalanM,
     "BalanJ":BalanJ,
-    "Joueur de air-president":Air_President,
+    "Joueur de air-president":Air_President,"Spamton":Spamton,
     "Millet":Nonesprite,
     "Gregoire":Nonesprite,
     "Reignaud":Nonesprite,

@@ -291,7 +291,7 @@ def main():
                     del names
 
 
-                    Game = GameObject.Game(training,chars,Menu_Chars.selectchar_1,Menu_Chars.selectchar_2)
+                    Game = GameObject.Game(training,chars,Menu_Chars.selectchar_1,Menu_Chars.selectchar_2,Menu_Chars.alt)
 
                     # importation de l'arrière-plan et de la musique
                     background = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),(1600,900))
