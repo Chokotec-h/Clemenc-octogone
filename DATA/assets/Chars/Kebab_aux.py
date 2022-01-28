@@ -58,6 +58,17 @@ Attacks = {
     "usmash6l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Usmash2_l.png"),(0.4,0,0)),((0,13,13,8),(14,9,13,12),(29,5,13,16),(45,1,13,21)),10,False),
     "usmash7l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Usmash2_l.png"),(0.8,0.3,0.3)),((0,13,13,8),(14,9,13,12),(29,5,13,16),(45,1,13,21)),10,False),
     "usmash-1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Usmash2_l.png"),(0.2,0.2,0.2)),((0,13,13,8),(14,9,13,12),(29,5,13,16),(45,1,13,21)),10,False),
+
+
+    "nair0":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.9,0.7,0.6)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(1,0.7,0.05)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair2":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair3":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.6,0.6,0.3)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair4":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.5,0.3,0)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair5":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.5,0.3,0.3)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair6":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.4,0,0)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair7":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.8,0.3,0.3)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
+    "nair-1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.2,0.2,0.2)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
 }
 Sauce = {
     "0":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Projectiles/Kebab/Sauce_air.png"),(0.9,0.7,0.6))),

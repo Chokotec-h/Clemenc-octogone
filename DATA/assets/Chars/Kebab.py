@@ -223,10 +223,13 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 3 :
+                self.animation = "uair"
+                self.animeframe = 0
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(0,0,48,24,pi/2,7*self.knockbackmodifier,3*self.damagemodifier,1/100,15*self.stunmodifier,6,self,sound="wooshs/mini woosh.wav"))
             if self.frame > 5 and self.active_hitboxes :
-                self.active_hitboxes[-1].relativey -= 15
+                self.active_hitboxes[-1].relativey -= 10
 
             if self.frame > 25 + self.changeframe: # 10 frames de lag
                 self.attack = None
@@ -252,6 +255,9 @@ class Kebab(Char):
                     self.lag = 12 + self.changeframe # Auto cancel frame 1-2 et 22+, 15 frames de landing lag
 
         if attack == "BackAir":
+            if self.frame == 1 :
+                self.animation = "bair"
+                self.animeframe = 0
             if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(-40,20,40,12,5*pi/6,13*self.knockbackmodifier,10*self.damagemodifier,1/150,14*self.stunmodifier,2,self,sound="hits and slap/cool hit.wav"))
 
@@ -283,6 +289,9 @@ class Kebab(Char):
                     self.lag = 15 + self.changeframe # Auto cancel frame 1-2 et 22+, 8 frames de landing lag
 
         if attack == "NeutralAir":
+            if self.frame == 6 :
+                self.animation = "nair"
+                self.animeframe = 0
             if self.frame == 8 :
                 self.active_hitboxes.append(Hitbox(-20,-20,88,88,(random()-0.5)*2*pi,12*self.knockbackmodifier,10*self.damagemodifier,1/200,14*self.stunmodifier,3,self,sound="hits and slap/cool hit.wav"))
 
@@ -411,6 +420,17 @@ class Kebab(Char):
                 pos[0] -= size[2] - 48
             pos[0] += 40*signe(self.direction)
             pos[1] -= size[3] - 48
+            window.blit(drawing_smash, pos,size) # on dessine le sprite
+        
+        if self.attack == "NeutralAir" and self.animeframe < 12:
+            drawsmash = Attacks["nair"+str(self.current_sauce)]
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*6),round(drawsmash[0].get_size()[1]*6))) # Rescale
+            size = drawsmash[1][min((self.animeframe)//2,len(drawsmash[1])-1)]
+            size = [size[0]*6,size[1]*6,size[2]*6,size[3]*6] # Rescale
+            if not self.look_right :
+                pos[0] -= size[2] - 48
+            pos[0] -= 20*signe(self.direction)
+            pos[1] -= 24
             window.blit(drawing_smash, pos,size) # on dessine le sprite
 
 
