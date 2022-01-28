@@ -282,6 +282,7 @@ class CharsMenu():
             if self.names[1] < 0:
                 self.names[1] = len(self.namelist)-1
 
+        # Changement de costume
         if input_but_no_repeat(4,controls,joysticks,0):
             self.alt[0] += 1
             if self.alt[0] >= len(chars[self.selectchar_1]) :
@@ -299,7 +300,7 @@ class CharsMenu():
             self.alt[1] -= 1
             if self.alt[1] < 0 :
                 self.alt[1] = len(chars[self.selectchar_2])-1
-        print(self.alt)
+        ##
 
         # Affichage si le joueur est prêt
         if self.selected_1 :
