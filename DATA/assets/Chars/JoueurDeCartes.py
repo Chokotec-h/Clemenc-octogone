@@ -519,4 +519,12 @@ class Poutre():
 
     def draw(self,window):
         window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+
+
+class Spamton(Air_President):
+    def __init__(self, x, y, player) -> None:
+        super().__init__(x, y, player)
+        self.name = "Spamton"
     
+    def __str__(self) -> str:
+        return "Spamton"

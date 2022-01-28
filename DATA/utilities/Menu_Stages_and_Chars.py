@@ -86,6 +86,8 @@ class CharsMenu():
         self.confirm = True
 
         self.training = training
+
+        self.alt = [0,0]
     
     def update(self,window,width,height,controls,joysticks):
         chars = Chars.chars
@@ -124,12 +126,16 @@ class CharsMenu():
             Bouton.draw(window)
         for i in range(len(chars)):
             # icones sur la roulette
-            window.blit(icons64[chars[i]],(64,105*(i-self.scroll1+4)-32))
-            window.blit(icons64[chars[i]],(64,105*(i-self.scroll1+4-len(chars))-32))
-            window.blit(icons64[chars[i]],(64,105*(i-self.scroll1+4+len(chars))-32))
+            if self.selectchar_1 == i :
+                window.blit(icons64[chars[i][self.alt[0]]],(64,105*(i-self.scroll1+4)-32))
+            else :
+                window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4)-32))
+            window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4-len(chars))-32))
+            window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4+len(chars))-32))
 
         # Haut/Bas pour choisir un personnage
         if convert_inputs(controls[0],joysticks,0)[3] and not self.selected_1 and self.scroll1 == self.selectchar_1:
+            self.alt[0] = 0
             self.selectchar_1 += 1
             self.scroll1 += 1
             self.scroll1 = self.scroll1%len(chars)
@@ -179,9 +185,11 @@ class CharsMenu():
                 Bouton.draw(window)
             for i in range(len(chars)):
                 # Icones de la roulette
-                window.blit(icons64[chars[i]],(width-128,105*(i-self.scroll2+4)-32))
-                window.blit(icons64[chars[i]],(width-128,105*(i-self.scroll2+4-len(chars))-32))
-                window.blit(icons64[chars[i]],(width-128,105*(i-self.scroll2+4+len(chars))-32))
+                if self.selectchar_2 == i :
+                    window.blit(icons64[chars[i][self.alt[1]]],(width-128,105*(i-self.scroll2+4)-32))
+                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4)-32))
+                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4-len(chars))-32))
+                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4+len(chars))-32))
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1],joysticks,1)[3] and not self.selected_2 and self.scroll2 == self.selectchar_2:
@@ -274,6 +282,25 @@ class CharsMenu():
             if self.names[1] < 0:
                 self.names[1] = len(self.namelist)-1
 
+        if input_but_no_repeat(4,controls,joysticks,0):
+            self.alt[0] += 1
+            if self.alt[0] >= len(chars[self.selectchar_1]) :
+                self.alt[0] = 0
+        if input_but_no_repeat(5,controls,joysticks,0):
+            self.alt[0] -= 1
+            if self.alt[0] < 0 :
+                self.alt[0] = len(chars[self.selectchar_1])-1
+
+        if input_but_no_repeat(4,controls,joysticks,1):
+            self.alt[1] += 1
+            if self.alt[1] >= len(chars[self.selectchar_2]) :
+                self.alt[1] = 0
+        if input_but_no_repeat(5,controls,joysticks,1):
+            self.alt[1] -= 1
+            if self.alt[1] < 0 :
+                self.alt[1] = len(chars[self.selectchar_2])-1
+        print(self.alt)
+
         # Affichage si le joueur est prêt
         if self.selected_1 :
             pygame.draw.rect(window,(230,230,230),(width/8,height-120,width/4,30))
@@ -284,11 +311,11 @@ class CharsMenu():
 
         ## Affichage des noms
         pygame.draw.rect(window,(200,200,200),(0,height-90,width,90))
-        Texte(str(Chars.charobjects[chars[self.selectchar_1]](0,0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
+        Texte(str(Chars.charobjects[chars[self.selectchar_1][self.alt[0]]](0,0,0)),("arial",64,True,False),(0,0,0),width/2-30,height-50,format_="right").draw(window)
         if self.training :
             Texte("Pandapluche",("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
         else :
-            Texte(str(Chars.charobjects[chars[self.selectchar_2]](0,0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
+            Texte(str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0,0,0)),("arial",64,True,False),(0,0,0),width/2+30,height-50,format_="left").draw(window)
         Texte("|",("arial",80,True,False),(0,0,0),width/2,height-50,format_="center").draw(window)
         ##
         
