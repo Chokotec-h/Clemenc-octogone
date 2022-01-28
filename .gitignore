@@ -1,2 +1,5 @@
 $ cat .gitignore
 *.pyc
+main.spec
+main.exe
+/build
