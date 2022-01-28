@@ -3,3 +3,4 @@ $ cat .gitignore
 main.spec
 main.exe
 /build
+/dist
