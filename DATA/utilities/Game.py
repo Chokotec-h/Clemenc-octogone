@@ -306,7 +306,7 @@ class Game():
                             self.basedamages -= 1
                             if self.basedamages < 0 :
                                 self.basedamages = 999
-                        Char_P2.damages = self.basedamages
+                        self.Char_P2.damages = self.basedamages
                     Bouton.draw(window)
 
                     ########################### Gestion des statistiques ###########################
