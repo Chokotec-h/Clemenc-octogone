@@ -9,7 +9,7 @@ icons ={
     "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
-    "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/Pyro_Aubin/icon.png"),
     "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/icon.png"),
     "Poissonnier":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Renault":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
