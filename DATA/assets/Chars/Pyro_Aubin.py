@@ -26,6 +26,7 @@ class Pyro_Aubin(Char):
         self.angle_fusee = 0
         self.hold = 0
         self.turnaround = 0
+        self.sizescale = 2.5
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
@@ -550,8 +551,8 @@ class Pyro_Aubin(Char):
     def draw(self, window): # Dessine aussi les inputs du konami code et la jauge d'explosifs
             drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
 
-            drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*4),round(drawing_sprite.get_size()[1]*4))) # Rescale
-            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*self.sizescale),round(drawing_sprite.get_size()[1]*self.sizescale))) # Rescale
+            size = [size[0]*self.sizescale,size[1]*self.sizescale,size[2]*self.sizescale,size[3]*self.sizescale] # Rescale
             pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
             window.blit(drawing_sprite, pos,size) # on dessine le sprite
             #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage

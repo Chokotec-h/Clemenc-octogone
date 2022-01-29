@@ -30,6 +30,17 @@ icons64 ={
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
+
+Nonesprite = {
+    "idle":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+
+}
+
 Balan = {
     "idle":("./DATA/Images/Sprites/Chars/Balan/Default/balan_idle.png",((10,2,12,30),(42,2,12,30),(74,4,12,28),(106,3,12,29)),5,True),
     "walk":("./DATA/Images/Sprites/Chars/Balan/Default/balan_walk.png",((7,2,15,30),(40,3,14,29),(70,3,16,29)),6,True),
@@ -70,13 +81,13 @@ Spamton = {
 
 }
 
-Nonesprite = {
-    "idle":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "walk":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "run":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "jump":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+Pyro_Aubin = {
+    "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "jump":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_jump.png",((7,4,31,44),(55,2,30,46),(101,1,38,46)),8,False),
+    "fall":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_jump.png",((101,1,38,46),),8,False),
+    "airdodge":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
 
 }
 
@@ -120,7 +131,7 @@ animations = {
     "Gregoire":Nonesprite,
     "Reignaud":Nonesprite,
     "Rey":Nonesprite,
-    "Pyro-Aubin":Nonesprite,
+    "Pyro-Aubin":Pyro_Aubin,
     "Kebab":Kebab,
     "Poissonnier":Nonesprite,
     "Renault":Nonesprite,
