@@ -146,6 +146,12 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "DownB":
+            if self.frame == 1 :
+                if self.eatleft :
+                    self.animation = "downb"
+                else :
+                    self.animation = "downb_no"
+                self.animeframe = 0
             if self.frame == 9 and self.eatleft:
                 self.damages = max(self.damages-15.5,0)
                 self.eatleft -= 1
