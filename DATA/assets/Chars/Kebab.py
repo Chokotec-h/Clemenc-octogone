@@ -437,6 +437,20 @@ class Kebab(Char):
             pos[1] -= size[3] - 48
             window.blit(drawing_smash, pos,size) # on dessine le sprite
         
+        if self.attack == "DownSmash" and self.animeframe > 6:
+            t = "" if self.look_right else "l"
+            drawsmash = Attacks["dsmash"+str(self.current_sauce)+t]
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
+            size = drawsmash[1][min((self.animeframe-6)//3,len(drawsmash[1])-1)]
+            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            if not self.look_right :
+                pos[0] -= size[2] - 48
+            pos[0] += 40*signe(self.direction)
+            pos[1] -= size[3]
+            if self.animeframe > 16 :
+                pos[1] += (min(self.animeframe-16,8))*8
+            window.blit(drawing_smash, pos,size) # on dessine le sprite
+        
         if self.attack == "NeutralAir" and self.animeframe < 12:
             drawsmash = Attacks["nair"+str(self.current_sauce)]
             drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*6),round(drawsmash[0].get_size()[1]*6))) # Rescale

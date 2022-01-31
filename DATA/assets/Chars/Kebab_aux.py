@@ -60,6 +60,27 @@ Attacks = {
     "usmash-1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Usmash2_l.png"),(0.2,0.2,0.2)),((0,13,13,8),(14,9,13,12),(29,5,13,16),(45,1,13,21)),10,False),
 
 
+    "dsmash0":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.9,0.7,0.6)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(1,0.7,0.05)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash2":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash3":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.6,0.6,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash4":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.5,0.3,0)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash5":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.5,0.3,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash6":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.4,0,0)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash7":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.8,0.3,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash-1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2.png"),(0.2,0.2,0.2)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+
+    "dsmash0l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.9,0.7,0.6)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(1,0.7,0.05)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash2l":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash3l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.6,0.6,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash4l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.5,0.3,0)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash5l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.5,0.3,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash6l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.4,0,0)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash7l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.8,0.3,0.3)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+    "dsmash-1l":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Dsmash2_l.png"),(0.2,0.2,0.2)),((1,2,21,13),(2,3,21,13),(45,3,21,13),(67,3,21,13)),10,False),
+
+
     "nair0":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(0.9,0.7,0.6)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
     "nair1":(replacewhite(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),(1,0.7,0.05)),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
     "nair2":(pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/Nair.png"),((1,0,16,16),(18,0,16,16),(35,0,16,16),(52,0,16,16),(69,0,16,16),(86,0,16,16)),10,False),
