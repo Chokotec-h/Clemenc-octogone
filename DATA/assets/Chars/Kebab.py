@@ -109,6 +109,9 @@ class Kebab(Char):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
+            if self.frame == 1 :
+                self.animation = "upb"
+                self.animeframe = 0
             if self.frame < 11 :
                 self.vy = self.fallspeed
             if self.frame == 11: # Saute frame 11
@@ -174,16 +177,22 @@ class Kebab(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame == 1 :
+                self.animation = "jab"
+                self.animeframe = 0
             if self.frame == 3 :
                 self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch.mp3"))
             if self.frame > 6 and attack_button :
                 self.attack = "Jab2"
+                self.animeframe = 0
                 self.frame = 0
 
             if self.frame > 15: # 18 frames de lag
                 self.attack = None
 
         if attack == "Jab2":
+            if self.frame == 1 :
+                self.animation = "jab2"
             if self.frame == 3 :
                 self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch2.mp3"))
 
