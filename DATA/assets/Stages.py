@@ -1,7 +1,7 @@
 import pygame
 
 # Nom des stages
-stages = ["Cour d'honneur", "K201", "Chapelle"]
+stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [("event:/BGM/let's_fight_!", "K201", True),
           ("event:/BGM/Panda_Ball", "Pandadrome", True),
@@ -74,4 +74,9 @@ def create_stage(stage):
         return (Stage(f"{stage}/Chapelle_plateforme", 0, 235 * 1.65,
                       [(-202, 376 - 49 * 4 + 21, 45 * 4, 12, (67, 14, 6)),
                        (206, 376 - 49 * 4 + 21, 45 * 4, 12, (67, 14, 6)), (0, 60, 72 * 4, 12, (67, 14, 6))]),
+                [(-200, -50), (200, -50)])
+    if stage == "Salle d'info":
+        return (Stage(f"{stage}/Salle d'info_plateforme", 0, 308,
+                      [(-276, 68, 192, 4, (0, 0, 0)),
+                       (276, 68, 192, 4, (0, 0, 0))]),
                 [(-200, -50), (200, -50)])
