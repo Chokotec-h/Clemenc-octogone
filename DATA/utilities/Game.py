@@ -131,7 +131,22 @@ class Game():
         elif self.pause:
             self.pause_time += time.time() - self.pausefrom  # gestion du chrono en pause
             self.pausefrom = time.time()
+            pygame.draw.rect(window,(100,100,100),(width // 2-80, height // 2 - 40 , 160, 80))
             Texte(f"Pause", ("Arial", 60, False, False), (0, 0, 0), width // 2, height // 2, 800).draw(window)
+            Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", 25, False, False), (0, 0, 0), 40, 40, 800,format_="left").draw(window)
+            if not self.training :
+                inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
+                inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
+                if (inputs_1[6] and inputs_1[7] and inputs_1[8]) or (inputs_2[6] and inputs_2[7] and inputs_2[8]):
+                    self.confirm = True
+                    Menu = "stage"
+                    Play = False
+                    self.pause = False
+                    self.focusedbutton = 0
+                    musicplaying = False
+                    # reinitialisation des controles
+                    controls = reset_commands(joysticks, commands)
+                    clock.tick(10)
 
         ################### Affichage des éléments ###################
 
@@ -205,11 +220,16 @@ class Game():
             s = str(round(s * 100) / 100).split(".")[0]
             m = int(s) // 60
             s = int(s) - m * 60
+
             # affichage du temps restant
             if m * 60 + s > 0 and self.game_running < 0:
                 if m * 60 + s > 5:
+                    s = str(s)
+                    if len(s) == 1:
+                        s = "0" + str(s)
                     Texte(f"{str(m)}:{str(s)}'{str(ms)}", ("Arial", 60, True, False), (255, 255, 255), width / 2,
                           75).draw(window)
+                    s = int(s)
                 else:
                     Texte(f"{str(s)}", ("Arial", 180, True, False), (100, 0, 0), width / 2, height / 2).draw(window)
 
@@ -277,7 +297,7 @@ class Game():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
-                            Char_P2 = Training(0, 0, 1)
+                            self.Char_P2 = Training(0, 0, 1)
                     Bouton.draw(window)
 
                     # Bouton de gestion de DI (Horizontale)

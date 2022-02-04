@@ -6,7 +6,7 @@ icons ={
     "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),
     "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/icon.png"),
     "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
-    "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/Gregoire/icon.png"),
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/Pyro_Aubin/icon.png"),
@@ -81,6 +81,16 @@ Spamton = {
 
 }
 
+Gregoire = {
+    "idle":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "jump":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "fall":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+
+}
+
 Pyro_Aubin = {
     "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
     "walk":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
@@ -133,7 +143,7 @@ animations = {
     "BalanJ":BalanJ,
     "Joueur de air-president":Air_President,"Spamton":Spamton,
     "Millet":Nonesprite,
-    "Gregoire":Nonesprite,
+    "Gregoire":Gregoire,
     "Reignaud":Nonesprite,
     "Rey":Nonesprite,
     "Pyro-Aubin":Pyro_Aubin,

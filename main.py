@@ -347,6 +347,7 @@ def main():
                 window.blit(background, (0, 0))
 
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
+                confirm = Game.confirm
 
             ######################################################################################################
 

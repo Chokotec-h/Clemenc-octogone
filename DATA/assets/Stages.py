@@ -1,15 +1,15 @@
 import pygame
 
 # Nom des stages
-stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info"]
+stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info", "Salle de TP","Table de self"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [("event:/BGM/let's_fight_!", "K201", True),
           ("event:/BGM/Panda_Ball", "Pandadrome", True),
           ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIG-SHOT", "Chapelle", "Spamton"),
           ("event:/BGM/Honor winds", "Cour d'honneur", True),
           ("event:/BGM/digital_autority", "Salle d'info", True),
-          ("event:/BGM/City night", "BDE", True),
-          ("event:/BGM/optic'mind", "TP d'optique", True)]
+          ("event:/BGM/City night", "Table de self", True),
+          ("event:/BGM/optic'mind", "Salle de TP", True)]
 
 
 class Stage:
@@ -79,4 +79,14 @@ def create_stage(stage):
         return (Stage(f"{stage}/Salle d'info_plateforme", 0, 308,
                       [(-276, 68, 192, 4, (0, 0, 0)),
                        (276, 68, 192, 4, (0, 0, 0))]),
+                [(-200, -50), (200, -50)])
+    if stage == "Salle de TP":
+        return (Stage(f"{stage}/Salle_de_TP_plateforme", 0, 308,
+                      [(-398, 164, 268, 4, (200, 200, 200)),(398, 164, 268, 4, (200, 200, 200)),
+                      (-530, 5, 268, 4, (200, 200, 200)),(530, 5, 268, 4, (200, 200, 200))]),
+                [(-200, -50), (200, -50)])
+    if stage == "Table de self":
+        return (Stage(f"{stage}/Table de self_plateforme", 0, 190,
+                      [(-620, 293, 200, 4, (24, 47, 73)),
+                      (620, 293, 200, 4, (24, 47, 73))]),
                 [(-200, -50), (200, -50)])

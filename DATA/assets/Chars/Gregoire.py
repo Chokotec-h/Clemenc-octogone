@@ -14,7 +14,7 @@ class Gregoire(Char):
         super().__init__(speed=0.9, dashspeed=1.9, airspeed=1.3, deceleration=0.9, fallspeed=0.7, fastfallspeed=1.4, fullhop=15, shorthop=13,
                          doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
+        self.rect = pygame.Rect(100,0,60,144) # Crée le rectangle de perso
         self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
         self.name = "Gregoire"
         self.x = x
@@ -377,7 +377,7 @@ class Rayon():
         if rect.colliderect(stage.mainplat.rect):
             return True
         for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.v*sin(self.angle_fwd)+4:
                 return True
         return False
 
