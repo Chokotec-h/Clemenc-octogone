@@ -88,4 +88,4 @@ class instance:
         @param name: the name of the parameter
         @param value: the new value
         """
-        check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name, value))
+        check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode('ascii'), value))
