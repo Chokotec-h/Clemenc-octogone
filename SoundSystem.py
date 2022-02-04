@@ -77,3 +77,11 @@ class instance:
 
     def play(self):
         start_inst(self.instance)
+
+    def changeParameter(self, name, value):
+        """
+        take a parameter and change its value  (may not work...)
+        @param name: the name of the parameter
+        @param value: the new value
+        """
+        check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name, value))
