@@ -4,6 +4,7 @@
 
 import pygame
 import traceback
+from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 import SoundSystem
@@ -348,6 +349,18 @@ def main():
 
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
                 confirm = Game.confirm
+
+                if stage.name == "Salle de TP" :
+                    tremolo = 0
+                    if Game.Char_P1.name == "Gregoire" :
+                        for p in Game.Char_P1.projectiles :
+                            if isinstance(p,Rayon):
+                                tremolo = 1
+                    if Game.Char_P2.name == "Gregoire" :
+                        for p in Game.Char_P1.projectiles :
+                            if isinstance(p,Rayon):
+                                tremolo = 1
+                    embient.changeParameter("tremolo",tremolo)
 
             ######################################################################################################
 

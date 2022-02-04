@@ -13,7 +13,8 @@ musics = [("event:/BGM/let's_fight_!", "K201", True),
 
 
 class Stage:
-    def __init__(self, sprite, mainx, mainy, platforms=[]) -> None:
+    def __init__(self,name , sprite, mainx, mainy, platforms=[]) -> None:
+        self.name = name
         self.mainplat = MainPlat(f"DATA/Images/Stages/{sprite}.png", mainx, mainy)
         # Platforms : [(x,y,l,h,color),...]
         self.plats = []
@@ -61,13 +62,13 @@ class Platform():
 
 def create_stage(stage):
     if stage == "K201":
-        return (Stage(f"{stage}/K201_plateforme", 0, 191 * 1.65),
+        return (Stage(stage,f"{stage}/K201_plateforme", 0, 191 * 1.65),
                 [(-350, 0), (350, 0)])  # Coordonnées de départ
     if stage == "Pandadrome":
-        return (Stage(f"{stage}/Pandadrome_plateforme", 0, 186 * 1.6),
+        return (Stage(stage,f"{stage}/Pandadrome_plateforme", 0, 186 * 1.6),
                 [(-350, 0), (0, 0)])  # Coordonnées de départ
     if stage == "Cour d'honneur":
-        return (Stage(f"{stage}/Cour d'honneur_plateforme", -6, 220 * 1.65,
+        return (Stage(stage,f"{stage}/Cour d'honneur_plateforme", -6, 220 * 1.65,
                       [(2, 186 * 1.7 + 8, 436, 4, (97, 87, 77)), (2, 186 * 1.7 - 226, 332, 4, (97, 87, 77))]),
                 [(-200, 0), (200, 0)])
     if stage == "Chapelle":
@@ -76,17 +77,17 @@ def create_stage(stage):
                        (206, 376 - 49 * 4 + 21, 45 * 4, 12, (67, 14, 6)), (0, 60, 72 * 4, 12, (67, 14, 6))]),
                 [(-200, -50), (200, -50)])
     if stage == "Salle d'info":
-        return (Stage(f"{stage}/Salle d'info_plateforme", 0, 308,
+        return (Stage(stage,f"{stage}/Salle d'info_plateforme", 0, 308,
                       [(-276, 68, 192, 4, (0, 0, 0)),
                        (276, 68, 192, 4, (0, 0, 0))]),
                 [(-200, -50), (200, -50)])
     if stage == "Salle de TP":
-        return (Stage(f"{stage}/Salle_de_TP_plateforme", 0, 308,
+        return (Stage(stage,f"{stage}/Salle_de_TP_plateforme", 0, 308,
                       [(-398, 164, 268, 4, (200, 200, 200)),(398, 164, 268, 4, (200, 200, 200)),
                       (-530, 5, 268, 4, (200, 200, 200)),(530, 5, 268, 4, (200, 200, 200))]),
                 [(-200, -50), (200, -50)])
     if stage == "Table de self":
-        return (Stage(f"{stage}/Table de self_plateforme", 0, 190,
+        return (Stage(stage,f"{stage}/Table de self_plateforme", 0, 190,
                       [(-620, 293, 200, 4, (24, 47, 73)),
                       (620, 293, 200, 4, (24, 47, 73))]),
                 [(-200, -50), (200, -50)])
