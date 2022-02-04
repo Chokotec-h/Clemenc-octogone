@@ -75,7 +75,7 @@ def reset_commands(joysticks,commands):
             controls[1][-1] = [['Button', 10]]
             convert_inputs(controls[1],joysticks,1)
         except :
-            controls[0] = commands["Menu"]
+            controls[1] = commands["Menu"]
     elif len(joysticks) > 0 :
         controls = deepcopy([commands["Menu"],commands["DefaultKeyboard"]])
         try :
