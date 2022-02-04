@@ -310,7 +310,7 @@ def main():
                     # importation de l'arrière-plan et de la musique
                     background = pygame.transform.scale(pygame.image.load(
                         f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),
-                                                        (1600, 900))
+                        (1600, 900))
                     for m in musics:
                         if m[1] == Menu_Stages.actualstages[stage] and (
                                 str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
@@ -350,17 +350,17 @@ def main():
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
                 confirm = Game.confirm
 
-                if stage.name == "Salle de TP" :
+                if stage.name == "Salle de TP":
                     tremolo = 0
-                    if Game.Char_P1.name == "Gregoire" :
-                        for p in Game.Char_P1.projectiles :
-                            if isinstance(p,Rayon):
+                    if Game.Char_P1.name == "Gregoire":
+                        for p in Game.Char_P1.projectiles:
+                            if isinstance(p, Rayon):
                                 tremolo = 1
-                    if Game.Char_P2.name == "Gregoire" :
-                        for p in Game.Char_P1.projectiles :
-                            if isinstance(p,Rayon):
+                    if Game.Char_P2.name == "Gregoire":
+                        for p in Game.Char_P1.projectiles:
+                            if isinstance(p, Rayon):
                                 tremolo = 1
-                    embient.changeParameter("tremolo",tremolo)
+                    embient.changeParameter("tremolo", tremolo)
 
             ######################################################################################################
 

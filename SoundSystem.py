@@ -67,13 +67,17 @@ class instance:
     def __init__(self, event: str = None):
         """
         init an instance of an event
-        @param event: if specifed the instance will be load an put in the insatnce variable
+        @param event: if specifed the instance will be load and put in the instance variable
         if None, the user will specify the instance later
         """
 
-        self.instance = None
+        self.event_desc = c_void_p()
+        self.instance = c_void_p()
+
         if event is not None:
-            self.instance = init_inst(event)
+            check_result(
+                studio_dll.FMOD_Studio_System_GetEvent(studio_sys, event.encode('ascii'), byref(self.event_desc)))
+            check_result(studio_dll.FMOD_Studio_EventDescription_CreateInstance(self.event_desc, byref(self.instance)))
 
     def play(self):
         start_inst(self.instance)
