@@ -106,7 +106,7 @@ def main():
                 # Affichage de la version
                 Texte("1.0.0 beta", ("Arial", 15, True, True), (0, 0, 0), 100, 64, format_="left").draw(window)
 
-                key = "A" if controls[0] == commands["Menu"] else "Espace"
+                key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
                     Texte(f"Appuyez sur {key}", ("Arial black", 50, True, False), (0, 0, 0), width / 2,
                           height - 64).draw(window)
