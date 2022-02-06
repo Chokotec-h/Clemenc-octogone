@@ -181,7 +181,7 @@ class Kebab(Char):
                 self.animation = "jab"
                 self.animeframe = 0
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch.mp3"))
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi,2*self.knockbackmodifier,4*self.damagemodifier,0,12*self.stunmodifier,2,self,sound="hits and slap/punch.mp3"))
             if self.frame > 6 and attack_button :
                 self.attack = "Jab2"
                 self.animeframe = 0
@@ -194,7 +194,7 @@ class Kebab(Char):
             if self.frame == 1 :
                 self.animation = "jab2"
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.knockbackmodifier,2,self,sound="hits and slap/punch2.mp3"))
+                self.active_hitboxes.append(Hitbox(42,20,40,40,pi/6,8*self.knockbackmodifier,4*self.damagemodifier,0,12*self.stunmodifier,2,self,sound="hits and slap/punch2.mp3"))
 
             if self.frame > 21: # 18 frames de lag
                 self.attack = None

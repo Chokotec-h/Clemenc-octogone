@@ -120,7 +120,7 @@ Kebab = {
     "downb":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_DownB.png",((1,2,17,12),(19,2,17,12),(37,2,16,12),(54,2,15,12),(70,2,15,12),(86,2,14,12),(101,2,14,12),(116,2,12,12),(129,2,12,12)),20,False),
     "downb_no":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_DownB_echec.png",((1,2,13,12),(15,2,13,12),(29,2,13,12),(42,2,12,12)),20,False),
     "upb":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_UpB.png",((2,2,12,12),(16,2,12,12),(29,2,12,12),(42,2,11,12),(54,2,12,12),(67,2,12,12),(80,2,12,12),(93,2,12,12)),18,False),
-    "jab":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Jab.png",((2,2,12,12),(16,2,12,12),(29,2,12,12),(42,2,11,12),(55,2,12,12)),20,False),
+    "jab":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Jab.png",((2,2,12,12),(16,2,12,12),(29,2,12,12),(42,2,13,12),(55,2,12,12)),20,False),
     "jab2":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Jab2.png",((1,2,13,12),(15,2,14,12),(30,2,15,12),(46,2,13,12),(59,2,12,12)),20,False),
 
 }
