@@ -1,3 +1,4 @@
+import ctypes
 from ctypes import *
 
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
@@ -19,7 +20,6 @@ def check_result(r):
 def studio_init():
     print("Initializing FMOD Studio")
     # Write debug log to file
-    check_result(core_dll.FMOD_Debug_Initialize(0x00000002, 1, 0, "log.txt".encode('ascii')))
     check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
     # Call System init
     check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0, c_void_p()))
@@ -38,7 +38,6 @@ def play_event(soundname: str) -> c_void_p:
     event_inst = c_void_p()
     check_result(studio_dll.FMOD_Studio_EventDescription_CreateInstance(event_desc, byref(event_inst)))
     check_result(studio_dll.FMOD_Studio_EventInstance_Start(event_inst))
-    check_result(studio_dll.FMOD_Studio_EventInstance_Release(event_inst))
     return event_inst
 
 
@@ -56,7 +55,7 @@ def stop_inst(event_inst: c_void_p):
 
 
 def start_inst(event_inst: c_void_p):
-    check_result(studio_dll.FMOD_Studio_EventInstance_Start(event_inst))
+    check_result(studio_dll.FMOD_Studio_EventInstance_Start(byref(event_inst)))
 
 
 def tick_update():
@@ -88,4 +87,11 @@ class instance:
         @param name: the name of the parameter
         @param value: the new value
         """
-        check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode('ascii'), value))
+        val = c_void_p()
+        val1 = c_void_p()
+        check_result(
+            studio_dll.FMOD_Studio_EventInstance_GetParameterByName(self.instance, name.encode("ascii"), byref(val), byref(val1)))
+
+        print(val.value, val1.value)
+
+        check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode("ascii"), value*1065353216, True))

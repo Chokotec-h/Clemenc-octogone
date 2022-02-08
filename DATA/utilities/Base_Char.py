@@ -33,7 +33,7 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
-        self.sound = SoundSystem.instance("event:"+sound)
+        self.sound = SoundSystem.instance("event:" + sound)
         if not own.look_right :
             self.relativex = change_left(x,sizex)
             self.angle = pi - angle
@@ -77,7 +77,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle() # Groupe de collision (spécial à pygame)
         self.collidegroup.add(self)
-        #self.jumpsound = SoundSystem.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
+        #self.jumpsound = SoundSysteme.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
 
         self.frame = 0              # Frames écoulées depuis le début de la précédente action
         self.attack = None          # Attaque en cours

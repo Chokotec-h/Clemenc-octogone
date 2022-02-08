@@ -17,6 +17,9 @@ from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
 from DATA.utilities.commands import *
 
+######## testIWAN
+
+
 ############################################################################################################
 ############################################## Initialisation ##############################################
 ############################################################################################################
@@ -357,7 +360,7 @@ def main():
                             if isinstance(p, Rayon):
                                 tremolo = 1
                     if Game.Char_P2.name == "Gregoire":
-                        for p in Game.Char_P1.projectiles:
+                        for p in Game.Char_P2.projectiles:
                             if isinstance(p, Rayon):
                                 tremolo = 1
                     embient.changeParameter("tremolo", tremolo)
