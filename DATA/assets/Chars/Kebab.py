@@ -12,7 +12,7 @@ saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") 
 
 class Kebab(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.3, dashspeed=2.3, airspeed=1.95, deceleration=0.75, fallspeed=0.3, fastfallspeed=1.3, fullhop=9, shorthop=7,
+        super().__init__(speed=1.3, dashspeed=2.3, airspeed=1.6, deceleration=0.75, fallspeed=0.3, fastfallspeed=1.3, fullhop=9, shorthop=7,
                          doublejumpheight=8,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso
@@ -145,7 +145,7 @@ class Kebab(Char):
             if self.frame == 9 :
                 if self.sauce != self.current_sauce and self.sauces[self.sauce] >= 599:
                     self.current_sauce = self.sauce
-            if self.frame > 15: # 10 frames de lag
+            if self.frame > 15 + self.changeframe: # 10 frames de lag
                 self.attack = None
 
         if attack == "DownB":

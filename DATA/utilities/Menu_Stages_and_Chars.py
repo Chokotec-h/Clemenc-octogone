@@ -187,7 +187,8 @@ class CharsMenu():
                 # Icones de la roulette
                 if self.selectchar_2 == i :
                     window.blit(icons64[chars[i][self.alt[1]]],(width-128,105*(i-self.scroll2+4)-32))
-                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4)-32))
+                else :
+                    window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4)-32))
                 window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4-len(chars))-32))
                 window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4+len(chars))-32))
 

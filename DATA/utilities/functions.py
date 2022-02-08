@@ -77,7 +77,7 @@ def reset_commands(joysticks,commands):
         except :
             controls[1] = commands["Menu"]
     elif len(joysticks) > 0 :
-        controls = deepcopy([commands["Menu"],commands["DefaultKeyboard"]])
+        controls = deepcopy([commands["Menu"],commands["Keyboard"]])
         try :
             controls[0][-2] = [['Button', 9]]
             controls[0][-1] = [['Button', 10]]
@@ -85,7 +85,7 @@ def reset_commands(joysticks,commands):
         except :
             controls[0] = commands["Menu"]
     else :
-        controls = [commands["DefaultKeyboard"],commands["DefaultKeyboard"]]
+        controls = [commands["Keyboard"],commands["Keyboard"]]
     return controls
 
 bouton = pygame.image.load("./DATA/Images/Menu/Controls/Button.png")

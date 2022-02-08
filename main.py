@@ -295,9 +295,9 @@ def main():
                 if Menu == "game":
                     names = Menu_Chars.names
                     # Jeu clavier
-                    if names[0] == 0 and controls[0] == commands["DefaultKeyboard"]:
+                    if names[0] == 0 and controls[0] == commands["Keyboard"]:
                         names[0] = 1
-                    if names[1] == 0 and controls[1] == commands["DefaultKeyboard"]:
+                    if names[1] == 0 and controls[1] == commands["Keyboard"]:
                         names[1] = 1
 
                     # conversion des contrôles

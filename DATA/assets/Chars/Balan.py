@@ -119,7 +119,7 @@ class Balan(Char):
         if attack == "DownTilt":
             if self.frame == 8:  # Frame 8-13
                 pygame.mixer.Sound("DATA/Musics/SE/plein de craie -_-/craie 1.mp3").play()
-                self.active_hitboxes.append(Hitbox(35, 80, 24, 10, 2 * pi / 5, 8, 3.8, 1 / 200, 14, 5, self, False))
+                self.active_hitboxes.append(Hitbox(35, 100, 48, 20, 2 * pi / 5, 8, 3.8, 1 / 200, 14, 5, self, False))
 
             if self.frame > 20:  # 7 frames de lag
                 self.attack = None

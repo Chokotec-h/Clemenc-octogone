@@ -83,7 +83,7 @@ Spamton = {
 
 Gregoire = {
     "idle":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
-    "walk":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_walk.png",((1,0,16,36),(18,0,16,36),(34,0,20,36),(54,0,18,36),(72,0,16,36),(88,0,16,36),(106,0,16,36)),8,True),
     "run":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
     "jump":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
     "fall":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
@@ -92,7 +92,7 @@ Gregoire = {
 }
 
 Pyro_Aubin = {
-    "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,46),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
     "walk":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
     "run":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
     "jump":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_jump.png",((7,4,31,44),(55,2,30,46),(101,1,38,46)),8,False),

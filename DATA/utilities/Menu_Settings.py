@@ -164,7 +164,7 @@ class SettingsMenu():
                 # liste des commandes
                 for i,n in enumerate(DATA.utilities.commands.commands) :
                     # on ne paramètre pas les configurations par défaut et du menu
-                    if n not in ["Default","Menu","DefaultKeyboard"]:
+                    if n not in ["Keyboard","Menu","DefaultKeyboard"]:
                         Bouton = Button(n,("arial",24,False,False),"./DATA/Images/Menu/Button.png",width/2,(i+1)*60-180,120,50)
                         Bouton.resize(Bouton.textobject.width+20,50)
                         if self.focusedbutton == i-3:
