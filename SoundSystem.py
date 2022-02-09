@@ -87,11 +87,4 @@ class instance:
         @param name: the name of the parameter
         @param value: the new value
         """
-        val = c_void_p()
-        val1 = c_void_p()
-        check_result(
-            studio_dll.FMOD_Studio_EventInstance_GetParameterByName(self.instance, name.encode("ascii"), byref(val), byref(val1)))
-
-        print(val.value, val1.value)
-
         check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode("ascii"), value*1065353216, True))
