@@ -273,6 +273,11 @@ def main():
                 ######################################################################################################
                 ############################################  Menu stage  ############################################
 
+                if Menu == "to chars":
+                    stage = Menu_Stages.stage
+                    Menu_Chars = CharsMenu(training)
+                    Menu = "char"
+
                 if Menu == "stage":
                     Menu = Menu_Stages.update(window, controls, joysticks, width, height)
                     confirm = Menu_Stages.confirm
