@@ -549,36 +549,37 @@ class Pyro_Aubin(Char):
                 self.attack = None
 
     def draw(self, window): # Dessine aussi les inputs du konami code et la jauge d'explosifs
-            drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
-
-            drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*self.sizescale),round(drawing_sprite.get_size()[1]*self.sizescale))) # Rescale
-            size = [size[0]*self.sizescale,size[1]*self.sizescale,size[2]*self.sizescale,size[3]*self.sizescale] # Rescale
-            pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
-            window.blit(drawing_sprite, pos,size) # on dessine le sprite
+        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
+        drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0],size[1],size[2],size[3]),not self.look_right,False)
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*self.sizescale),round(drawing_sprite.get_size()[1]*self.sizescale))) # Rescale
+        size = [size[0]*self.sizescale,size[1]*self.sizescale,size[2]*self.sizescale,size[3]*self.sizescale] # Rescale
+        pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
+        if self.show :
+            window.blit(drawing_sprite, pos) # on dessine le sprite
             #self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
 
-            for p in self.projectiles :
-                p.draw(window)
+        for p in self.projectiles :
+            p.draw(window)
 
-            for i,s in enumerate(self.smoke_dash):
-                        s.draw(window)
-                        if s.life_time < 0:
-                            del self.smoke_dash[i]
-            
-            for i,s in enumerate(self.double_jump):
-                        s.draw(window)
-                        if s.life_time < 0:
-                            del self.double_jump[i]
-            if self.player == 0 :
-                x = 533
-            else :
-                x = 1066
-            
-            for i,key in enumerate(self.konami) :
-                window.blit(pygame.image.load(f"./DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
-            pygame.draw.rect(window,(0,0,0),(x,770,100,20))
-            pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
-            Texte(str(floor(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
+        for i,s in enumerate(self.smoke_dash):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.smoke_dash[i]
+        
+        for i,s in enumerate(self.double_jump):
+                    s.draw(window)
+                    if s.life_time < 0:
+                        del self.double_jump[i]
+        if self.player == 0 :
+            x = 533
+        else :
+            x = 1066
+        
+        for i,key in enumerate(self.konami) :
+            window.blit(pygame.image.load(f"./DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
+        pygame.draw.rect(window,(0,0,0),(x,770,100,20))
+        pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
+        Texte(str(floor(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
 ###################          
 """ Projectiles """
 ###################

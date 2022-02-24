@@ -58,14 +58,12 @@ class Gregoire(Char):
                 self.vy = (down - up) * 20
                 self.airdodge = True
                 self.doublejump = [True for _ in self.doublejump]  # Annule tout les sauts
-            if self.frame > 35:
+            if self.frame > 28:
                 self.airdodge = False
                 self.vy = 0
                 self.vx = 0
-            if self.frame > 45:  # 10 frames de lag
+            if self.frame > 33:  # 5 frames de lag
                 self.attack = None
-            if self.grounded:
-                self.lag += 1
 
         if attack == "NeutralB":
             if self.frame < 5:

@@ -7,8 +7,8 @@ def get_sprite(animation,char,newframe,right):
     time = image[2]
     looped = image[3]
     image = image[0]
-    if not right :
-        image = image[0:-4]+"_l.png"
+    #if not right :
+    #    image = image[0:-4]+"_l.png"
     image = pygame.image.load(image).convert_alpha()
 
     frame = round(newframe / (60/time))
