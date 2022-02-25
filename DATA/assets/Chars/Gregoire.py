@@ -331,7 +331,7 @@ class Gregoire(Char):
             elif self.frame == 10:  # Active on 10-16
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(
-                    Hitbox(30, 60, 60, 32, pi / 5, 12 + 7 * (self.charge / 200), incertitude(13), 1 / 250,
+                    Hitbox(30, 60, 60, 32, pi / 2, 20 + 10 * (self.charge / 200), incertitude(13), 1 / 250,
                            9 + 5 * (self.charge / 150), 6, self, False, sound="hits and slap/punch.mp3"))
 
             if self.frame > 35:  # 19 frames de lag
