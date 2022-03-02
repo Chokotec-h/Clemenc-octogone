@@ -71,6 +71,9 @@ class Gregoire(Char):
                     self.look_right = False
                 if right:
                     self.look_right = True
+            if self.frame == 8:
+                self.animation = "neutralB"
+                self.animeframe = 0
             if self.frame < 25:
                 if up:
                     self.angle_rayon = pi / 4
@@ -92,11 +95,17 @@ class Gregoire(Char):
                 self.charge = 0
 
         if attack == "DownB":
+            if self.frame == 10:
+                self.animation = "downb_charge"
+                self.animeframe = 0
             if self.frame < 10:
                 if left:
                     self.look_right = False
                 if right:
                     self.look_right = True
+            if self.frame == 70:
+                self.animation = "downb_release"
+                self.animeframe = 0
             if self.frame == 70:
                 self.active_hitboxes.append(
                     Hitbox(32, 32, 64, 64, pi / 4, 23, 68.29, 1 / 100, 9, 5, self, False, sound="BOOM !!!/Cannon.wav"))
@@ -105,6 +114,9 @@ class Gregoire(Char):
                 self.charge = 0
 
         if attack == "SideB":
+            if self.frame == 8:
+                self.animation = "sideB"
+                self.animeframe = 0
             if self.frame < 8:
                 if left:  # peut reverse netre les frames 1 et 7
                     self.look_right = False
@@ -123,6 +135,9 @@ class Gregoire(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame == 8:
+                self.animation = "jab"
+                self.animeframe = 0
             if attack_button and self.frame < 2:
                 self.rapidjab = True
             if self.frame > 10 and self.rapidjab:
@@ -139,11 +154,14 @@ class Gregoire(Char):
             if not self.rapidjab:
                 if self.frame == 3:
                     self.active_hitboxes.append(
-                        Hitbox(32, 32, 64, 64, pi / 4, 18, incertitude(2.5), 1 / 200, 8, 3, self, False))
+                        Hitbox(32, 32, 64, 64, pi / 4, 10, incertitude(2.5), 1 / 200, 8, 3, self, False))
                 if self.frame > 30:  # 24 frames de lag
                     self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 0:
+                self.animation = "dtilt"
+                self.animeframe = 0
             if self.frame == 16:
                 self.active_hitboxes.append(
                     Hitbox(32, 64, 48, 48, -2 * pi / 5, 22, incertitude(9), 1 / 200, 13, 3, self, False,
@@ -152,6 +170,9 @@ class Gregoire(Char):
                 self.attack = None
 
         if attack == "ForwardTilt":
+            if self.frame == 0:
+                self.animation = "ftilt"
+                self.animeframe = 0
             if self.frame < 3:
                 if left:
                     self.look_right = False
@@ -165,16 +186,22 @@ class Gregoire(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 0:
+                self.animation = "utilt"
+                self.animeframe = 0
             if self.frame == 8:
                 self.vy = -6
                 angle = pi / 2
                 self.active_hitboxes.append(
-                    Hitbox(-5, -48, 58, 58, angle, 15, incertitude(10), 1 / 300, 13, 3, self, False,
+                    Hitbox(-5, -12, 58, 58, angle, 15, incertitude(10), 1 / 300, 13, 3, self, False,
                            sound="hits and slap/punch2.wav"))
             if self.frame > 25:  # Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 0:
+                self.animation = "uair"
+                self.animeframe = 0
             if self.frame < 25:
                 self.vy = 0
                 self.vx *= 0.8
@@ -192,9 +219,14 @@ class Gregoire(Char):
                     self.lag = 6  # Auto cancel frame 1-2 et 30+, 6 frames de landing lag
 
         if attack == "ForwardAir":
+            if self.frame == 0:
+                self.animation = "fair"
+                self.animeframe = 0
             if self.frame == 7:
                 if shield:
                     self.strongfair = True
+                    self.animation = "fair2"
+                    self.animeframe = 7
                 else:
                     self.strongfair = False
                     self.active_hitboxes.append(Hitbox(48, 32, 36, 16, pi / 4, 12, 9, 1 / 200, 13, 3, self,
@@ -211,6 +243,9 @@ class Gregoire(Char):
             # Pas d'auto cancel. Agit même après avoir atterri
 
         if attack == "BackAir":
+            #if self.frame == 8:
+            #    self.animation = "bair"
+            #    self.animeframe = 0
             if self.frame == 13:
                 self.active_hitboxes.append(
                     Hitbox(-48, 64, 32, 32, pi / 6, 25, incertitude(13), 1 / 200, 14, 5, self, False,
@@ -224,6 +259,9 @@ class Gregoire(Char):
                     self.lag = 5  # Auto cancel frame 1-2 et 22+, 5 frames de landing lag
 
         if attack == "DownAir":
+            #if self.frame == 8:
+            #    self.animation = "dair_fall"
+            #    self.animeframe = 0
             self.vx = min(self.frame / 10, 15) * signe(self.direction)
             if self.frame < 14:
                 self.vy = 0
@@ -250,6 +288,9 @@ class Gregoire(Char):
                 self.lag = 10  # Ne se termine que lorsqu'il touche le sol
 
         if attack == "NeutralAir":
+            if self.frame == 0:
+                self.animation = "nair"
+                self.animeframe = 0
             if self.frame == 12:
                 self.active_hitboxes.append(Hitbox(48, 48, 32, 32, pi / 2, 2, incertitude(6), 0, 20, 3, self, False,
                                                    sound="hits and slap/punch2.mp3"))
@@ -267,9 +308,13 @@ class Gregoire(Char):
                     self.lag = 12  # Auto cancel frame 1-3 et 28+, 12 frames de landing lag
 
         if attack == "ForwardSmash":
+            if self.frame == 0:
+                self.animation = "fsmash"
+                self.animeframe = 0
             if self.frame > 3 and self.frame < 6 and smash and self.charge < 200:  # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge + 1
+                self.animeframe -= 1
 
             elif self.frame == 24:  # Active on 24-27
                 self.vx = 10 * signe(self.direction)
@@ -285,19 +330,12 @@ class Gregoire(Char):
                 self.charge = 0
 
         if attack == "UpSmash":
+            if self.frame == 0:
+                self.animation = "usmash"
+                self.animeframe = 0
 
             if self.active_hitboxes:  # Moving hitbox
-                self.active_hitboxes[-1].relativex -= 20 * signe(self.direction)
-                if self.frame == 12:
-                    self.active_hitboxes[-1].relativey += 10
-                if self.frame == 13:
-                    self.active_hitboxes[-1].relativey -= 10
-                if self.frame < 14:
-                    if self.look_right:
-                        self.active_hitboxes[-1].relativex -= 50
-
-                    else:
-                        self.active_hitboxes[-1].relativex += 50
+                self.active_hitboxes[-1].relativey -= 20
 
             if self.frame < 5:
                 if left:  # peut reverse netre les frames 1 et 5
@@ -307,10 +345,11 @@ class Gregoire(Char):
             if self.frame > 4 and self.frame < 8 and smash and self.charge < 200:  # Chargement jusqu'à 200 frames
                 self.frame = 5
                 self.charge = self.charge + 1
+                self.animeframe -= 1
 
-            elif self.frame == 11:  # Active on 11-13
+            elif self.frame == 11:  # Active on 11-16
                 self.charge = min(self.charge, 100)
-                self.active_hitboxes.append(Hitbox(50, -16, 64, 64, pi / 4, 13 + 10 * (self.charge / 200), 13, 1 / 90,
+                self.active_hitboxes.append(Hitbox(50, 40, 48, 48, pi / 2, 19 + 10 * (self.charge / 200), 18, 1 / 90,
                                                    10 + 7 * (self.charge / 100), 5, self, False,
                                                    sound="hits and slap/punch1.mp3"))
 
@@ -319,6 +358,9 @@ class Gregoire(Char):
                 self.charge = 0
 
         if attack == "DownSmash":
+            if self.frame == 0:
+                self.animation = "dsmash"
+                self.animeframe = 0
 
             if self.frame < 2:
                 if left:  # peut reverse netre les frames 1 et 5
@@ -328,6 +370,7 @@ class Gregoire(Char):
             if self.frame > 4 and self.frame < 6 and smash and self.charge < 200:  # Chargement jusqu'à 200 frames
                 self.frame = 4
                 self.charge = self.charge + 1
+                self.animeframe -= 1
             elif self.frame == 10:  # Active on 10-16
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(
@@ -339,14 +382,17 @@ class Gregoire(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
+            if self.frame == 0:
+                self.animation = "dashattack"
+                self.animeframe = 0
             if self.frame == 9:
                 self.active_hitboxes.append(
-                    Hitbox(0, 32, 64, 48, pi / 5, 9, incertitude(9), 1 / 250, 8, 15, self, False))
-            if self.frame == 24:
+                    Hitbox(0, 64, 64, 48, pi / 5, 9, incertitude(9), 1 / 250, 8, 20, self, False))
+            if self.frame == 30:
                 self.active_hitboxes.append(
-                    Hitbox(48, 32, 48, 48, -2 * pi / 5, 12, incertitude(12), 1 / 150, 12, 2, self, False,
+                    Hitbox(48, 64, 48, 48, -2 * pi / 5, 12, incertitude(12), 1 / 150, 12, 2, self, False,
                            sound="hits and slap/cool hit.wav"))
-            if self.frame < 21:
+            if self.frame < 30:
                 self.vy = 0
                 if self.grounded:
                     self.vx += self.dashspeed * signe(self.direction) / 2
