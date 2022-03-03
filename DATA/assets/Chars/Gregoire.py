@@ -58,11 +58,11 @@ class Gregoire(Char):
                 self.vy = (down - up) * 20
                 self.airdodge = True
                 self.doublejump = [True for _ in self.doublejump]  # Annule tout les sauts
-            if self.frame > 28:
+            if self.frame > 40:
                 self.airdodge = False
                 self.vy = 0
                 self.vx = 0
-            if self.frame > 33:  # 5 frames de lag
+            if self.frame > 45:  # 5 frames de lag
                 self.attack = None
 
         if attack == "NeutralB":
@@ -243,9 +243,9 @@ class Gregoire(Char):
             # Pas d'auto cancel. Agit même après avoir atterri
 
         if attack == "BackAir":
-            #if self.frame == 8:
-            #    self.animation = "bair"
-            #    self.animeframe = 0
+            if self.frame == 0:
+                self.animation = "bair"
+                self.animeframe = 0
             if self.frame == 13:
                 self.active_hitboxes.append(
                     Hitbox(-48, 64, 32, 32, pi / 6, 25, incertitude(13), 1 / 200, 14, 5, self, False,
@@ -259,9 +259,9 @@ class Gregoire(Char):
                     self.lag = 5  # Auto cancel frame 1-2 et 22+, 5 frames de landing lag
 
         if attack == "DownAir":
-            #if self.frame == 8:
-            #    self.animation = "dair_fall"
-            #    self.animeframe = 0
+            if self.frame == 0:
+                self.animation = "dair_dive"
+                self.animeframe = 0
             self.vx = min(self.frame / 10, 15) * signe(self.direction)
             if self.frame < 14:
                 self.vy = 0
@@ -281,11 +281,17 @@ class Gregoire(Char):
                     else:
                         self.active_hitboxes[-1].angle = pi if self.look_right else 0
 
+            if self.frame == 50:
+                self.animation = "dair_fall"
+                self.animeframe = 0
             if self.grounded:
+                self.animation = "dair_ground"
+                self.animeframe = 0
+            if self.grounded or self.frame > 60 :
                 if self.active_hitboxes:
                     self.active_hitboxes = list()
                 self.attack = None
-                self.lag = 10  # Ne se termine que lorsqu'il touche le sol
+                self.lag = 15  # Ne se termine que lorsqu'il touche le sol ou au bout de 60 frames
 
         if attack == "NeutralAir":
             if self.frame == 0:
@@ -553,7 +559,7 @@ class Quantique():
         self.y = y
         self.own = own
         self.animeframe = self.own.animeframe
-        self.duration = 60
+        self.duration = 120
         self.angle = pi / 2
         self.knockback = 7
         self.damages = incertitude(3)

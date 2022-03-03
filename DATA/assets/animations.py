@@ -84,10 +84,10 @@ Spamton = {
 Gregoire = {
     "idle":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
     "walk":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_walk.png",((1,0,16,36),(18,0,16,36),(34,0,20,36),(54,0,18,36),(72,0,16,36),(88,0,16,36),(106,0,16,36)),8,True),
-    "run":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_run.png",((1,0,16,36),(21,0,20,36),(50,0,18,36),(73,0,20,36),(96,0,24,36),(128,0,18,36)),12,True),
     "jump":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_jump.png",((3,2,17,34),(25,1,15,35),(46,0,16,37),(63,1,21,36)),12,False),
     "fall":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_jump.png",((63,1,21,36),),8,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_parry_airdodge.png",((1,0,15,36),(20,0,17,36),(39,0,17,36)),8,False),
     "jab":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_jab.png",((1,0,17,36),(19,0,19,36),(38,0,19,36),(60,0,19,35),(79,0,17,36),(97,0,18,36),(120,0,16,36),(136,0,18,36)),20,True),
     "nair":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_nair.png",((0,0,19,36),(20,0,14,36),(37,0,15,36),(53,0,15,35),(70,0,21,36),(91,0,18,36)),12,False),
     "dashattack":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_dashattack.png",((1,2,18,36),(21,4,18,34),(42,9,25,29),(69,20,18,18),(89,20,18,18),(110,20,18,18),(130,20,18,18),(150,20,18,18),(170,20,18,18),(191,20,18,18),(211,13,29,25)),20,False),
@@ -104,7 +104,10 @@ Gregoire = {
     "uair":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_uair.png",((2,0,21,36),(27,0,16,36),(44,0,15,36),(60,0,15,36)),10,False),
     "usmash":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_usmash.png",((1,2,18,36),(21,4,18,34),(39,4,21,34),(60,4,18,34),(78,1,14,37)),10,False),
     "utilt":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_utilt.png",((1,6,27,30),(29,0,17,36),(54,5,25,31),(83,0,14,36)),10,False),
-    # left  :  run, airdodge, dair and bair
+    "dair_dive":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_dair_dive.png",((4,6,25,31),(31,8,25,29),(63,12,29,25),(97,0,14,37)),10,False),
+    "dair_fall":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_dair_fall.png",((6,0,14,37),(25,12,30,25),(61,7,25,29),(93,9,29,25),(125,2,21,36)),15,False),
+    "dair_ground":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_dair_ground.png",((6,0,14,37),(25,12,29,25),(61,8,25,29),(94,4,18,34)),10,False),
+    "bair":("./DATA/Images/Sprites/Chars/Gregoire/gregoire_bair.png",((2,0,21,36),(25,0,22,36),(48,0,23,36),(78,0,14,36),(99,0,21,36),(122,0,26,36),(148,0,16,36)),10,False),
 }
 
 Pyro_Aubin = {
