@@ -133,8 +133,8 @@ class Game():
             self.pausefrom = time.time()
             pygame.draw.rect(window,(100,100,100),(width // 2-80, height // 2 - 40 , 160, 80))
             Texte(f"Pause", ("Arial", 60, False, False), (0, 0, 0), width // 2, height // 2, 800).draw(window)
-            Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", 25, False, False), (0, 0, 0), 40, 40, 800,format_="left").draw(window)
-            if not self.training :
+            if not self.training : 
+                Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", 25, False, False), (0, 0, 0), 40, 40, 800,format_="left").draw(window)
                 inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
                 inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
                 if (inputs_1[6] and inputs_1[7] and inputs_1[8]) or (inputs_2[6] and inputs_2[7] and inputs_2[8]):
