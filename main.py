@@ -239,11 +239,13 @@ def main():
 
                     Texte("Graphics", ("arial", 28, True, False), (0, 0, 0), width / 3, 2 * height / 8).draw(window)
                     Texte("Loïc", ("arial", 28, False, False), (0x20, 0x50, 0xF0), 2 * width / 3,
-                          2 * height / 8 - 30).draw(window)
-                    Texte("Elsa", ("arial", 28, False, False), (0xBC, 0x79, 0xE4), 2 * width / 3, 2 * height / 8).draw(
-                        window)
-                    Texte("Nicolas", ("arial", 28, False, False), (120, 120, 120), 2 * width / 3,
-                          2 * height / 8 + 30).draw(window)
+                          2 * height / 8 - 15).draw(window)
+                    Texte("Elsa", ("arial", 28, False, False), (0xBC, 0x79, 0xE4), 2 * width / 3, 
+                          2 * height / 8 + 15).draw(window)
+                    Texte("Nicolas", ("arial", 28, False, False), (120, 120, 120), 3 * width / 4,
+                          2 * height / 8 - 15).draw(window)
+                    Texte("Aubin", ("arial", 28, False, False), (0x55, 0x77, 0xBB), 3 * width / 4,
+                          2 * height / 8 + 15).draw(window)
 
                     Texte("Musics & Sounds", ("arial", 28, True, False), (0, 0, 0), width / 3, 3 * height / 8).draw(
                         window)
