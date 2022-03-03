@@ -139,7 +139,7 @@ class Game():
                 inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
                 if (inputs_1[6] and inputs_1[7] and inputs_1[8]) or (inputs_2[6] and inputs_2[7] and inputs_2[8]):
                     self.confirm = True
-                    Menu = "stage"
+                    Menu = "to char"
                     Play = False
                     self.pause = False
                     self.focusedbutton = 0
@@ -280,7 +280,7 @@ class Game():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
-                            Menu = "stage"
+                            Menu = "to char"
                             Play = False
                             self.pause = False
                             self.focusedbutton = 0

@@ -168,8 +168,9 @@ def main():
                     if focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            Menu = "stage"
-                            Menu_Stages = StagesMenu(False)
+                            Menu = "char"
+                            Menu_Stages.training = False
+                            Menu_Chars.training = False
                             training = False
                             confirm = True
                     Bouton.draw(window)
@@ -180,8 +181,9 @@ def main():
                     if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            Menu = "stage"
-                            Menu_Stages = StagesMenu(True)
+                            Menu = "char"
+                            Menu_Stages.training = True
+                            Menu_Chars.training = True
                             training = True
                             confirm = True
                     Bouton.draw(window)
@@ -276,33 +278,36 @@ def main():
                     confirm = Menu_Settings.confirm
 
                 ######################################################################################################
-                ############################################  Menu stage  ############################################
+                ############################################  Transition  ############################################
 
-                if Menu == "to chars":
-                    stage = Menu_Stages.stage
-                    Menu_Chars = CharsMenu(training)
+                if Menu == "to char":
                     Menu = "char"
+                    Menu_Chars.confirm = True
 
-                if Menu == "stage":
-                    Menu = Menu_Stages.update(window, controls, joysticks, width, height)
-                    confirm = Menu_Stages.confirm
+                if Menu == "to stage":
+                    Menu = "stage"
+                    Menu_Stages.confirm = True
 
                 ######################################################################################################
                 #########################################  Menu personnages  #########################################
-
-                if Menu == "to chars":
-                    stage = Menu_Stages.stage
-                    Menu_Chars = CharsMenu(training)
-                    Menu = "char"
 
                 if Menu == "char":
                     Menu = Menu_Chars.update(window, width, height, controls, joysticks)
                     confirm = Menu_Chars.confirm
 
                 ######################################################################################################
+                ############################################  Menu stage  ############################################
+
+                if Menu == "stage":
+                    Menu = Menu_Stages.update(window, controls, joysticks, width, height)
+                    confirm = Menu_Stages.confirm
+
+                ######################################################################################################
                 ######################################  Démarrage de la partie  ######################################
 
                 if Menu == "game":
+                    stage = Menu_Stages.stage
+                    
                     names = Menu_Chars.names
                     # Jeu clavier
                     if names[0] == 0 and controls[0] == commands["Keyboard"]:

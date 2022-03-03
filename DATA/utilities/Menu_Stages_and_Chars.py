@@ -45,7 +45,7 @@ class StagesMenu():
         if self.focused_button == -1:
             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
             if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
-                Menu = "main"
+                Menu = "to char"
                 self.confirm = True
         else :
             # Affichage du nom du stage sélectionné
@@ -60,7 +60,7 @@ class StagesMenu():
 
                 # setup du mennu personnage
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
-                    Menu = "to chars"
+                    Menu = "game"
                     self.stage = i
             Bouton.draw(window)
             # image du stage
@@ -106,7 +106,7 @@ class CharsMenu():
         if self.b > 0:
             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
         if self.b >= 10:
-            Menu = "stage"
+            Menu = "main"
         Bouton.draw(window)
         Texte("<--",("arial",30,True,False),(0,0,0),width/2,25).draw(window)
         Texte("(B)",("arial",30,True,False),(0,0,0),width/2,50).draw(window)
@@ -322,6 +322,9 @@ class CharsMenu():
         ##
         
         if (self.selected_2 or self.training) and self.selected_1 :
-            Menu = "game"
+            Menu = "to stage"
+            # reset la confirmation du menu personnage (conserve en mémoire le dernier personnage et le nom choisi)
+            self.selected_2 = False
+            self.selected_1 = False
         
         return Menu
