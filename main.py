@@ -309,6 +309,9 @@ def main():
                     stage = Menu_Stages.stage
                     
                     names = Menu_Chars.names
+
+                    Menu_Chars.selected_1 = False
+                    Menu_Chars.selected_2 = False
                     # Jeu clavier
                     if names[0] == 0 and controls[0] == commands["Keyboard"]:
                         names[0] = 1
@@ -345,7 +348,7 @@ def main():
                 if Menu == "results":
                     # réinitialisation des contrôles
                     controls = reset_commands(joysticks, commands)
-                    Menu = "stage"
+                    Menu = "char"
 
             ######################################################################################################
             ############################################  En  combat  ############################################

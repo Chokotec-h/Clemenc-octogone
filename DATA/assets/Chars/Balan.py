@@ -203,7 +203,7 @@ class Balan(Char):
 
         if attack == "BackAir":
             if self.frame == 6:  # Frame 6-8
-                self.active_hitboxes.append(Hitbox(-40, 32, 16, 16, 49 * pi / 50, 10, 12, 1 / 150, 20, 6, self, False,
+                self.active_hitboxes.append(Hitbox(-42, 32, 48, 48, 49 * pi / 50, 10, 12, 1 / 150, 20, 6, self, False,
                                                    sound="hits and slap/cool hit.wav"))
             if self.frame == 9:  # Frame 9-11
                 if not self.look_right:
