@@ -42,12 +42,14 @@ Nonesprite = {
 }
 
 Renault = {
-    "idle":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
-    "walk":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
-    "run":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
-    "jump":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,16,35),),1,True),
+    "idle":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),(21,1,14,35),(42,3,14,33),(59,2,14,34)),9,True),
+    "walk":("./DATA/Images/Sprites/Chars/Renault/Default/walk.png",((2,1,16,35),(22,2,16,34),(40,1,14,35),(56,1,14,35),(74,1,14,35),(95,2,18,34),(115,1,14,35)),10,True),
+    "run":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "downtilt":("./DATA/Images/Sprites/Chars/Renault/Default/DownTilt.png",((2,1,14,35),(23,1,14,35),(39,1,24,35),(70,1,21,35),(96,1,24,35),(119,1,24,35),(145,1,24,35),(170,1,21,35),(195,1,16,35),(212,1,14,35)),16,False),
+    "upsmash":("./DATA/Images/Sprites/Chars/Renault/Default/UpSmash.png",((2,1,14,35),(23,1,14,35),(39,1,24,35),(70,1,21,35),(96,1,24,35),(119,1,24,35),(145,1,24,35),(170,1,21,35),(195,1,16,35),(212,1,14,35)),16,False),
 
 }
 

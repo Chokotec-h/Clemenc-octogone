@@ -116,10 +116,13 @@ class Renault(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 1 :
+                self.animation = "downtilt"
+                self.animeframe = 0
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(64,120-64,16,64,8*pi/17,8,6.4,1/200,12,8,self))
+                self.active_hitboxes.append(Hitbox(64,120-64,16,64,8*pi/17,9,6.4,1/200,18,8,self))
 
-            if self.frame > 20: # 7 frames de lag
+            if self.frame > 29: # 7 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
