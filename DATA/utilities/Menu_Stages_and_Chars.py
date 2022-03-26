@@ -112,27 +112,6 @@ class CharsMenu():
         Texte("(B)",("arial",30,True,False),(0,0,0),width/2,50).draw(window)
 
 
-        ### Interface personnages P1
-        for i in range(len(chars)):
-            # Roulette
-            Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1-len(chars)+4),384,100)
-            Bouton.draw(window)
-            Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+len(chars)+4),384,100)
-            Bouton.draw(window)
-            Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+4),384,100)
-            if self.selectchar_1 == i :
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                Bouton.resize(400,100)
-            Bouton.draw(window)
-        for i in range(len(chars)):
-            # icones sur la roulette
-            if self.selectchar_1 == i :
-                window.blit(icons64[chars[i][self.alt[0]]],(64,105*(i-self.scroll1+4)-32))
-            else :
-                window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4)-32))
-            window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4-len(chars))-32))
-            window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4+len(chars))-32))
-
         # Haut/Bas pour choisir un personnage
         if convert_inputs(controls[0],joysticks,0)[3] and not self.selected_1 and self.scroll1 == self.selectchar_1:
             self.alt[0] = 0
@@ -165,32 +144,89 @@ class CharsMenu():
         if convert_inputs(controls[0],joysticks,0)[7]:
             self.selected_1 = False
 
-        ### Interface personnages P2
         if self.training :
+
+            ### Interface personnages P1
+            for i in range(len(chars)):
+                # Roulette
+                if i < 5 :
+                    Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+len(chars)+4),384,100)
+                    Bouton.draw(window)
+                if len(chars) - i < 5 :
+                    Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1-len(chars)+4),384,100)
+                    Bouton.draw(window)
+                Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+4),384,100)
+                if self.selectchar_1 == i :
+                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.resize(400,100)
+                Bouton.draw(window)
+            for i in range(len(chars)):
+                # icones sur la roulette
+                if self.selectchar_1 == i :
+                    window.blit(icons64[chars[i][self.alt[0]]],(64,105*(i-self.scroll1+4)-32))
+                else :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4)-32))
+                if i < 5 :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4+len(chars))-32))
+                if len(chars) - i < 5 :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4-len(chars))-32))
+            
+            ### Interface personnages P2
             # Pandapluche (Peluche Panda des A-L)
             Bouton = Button("",("arial",50,True,False),standard,width,height/2,384,100)
             Bouton.draw(window)
             window.blit(pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Misc/Training/Training_icon.png"),(64,64)),(width-128,height/2-32))
-        else :
+        
+        else :   
+             
             for i in range(len(chars)):
+                ### Interface personnages P1
                 # Roulette
-                Bouton = Button("",("arial",50,True,False),standard,width,105*(i-self.scroll2-len(chars)+4),384,100)
+                if i < 4 :
+                    Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+len(chars)+4),384,100)
+                    Bouton.draw(window)
+                if i - len(chars) > -5 :
+                    Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1-len(chars)+4),384,100)
+                    Bouton.draw(window)
+                Bouton = Button("",("arial",50,True,False),standard,0,105*(i-self.scroll1+4),384,100)
+                if self.selectchar_1 == i :
+                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.resize(400,100)
                 Bouton.draw(window)
-                Bouton = Button("",("arial",50,True,False),standard,width,105*(i-self.scroll2+len(chars)+4),384,100)
-                Bouton.draw(window)
+        
+                ### Interface personnages P2
+                # Roulette
+                if i < 4 :
+                    Bouton = Button("",("arial",50,True,False),standard,width,105*(i-self.scroll2+len(chars)+4),384,100)
+                    Bouton.draw(window)
+                if i - len(chars) > -5 :
+                    Bouton = Button("",("arial",50,True,False),standard,width,105*(i-self.scroll2-len(chars)+4),384,100)
+                    Bouton.draw(window)
                 Bouton = Button("",("arial",50,True,False),standard,width,105*(i-self.scroll2+4),384,100)
                 if self.selectchar_2 == i :
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     Bouton.resize(400,100)
                 Bouton.draw(window)
+
             for i in range(len(chars)):
-                # Icones de la roulette
+                # icones sur la roulette
+                if self.selectchar_1 == i :
+                    window.blit(icons64[chars[i][self.alt[0]]],(64,105*(i-self.scroll1+4)-32))
+                else :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4)-32))
                 if self.selectchar_2 == i :
                     window.blit(icons64[chars[i][self.alt[1]]],(width-128,105*(i-self.scroll2+4)-32))
                 else :
                     window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4)-32))
-                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4-len(chars))-32))
-                window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4+len(chars))-32))
+
+                if i - len(chars) > -5 :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4-len(chars))-32))
+                    window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4-len(chars))-32))
+                    
+                if i < 4 :
+                    window.blit(icons64[chars[i][0]],(64,105*(i-self.scroll1+4+len(chars))-32))
+                    window.blit(icons64[chars[i][0]],(width-128,105*(i-self.scroll2+4+len(chars))-32))
+
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1],joysticks,1)[3] and not self.selected_2 and self.scroll2 == self.selectchar_2:

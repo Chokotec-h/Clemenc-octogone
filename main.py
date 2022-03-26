@@ -168,7 +168,7 @@ def main():
                     if focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            Menu = "char"
+                            Menu = "to char"
                             Menu_Stages.training = False
                             Menu_Chars.training = False
                             training = False
@@ -181,7 +181,7 @@ def main():
                     if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            Menu = "char"
+                            Menu = "to char"
                             Menu_Stages.training = True
                             Menu_Chars.training = True
                             training = True

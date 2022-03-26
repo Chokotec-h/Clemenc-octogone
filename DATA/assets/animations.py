@@ -44,12 +44,24 @@ Nonesprite = {
 Renault = {
     "idle":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),(21,1,14,35),(42,3,14,33),(59,2,14,34)),9,True),
     "walk":("./DATA/Images/Sprites/Chars/Renault/Default/walk.png",((2,1,16,35),(22,2,16,34),(40,1,14,35),(56,1,14,35),(74,1,14,35),(95,2,18,34),(115,1,14,35)),10,True),
-    "run":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
-    "jump":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/Renault/Default/Run.png",((2,14,18,20),(22,14,18,20),(42,14,18,20),(62,14,18,20),(82,14,18,20),(102,14,18,20)),10,True),
+    "jump":("./DATA/Images/Sprites/Chars/Renault/Default/Jump.png",((2,1,14,35),(19,1,17,35),(38,1,19,35),(62,1,15,35)),12,False),
+    "fall":("./DATA/Images/Sprites/Chars/Renault/Default/Fall.png",((1,1,16,35),),1,True),
     "airdodge":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "jab":("./DATA/Images/Sprites/Chars/Renault/Default/Jab.png",((0,1,27,35),(31,1,27,35)),12,True),
     "downtilt":("./DATA/Images/Sprites/Chars/Renault/Default/DownTilt.png",((2,1,14,35),(23,1,14,35),(39,1,24,35),(70,1,21,35),(96,1,24,35),(119,1,24,35),(145,1,24,35),(170,1,21,35),(195,1,16,35),(212,1,14,35)),16,False),
-    "upsmash":("./DATA/Images/Sprites/Chars/Renault/Default/UpSmash.png",((2,1,14,35),(23,1,14,35),(39,1,24,35),(70,1,21,35),(96,1,24,35),(119,1,24,35),(145,1,24,35),(170,1,21,35),(195,1,16,35),(212,1,14,35)),16,False),
+    "forwardtilt":("./DATA/Images/Sprites/Chars/Renault/Default/Ftilt.png",((2,2,14,35),(27,2,68,35),(95,2,68,35),(168,2,14,35)),9,False),
+    "uptilt":("./DATA/Images/Sprites/Chars/Renault/Default/UpTilt.png",((1,1,22,35),(23,1,23,35),(45,1,22,35),(70,1,24,35),(94,1,22,35),(119,1,23,35)),12,False),
+    "upsmash":("./DATA/Images/Sprites/Chars/Renault/Default/UpSmash.png",((23,1,14,35),(38,1,28,35),(66,1,28,35),(94,1,28,35),(122,1,27,35),(149,1,27,35),(178,1,27,35),(205,1,28,35),(233,1,27,35),(261,1,21,35),(285,1,14,35)),16,False),
+    "fsmash_init":("./DATA/Images/Sprites/Chars/Renault/Default/FSmash_init.png",((2,1,15,35),(22,1,14,35),(39,1,25,35)),11,False),
+    "fsmash_hold":("./DATA/Images/Sprites/Chars/Renault/Default/FSmash_hold.png",((1,1,24,35),(32,1,23,35)),16,True),
+    "fsmash_release":("./DATA/Images/Sprites/Chars/Renault/Default/FSmash_release.png",((2,1,24,35),(30,1,24,35),(56,1,24,35),(80,1,24,35)),12,True),
+    "dsmash":("./DATA/Images/Sprites/Chars/Renault/Default/DownSmash.png",((2,1,24,35),(24,1,26,35),(62,1,26,35),(95,1,26,35),(124,1,26,35),(156,1,26,35),(190,1,27,35),(225,1,25,35),(256,1,22,35),(285,1,14,35)),12,True),
+    "bair":("./DATA/Images/Sprites/Chars/Renault/Default/Bair.png",((1,1,14,35),(22,1,14,35),(54,1,14,35),(72,1,23,35),(103,1,23,35),(131,1,23,35),(161,1,14,35),(181,1,14,35)),18,False),
+    "dair":("./DATA/Images/Sprites/Chars/Renault/Default/Dair.png",((1,3,14,35),(22,2,14,35),(40,3,20,35),(62,3,27,35),(94,3,22,35),(117,3,16,35),(140,3,14,35)),18,False),
+    "neutralB":("./DATA/Images/Sprites/Chars/Renault/Default/NeutralB.png",((2,1,14,35),(19,1,17,35),(38,1,19,35),(62,1,15,35)),12,False),
+    "sideB":("./DATA/Images/Sprites/Chars/Renault/Default/SideB.png",((2,1,30,35),),1,False),
+    "upB":("./DATA/Images/Sprites/Chars/Renault/Default/UpB.png",((3,4,16,42),(23,4,16,42)),12,True),
 
 }
 
