@@ -39,9 +39,9 @@ class Renault(Char):
                     self.look_right = True
             if self.frame > 7 and self.frame < 100 :
                 self.vy = -5-self.frame/20
-                if self.frame%8 == 0 :
+                if self.frame%4 == 0 :
                     pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh.mp3").play()
-                    self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,8+abs(self.vy),3,0,9,4,self,position_relative=True))
+                    self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,4+abs(self.vy)/2,0.8,0,5,4,self,position_relative=True))
             if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
                 self.attack = None
@@ -172,6 +172,9 @@ class Renault(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 0:
+                self.animation = "uair"
+                self.animeframe = 0
             if self.frame == 8 :
                 self.active_hitboxes.append(Hitbox(0,0,36,36,pi-exp(1)*pi/5,12,exp(1),exp(-6),14,10,self))
             if self.frame > 8 and self.active_hitboxes :
@@ -187,6 +190,9 @@ class Renault(Char):
                     self.lag = 7 # Auto cancel frame 1-3 et 24+, 7 frames de landing lag
 
         if attack == "ForwardAir":
+            if self.frame == 0:
+                self.animation = "fair"
+                self.animeframe = 0
             if self.frame == 7 :
                 self.active_hitboxes.append(Hitbox(50,36,36,36,pi/3,12,6,1/200,7,5,self))
             if self.frame > 7 and self.active_hitboxes :
@@ -237,15 +243,21 @@ class Renault(Char):
                     self.lag = 17 # Auto cancel frame 1-8 et 40+, 17 frames de landing lag
 
         if attack == "NeutralAir":
+            if self.frame == 5 :
+                self.animation = "nair1"
+                self.animeframe = 0
+            if self.frame == 15 :
+                self.animation = "nair2"
+                self.animeframe = 0
             if self.frame > 6 and self.frame < 16 :
                 pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
             if self.frame > 16 and self.frame < 20 :
                 pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
-                self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
+                self.active_hitboxes.append(Hitbox(-40,-40,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
             if self.frame == 22 :
                 pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
-                self.active_hitboxes.append(Hitbox(-44,-8,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
+                self.active_hitboxes.append(Hitbox(-44,-44,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag
                 self.attack = None

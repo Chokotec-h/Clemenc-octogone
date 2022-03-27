@@ -354,10 +354,11 @@ def main():
                     # Affichage des personnages
                     Game.Char_P2.draw(window)
                     Game.Char_P1.draw(window)
-                    if time.time() - Game.begin_game < 2 :
+
+                    if time.time() - Game.begin_game < 2 and not training:
                         Texte(f"{str(3-round(time.time() - Game.begin_game))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
                         
-                    elif time.time() - Game.begin_game < 3 :
+                    elif time.time() - Game.begin_game < 3 and not training :
                         Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(window)
 
                     else :
