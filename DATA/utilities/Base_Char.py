@@ -599,6 +599,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             p.draw(window)
 
     def collide(self, other):
+        if self.intangibility > 0 :
+            self.intangibility -= 1
+            if self.intangibility <= 0 :
+                self.intangibility = False
         for i, hitbox in enumerate(other.active_hitboxes):  # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
                 if (not self.parry) and (not self.intangibility):  # Parry
