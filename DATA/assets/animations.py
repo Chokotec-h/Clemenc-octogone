@@ -7,7 +7,7 @@ icons ={
     "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon_S.png"),
     "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/Gregoire/icon.png"),
-    "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/Reignaud/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
     "Pyro-Aubin":pygame.image.load("./DATA/Images/Sprites/Chars/Pyro_Aubin/icon.png"),
     "Kebab":pygame.image.load("./DATA/Images/Sprites/Chars/Kebab/icon.png"),
@@ -38,6 +38,16 @@ Nonesprite = {
     "jump":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
     "fall":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
     "airdodge":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+
+}
+
+Reignaud = {
+    "idle":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),(21,2,13,34),(40,1,13,35)),2,True),
+    "walk":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
 
 }
 
