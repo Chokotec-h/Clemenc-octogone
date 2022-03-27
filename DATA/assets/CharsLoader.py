@@ -13,7 +13,7 @@ from DATA.assets.Chars.Training_Mob import *
 
 # Nom des personnages
 chars = [["Balan"],
-         ["Millet"],
+         ["Millet", "Bowser"],
          ["Gregoire"],
          ["Poissonnier"],
          ["Renault"],
@@ -28,7 +28,7 @@ pygame.mixer.init()
 charobjects = {
     "Balan": Balan,
     "Joueur de air-president": Air_President, "Spamton": Spamton,
-    "Millet": Millet,
+    "Millet": Millet, "Bowser": Bowser,
     "Gregoire": Gregoire,
     "Reignaud": Reignaud,
     "Rey": Rey,

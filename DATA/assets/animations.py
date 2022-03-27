@@ -5,7 +5,7 @@ import pygame
 icons ={
     "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),
     "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon_S.png"),
-    "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
+    "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"), "Bowser":pygame.image.load("./DATA/Images/Sprites/Chars/Millet/Bowser/icon.png"),
     "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/Gregoire/icon.png"),
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/Reignaud/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
@@ -18,7 +18,7 @@ icons ={
 icons64 ={
     "Balan":pygame.transform.scale(icons["Balan"],(64,64)),
     "Joueur de air-president":pygame.transform.scale(icons["Joueur de air-president"],(64,64)), "Spamton":pygame.transform.scale(icons["Spamton"],(64,64)),
-    "Millet":pygame.transform.scale(icons["Millet"],(64,64)),
+    "Millet":pygame.transform.scale(icons["Millet"],(64,64)), "Bowser":pygame.transform.scale(icons["Bowser"],(64,64)),
     "Gregoire":pygame.transform.scale(icons["Gregoire"],(64,64)),
     "Reignaud":pygame.transform.scale(icons["Reignaud"],(64,64)),
     "Rey":pygame.transform.scale(icons["Rey"],(64,64)),
@@ -168,6 +168,28 @@ Pyro_Aubin = {
 
 }
 
+Millet = {
+    "idle":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "dair":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+
+}
+
+Bowser = {
+    "idle":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
+    "jump":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,False),
+    "fall":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,False),
+    "airdodge":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
+    "dair":("./DATA/Images/Sprites/Chars/Millet/Bowser/DownAir.png",((3,0,34,39),),8,False),
+
+}
+
 Kebab = {
     "idle":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_idle.png",((2,2,12,12),(16,1,12,13),(30,2,12,12),(44,3,12,11),(58,2,12,12),),6,True),
     "walk":("./DATA/Images/Sprites/Chars/Kebab/Default/Kebab_Walk.png",((2,2,12,12),(16,2,12,12),(30,2,12,12),(43,2,12,12),(57,2,12,12),(70,2,12,12)),8,True),
@@ -209,7 +231,7 @@ animations = {
     "BalanM":BalanM,
     "BalanJ":BalanJ,
     "Joueur de air-president":Air_President,"Spamton":Spamton,
-    "Millet":Nonesprite,
+    "Millet":Nonesprite, "Bowser":Bowser,
     "Gregoire":Gregoire,
     "Reignaud":Reignaud,
     "Rey":Nonesprite,

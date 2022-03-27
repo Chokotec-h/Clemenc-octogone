@@ -204,6 +204,9 @@ class Millet(Char):
                     self.lag = 5 # Auto cancel frame 1-2 et 22+, 5 frames de landing lag
 
         if attack == "DownAir":
+            if self.frame == 1 :
+                self.animation = "dair"
+                self.animeframe = 0
             self.vx = 0
             if self.frame < 14 :
                 self.vy = 0
@@ -494,3 +497,12 @@ class Quantique():
         size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
         pos = [self.x + 800 - size[2]/2, self.y-size[3]+self.rect.h + 449] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size)
+
+
+class Bowser(Millet):
+    def __init__(self, x, y, player) -> None:
+        super().__init__(x, y, player)
+        self.name = "Bowser"
+    
+    def __str__(self) -> str:
+        return "Bowser"
