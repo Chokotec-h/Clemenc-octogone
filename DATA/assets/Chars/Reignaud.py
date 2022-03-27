@@ -207,7 +207,7 @@ class Reignaud(Char):
             else :
                 self.cancelable = False
             if self.frame == 16 :
-                self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,15,19,1/150,10,3,self,False,sound="hits and slap/cool hit.wav"))
+                self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,25,19,1/150,10,3,self,False,sound="hits and slap/cool hit.wav"))
 
             if self.frame > 44: # 28 frames de lag
                 self.attack = None
