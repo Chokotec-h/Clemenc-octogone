@@ -10,7 +10,7 @@ class Renault(Char):
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
         self.name = "Renault"
         self.x = x
         self.rect.y = y
@@ -40,7 +40,7 @@ class Renault(Char):
             if self.frame > 7 and self.frame < 100 :
                 self.vy = -5-self.frame/20
                 if self.frame%8 == 0 :
-                    pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh.mp3").play()
                     self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,8+abs(self.vy),3,0,9,4,self,position_relative=True))
             if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -69,7 +69,7 @@ class Renault(Char):
                 self.intangibility = 4
             if self.frame == 40 :
                 self.show = True
-                pygame.mixer.Sound("DATA/Musics/SE/wooshs/other woosh.wav").play()
+                pygame.mixer.Sound("DATA/Musics/SFX/wooshs/other woosh.wav").play()
                 self.active_hitboxes.append(Hitbox(0,0,48,120,pi/2,12,16,1/250,11,2,self,boum=2))
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             if self.frame > 70 : # 30 frames de lag
@@ -90,7 +90,7 @@ class Renault(Char):
                 self.vx = (8+self.frame/10)*signe(self.direction)
                 self.vy = -self.fastfallspeed if self.fastfall else -self.fallspeed
                 if special and self.frame%3 == 0 :
-                    pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hitting metal.wav").play()
                     self.active_hitboxes.append(Hitbox(48,12,64,64,0,2,0.8,0,4,2,self,boum=-1))
                 if not special :
                     self.animation = "fall"
@@ -238,13 +238,13 @@ class Renault(Char):
 
         if attack == "NeutralAir":
             if self.frame > 6 and self.frame < 16 :
-                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
+                pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
             if self.frame > 16 and self.frame < 20 :
-                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
+                pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-40,-4,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
             if self.frame == 22 :
-                pygame.mixer.Sound("DATA/Musics/SE/other/electric cable sound.wav").play()
+                pygame.mixer.Sound("DATA/Musics/SFX/other/electric cable sound.wav").play()
                 self.active_hitboxes.append(Hitbox(-44,-8,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag
@@ -420,7 +420,7 @@ class Gear():
         self.damages_stacking = 1/200
         self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Renault/Gear.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hitting metal.wav")
     
     def update(self):
         self.duration -= 1

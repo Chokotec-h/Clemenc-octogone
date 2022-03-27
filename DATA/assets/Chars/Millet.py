@@ -15,7 +15,7 @@ class Millet(Char):
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
         self.name = "Millet"
         self.x = x
         self.rect.y = y
@@ -81,7 +81,7 @@ class Millet(Char):
                     self.look_right = True
             if self.frame > 25 and self.frame < 45:
                 if self.frame == 26 :
-                    pygame.mixer.Sound("DATA/Musics/SE/lasers/laser3.wav").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser3.wav").play()
                 self.vy = 0
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
@@ -346,7 +346,7 @@ class Millet(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own:Millet) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/lasers/cool lazer.mp3")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer.mp3")
         self.stage = stage
         self.x = x
         self.y = y
@@ -441,7 +441,7 @@ class Fire():
 
 class Sinusoide():
     def __init__(self,x,y,angle,own:Millet) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hit.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hit.wav")
         self.rect = pygame.Rect(x,y,5,5)
         self.angle = angle
         self.v = 5*signe(own.direction)

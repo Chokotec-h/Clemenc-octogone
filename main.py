@@ -8,6 +8,7 @@ from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 import SoundSystem
+import time
 
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
@@ -287,6 +288,7 @@ def main():
                 if Menu == "to stage":
                     Menu = "stage"
                     Menu_Stages.confirm = True
+                    gamecreated = False
 
                 ######################################################################################################
                 #########################################  Menu personnages  #########################################
@@ -306,41 +308,61 @@ def main():
                 ######################################  Démarrage de la partie  ######################################
 
                 if Menu == "game":
-                    stage = Menu_Stages.stage
-                    
-                    names = Menu_Chars.names
+                    if not gamecreated :
+                        stage = Menu_Stages.stage
+                        
+                        names = Menu_Chars.names
 
-                    Menu_Chars.selected_1 = False
-                    Menu_Chars.selected_2 = False
-                    # Jeu clavier
-                    if names[0] == 0 and controls[0] == commands["Keyboard"]:
-                        names[0] = 1
-                    if names[1] == 0 and controls[1] == commands["Keyboard"]:
-                        names[1] = 1
+                        Menu_Chars.selected_1 = False
+                        Menu_Chars.selected_2 = False
+                        # Jeu clavier
+                        if names[0] == 0 and controls[0] == commands["Keyboard"]:
+                            names[0] = 1
+                        if names[1] == 0 and controls[1] == commands["Keyboard"]:
+                            names[1] = 1
 
-                    # conversion des contrôles
-                    controls = [commands[Menu_Chars.namelist[names[0]]], commands[Menu_Chars.namelist[names[1]]]]
-                    del names
+                        # conversion des contrôles
+                        controls = [commands[Menu_Chars.namelist[names[0]]], commands[Menu_Chars.namelist[names[1]]]]
+                        del names
 
-                    Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
-                                           Menu_Chars.alt)
+                        Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
+                                            Menu_Chars.alt)
 
-                    # importation de l'arrière-plan et de la musique
-                    background = pygame.transform.scale(pygame.image.load(
-                        f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),
-                        (1600, 900))
-                    for m in musics:
-                        if m[1] == Menu_Stages.actualstages[stage] and (
-                                str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
-                            currentmusic = m[0]
+                        # importation de l'arrière-plan et de la musique
+                        background = pygame.transform.scale(pygame.image.load(
+                            f"./DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),
+                            (1600, 900))
+                        for m in musics:
+                            if m[1] == Menu_Stages.actualstages[stage] and (
+                                    str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
+                                currentmusic = m[0]
+
+                        # création du stage
+                        stage, [(Game.Char_P1.x, Game.Char_P1.rect.y),
+                                (Game.Char_P2.x, Game.Char_P2.rect.y)] = Stages.create_stage(
+                            Menu_Stages.actualstages[stage])
+                        
+                        gamecreated = True
+
                     musicplaying = False
+                    window.fill((255, 255, 255))
+                    window.blit(background, (0, 0))
 
-                    # création du stage
-                    stage, [(Game.Char_P1.x, Game.Char_P1.rect.y),
-                            (Game.Char_P2.x, Game.Char_P2.rect.y)] = Stages.create_stage(
-                        Menu_Stages.actualstages[stage])
+                    # Affichage du stage
+                    stage.draw(window)
 
-                    Play = True
+                    # Affichage des personnages
+                    Game.Char_P2.draw(window)
+                    Game.Char_P1.draw(window)
+                    if time.time() - Game.begin_game < 2 :
+                        Texte(f"{str(3-round(time.time() - Game.begin_game))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
+                        
+                    elif time.time() - Game.begin_game < 3 :
+                        Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(window)
+
+                    else :
+                        Game.begin_game = time.time()
+                        Play = True
 
                 ######################################################################################################
                 ########################################  Ecran de résultats  ########################################
