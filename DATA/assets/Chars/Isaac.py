@@ -10,7 +10,7 @@ class Isaac(Char):
                          doublejumpheight=11,airdodgespeed=7,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
         self.name = "Isaac"
         self.x = x
         self.rect.y = y

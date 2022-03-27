@@ -12,7 +12,7 @@ class Air_President(Char):
                          doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
         self.name = "Joueur de air-president"
         self.x = x
         self.rect.y = y
@@ -69,7 +69,7 @@ class Air_President(Char):
             if self.frame == 6: # Hitbox frame 6-15
                 self.vx = 0
                 self.vy = -24
-                pygame.mixer.Sound(f"DATA/Musics/SE/boings/boing ({randint(2,8)}).mp3").play()
+                pygame.mixer.Sound(f"DATA/Musics/SFX/boings/boing ({randint(2,8)}).mp3").play()
                 self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False,sound="boings/boing (1).wav"))
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
@@ -345,15 +345,15 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
-            pygame.mixer.Sound("DATA/Musics/SE/other/Its-pronounced-rules.mp3").play()
-            self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/cool hit.wav")
+            pygame.mixer.Sound("DATA/Musics/SFX/other/Its-pronounced-rules.mp3").play()
+            self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/cool hit.wav")
             self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
             self.knockback = 1000
             self.damages = 999
             self.stun = 1000
             self.damages_stacking = 1
         else :
-            self.sound = pygame.mixer.Sound("DATA/Musics/SE/wooshs/woosh.mp3")
+            self.sound = pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh.mp3")
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
@@ -383,8 +383,8 @@ class Carte():
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
-        pygame.mixer.Sound("DATA/Musics/SE/wooshs/encore un woosh.mp3").play()
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/boings/boing.mp3")
+        pygame.mixer.Sound("DATA/Musics/SFX/wooshs/encore un woosh.mp3").play()
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/boings/boing.mp3")
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
@@ -483,7 +483,7 @@ class Poutre():
         self.duration = 10
         self.stage = stage
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hitting metal.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hitting metal.wav")
 
     def update(self):
         self.knockback = sqrt(self.vx**2+self.vy**2)

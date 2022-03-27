@@ -18,7 +18,7 @@ class Gregoire(Char):
                          doublejumpheight=16, airdodgespeed=6, airdodgetime=3, dodgeduration=15)
 
         self.rect = pygame.Rect(100, 0, 60, 144)  # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav")  # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav")  # Son test
         self.name = "Gregoire"
         self.x = x
         self.rect.y = y
@@ -85,7 +85,7 @@ class Gregoire(Char):
                     self.look_right = True
             if 25 < self.frame < 45:
                 if self.frame == 26:
-                    pygame.mixer.Sound("DATA/Musics/SE/lasers/laser2.wav").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser2.wav").play()
                 self.vy = 0
                 self.projectiles.append(
                     Rayon(stage, self.x, self.rect.y + 24, -self.angle_rayon * signe(self.direction),
@@ -437,7 +437,7 @@ class Gregoire(Char):
 
 class Rayon():
     def __init__(self, stage, x, y, angle_fwd, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/lasers/cool lazer.mp3")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer.mp3")
         self.stage = stage
         self.x = x
         self.y = y
@@ -531,7 +531,7 @@ class Thunder():
 
 class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/hit.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hit.wav")
         self.rect = pygame.Rect(x, y, 5, 5)
         self.angle = angle
         self.v = 5 * signe(own.direction)

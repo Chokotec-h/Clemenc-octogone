@@ -17,7 +17,7 @@ class Kebab(Char):
 
         self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso
         self.doublejump = [False,False,False]   # Possède 3 double sauts
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SE/jump.wav") # Son test
+        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
         self.name = "Kebab"
         self.x = x
         self.rect.y = y
@@ -497,7 +497,7 @@ class Kebab(Char):
 
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SE/hits and slap/other hit.mp3")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/other hit.mp3")
         self.sauce = str(own.current_sauce)
         self.sprite = Sauce[self.sauce]
         self.x = own.x
