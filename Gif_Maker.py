@@ -26,6 +26,6 @@ def convert_to_gif(char,animation):
 
 def convert_all(char):
     for a in animations[char]:
-        convert_to_gif("Kebab",a)
+        convert_to_gif(char,a)
 
-convert_all("Kebab")
+convert_all("Bowser")

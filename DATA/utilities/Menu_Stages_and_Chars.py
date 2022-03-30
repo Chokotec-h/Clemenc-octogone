@@ -122,6 +122,7 @@ class CharsMenu():
             if self.selectchar_1 >= len(chars) :
                 self.selectchar_1 = 0
         if convert_inputs(controls[0],joysticks,0)[2] and not self.selected_1 and self.scroll1 == self.selectchar_1:
+            self.alt[0] = 0
             self.selectchar_1 -= 1
             self.scroll1 -= 1
             self.scroll1 = self.scroll1%len(chars)
@@ -230,6 +231,7 @@ class CharsMenu():
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1],joysticks,1)[3] and not self.selected_2 and self.scroll2 == self.selectchar_2:
+                self.alt[1] = 0
                 self.selectchar_2 += 1
                 self.scroll2 += 1
                 self.scroll2 = self.scroll2%len(chars)
@@ -237,6 +239,7 @@ class CharsMenu():
                 if self.selectchar_2 >= len(chars) :
                     self.selectchar_2 = 0
             if convert_inputs(controls[1],joysticks,1)[2] and not self.selected_2 and self.scroll2 == self.selectchar_2:
+                self.alt[1] = 0
                 self.selectchar_2 -= 1
                 self.scroll2 -= 1
                 self.scroll2 = self.scroll2%len(chars)

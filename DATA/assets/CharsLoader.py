@@ -12,21 +12,21 @@ from DATA.assets.Chars.Isaac import *
 from DATA.assets.Chars.Training_Mob import *
 
 # Nom des personnages
-chars = [["Balan"],
+chars = [["Balan","BalanM"],
          ["Millet", "Bowser"],
          ["Gregoire"],
          ["Poissonnier"],
          ["Renault"],
          ["Reignaud"],
          ["Rey"],
-         ("Joueur de air-president", "Spamton"),
+         ["Joueur de air-president", "Spamton"],
          ["Pyro-Aubin"],
          ["Kebab"]]
 
 pygame.mixer.init()
 
 charobjects = {
-    "Balan": Balan,
+    "Balan": Balan, "BalanM": Balan2,
     "Joueur de air-president": Air_President, "Spamton": Spamton,
     "Millet": Millet, "Bowser": Bowser,
     "Gregoire": Gregoire,

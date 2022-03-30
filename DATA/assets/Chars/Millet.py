@@ -204,9 +204,9 @@ class Millet(Char):
                     self.lag = 5 # Auto cancel frame 1-2 et 22+, 5 frames de landing lag
 
         if attack == "DownAir":
-            if self.frame == 1 :
-                self.animation = "dair"
-                self.animeframe = 0
+            #if self.frame == 1 :
+            #    self.animation = "dair"
+            #    self.animeframe = 0
             self.vx = 0
             if self.frame < 14 :
                 self.vy = 0

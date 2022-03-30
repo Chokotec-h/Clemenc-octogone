@@ -3,9 +3,9 @@ import pygame
 
 
 icons ={
-    "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),
+    "Balan":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/icon.png"),"BalanM":pygame.image.load("./DATA/Images/Sprites/Chars/Balan/Masked/icon.png"),
     "Joueur de air-president":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon.png"), "Spamton":pygame.image.load("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/icon_S.png"),
-    "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"), "Bowser":pygame.image.load("./DATA/Images/Sprites/Chars/Millet/Bowser/icon.png"),
+    "Millet":pygame.image.load("./DATA/Images/Sprites/Chars/Millet/icon.png"), "Bowser":pygame.image.load("./DATA/Images/Sprites/Chars/Millet/Bowser/icon.png"),
     "Gregoire":pygame.image.load("./DATA/Images/Sprites/Chars/Gregoire/icon.png"),
     "Reignaud":pygame.image.load("./DATA/Images/Sprites/Chars/Reignaud/icon.png"),
     "Rey":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
@@ -16,7 +16,7 @@ icons ={
     "Isaac":pygame.image.load("./DATA/Images/Sprites/Chars/None/icon.png"),
 }
 icons64 ={
-    "Balan":pygame.transform.scale(icons["Balan"],(64,64)),
+    "Balan":pygame.transform.scale(icons["Balan"],(64,64)),"BalanM":pygame.transform.scale(icons["BalanM"],(64,64)),
     "Joueur de air-president":pygame.transform.scale(icons["Joueur de air-president"],(64,64)), "Spamton":pygame.transform.scale(icons["Spamton"],(64,64)),
     "Millet":pygame.transform.scale(icons["Millet"],(64,64)), "Bowser":pygame.transform.scale(icons["Bowser"],(64,64)),
     "Gregoire":pygame.transform.scale(icons["Gregoire"],(64,64)),
@@ -110,12 +110,12 @@ for s in Balan:
     BalanJ[s] = (Balan[s][0].replace("Default","Jedi"),Balan[s][1],Balan[s][2],Balan[s][3])
 
 Air_President = {
-    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),3,True),
+    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),5,True),
+    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),10,True),
+    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),1,True),
 
 }
 
@@ -169,24 +169,24 @@ Pyro_Aubin = {
 }
 
 Millet = {
-    "idle":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "walk":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "run":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "jump":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
-    "dair":("./DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
+    "idle":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),(24,3,12,33),(40,3,12,33),(56,3,12,33),(72,2,12,34)),5,True),
+    "walk":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
+    "run":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
+    "jump":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
+    "fall":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
+    #"dair":("./DATA/Images/Sprites/Chars/Millet/Default/Idle.png",((5,2,12,34),),1,True),
 
 }
 
 Bowser = {
-    "idle":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
-    "walk":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
-    "run":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
-    "jump":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,False),
-    "fall":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,False),
-    "airdodge":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((3,1,34,41),),8,True),
-    "dair":("./DATA/Images/Sprites/Chars/Millet/Bowser/DownAir.png",((3,0,34,39),),8,False),
+    "idle":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),(23,2,16,35),(39,2,16,35),(55,2,16,35),(71,1,16,36),),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),),8,True),
+    "jump":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),),8,False),
+    "fall":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),),8,False),
+    "airdodge":("./DATA/Images/Sprites/Chars/Millet/Bowser/Idle.png",((4,1,16,36),),8,True),
+    #"dair":("./DATA/Images/Sprites/Chars/Millet/Bowser/DownAir.png",((3,0,34,39),),8,False),
 
 }
 
@@ -227,11 +227,9 @@ Training = {
 ### Lien Nom/animation
 
 animations = {
-    "Balan":Balan,
-    "BalanM":BalanM,
-    "BalanJ":BalanJ,
+    "Balan":Balan,"BalanM":BalanM,"BalanJ":BalanJ,
     "Joueur de air-president":Air_President,"Spamton":Spamton,
-    "Millet":Nonesprite, "Bowser":Bowser,
+    "Millet":Millet, "Bowser":Bowser,
     "Gregoire":Gregoire,
     "Reignaud":Reignaud,
     "Rey":Nonesprite,
