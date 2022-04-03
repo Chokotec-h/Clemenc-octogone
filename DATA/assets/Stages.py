@@ -62,7 +62,9 @@ class Platform():
 
 def create_stage(stage):
     if stage == "K201":
-        return (Stage(stage,f"{stage}/K201_plateforme", 0, 191 * 1.65),
+        return (Stage(stage,f"{stage}/K201_plateforme", 0, 191 * 1.65,
+                    [(-500, 220, 150, 12, (100, 70, 0)),
+                    (500, 220, 150, 12, (100, 70, 0))]),
                 [(-350, 0), (350, 0)])  # Coordonnées de départ
     if stage == "Pandadrome":
         return (Stage(stage,f"{stage}/Pandadrome_plateforme", 0, 186 * 1.6),
@@ -88,6 +90,4 @@ def create_stage(stage):
                 [(-200, -50), (200, -50)])
     if stage == "Table de self":
         return (Stage(stage,f"{stage}/Table de self_plateforme", 0, 190,
-                      [(-620, 293, 200, 4, (24, 47, 73)),
-                      (620, 293, 200, 4, (24, 47, 73))]),
                 [(-200, -50), (200, -50)])
