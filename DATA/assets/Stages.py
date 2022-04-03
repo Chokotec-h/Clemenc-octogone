@@ -89,5 +89,5 @@ def create_stage(stage):
                       (-530, 5, 268, 4, (200, 200, 200)),(530, 5, 268, 4, (200, 200, 200))]),
                 [(-200, -50), (200, -50)])
     if stage == "Table de self":
-        return (Stage(stage,f"{stage}/Table de self_plateforme", 0, 190,
+        return (Stage(stage,f"{stage}/Table de self_plateforme", 0, 190),
                 [(-200, -50), (200, -50)])
