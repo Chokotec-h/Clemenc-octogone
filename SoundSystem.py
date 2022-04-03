@@ -119,7 +119,7 @@ class instance:
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))
-        check_result(studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize))
+        check_result(studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1))
         return tempBuffer.value
 
 

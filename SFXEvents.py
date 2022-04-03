@@ -2,22 +2,23 @@ from ctypes import *
 import SoundSystem
 import time
 
-dicoEventPath = {}
-dicoEvent = {}
-eventList = []
+# Dico with all SFX song
+SFXDicoEventPath = {}  # key per path
+SFXDicoEvent = {}  # key per folder  and   song
+
+UIDicoEvent = {}  # a dico with all UI song
 
 
 def SFX_init():
+    # SFX Loader
     SFXArray = SoundSystem.getAllEventFromBank(SoundSystem.BankList[-2])
     for SFX in SFXArray:
         desc_p = c_void_p(SFX)
-        eventList.append(SoundSystem.instance(eventDesc=desc_p))
 
-        """
         event = SoundSystem.instance(eventDesc=desc_p)
         keys = event.getPath()
 
-        dicoEventPath[str(keys[11:])] = event  # constructe dicoPath
+        SFXDicoEventPath[str(keys[11:])] = event  # constructe dicoPath
 
         # split the path
         truc = str(keys).split("/")
@@ -25,11 +26,23 @@ def SFX_init():
         song = truc[3]
 
         # builde de dico
-        if folder not in dicoEvent.keys():
-            dicoEvent[folder] = {}
+        if folder not in SFXDicoEvent.keys():
+            SFXDicoEvent[folder] = {}
 
-        dicoEvent[folder][song] = event
+        SFXDicoEvent[folder][song] = event
 
-    print(dicoEventPath)
-    print(dicoEvent)
-    """
+    # UI Loader
+    UIArray = SoundSystem.getAllEventFromBank(SoundSystem.BankList[-1])
+    for UI in UIArray:
+        desc_p = c_void_p(UI)
+
+        event = SoundSystem.instance(eventDesc=desc_p)
+        keys = event.getPath()
+
+        SFXDicoEventPath[str(keys[11:])] = event  # constructe dicoPath
+
+        # split the path
+        truc = str(keys).split("/")
+        song = truc[3]
+
+        SFXDicoEvent[song] = event
