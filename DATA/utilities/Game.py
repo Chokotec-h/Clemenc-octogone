@@ -41,6 +41,7 @@ class Game():
             self.fastfallspeed = 1.25
         else:
             self.Char_P2 = Chars.charobjects[chars[selectchar_2][alt[1]]](0, 0, 1)
+        self.Char_P2.look_right = False
         ###
 
         # initialisation des vies et du temps

@@ -197,7 +197,26 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def get_inputs(self, inputs, stage, other,
                    cancel):  # Cancel spécial pour reignaud (pour pas avoir à tout copier coller)
+        
+        (left, right, up, down, fullhop, shorthop, attack, special, shield,
+        C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down) = inputs  # dissociation des inputs
+        jump = fullhop or shorthop
+
         self.direction = 90 if self.look_right else -90
+
+        if self.lenght_parry > 0 :
+            self.lenght_parry += 1
+            self.parry = True
+            if self.lenght_parry > 8 :
+                self.animation = "idle"
+                self.parry = False
+                if not self.parried and self.lenght_parry == 9:
+                    self.lag = 10
+                if (not shield) or (left or right):
+                    self.lenght_parry = 0
+            else :
+                self.animation = "airdodge"
+                self.animeframe = self.lenght_parry
 
         if self.tech > 0:
             self.tech -= 1
@@ -206,8 +225,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         if self.tech < 0:
             self.tech += 1
 
-        left, right, up, down, fullhop, shorthop, attack, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs  # dissociation des inputs
-        jump = fullhop or shorthop
 
         if not (left or right) or (left and self.look_right) or (
                 right and not self.look_right):  # Cancel le dash au changement de direction
@@ -239,30 +256,20 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if shield and self.tech == 0:
                 self.tech = 10
         else:
-            if (not shield) and self.parry:
-                self.lag = 3
-            if self.grounded and self.attack is None and not self.lag and shield:
+
+            if self.grounded and self.attack is None and not self.lag and shield and self.lenght_parry == 0:
                 if right or left:
                     if not self.dash:
                         self.smoke_dash.append(Dash_Smoke(self.rect.x + self.rect.w / 2 - (right - 0.5) * 70,
                                                           self.rect.y + self.rect.h / 2, right))
                     self.dash = True
                     self.parry = False
-                    self.lenght_parry = -10
-                elif self.lenght_parry > 1 and self.lenght_parry < 8:
+                elif not self.dash:
                     self.parry = True
-                elif self.lenght_parry > 8:
-                    self.parry = False
-                    if not self.parried:
-                        self.lag = 10
-                self.lenght_parry = self.lenght_parry + 1
-            else:
-                self.parry = False
-                if not shield:
-                    self.parried = False
-                    self.lenght_parry = 0
-            if shield and (not self.grounded) and (
-            self.can_airdodge) and self.attack is None and self.can_act and not self.jumping:
+                    self.lenght_parry = 1
+
+            if (shield and (not self.grounded) and (self.can_airdodge)
+                and self.attack is None and self.can_act and not self.jumping):
                 self.animation = "airdodge"
                 self.can_airdodge = False
                 self.airdodge = True
@@ -277,13 +284,16 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.hitstun:
                 self.active_hitboxes = list()
             if (self.attack is None or cancel) and not self.lag and not (
-            self.airdodge):  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
+            self.airdodge) and self.lenght_parry == 0:  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if self.grounded:
                     self.animation = "idle"
                 elif self.vy > 0:
                     self.animation = "fall"
                 else:
                     self.animation = "jump"
+                
+                if self.parry :
+                    self.animation = "airdodge"
 
                 if right:  # Si on input à droite
                     if special:

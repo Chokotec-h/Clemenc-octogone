@@ -67,7 +67,7 @@ Renault = {
     "run":("./DATA/Images/Sprites/Chars/Renault/Default/Run.png",((2,14,18,20),(22,14,18,20),(42,14,18,20),(62,14,18,20),(82,14,18,20),(102,14,18,20)),10,True),
     "jump":("./DATA/Images/Sprites/Chars/Renault/Default/Jump.png",((2,1,14,35),(19,1,17,35),(38,1,19,35),(62,1,15,35)),12,False),
     "fall":("./DATA/Images/Sprites/Chars/Renault/Default/Fall.png",((1,1,16,35),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Renault/Default/Parry_Dodge.png",((2,1,14,35),(21,1,14,35),(37,1,15,35)),12,False),
     "jab":("./DATA/Images/Sprites/Chars/Renault/Default/Jab.png",((0,1,27,35),(31,1,27,35)),12,True),
     "downtilt":("./DATA/Images/Sprites/Chars/Renault/Default/DownTilt.png",((2,1,14,35),(23,1,14,35),(39,1,24,35),(70,1,21,35),(96,1,24,35),(119,1,24,35),(145,1,24,35),(170,1,21,35),(195,1,16,35),(212,1,14,35)),16,False),
     "forwardtilt":("./DATA/Images/Sprites/Chars/Renault/Default/Ftilt.png",((2,2,14,35),(27,2,68,35),(95,2,68,35),(168,2,14,35)),9,False),
@@ -159,12 +159,12 @@ Gregoire = {
 }
 
 Pyro_Aubin = {
-    "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,46),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
-    "walk":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
-    "run":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
-    "jump":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_jump.png",((7,4,31,44),(55,2,30,46),(101,1,38,46)),8,False),
-    "fall":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_jump.png",((101,1,38,46),),8,False),
-    "airdodge":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "idle":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_idle.png",((14,1,22,46),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "walk":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
+    "jump":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_jump.png",((7,4,31,44),(55,2,30,46),(101,1,38,46)),8,False),
+    "fall":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_jump.png",((101,1,38,46),),8,False),
+    "airdodge":("./DATA/Images/Sprites/Chars/Pyro_Aubin/Default/Aubin_idle.png",((14,1,22,47),(62,2,26,46),(108,4,29,44),(158,2,26,46)),8,True),
 
 }
 
