@@ -321,24 +321,7 @@ class Poissonnier(Char):
 
     def draw(self, window): # Dessine aussi la jauge de surchauffe
 
-        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
-        drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0],size[1],size[2],size[3]),not self.look_right,False)
-        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*self.sizescale),round(drawing_sprite.get_size()[1]*self.sizescale))) # Rescale
-        size = [size[0]*self.sizescale,size[1]*self.sizescale,size[2]*self.sizescale,size[3]*self.sizescale] # Rescale
-        pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
-        if self.show :
-            window.blit(drawing_sprite, pos) # on dessine le sprite
-
-
-        for i,s in enumerate(self.smoke_dash):
-                    s.draw(window)
-                    if s.life_time < 0:
-                        del self.smoke_dash[i]
-        
-        for i,s in enumerate(self.double_jump):
-                    s.draw(window)
-                    if s.life_time < 0:
-                        del self.double_jump[i]
+        super().draw(window)
 
         if self.player == 0 :
             x = 500
@@ -349,13 +332,7 @@ class Poissonnier(Char):
         pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
         Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
 
-        # debug
-        if self.parry:
-            pygame.draw.rect(window,(200,200,200),(pos[0],pos[1],self.rect.w,self.rect.h))
 
-        # draw projectiles
-        for p in self.projectiles :
-            p.draw(window)
 ###################          
 """ Projectiles """
 ###################
