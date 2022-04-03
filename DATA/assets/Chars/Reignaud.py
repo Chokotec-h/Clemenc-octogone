@@ -100,6 +100,9 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "Jab":
+            if self.frame < 8 :
+                self.animation = "jab"
+                self.animeframe = self.frame
             if self.frame < 7 :
                 self.cancelable = True
             else :
@@ -142,6 +145,9 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame < 9 :
+                self.animation = "utilt"
+                self.animeframe = min(0,self.frame-7)
             if self.frame < 8 :
                 self.cancelable = True
             else :

@@ -48,6 +48,8 @@ Reignaud = {
     "jump":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
     "fall":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
     "airdodge":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "jab":("./DATA/Images/Sprites/Chars/Reignaud/Default/Jab.png",((1,1,13,35),(18,1,14,35),(38,1,14,35),(54,1,14,35),(75,1,13,35)),10,False),
+    "utilt":("./DATA/Images/Sprites/Chars/Reignaud/Default/Utilt.png",((20,1,16,35),(39,1,16,35),(59,1,16,35),(79,1,18,35),(101,1,16,35),(122,1,16,35)),16,True),
 
 }
 
