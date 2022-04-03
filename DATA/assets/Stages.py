@@ -7,7 +7,7 @@ musics = [("event:/BGM/let's_fight_!", "K201", True),("event:/BGM/Industrial cla
           ("event:/BGM/Panda_Ball", "Pandadrome", True),
           ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIG-SHOT", "Chapelle", "Spamton"),
           ("event:/BGM/Honor winds", "Cour d'honneur", True),
-          ("event:/BGM/digital_autority", "Salle d'info", True),
+          ("event:/BGM/Cyber_Class", "Salle d'info", True),
           ("event:/BGM/Lunch time !", "Table de self", True),
           ("event:/BGM/optic'mind", "Salle de TP", True)]
 
