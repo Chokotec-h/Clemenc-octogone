@@ -8,6 +8,7 @@ from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 import SoundSystem
+import SFXEvents
 import time
 
 import DATA.assets.CharsLoader as Chars
@@ -17,9 +18,6 @@ from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
 from DATA.utilities.commands import *
-
-######## testIWAN
-
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
@@ -36,6 +34,8 @@ for j in joysticks:
 
 ##########################################################################################################
 SoundSystem.studio_init()
+SFXEvents.SFX_init()  # toujour après un studio ini    SINON   SA MARCHE PAAAAAAAAAAAAS!?:^$@&@!?!^$$ù$à
+
 embient = SoundSystem.instance()
 embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
