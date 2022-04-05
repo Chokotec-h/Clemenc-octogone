@@ -118,18 +118,26 @@ class instance:
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))
-        check_result(studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1))
+        check_result(
+            studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1))
         return tempBuffer.value
 
 
-def getAllEventFromBank(bank):
+def getEventCount(bank):
     """
-    @param bank: a bank to get all his event
-    @return: a cArray with all events
+    @param bank: the bank with event
+    @return: the number of event
     """
     eventNumber = c_int()
     check_result(studio_dll.FMOD_Studio_Bank_GetEventCount(bank, byref(eventNumber)))
+    return eventNumber.value
 
-    CArray = (c_void_p * eventNumber.value)()
-    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(CArray), eventNumber))
-    return CArray
+
+def getAllEventFromBank(bank, Array, eventNumber):
+    """
+    @param bank: a bank to get all his event
+    @param Array : an Array to stack all event
+    @param eventNumber : the number of event
+    @return: a cArray with all events
+    """
+    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(Array), eventNumber))

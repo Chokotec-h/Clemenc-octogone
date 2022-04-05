@@ -11,7 +11,9 @@ UIDicoEvent = {}  # a dico with all UI song
 
 def SFX_init():
     # SFX Loader
-    SFXArray = SoundSystem.getAllEventFromBank(SoundSystem.BankList[-2])
+    SFXnumber = SoundSystem.getEventCount(SoundSystem.BankList[-2])
+    SFXArray = (c_void_p * SFXnumber)()
+    SoundSystem.getAllEventFromBank(SoundSystem.BankList[-2], SFXArray, SFXnumber)
     for SFX in SFXArray:
         desc_p = c_void_p(SFX)
 
@@ -22,6 +24,7 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
+        print(truc)
         folder = truc[2] #  NE  PAS  CHANGER
         song = truc[3]  #  NE PAS CHANGER
 
@@ -32,8 +35,10 @@ def SFX_init():
         SFXDicoEvent[folder][song] = event
 
     # UI Loader
-    """
-    UIArray = SoundSystem.getAllEventFromBank(SoundSystem.BankList[-1])
+    UInumber = SoundSystem.getEventCount(SoundSystem.BankList[-1])
+    UIArray = (c_void_p * UInumber)()
+    SoundSystem.getAllEventFromBank(SoundSystem.BankList[-1], UIArray, UInumber)
+
     for UI in UIArray:
         desc_p = c_void_p(UI)
 
@@ -44,7 +49,8 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
-        song = truc[3]
+        print(truc)
+        song = truc[2]
 
         SFXDicoEvent[song] = event
-    """
+
