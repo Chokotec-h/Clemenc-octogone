@@ -45,7 +45,6 @@ def play_event(eventPath: str) -> c_void_p:
     print("Playing sound: " + eventPath)
     event_desc = c_void_p()
     check_result(studio_dll.FMOD_Studio_System_GetEvent(studio_sys, eventPath.encode('ascii'), byref(event_desc)))
-    print("pointeur : " + str(event_desc))
 
     event_inst = c_void_p()
     check_result(studio_dll.FMOD_Studio_EventDescription_CreateInstance(event_desc, byref(event_inst)))
@@ -132,5 +131,5 @@ def getAllEventFromBank(bank):
     check_result(studio_dll.FMOD_Studio_Bank_GetEventCount(bank, byref(eventNumber)))
 
     CArray = (c_void_p * eventNumber.value)()
-    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(CArray), eventNumber.value))
+    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(CArray), eventNumber))
     return CArray
