@@ -49,7 +49,7 @@ def SFX_init():
         # split the path
         truc = str(keys).split("/")
         print(truc)
-        song = truc[2]
+        song = truc[2] # ne pas changer
 
         SFXDicoEvent[song] = event
 
