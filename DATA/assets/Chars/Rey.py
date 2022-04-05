@@ -38,7 +38,7 @@ class Rey(Char):
                 if right :
                     self.vx += self.airspeed
                 if self.frame%10 == 0 :
-                    pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh").play()
+                    SFXDicoEvent['wooshs']["woosh'"].play()
             if self.frame > 51 :
                 self.attack = None
                 self.can_act = True
@@ -70,7 +70,7 @@ class Rey(Char):
                     self.door = Door(self.rect.x,self.rect.y,self)
                     self.projectiles.append(self.door)
                 else :
-                    pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam").play()
+                    SFXDicoEvent['mincelious']["Door-Slam'"].play()
                     self.door.in_use = True
                     self.x = self.door.x + self.rect.w/2
                     self.rect.y = self.door.y
@@ -181,7 +181,7 @@ class Rey(Char):
                     self.active_hitboxes[-1].damages = 3
                     self.active_hitboxes[-1].stun = 8
                     self.active_hitboxes[-1].knockback = 7
-                    self.active_hitboxes[-1].sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/8bit hit")
+                    self.active_hitboxes[-1].sound = SFXDicoEvent['hits']["8bit hit'"]
 
             if self.frame > 45: # 15 frames de lag
                 self.attack = None
@@ -348,7 +348,7 @@ doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/O
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam")
+        self.sound = SFXDicoEvent['mincelious']["Door-Slam'"]
         self.x = x
         self.y = y
         self.own = own
@@ -380,7 +380,7 @@ class Door():
 
 class Spectre_de_rey():
     def __init__(self,own:Rey,other) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer")
+        self.sound = SFXDicoEvent['lasers']["cool lazer'"]
         self.x = own.rect.x
         self.y = own.rect.y+own.rect.h/12
         self.own = own

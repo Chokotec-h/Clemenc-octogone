@@ -38,7 +38,7 @@ class Poissonnier(Char):
         if self.damages <= 0 :
             self.damagestaken = 0
         if self.overheat > 199 :
-            pygame.mixer.Sound("DATA/Musics/SFX/BOOM !!!/Explosion").play()
+            SFXDicoEvent['explosions']["Explosion'"].play()
             self.projectiles.append(Surchauffe(self.rect.x,self.rect.y,self))
             self.overheat = 0
             self.damages += 20
@@ -211,10 +211,10 @@ class Poissonnier(Char):
 
         if attack == "NeutralAir":
             if self.frame == 4 :
-                pygame.mixer.Sound("DATA/Musics/SFX/hits/punch2").play()
+                SFXDicoEvent['hits']["punch2'"].play()
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/5,2,8,0,8,2,self))
             if self.frame == 7 :
-                pygame.mixer.Sound("DATA/Musics/SFX/hits/punch2").play()
+                SFXDicoEvent['hits']["punch2'"].play()
                 self.active_hitboxes.append(Hitbox(10,32,64,64,pi/3,12,12,1/200,14,2,self))
                 self.damages += 0.1
 
@@ -272,7 +272,7 @@ class Poissonnier(Char):
                 self.charge = self.charge+1
             if self.frame == 30 :
                 self.charge = min(self.charge,100)
-                pygame.mixer.Sound("DATA/Musics/SFX/hits/hitting metal").play()
+                SFXDicoEvent['hits']["hitting metal'"].play()
                 self.active_hitboxes.append(Hitbox(10,-82,32,84,pi/9,18+8*(self.charge/100),22.2,1/256,24+9*(self.charge/100),6,self,boum=7,deflect=True,modifier=1.5))
             if self.frame > 30 and self.active_hitboxes:
                 self.active_hitboxes[-1].relativex += 12*signe(self.direction)

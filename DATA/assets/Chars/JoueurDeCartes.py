@@ -69,7 +69,7 @@ class Air_President(Char):
             if self.frame == 6: # Hitbox frame 6-15
                 self.vx = 0
                 self.vy = -24
-                pygame.mixer.Sound(f"DATA/Musics/SFX/boings/boing ({randint(2,8)})").play()
+                SFXDicoEvent['boings'][f"boing ({randint(2,8)})'"]
                 self.active_hitboxes.append(Hitbox(-1.5,88,51,48,-pi/2,2,6,1/150,3,8,self,False,sound="boings/boing (1)"))
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
@@ -191,7 +191,7 @@ class Air_President(Char):
 
         if attack == "ForwardAir":
             if self.frame == 9 : # Frame 9-10
-                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,16,2,self,False,sound="other/electric cable sound"))
+                self.active_hitboxes.append(Hitbox(24,28,64,12,pi/6,12,11.3,1/150,16,2,self,False,sound="lasers/electric cable sound"))
             if self.frame > 14  and self.frame < 21: # Fame 15-20
                 self.active_hitboxes.append(Hitbox(24,28,64,12,pi/42,2,0.5,1/404,3,2,self,False,boum = -1))
             if self.frame > 45: # 25 frames de lag
@@ -345,15 +345,15 @@ class Air_President(Char):
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         if number == "R":
-            pygame.mixer.Sound("DATA/Musics/SFX/other/Its-pronounced-rules").play()
-            self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/cool hit")
+            SFXDicoEvent['mincelious']["Its-pronounced-rules'"].play()
+            self.sound = SFXDicoEvent['hits']["cool hit'"]
             self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
             self.knockback = 1000
             self.damages = 999
             self.stun = 1000
             self.damages_stacking = 1
         else :
-            self.sound = pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh")
+            self.sound = SFXDicoEvent['wooshs']["woosh'"]
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
@@ -383,8 +383,8 @@ class Carte():
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
-        pygame.mixer.Sound("DATA/Musics/SFX/wooshs/encore un woosh").play()
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/boings/boing")
+        SFXDicoEvent['wooshs']["encore un woosh'"].play()
+        self.sound = SFXDicoEvent['boings']["boing'"]
         self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
@@ -483,7 +483,7 @@ class Poutre():
         self.duration = 10
         self.stage = stage
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/hitting metal")
+        self.sound = SFXDicoEvent['hits']["hitting metal'"]
 
     def update(self):
         self.knockback = sqrt(self.vx**2+self.vy**2)

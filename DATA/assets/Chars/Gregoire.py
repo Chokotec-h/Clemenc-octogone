@@ -85,7 +85,7 @@ class Gregoire(Char):
                     self.look_right = True
             if 25 < self.frame < 45:
                 if self.frame == 26:
-                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser2").play()
+                    SFXDicoEvent['lasers']["laser2'"].play()
                 self.vy = 0
                 self.projectiles.append(
                     Rayon(stage, self.x, self.rect.y + 24, -self.angle_rayon * signe(self.direction),
@@ -108,7 +108,7 @@ class Gregoire(Char):
                 self.animeframe = 0
             if self.frame == 70:
                 self.active_hitboxes.append(
-                    Hitbox(32, 32, 64, 64, pi / 4, 23, 68.29, 1 / 100, 9, 5, self, False, sound="BOOM !!!/Cannon"))
+                    Hitbox(32, 32, 64, 64, pi / 4, 23, 68.29, 1 / 100, 9, 5, self, False, sound="explosions/Cannon"))
             if self.frame > 120:  # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -437,7 +437,7 @@ class Gregoire(Char):
 
 class Rayon():
     def __init__(self, stage, x, y, angle_fwd, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer")
+        self.sound = SFXDicoEvent['lasers']["cool lazer'"]
         self.stage = stage
         self.x = x
         self.y = y
@@ -531,7 +531,7 @@ class Thunder():
 
 class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/hit")
+        self.sound = SFXDicoEvent['hits']["hit'"]
         self.rect = pygame.Rect(x, y, 5, 5)
         self.angle = angle
         self.v = 5 * signe(own.direction)

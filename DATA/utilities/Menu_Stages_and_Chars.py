@@ -12,14 +12,16 @@ class StagesMenu():
         self.confirm = True
         self.stage = 0
 
-        if self.training :
-            self.actualstages = ["Pandadrome"] + stages
-        else :
-            self.actualstages = stages
+
+        self.basicstages = stages
         
         self.UIDicoEvent = UIDicoEvent
 
     def update(self,window,controls,joysticks,width,height):
+        if self.training :
+            self.actualstages = ["Pandadrome"] + stages
+        else :
+            self.actualstages = stages
         Menu = "stage"
 
         if not convert_inputs(controls[0],joysticks,0)[6]:

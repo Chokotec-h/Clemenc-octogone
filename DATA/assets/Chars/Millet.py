@@ -81,7 +81,7 @@ class Millet(Char):
                     self.look_right = True
             if self.frame > 25 and self.frame < 45:
                 if self.frame == 26 :
-                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser3").play()
+                    SFXDicoEvent['lasers']["laser3'"].play()
                 self.vy = 0
                 self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
@@ -95,7 +95,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame == 70 :
-                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,25,5,self,False,sound="BOOM !!!/Cannon"))
+                self.active_hitboxes.append(Hitbox(32,32,64,64,pi/4,20,68.29,1/100,25,5,self,False,sound="explosions/Cannon"))
             if self.frame > 120 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -349,7 +349,7 @@ class Millet(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own:Millet) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer")
+        self.sound = SFXDicoEvent['lasers']["cool lazer'"]
         self.stage = stage
         self.x = x
         self.y = y
@@ -444,7 +444,7 @@ class Fire():
 
 class Sinusoide():
     def __init__(self,x,y,angle,own:Millet) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/hit")
+        self.sound = SFXDicoEvent['hits']["hit'"]
         self.rect = pygame.Rect(x,y,5,5)
         self.angle = angle
         self.v = 5*signe(own.direction)

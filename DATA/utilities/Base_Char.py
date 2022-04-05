@@ -714,10 +714,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if self.superarmor != -1:
                             self.superarmor = max(self.superarmor - projectile.damages, 0)
                         self.damages += projectile.damages
-                    # try :
-                    #    projectile.sound.play()
-                    # except:
-                    #    playsound("DATA/Musics/SE/hits/8bit hit.mp3")
+                    try :
+                        projectile.sound.play()
+                    except:
+                        SFXDicoEvent['hits']["8bit hit'"].play()
                 else:
                     if self.parry:
                         other.BOUM = 8
