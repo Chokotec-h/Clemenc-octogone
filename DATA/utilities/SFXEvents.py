@@ -1,5 +1,5 @@
 from ctypes import *
-import SoundSystem
+import DATA.utilities.SoundSystem as SoundSystem
 import time
 
 # Dico with all SFX song
