@@ -24,7 +24,6 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
-        print(truc)
         folder = truc[2] #  NE  PAS  CHANGER
         song = truc[3]  #  NE PAS CHANGER
 

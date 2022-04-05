@@ -1,7 +1,7 @@
 import pygame
 from math import cos, sin, pi
 from copy import deepcopy
-import SoundSystem
+import DATA.utilities.SoundSystem as SoundSystem
 
 from DATA.utilities.Animations import get_sprite
 
@@ -206,11 +206,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         if self.lenght_parry > 0 :
             self.lenght_parry += 1
-            self.parry = True
-            if self.lenght_parry > 8 :
-                self.animation = "idle"
+            if self.lenght_parry > 4 and self.lenght_parry < 10 :
+                self.parry = True
+            else :
                 self.parry = False
-                if not self.parried and self.lenght_parry == 9:
+            if self.lenght_parry > 10 :
+                self.animation = "idle"
+                if not self.parried and self.lenght_parry == 11:
                     self.lag = 10
                 if (not shield) or (left or right):
                     self.lenght_parry = 0
@@ -257,15 +259,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.tech = 10
         else:
 
-            if self.grounded and self.attack is None and not self.lag and shield and self.lenght_parry == 0:
+            if self.grounded and self.attack is None and not self.lag and shield and self.lenght_parry < 5:
                 if right or left:
                     if not self.dash:
                         self.smoke_dash.append(Dash_Smoke(self.rect.x + self.rect.w / 2 - (right - 0.5) * 70,
                                                           self.rect.y + self.rect.h / 2, right))
                     self.dash = True
                     self.parry = False
-                elif not self.dash:
-                    self.parry = True
+                    self.lenght_parry = 0
+                elif not self.dash and self.lenght_parry == 0:
                     self.lenght_parry = 1
 
             if (shield and (not self.grounded) and (self.can_airdodge)
@@ -284,7 +286,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.hitstun:
                 self.active_hitboxes = list()
             if (self.attack is None or cancel) and not self.lag and not (
-            self.airdodge) and self.lenght_parry == 0:  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
+            self.airdodge) and self.lenght_parry < 5:  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if self.grounded:
                     self.animation = "idle"
                 elif self.vy > 0:
@@ -655,7 +657,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         other.BOUM = 8
                         self.parried = True
                         other.attack = None
-                        other.lag = min(hitbox.damages * hitbox.knockback / 10, 9)
+                        other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
                 hitbox.sound.play()
                 del other.active_hitboxes[i]  # Supprime la hitbox
                 return

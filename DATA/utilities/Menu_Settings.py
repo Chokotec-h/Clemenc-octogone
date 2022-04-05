@@ -4,7 +4,7 @@ from DATA.utilities.Entry import TextInput
 import DATA.utilities.commands
 
 class SettingsMenu():
-    def __init__(self) -> None:
+    def __init__(self,UIDicoEvent) -> None:
         self.menu = "settings"
         self.focusedbutton = 0
         self.row = 0
@@ -13,6 +13,7 @@ class SettingsMenu():
         self.inputget = -1
         self.getting = list()
         self.name = ""
+        self.UIDicoEvent = UIDicoEvent
         
 
     def update(self,window,width,height,events,controls,joysticks,musicvolume,soundvolume):
@@ -38,6 +39,7 @@ class SettingsMenu():
             if self.focusedbutton == 0:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 forward'"].play()
                     self.menu = "musics"
                     oldmusicvolume = musicvolume
                     oldsoundvolume = soundvolume
@@ -60,6 +62,7 @@ class SettingsMenu():
             if self.focusedbutton == 2:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 back'"].play()
                     Menu = "main"
                     self.confirm = True
             Bouton.draw(window)
@@ -124,6 +127,7 @@ class SettingsMenu():
             if self.focusedbutton == 2:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 forward'"].play()
                     with open("DATA/utilities/Settings.txt","w") as settings :
                         settings.write(f"Music :\nmusicvolume={round(musicvolume,2)}\nsoundvolume={round(soundvolume,2)}\n")
                     self.menu = "settings"
@@ -136,6 +140,7 @@ class SettingsMenu():
             if self.focusedbutton == 3:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 forward'"].play()
                     soundvolume = oldsoundvolume
                     musicvolume = oldmusicvolume
                     # DATA.utilities.Sound_manager.soundvolume = soundvolume
@@ -170,6 +175,7 @@ class SettingsMenu():
                         if self.focusedbutton == i-3:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                                self.UIDicoEvent["UI1 forward'"].play()
                                 self.commandconfig = n
                                 self.inputget = -3
                                 self.confirm = True
@@ -180,6 +186,7 @@ class SettingsMenu():
                 if self.focusedbutton == -2:
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                        self.UIDicoEvent["UI1 forward'"].play()
                         self.commandconfig = 0
                         self.name = "Player"
                         self.confirm = True
@@ -190,6 +197,7 @@ class SettingsMenu():
                 if self.focusedbutton == -1:
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                        self.UIDicoEvent["UI1 back'"].play()
                         self.menu = "settings"
                         self.focusedbutton = 0
                         self.confirm = True
@@ -258,6 +266,7 @@ class SettingsMenu():
                     draw_input(window,width/6,(i+1)*80,i,k,self.inputget,i,self.focusedbutton,self.row,0)
                     if self.focusedbutton == i and self.row == 0:
                         if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                            self.UIDicoEvent["UI1 forward'"].play()
                             self.inputget = i
                             self.confirm = True
                 # Jump, Attack, Special, Shield
@@ -265,6 +274,7 @@ class SettingsMenu():
                     draw_input(window,2*width/6,(i+1)*80,i+4,k,self.inputget,i,self.focusedbutton,self.row,1)
                     if self.focusedbutton == i and self.row == 1:
                         if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                            self.UIDicoEvent["UI1 forward'"].play()
                             self.inputget = i+4
                             self.confirm = True
                 # C-Stick
@@ -272,6 +282,7 @@ class SettingsMenu():
                     draw_input(window,4*width/6,(i+1)*80,i+9,k,self.inputget,i,self.focusedbutton,self.row,2)
                     if self.focusedbutton == i and self.row == 2:
                         if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                            self.UIDicoEvent["UI1 forward'"].play()
                             self.inputget = i+9
                             self.confirm = True
                 # D-Pad + Pause
@@ -279,6 +290,7 @@ class SettingsMenu():
                     draw_input(window,5*width/6,(i+1)*80,i+13,k,self.inputget,i,self.focusedbutton,self.row,3)
                     if self.focusedbutton == i and self.row == 3:
                         if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                            self.UIDicoEvent["UI1 forward'"].play()
                             self.inputget = i+13
                             self.confirm = True
                 # Sauvegarde
@@ -286,6 +298,7 @@ class SettingsMenu():
                 if self.focusedbutton == -1 and self.row%2 == 0:
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                        self.UIDicoEvent["UI1 forward'"].play()
                         with open("./DATA/utilities/commands.py","w") as commandfile :
                             commandfile.write("commands = {\n")
                             for k in DATA.utilities.commands.commands :
@@ -301,6 +314,7 @@ class SettingsMenu():
                 if self.focusedbutton == -1 and self.row%2 == 1:
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
+                        self.UIDicoEvent["UI1 forward'"].play()
                         del DATA.utilities.commands.commands[self.commandconfig]
                         with open("./DATA/utilities/commands.py","w") as commandfile :
                             commandfile.write("commands = {\n")
