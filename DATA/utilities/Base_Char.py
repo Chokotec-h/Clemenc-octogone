@@ -2,11 +2,19 @@ import pygame
 from math import cos, sin, pi
 from copy import deepcopy
 import DATA.utilities.SoundSystem as SoundSystem
+import DATA.utilities.SFXEvents as SFXEvents
 
 from DATA.utilities.Animations import get_sprite
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
+
+# Implémentation pas opti des sons mais on s'en fout OK
+print("Calcul fait 2 fois pour l'instant parce que vive la non optimisation")
+SoundSystem.studio_init()
+SFXEvents.SFX_init()
+
+SFXDicoEvent = SFXEvents.SFXDicoEvent
 
 def signe(val):
     if val == 0:

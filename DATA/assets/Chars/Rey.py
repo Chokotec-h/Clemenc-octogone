@@ -1,6 +1,6 @@
 from random import random
 import DATA.utilities.Animations as Animations
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import pi
 

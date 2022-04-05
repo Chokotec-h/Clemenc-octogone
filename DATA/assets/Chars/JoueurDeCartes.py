@@ -1,5 +1,5 @@
 from DATA.assets.Stages import Stage
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import pi, cos, sin, sqrt
 from random import randint

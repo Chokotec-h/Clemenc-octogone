@@ -1,6 +1,6 @@
 from random import random, choice
 from DATA.utilities.Animations import get_sprite
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
