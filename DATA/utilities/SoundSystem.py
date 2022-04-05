@@ -14,7 +14,7 @@ studio_sys = c_void_p()
 
 BankList = []  # a list of all bank
 string_buffer = create_string_buffer(100)
-bufferSize = 50
+bufferSize = 100
 
 
 def check_result(r):
