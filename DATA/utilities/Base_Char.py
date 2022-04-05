@@ -30,7 +30,7 @@ def change_left(x, size):
 class Hitbox():
     def __init__(self, x, y, sizex, sizey, angle, knockback, damages, damage_stacking, stun, duration, own,
                  position_relative=False, deflect=False, modifier=1, boum=0,
-                 sound="/SE/hits and slap/8bit hit") -> None:
+                 sound="hits/8bit hit") -> None:
         self.relativex = x  # Position relative
         self.relativey = y
         self.sizex = sizex
@@ -46,7 +46,10 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
-        self.sound = SoundSystem.instance("event:" + sound)
+        path = sound.split("/")
+
+        self.sound = SFXDicoEvent[path[0]][path[1]+"'"]
+
         if not own.look_right:
             self.relativex = change_left(x, sizex)
             self.angle = pi - angle
@@ -71,6 +74,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
     def __init__(self, speed, dashspeed, airspeed, deceleration, fallspeed, fastfallspeed, fullhop, shorthop,
                  doublejumpheight, airdodgespeed, airdodgetime, dodgeduration):
         pygame.sprite.Sprite.__init__(self)
+
+        self.jumpsound = SFXDicoEvent['mincelious']["jump'"]  # Son test
+
         self.x = 0
         self.damages = 0.0
         self.direction = 90
@@ -711,7 +717,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     # try :
                     #    projectile.sound.play()
                     # except:
-                    #    playsound("DATA/Musics/SE/hits and slap/8bit hit.mp3")
+                    #    playsound("DATA/Musics/SE/hits/8bit hit.mp3")
                 else:
                     if self.parry:
                         other.BOUM = 8

@@ -12,7 +12,7 @@ class Rey(Char):
                          doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav") # Son test
+
         self.name = "Rey"
         self.x = x
         self.rect.y = y
@@ -38,7 +38,7 @@ class Rey(Char):
                 if right :
                     self.vx += self.airspeed
                 if self.frame%10 == 0 :
-                    pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh.mp3").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/wooshs/woosh").play()
             if self.frame > 51 :
                 self.attack = None
                 self.can_act = True
@@ -70,7 +70,7 @@ class Rey(Char):
                     self.door = Door(self.rect.x,self.rect.y,self)
                     self.projectiles.append(self.door)
                 else :
-                    pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam.wav").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam").play()
                     self.door.in_use = True
                     self.x = self.door.x + self.rect.w/2
                     self.rect.y = self.door.y
@@ -95,7 +95,7 @@ class Rey(Char):
 
         if attack == "Jab":
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/6,2,4,1/1000,12,2,self,False,sound="hits and slap/mini hit.wav"))
+                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/6,2,4,1/1000,12,2,self,False,sound="hits/mini hit"))
             if self.frame > 6 and attack_button :
                 self.attack = "Jab2"
                 self.frame = 0
@@ -105,7 +105,7 @@ class Rey(Char):
 
         if attack == "Jab2":
             if self.frame == 3 :
-                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/4,2,4,1/1000,12,2,self,False,sound="hits and slap/mini hit.wav"))
+                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/4,2,4,1/1000,12,2,self,False,sound="hits/mini hit"))
             if self.frame > 5 and attack_button :
                 self.attack = "Jab3"
                 self.frame = 0
@@ -115,14 +115,14 @@ class Rey(Char):
 
         if attack == "Jab3":
             if self.frame == 4 :
-                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/3,10,8,1/200,14,2,self,False,sound="hits and slap/other hit.mp3"))
+                self.active_hitboxes.append(Hitbox(42,42,64,42,pi/3,10,8,1/200,14,2,self,False,sound="hits/other hit"))
 
             if self.frame > 35: # 18 frames de lag
                 self.attack = None
 
         if attack == "DownTilt":
             if self.frame == 8 : # Frame 8-13
-                self.active_hitboxes.append(Hitbox(24,80,75,24,5*pi/13,12,1.2,1/200,20,3,self,False,sound="hits and slap/hit.wav"))
+                self.active_hitboxes.append(Hitbox(24,80,75,24,5*pi/13,12,1.2,1/200,20,3,self,False,sound="hits/hit"))
 
             if self.frame > 20: # 7 frames de lag
                 self.attack = None
@@ -146,7 +146,7 @@ class Rey(Char):
 
         if attack == "ForwardTilt2":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(42,40,50,50,pi/4,14,11,1/250,14,2,self,False,sound="hits and slap/cool hit.wav"))
+                self.active_hitboxes.append(Hitbox(42,40,50,50,pi/4,14,11,1/250,14,2,self,False,sound="hits/cool hit"))
 
             if self.frame > 30: # 8 frames de lag
                 self.attack = None
@@ -154,16 +154,16 @@ class Rey(Char):
         if attack == "UpTilt":
             if self.frame == 6 :
                 self.rect.y -= 60
-                self.active_hitboxes.append(Hitbox(0,0,48,128,6*pi/13,17,14,1/200,18,8,self,False,sound="hits and slap/punch.mp3"))
+                self.active_hitboxes.append(Hitbox(0,0,48,128,6*pi/13,17,14,1/200,18,8,self,False,sound="hits/punch"))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
 
         if attack == "UpAir":
             if self.frame == 8 :
-                self.active_hitboxes.append(Hitbox(-8,-30,32,48,3*pi/10,10,9,1/250,14,8,self,False,sound="hits and slap/punch2.mp3"))
+                self.active_hitboxes.append(Hitbox(-8,-30,32,48,3*pi/10,10,9,1/250,14,8,self,False,sound="hits/punch2"))
             if self.frame == 12 :
                 if self.active_hitboxes :
-                    self.active_hitboxes[-1] = Hitbox(24,-30,32,48,pi/3,10,9,1/250,14,4,self,False,sound="hits and slap/punch2.mp3")
+                    self.active_hitboxes[-1] = Hitbox(24,-30,32,48,pi/3,10,9,1/250,14,4,self,False,sound="hits/punch2")
 
             if self.frame > 22: # 10 frames de lag
                 self.attack = None
@@ -175,13 +175,13 @@ class Rey(Char):
 
         if attack == "ForwardAir":
             if self.frame == 14 :
-                self.active_hitboxes.append(Hitbox(32,42,48,48,pi/6,18,22,1/180,17,16,self,sound="hits and slap/cool hit.wav"))
+                self.active_hitboxes.append(Hitbox(32,42,48,48,pi/6,18,22,1/180,17,16,self,sound="hits/cool hit"))
             if self.frame == 16 :
                 if self.active_hitboxes :
                     self.active_hitboxes[-1].damages = 3
                     self.active_hitboxes[-1].stun = 8
                     self.active_hitboxes[-1].knockback = 7
-                    self.active_hitboxes[-1].sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/8bit hit.mp3")
+                    self.active_hitboxes[-1].sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/8bit hit")
 
             if self.frame > 45: # 15 frames de lag
                 self.attack = None
@@ -196,11 +196,11 @@ class Rey(Char):
                 self.active_hitboxes.append(Hitbox(-64,42,64,64,pi/50,7,3,1/1000,12,2,self,False))
             if self.frame > 10 and self.frame%5 == 3 and self.frame < 28:
                 if self.frame%2 == 0 :
-                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/50,7,3,1/1000,12,2,self,False,sound="hits and slap/punch2.mp3"))
+                    self.active_hitboxes.append(Hitbox(-72,42,112,48,pi/50,7,3,1/1000,12,2,self,False,sound="hits/punch2"))
                 else :
-                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,49*pi/50,7,3,1/1000,12,2,self,False,sound="hits and slap/punch2.mp3"))
+                    self.active_hitboxes.append(Hitbox(change_left(-72,112),42,112,48,49*pi/50,7,3,1/1000,12,2,self,False,sound="hits/punch2"))
             if self.frame == 30 :
-                    self.active_hitboxes.append(Hitbox(-100,42,100,48,pi,13,3.4,1/220,12,2,self,False,sound="hits and slap/punch1.mp3"))
+                    self.active_hitboxes.append(Hitbox(-100,42,100,48,pi,13,3.4,1/220,12,2,self,False,sound="hits/punch1"))
             
 
             if self.frame > 40: # 10 frames de lag
@@ -217,7 +217,7 @@ class Rey(Char):
                 self.vy += 2*self.fastfallspeed
             if self.frame == 16 :
                 self.vy = 3*self.fastfallspeed
-                self.active_hitboxes.append(Hitbox(24,70,72,72,-pi/3,15,8,1/190,15,40,self,False,sound="hits and slap/cool hit.wav"))
+                self.active_hitboxes.append(Hitbox(24,70,72,72,-pi/3,15,8,1/190,15,40,self,False,sound="hits/cool hit"))
 
 
             if self.grounded or self.frame > 60 :
@@ -259,7 +259,7 @@ class Rey(Char):
                 self.superarmor = 0
             if self.frame == 20 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(32,50,72,48,pi/10,22+9*(self.charge/100),17,1/130,20+11*(self.charge/100),3,self,False,sound="hits and slap/cool hit.wav"))
+                self.active_hitboxes.append(Hitbox(32,50,72,48,pi/10,22+9*(self.charge/100),17,1/130,20+11*(self.charge/100),3,self,False,sound="hits/cool hit"))
             if self.frame > 65: # 42 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -276,10 +276,10 @@ class Rey(Char):
                 self.frame = 11
                 self.charge = self.charge+1
             if self.frame == 21 :
-                self.active_hitboxes.append(Hitbox(-32,-20,64,64,5*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),5,self,False,sound="hits and slap/punch1.mp3"))
+                self.active_hitboxes.append(Hitbox(-32,-20,64,64,5*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),5,self,False,sound="hits/punch1"))
             if self.frame == 23 :
                 if self.active_hitboxes :
-                    self.active_hitboxes[-1] = Hitbox(change_left(-32,64),-20,64,64,4*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),2,self,False,sound="hits and slap/punch1.mp3")
+                    self.active_hitboxes[-1] = Hitbox(change_left(-32,64),-20,64,64,4*pi/9,28+8*(self.charge/100),16,1/150,26+10*(self.charge/100),2,self,False,sound="hits/punch1")
             if self.frame > 40: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -292,7 +292,7 @@ class Rey(Char):
             
             if self.frame == 24 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(64,42,48,48,29/60,25+8*(self.charge/100),18,1/190,14+7*(self.charge/100),2,self,False,sound="hits and slap/hitting metal.wav"))
+                self.active_hitboxes.append(Hitbox(64,42,48,48,29/60,25+8*(self.charge/100),18,1/190,14+7*(self.charge/100),2,self,False,sound="hits/hitting metal"))
 
             if self.frame > 47: # 23 frames de lag
                 self.attack = None
@@ -348,7 +348,7 @@ doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/O
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/other/Door-Slam")
         self.x = x
         self.y = y
         self.own = own
@@ -380,7 +380,7 @@ class Door():
 
 class Spectre_de_rey():
     def __init__(self,own:Rey,other) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer.mp3")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer")
         self.x = own.rect.x
         self.y = own.rect.y+own.rect.h/12
         self.own = own

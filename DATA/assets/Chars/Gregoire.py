@@ -18,7 +18,7 @@ class Gregoire(Char):
                          doublejumpheight=16, airdodgespeed=6, airdodgetime=3, dodgeduration=15)
 
         self.rect = pygame.Rect(100, 0, 60, 144)  # Crée le rectangle de perso
-        self.jumpsound = pygame.mixer.Sound("DATA/Musics/SFX/jump.wav")  # Son test
+
         self.name = "Gregoire"
         self.x = x
         self.rect.y = y
@@ -85,7 +85,7 @@ class Gregoire(Char):
                     self.look_right = True
             if 25 < self.frame < 45:
                 if self.frame == 26:
-                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser2.wav").play()
+                    pygame.mixer.Sound("DATA/Musics/SFX/lasers/laser2").play()
                 self.vy = 0
                 self.projectiles.append(
                     Rayon(stage, self.x, self.rect.y + 24, -self.angle_rayon * signe(self.direction),
@@ -108,7 +108,7 @@ class Gregoire(Char):
                 self.animeframe = 0
             if self.frame == 70:
                 self.active_hitboxes.append(
-                    Hitbox(32, 32, 64, 64, pi / 4, 23, 68.29, 1 / 100, 9, 5, self, False, sound="BOOM !!!/Cannon.wav"))
+                    Hitbox(32, 32, 64, 64, pi / 4, 23, 68.29, 1 / 100, 9, 5, self, False, sound="BOOM !!!/Cannon"))
             if self.frame > 120:  # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -165,7 +165,7 @@ class Gregoire(Char):
             if self.frame == 16:
                 self.active_hitboxes.append(
                     Hitbox(32, 64, 48, 48, -2 * pi / 5, 22, incertitude(9), 1 / 200, 13, 3, self, False,
-                           sound="hits and slap/punch2.mp3"))
+                           sound="hits/punch2"))
             if self.frame > 35:  # 19 frames de lag
                 self.attack = None
 
@@ -181,7 +181,7 @@ class Gregoire(Char):
             if self.frame == 10:
                 self.active_hitboxes.append(
                     Hitbox(48, 52, 32, 32, pi / 4, 19, incertitude(8), 1 / 225, 10, 3, self, False,
-                           sound="hits and slap/punch.mp3"))
+                           sound="hits/punch"))
             if self.frame > 33:  # 27 frames de lag
                 self.attack = None
 
@@ -194,7 +194,7 @@ class Gregoire(Char):
                 angle = pi / 2
                 self.active_hitboxes.append(
                     Hitbox(-5, -12, 58, 58, angle, 15, incertitude(10), 1 / 300, 13, 3, self, False,
-                           sound="hits and slap/punch2.wav"))
+                           sound="hits/punch2"))
             if self.frame > 25:  # Frames de lag
                 self.attack = None
 
@@ -208,7 +208,7 @@ class Gregoire(Char):
             if self.frame == 15:  # 15-23
                 self.active_hitboxes.append(
                     Hitbox(40, 10, 32, 32, pi / 2, 20, incertitude(12), 1 / 90, 12, 8, self, False,
-                           sound="hits and slap/cool hit.wav"))
+                           sound="hits/cool hit"))
 
             if self.frame > 45:  # 22 frames de lag
                 self.attack = None
@@ -230,13 +230,13 @@ class Gregoire(Char):
                 else:
                     self.strongfair = False
                     self.active_hitboxes.append(Hitbox(48, 32, 36, 16, pi / 4, 12, 9, 1 / 200, 13, 3, self,
-                                                       sound="hits and slap/8bit hit reverse.mp3"))
+                                                       sound="hits/8bit hit reverse"))
             if self.frame < 10 and self.active_hitboxes:
                 self.active_hitboxes[-1].sizey += 16
             if self.frame == 45:
                 self.active_hitboxes.append(
                     Hitbox(48, 45, 16, 16, pi / 2, 3, 95.45, 1 / 1000, 25, 3, self, False, boum=30,
-                           sound="hits and slap/slap.mp3"))
+                           sound="hits/slap"))
             if self.frame > 69 or (self.frame > 40 and not self.strongfair):  # 24 frames de lag
                 self.attack = None
 
@@ -249,7 +249,7 @@ class Gregoire(Char):
             if self.frame == 13:
                 self.active_hitboxes.append(
                     Hitbox(-48, 64, 32, 32, pi / 6, 25, incertitude(13), 1 / 200, 14, 5, self, False,
-                           sound="wooshs/other woosh.wav"))
+                           sound="wooshs/other woosh"))
             if self.frame > 27:  # 11 frames de lag
                 self.attack = None
 
@@ -269,7 +269,7 @@ class Gregoire(Char):
             if self.frame == 17:
                 self.active_hitboxes.append(
                     Hitbox(0, 0, 48, 128, -pi / 2, 19, incertitude(10), 1 / 200, 15, 4096, self, False,
-                           sound="hits and slap/cool hit.wav"))
+                           sound="hits/cool hit"))
             if self.frame > 19:
                 if self.active_hitboxes:
                     self.active_hitboxes[-1].knockback = 8
@@ -299,11 +299,11 @@ class Gregoire(Char):
                 self.animeframe = 0
             if self.frame == 12:
                 self.active_hitboxes.append(Hitbox(48, 48, 32, 32, pi / 2, 2, incertitude(6), 0, 20, 3, self, False,
-                                                   sound="hits and slap/punch2.mp3"))
+                                                   sound="hits/punch2"))
             if self.frame == 18:
                 self.active_hitboxes.append(
                     Hitbox(48, 48, 48, 48, 2 * pi / 5, 20, incertitude(10), 1 / 250, 12, 3, self, False,
-                           sound="hits and slap/punch1.mp3"))
+                           sound="hits/punch1"))
 
             if self.frame > 40:  # 26 frames de lag
                 self.attack = None
@@ -327,7 +327,7 @@ class Gregoire(Char):
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(
                     Hitbox(48, 16, 48, 48, pi / 4, 22 + 12 * (self.charge / 200), incertitude(20), 1 / 250,
-                           9 + 8 * (self.charge / 100), 5, self, True, sound="hits and slap/punch1.mp3"))
+                           9 + 8 * (self.charge / 100), 5, self, True, sound="hits/punch1"))
             elif self.frame == 24:  # Late hitbox
                 if self.active_hitboxes:
                     self.active_hitboxes[-1].knockback *= 0.5
@@ -357,7 +357,7 @@ class Gregoire(Char):
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(Hitbox(50, 40, 48, 48, pi / 2, 19 + 10 * (self.charge / 200), 18, 1 / 90,
                                                    10 + 7 * (self.charge / 100), 5, self, False,
-                                                   sound="hits and slap/punch1.mp3"))
+                                                   sound="hits/punch1"))
 
             if self.frame > 57:  # 44 frames de lag
                 self.attack = None
@@ -381,7 +381,7 @@ class Gregoire(Char):
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(
                     Hitbox(30, 60, 60, 32, pi / 2, 20 + 10 * (self.charge / 200), incertitude(13), 1 / 250,
-                           9 + 5 * (self.charge / 150), 6, self, False, sound="hits and slap/punch.mp3"))
+                           9 + 5 * (self.charge / 150), 6, self, False, sound="hits/punch"))
 
             if self.frame > 35:  # 19 frames de lag
                 self.attack = None
@@ -397,7 +397,7 @@ class Gregoire(Char):
             if self.frame == 30:
                 self.active_hitboxes.append(
                     Hitbox(48, 64, 48, 48, -2 * pi / 5, 12, incertitude(12), 1 / 150, 12, 2, self, False,
-                           sound="hits and slap/cool hit.wav"))
+                           sound="hits/cool hit"))
             if self.frame < 30:
                 self.vy = 0
                 if self.grounded:
@@ -437,7 +437,7 @@ class Gregoire(Char):
 
 class Rayon():
     def __init__(self, stage, x, y, angle_fwd, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer.mp3")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/lasers/cool lazer")
         self.stage = stage
         self.x = x
         self.y = y
@@ -531,7 +531,7 @@ class Thunder():
 
 class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
-        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits and slap/hit.wav")
+        self.sound = pygame.mixer.Sound("DATA/Musics/SFX/hits/hit")
         self.rect = pygame.Rect(x, y, 5, 5)
         self.angle = angle
         self.v = 5 * signe(own.direction)
