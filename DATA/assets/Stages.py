@@ -7,7 +7,7 @@ musics = [("event:/BGM/let's_fight_!", "K201", True),("event:/BGM/Industrial cla
           ("event:/BGM/Panda_Ball", "Pandadrome", True),
           ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIG-SHOT", "Chapelle", "Spamton"),
           ("event:/BGM/Honor winds", "Cour d'honneur", True),
-          ("event:/BGM/Cyber_Class", "Salle d'info", True),
+          ("event:/BGM/Cyber Class", "Salle d'info", True),
           ("event:/BGM/Lunch time !", "Table de self", True),
           ("event:/BGM/optic'mind", "Salle de TP", True)]
 
@@ -82,7 +82,7 @@ def create_stage(stage):
         return (Stage(stage,f"{stage}/Salle d'info_plateforme", 0, 308,
                       [(-276, 68, 192, 4, (0, 0, 0)),
                        (276, 68, 192, 4, (0, 0, 0))]),
-                [(-200, -50), (200, -50)])
+                [(-230, -65), (230, -65)])
     if stage == "Salle de TP":
         return (Stage(stage,f"{stage}/Salle_de_TP_plateforme", 0, 308,
                       [(-398, 164, 268, 4, (200, 200, 200)),(398, 164, 268, 4, (200, 200, 200)),
