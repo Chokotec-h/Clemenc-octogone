@@ -1,5 +1,5 @@
 from ctypes import *
-import SoundSystem
+import DATA.utilities.SoundSystem as SoundSystem
 import time
 
 # Dico with all SFX song
@@ -21,6 +21,7 @@ def SFX_init():
         SFXDicoEventPath[str(keys[11:])] = event  # constructe dicoPath
 
         # split the path
+        
         truc = str(keys).split("/")
         folder = truc[2]
         song = truc[3]
@@ -43,6 +44,6 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
-        song = truc[3]
+        song = truc[-1]
 
         SFXDicoEvent[song] = event

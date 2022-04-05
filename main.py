@@ -7,8 +7,8 @@ import traceback
 from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
-import SoundSystem
-import SFXEvents
+import DATA.utilities.SoundSystem as SoundSystem
+import DATA.utilities.SFXEvents as SFXEvents
 import time
 
 import DATA.assets.CharsLoader as Chars
@@ -35,6 +35,8 @@ for j in joysticks:
 ##########################################################################################################
 SoundSystem.studio_init()
 SFXEvents.SFX_init()  # toujour après un studio ini    SINON   SA MARCHE PAAAAAAAAAAAAS!?:^$@&@!?!^$$ù$à
+
+UIDicoEvent = SFXEvents.SFXDicoEvent
 
 embient = SoundSystem.instance()
 embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
@@ -81,9 +83,9 @@ def main():
         focusedbutton = 0  # numéro de bouton
         confirm = False  # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
 
-        Menu_Settings = SettingsMenu()
-        Menu_Stages = StagesMenu(False)
-        Menu_Chars = CharsMenu(False)
+        Menu_Settings = SettingsMenu(UIDicoEvent)
+        Menu_Stages = StagesMenu(False,UIDicoEvent)
+        Menu_Chars = CharsMenu(False,UIDicoEvent)
 
         # Animation de l'ecran titre
         titleframe = 0
@@ -120,6 +122,7 @@ def main():
                     window)
                 Texte("OCTOGONE", ("Comic", 128, True, False), (128, 0, 128), width / 2, height / 2 + 256).draw(window)
                 if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                    UIDicoEvent["UI1 ready'"].play()
                     confirm = True
                     Menu = "main"
                 titleframe += 1
@@ -169,6 +172,7 @@ def main():
                     if focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 validation'"].play()
                             Menu = "to char"
                             Menu_Stages.training = False
                             Menu_Chars.training = False
@@ -182,6 +186,7 @@ def main():
                     if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 validation'"].play()
                             Menu = "to char"
                             Menu_Stages.training = True
                             Menu_Chars.training = True
@@ -199,8 +204,9 @@ def main():
                     if focusedbutton == 2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 validation'"].play()
                             Menu = "settings"
-                            Menu_Settings = SettingsMenu()
+                            Menu_Settings = SettingsMenu(UIDicoEvent)
                             confirm = True
                     Bouton.draw(window)
 
@@ -210,6 +216,7 @@ def main():
                     if focusedbutton == -2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 ready'"].play()
                             Menu = "credits"
                             musicplaying = False
                             confirm = True
@@ -266,6 +273,7 @@ def main():
                                     60)
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                        UIDicoEvent["UI1 back'"].play()
                         Menu = "main"
                         musicplaying = False
                         confirm = True
@@ -309,6 +317,7 @@ def main():
 
                 if Menu == "game":
                     if not gamecreated :
+                        beep = 0
                         stage = Menu_Stages.stage
                         
                         names = Menu_Chars.names
@@ -326,7 +335,7 @@ def main():
                         del names
 
                         Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
-                                            Menu_Chars.alt)
+                                            Menu_Chars.alt, UIDicoEvent)
 
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(
@@ -355,13 +364,21 @@ def main():
                     Game.Char_P2.draw(window)
                     Game.Char_P1.draw(window)
 
-                    if time.time() - Game.begin_game < 2 and not training:
-                        Texte(f"{str(3-round(time.time() - Game.begin_game))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
-                        
-                    elif round(time.time() - Game.begin_game) < 3 and not training :
+                    if 3-round(time.time() - Game.begin_game - 0.2) < 1 and round(time.time() - Game.begin_game) < 5 and not training :
+                        if beep < 4 :
+                            UIDicoEvent["UI1 ready'"].play()
+                            beep += 1
+
                         Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(window)
 
-                    else :
+                    elif time.time() - Game.begin_game < 4 and time.time() - Game.begin_game > 0.2 and not training:
+                        if beep < round(time.time() - Game.begin_game + 0.2) :
+                            UIDicoEvent["UI1 selection 2'"].play()
+                            beep += 1
+                        Texte(f"{str(3-round(time.time() - Game.begin_game - 0.2))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
+                        
+
+                    elif time.time() - Game.begin_game > 5 :
                         Game.begin_game = time.time()
                         Play = True
 

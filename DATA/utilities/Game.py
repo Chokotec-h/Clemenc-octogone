@@ -10,7 +10,7 @@ import time
 
 
 class Game():
-    def __init__(self, training, chars, selectchar_1, selectchar_2, alt) -> None:
+    def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent) -> None:
 
         # Gestion de la fumee de hitstun
         self.smoke = list()
@@ -55,6 +55,8 @@ class Game():
         self.focusedbutton = 0
         self.confirm = True
 
+        self.UIDicoEvent = UIDicoEvent
+
     def play(self, controls, joysticks, stage, width, height, window, clock):
 
         Play = True
@@ -66,6 +68,10 @@ class Game():
                 convert_inputs(controls[0], joysticks, 0)[-1] or convert_inputs(controls[1], joysticks, 1)[-1]):
             if not self.hold_pause:
                 self.pause = not self.pause
+                if self.pause :
+                    self.UIDicoEvent["UI1 pause'"].play()
+                else :
+                    self.UIDicoEvent["UI1 unpause'"].play()
                 self.hold_pause = True
         else:
             self.hold_pause = False
