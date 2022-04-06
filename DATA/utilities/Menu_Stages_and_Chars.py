@@ -49,7 +49,7 @@ class StagesMenu():
         if self.focused_button == -1:
             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
             if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
-                self.UIDicoEvent["UI1 back'"].play()
+                self.UIDicoEvent["UI1 back"].play()
                 Menu = "to char"
                 self.confirm = True
         else :
@@ -65,7 +65,7 @@ class StagesMenu():
 
                 # setup du mennu personnage
                 if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
-                    self.UIDicoEvent["UI1 validation'"].play()
+                    self.UIDicoEvent["UI1 validation"].play()
                     Menu = "game"
                     self.stage = i
             Bouton.draw(window)
@@ -114,7 +114,7 @@ class CharsMenu():
         if self.b > 0:
             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
         if self.b >= 10:
-            self.UIDicoEvent["UI1 back'"].play()
+            self.UIDicoEvent["UI1 back"].play()
             Menu = "main"
         Bouton.draw(window)
         Texte("<--",("arial",30,True,False),(0,0,0),width/2,25).draw(window)
@@ -123,7 +123,7 @@ class CharsMenu():
 
         # Haut/Bas pour choisir un personnage
         if convert_inputs(controls[0],joysticks,0)[3] and not self.selected_1 and self.scroll1 == self.selectchar_1:
-            self.UIDicoEvent["UI1 selection'"].play()
+            self.UIDicoEvent["UI1 selection"].play()
             self.alt[0] = 0
             self.selectchar_1 += 1
             self.scroll1 += 1
@@ -132,7 +132,7 @@ class CharsMenu():
             if self.selectchar_1 >= len(chars) :
                 self.selectchar_1 = 0
         if convert_inputs(controls[0],joysticks,0)[2] and not self.selected_1 and self.scroll1 == self.selectchar_1:
-            self.UIDicoEvent["UI1 selection'"].play()
+            self.UIDicoEvent["UI1 selection"].play()
             self.alt[0] = 0
             self.selectchar_1 -= 1
             self.scroll1 -= 1
@@ -153,11 +153,11 @@ class CharsMenu():
         # Confirmation / Annulation
         if convert_inputs(controls[0],joysticks,0)[6] and not self.confirm:
             if not self.selected_1:
-                self.UIDicoEvent["UI1 validation'"].play()
+                self.UIDicoEvent["UI1 validation"].play()
             self.selected_1 = True
         if convert_inputs(controls[0],joysticks,0)[7]:
             if self.selected_1 :
-                self.UIDicoEvent["UI1 error'"].play()
+                self.UIDicoEvent["UI1 error"].play()
             self.selected_1 = False
 
         if self.training :
@@ -246,7 +246,7 @@ class CharsMenu():
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1],joysticks,1)[3] and not self.selected_2 and self.scroll2 == self.selectchar_2:
-                self.UIDicoEvent["UI1 selection'"].play()
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.alt[1] = 0
                 self.selectchar_2 += 1
                 self.scroll2 += 1
@@ -255,7 +255,7 @@ class CharsMenu():
                 if self.selectchar_2 >= len(chars) :
                     self.selectchar_2 = 0
             if convert_inputs(controls[1],joysticks,1)[2] and not self.selected_2 and self.scroll2 == self.selectchar_2:
-                self.UIDicoEvent["UI1 selection'"].play()
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.alt[1] = 0
                 self.selectchar_2 -= 1
                 self.scroll2 -= 1
@@ -276,11 +276,11 @@ class CharsMenu():
             # Confirmation / Annulation
             if convert_inputs(controls[1],joysticks,1)[6] and not self.confirm:
                 if not self.selected_2:
-                    self.UIDicoEvent["UI1 validation'"].play()
+                    self.UIDicoEvent["UI1 validation"].play()
                 self.selected_2 = True
             if convert_inputs(controls[1],joysticks,1)[7]:
                 if self.selected_2:
-                    self.UIDicoEvent["UI1 error'"].play()
+                    self.UIDicoEvent["UI1 error"].play()
                 self.selected_2 = False
 
         # Choix du nom

@@ -389,7 +389,7 @@ class Balan(Char):
 class Projo_Craie():
     def __init__(self, id, own, stage):
         # Craies de M Balan
-        SFXDicoEvent["wooshs"]["mini woosh'"].play()
+        SFXDicoEvent["wooshs"]["mini woosh"].play()
         self.id = id + 1
         self.sprite = pygame.transform.scale(pygame.image.load(
             "./DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_" + ["blanche", "rouge", "bleue", "verte", "jaune"][
@@ -442,7 +442,7 @@ class Projo_Craie():
         window.blit(self.sprite, (self.x + 800, self.y + 450))  # on dessine le sprite
 
 
-class Exposant():
+class Exposant:
     def __init__(self, opponent, own: Balan, charge) -> None:
         self.opponent = opponent
         self.charge = charge + 1

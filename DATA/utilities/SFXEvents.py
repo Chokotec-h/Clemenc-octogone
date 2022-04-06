@@ -24,9 +24,11 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
+        truc[3] = truc[3][:-1]
+        folder = truc[2]  # NE  PAS  CHANGER
+        song = truc[3]  # NE PAS CHANGER
         print(truc)
-        folder = truc[2] #  NE  PAS  CHANGER
-        song = truc[3]  #  NE PAS CHANGER
+
 
         # builde de dico
         if folder not in SFXDicoEvent.keys():
@@ -49,8 +51,8 @@ def SFX_init():
 
         # split the path
         truc = str(keys).split("/")
+        truc[2] = truc[2][:-1]  # ne pas changer
+        song = truc[2]  # ne pas changer
         print(truc)
-        song = truc[2] # ne pas changer
 
         SFXDicoEvent[song] = event
-

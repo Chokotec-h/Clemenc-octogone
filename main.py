@@ -122,7 +122,7 @@ def main():
                     window)
                 Texte("OCTOGONE", ("Comic", 128, True, False), (128, 0, 128), width / 2, height / 2 + 256).draw(window)
                 if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                    UIDicoEvent["UI1 ready'"].play()
+                    UIDicoEvent["UI1 ready"].play()
                     confirm = True
                     Menu = "main"
                 titleframe += 1
@@ -160,9 +160,11 @@ def main():
                     # inputs haut et bas pour se déplacer dans le menu
                     if input_but_no_repeat(3, controls, joysticks, 0):
                         focusedbutton += 1
+                        UIDicoEvent["UI1 selection"].play()
 
                     if input_but_no_repeat(2, controls, joysticks, 0):
                         focusedbutton -= 1
+                        UIDicoEvent["UI1 selection"].play()
 
                     focusedbutton = ((focusedbutton + 2) % 5) - 2
 
@@ -172,7 +174,7 @@ def main():
                     if focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            UIDicoEvent["UI1 validation'"].play()
+                            UIDicoEvent["UI1 validation"].play()
                             Menu = "to char"
                             Menu_Stages.training = False
                             Menu_Chars.training = False
@@ -186,7 +188,7 @@ def main():
                     if focusedbutton == 1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            UIDicoEvent["UI1 validation'"].play()
+                            UIDicoEvent["UI1 forward"].play()
                             Menu = "to char"
                             Menu_Stages.training = True
                             Menu_Chars.training = True
@@ -204,7 +206,7 @@ def main():
                     if focusedbutton == 2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            UIDicoEvent["UI1 validation'"].play()
+                            UIDicoEvent["UI1 forward"].play()
                             Menu = "settings"
                             Menu_Settings = SettingsMenu(UIDicoEvent)
                             confirm = True
@@ -216,7 +218,7 @@ def main():
                     if focusedbutton == -2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            UIDicoEvent["UI1 ready'"].play()
+                            UIDicoEvent["UI1 forward"].play()
                             Menu = "credits"
                             musicplaying = False
                             confirm = True
@@ -273,7 +275,7 @@ def main():
                                     60)
                     Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                        UIDicoEvent["UI1 back'"].play()
+                        UIDicoEvent["UI1 back"].play()
                         Menu = "main"
                         musicplaying = False
                         confirm = True
@@ -366,14 +368,14 @@ def main():
 
                     if 3-round(time.time() - Game.begin_game - 0.2) < 1 and round(time.time() - Game.begin_game) < 5 and not training :
                         if beep < 4 :
-                            UIDicoEvent["UI1 ready'"].play()
+                            UIDicoEvent["UI1 ready"].play()
                             beep += 1
 
                         Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(window)
 
                     elif time.time() - Game.begin_game < 4 and time.time() - Game.begin_game > 0.2 and not training:
                         if beep < round(time.time() - Game.begin_game + 0.2) :
-                            UIDicoEvent["UI1 selection 2'"].play()
+                            UIDicoEvent["UI1 selection 2"].play()
                             beep += 1
                         Texte(f"{str(3-round(time.time() - Game.begin_game - 0.2))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
                         
