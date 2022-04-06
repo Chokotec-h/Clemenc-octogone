@@ -75,7 +75,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                  doublejumpheight, airdodgespeed, airdodgetime, dodgeduration):
         pygame.sprite.Sprite.__init__(self)
 
-        self.jumpsound = SFXDicoEvent['mincelious']["jump'"]  # Son test
+        self.jumpsound = SFXDicoEvent['mincelious']["jump"]  # Son test
 
         self.x = 0
         self.damages = 0.0

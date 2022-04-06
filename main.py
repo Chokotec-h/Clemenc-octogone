@@ -218,7 +218,7 @@ def main():
                     if focusedbutton == -2:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
-                            UIDicoEvent["UI1 forward"].play()
+                            # UIDicoEvent["UI1 forward"].play()   rien c est bien pour les crédit
                             Menu = "credits"
                             musicplaying = False
                             confirm = True
