@@ -84,8 +84,8 @@ def main():
         confirm = False  # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
 
         Menu_Settings = SettingsMenu(UIDicoEvent)
-        Menu_Stages = StagesMenu(False,UIDicoEvent)
-        Menu_Chars = CharsMenu(False,UIDicoEvent)
+        Menu_Stages = StagesMenu(False, UIDicoEvent)
+        Menu_Chars = CharsMenu(False, UIDicoEvent)
 
         # Animation de l'ecran titre
         titleframe = 0
@@ -148,7 +148,7 @@ def main():
                     elif Menu != "game":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
-                        
+
                     # pygame.mixer.music.play(-1)
                     musicplaying = True
 
@@ -253,7 +253,7 @@ def main():
                     Texte("Graphics", ("arial", 28, True, False), (0, 0, 0), width / 3, 2 * height / 8).draw(window)
                     Texte("Loïc", ("arial", 28, False, False), (0x20, 0x50, 0xF0), 2 * width / 3,
                           2 * height / 8 - 15).draw(window)
-                    Texte("Elsa", ("arial", 28, False, False), (0xBC, 0x79, 0xE4), 2 * width / 3, 
+                    Texte("Elsa", ("arial", 28, False, False), (0xBC, 0x79, 0xE4), 2 * width / 3,
                           2 * height / 8 + 15).draw(window)
                     Texte("Nicolas", ("arial", 28, False, False), (120, 120, 120), 3 * width / 4,
                           2 * height / 8 - 15).draw(window)
@@ -323,7 +323,7 @@ def main():
                         SoundSystem.stop_inst(embient.instance)
                         beep = 0
                         stage = Menu_Stages.stage
-                        
+
                         names = Menu_Chars.names
 
                         Menu_Chars.selected_1 = False
@@ -339,7 +339,7 @@ def main():
                         del names
 
                         Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
-                                            Menu_Chars.alt, UIDicoEvent)
+                                               Menu_Chars.alt, UIDicoEvent)
 
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(
@@ -354,10 +354,10 @@ def main():
                         stage, [(Game.Char_P1.x, Game.Char_P1.rect.y),
                                 (Game.Char_P2.x, Game.Char_P2.rect.y)] = Stages.create_stage(
                             Menu_Stages.actualstages[stage])
-                        
+
                         gamecreated = True
 
-                    
+
                     window.fill((255, 255, 255))
                     window.blit(background, (0, 0))
 
@@ -368,19 +368,21 @@ def main():
                     Game.Char_P2.draw(window)
                     Game.Char_P1.draw(window)
 
-                    if 3-round(time.time() - Game.begin_game - 0.2) < 1 and round(time.time() - Game.begin_game) < 5 and not training :
-                        if beep < 4 :
+                    if 3 - round(time.time() - Game.begin_game - 0.2) < 1 and round(
+                            time.time() - Game.begin_game) < 5 and not training:
+                        if beep < 4:
                             UIDicoEvent["UI1 ready"].play()
                             beep += 1
 
-                        Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(window)
+                        Texte(f"PARTEZ !", ("Arial", 180, True, False), (120, 0, 120), width / 2, height / 2).draw(
+                            window)
 
-                    elif time.time() - Game.begin_game < 4 and time.time() - Game.begin_game > 0.2 and not training:
-                        if beep < round(time.time() - Game.begin_game + 0.2) :
+                    elif 4 > time.time() - Game.begin_game > 0.2 and not training:
+                        if beep < round(time.time() - Game.begin_game + 0.2):
                             UIDicoEvent["UI1 selection 2"].play()
                             beep += 1
-                        Texte(f"{str(3-round(time.time() - Game.begin_game - 0.2))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
-                        
+                        Texte(f"{str(3 - round(time.time() - Game.begin_game - 0.2))}", ("Arial", 180, True, False),
+                              (0, 0, 100), width / 2, height / 2).draw(window)
 
                     elif time.time() - Game.begin_game > 5 or training:
                         musicplaying = False
@@ -430,8 +432,7 @@ def main():
             SoundSystem.tick_update()
             clock.tick(60)  # FPS
 
-
-    except:
+    except Exception:
         traceback.print_exc()
 
     finally:

@@ -1,6 +1,6 @@
 /* ======================================================================================== */
 /* FMOD Studio API - Common C/C++ header file.                                              */
-/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2021.                               */
+/* Copyright (c), Firelight Technologies Pty, Ltd. 2004-2022.                               */
 /*                                                                                          */
 /* This header defines common enumerations, structs and callbacks that are shared between   */
 /* the C and C++ interfaces.                                                                */
@@ -43,6 +43,7 @@ typedef unsigned int FMOD_STUDIO_PARAMETER_FLAGS;
 #define FMOD_STUDIO_PARAMETER_AUTOMATIC                     0x00000002
 #define FMOD_STUDIO_PARAMETER_GLOBAL                        0x00000004
 #define FMOD_STUDIO_PARAMETER_DISCRETE                      0x00000008
+#define FMOD_STUDIO_PARAMETER_LABELED                       0x00000010
 
 typedef unsigned int FMOD_STUDIO_SYSTEM_CALLBACK_TYPE;
 #define FMOD_STUDIO_SYSTEM_CALLBACK_PREUPDATE               0x00000001
@@ -121,6 +122,7 @@ typedef enum FMOD_STUDIO_PARAMETER_TYPE
     FMOD_STUDIO_PARAMETER_AUTOMATIC_LISTENER_ORIENTATION,
     FMOD_STUDIO_PARAMETER_AUTOMATIC_SPEED,
     FMOD_STUDIO_PARAMETER_AUTOMATIC_SPEED_ABSOLUTE,
+    FMOD_STUDIO_PARAMETER_AUTOMATIC_DISTANCE_NORMALIZED,
 
     FMOD_STUDIO_PARAMETER_MAX,
     FMOD_STUDIO_PARAMETER_FORCEINT = 65536                  /* Makes sure this enum is signed 32bit. */
@@ -212,6 +214,7 @@ typedef struct FMOD_STUDIO_PARAMETER_DESCRIPTION
     float                       defaultvalue;
     FMOD_STUDIO_PARAMETER_TYPE  type;
     FMOD_STUDIO_PARAMETER_FLAGS flags;
+    FMOD_GUID                   guid;
 } FMOD_STUDIO_PARAMETER_DESCRIPTION;
 
 typedef struct FMOD_STUDIO_USER_PROPERTY
@@ -276,11 +279,7 @@ typedef struct FMOD_STUDIO_ADVANCEDSETTINGS
 
 typedef struct FMOD_STUDIO_CPU_USAGE
 {
-    float           dspusage;
-    float           streamusage;
-    float           geometryusage;
-    float           updateusage;
-    float           studiousage;
+    float           update;
 } FMOD_STUDIO_CPU_USAGE;
 
 typedef struct FMOD_STUDIO_BUFFER_INFO

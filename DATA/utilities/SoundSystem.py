@@ -2,7 +2,7 @@ from ctypes import *
 
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
-VERSION = 0x00020114
+VERSION = 0x00020206
 BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.bank"]
 
 BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
@@ -27,7 +27,7 @@ def studio_init():
     # Write debug log to file
     check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
     # Call System init
-    check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0, c_void_p()))
+    check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0x00010000, c_void_p()))
     # Load banks
     for bankname in BANK_FILES:
         print("Loading bank: " + bankname)
