@@ -497,7 +497,7 @@ class Kebab(Char):
 
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
-        self.sound = SFXDicoEvent['hits']["other hit'"]
+        self.sound = SFXDicoEvent['hits']["other hit"]
         self.sauce = str(own.current_sauce)
         self.sprite = Sauce[self.sauce]
         self.x = own.x

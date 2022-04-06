@@ -69,9 +69,9 @@ class Game():
             if not self.hold_pause:
                 self.pause = not self.pause
                 if self.pause :
-                    self.UIDicoEvent["UI1 pause'"].play()
+                    self.UIDicoEvent["UI1 pause"].play()
                 else :
-                    self.UIDicoEvent["UI1 unpause'"].play()
+                    self.UIDicoEvent["UI1 unpause"].play()
                 self.hold_pause = True
         else:
             self.hold_pause = False

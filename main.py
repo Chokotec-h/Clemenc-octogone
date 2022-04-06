@@ -145,9 +145,10 @@ def main():
                     if Menu == "credits":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/intro")
-                    else:
+                    elif Menu != "game":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
+                        
                     # pygame.mixer.music.play(-1)
                     musicplaying = True
 
@@ -319,6 +320,7 @@ def main():
 
                 if Menu == "game":
                     if not gamecreated :
+                        SoundSystem.stop_inst(embient.instance)
                         beep = 0
                         stage = Menu_Stages.stage
                         
@@ -355,7 +357,7 @@ def main():
                         
                         gamecreated = True
 
-                    musicplaying = False
+                    
                     window.fill((255, 255, 255))
                     window.blit(background, (0, 0))
 
@@ -380,7 +382,8 @@ def main():
                         Texte(f"{str(3-round(time.time() - Game.begin_game - 0.2))}", ("Arial", 180, True, False), (0, 0, 100), width / 2, height / 2).draw(window)
                         
 
-                    elif time.time() - Game.begin_game > 5 :
+                    elif time.time() - Game.begin_game > 5 or training:
+                        musicplaying = False
                         Game.begin_game = time.time()
                         Play = True
 
@@ -399,7 +402,6 @@ def main():
 
                 # musique
                 if not musicplaying:
-                    SoundSystem.stop_inst(embient.instance)
                     embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
 

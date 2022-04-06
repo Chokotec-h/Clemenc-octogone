@@ -40,7 +40,7 @@ class Renault(Char):
             if self.frame > 7 and self.frame < 100 :
                 self.vy = -5-self.frame/20
                 if self.frame%4 == 0 :
-                    SFXDicoEvent['wooshs']["woosh'"].play()
+                    SFXDicoEvent['wooshs']["woosh"].play()
                     self.active_hitboxes.append(Hitbox(-2,-24,52,20,3*pi/5,4+abs(self.vy)/2,0.8,0,5,4,self,position_relative=True))
             if self.frame > 100 :
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -69,7 +69,7 @@ class Renault(Char):
                 self.intangibility = 4
             if self.frame == 40 :
                 self.show = True
-                SFXDicoEvent['wooshs']["other woosh'"].play()
+                SFXDicoEvent['wooshs']["other woosh"].play()
                 self.active_hitboxes.append(Hitbox(0,0,48,120,pi/2,12,16,1/250,11,2,self,boum=2))
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
             if self.frame > 70 : # 30 frames de lag
@@ -90,7 +90,7 @@ class Renault(Char):
                 self.vx = (8+self.frame/10)*signe(self.direction)
                 self.vy = -self.fastfallspeed if self.fastfall else -self.fallspeed
                 if special and self.frame%3 == 0 :
-                    SFXDicoEvent['hits']["hitting metal'"].play()
+                    SFXDicoEvent['hits']["hitting metal"].play()
                     self.active_hitboxes.append(Hitbox(48,12,64,64,0,2,0.8,0,4,2,self,boum=-1))
                 if not special :
                     self.animation = "fall"
@@ -250,13 +250,13 @@ class Renault(Char):
                 self.animation = "nair2"
                 self.animeframe = 0
             if self.frame > 6 and self.frame < 16 :
-                SFXDicoEvent['lasers']["electric cable sound'"].play()
+                SFXDicoEvent['lasers']["electric cable sound"].play()
                 self.active_hitboxes.append(Hitbox(20,56,8,8,pi/2,1,0.1,0,3,2,self,boum=-2))
             if self.frame > 16 and self.frame < 20 :
-                SFXDicoEvent['lasers']["electric cable sound'"].play()
+                SFXDicoEvent['lasers']["electric cable sound"].play()
                 self.active_hitboxes.append(Hitbox(-40,-40,128,128,pi/2,2,0.3,0,5,2,self,boum=0))
             if self.frame == 22 :
-                SFXDicoEvent['lasers']["electric cable sound'"].play()
+                SFXDicoEvent['lasers']["electric cable sound"].play()
                 self.active_hitboxes.append(Hitbox(-44,-44,136,136,pi/2,13,3,1/200,12,2,self,boum=1))
 
             if self.frame > 40: # 17 frames de lag
@@ -432,7 +432,7 @@ class Gear():
         self.damages_stacking = 1/200
         self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Renault/Gear.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = SFXDicoEvent['hits']["hitting metal'"]
+        self.sound = SFXDicoEvent['hits']["hitting metal"]
     
     def update(self):
         self.duration -= 1

@@ -48,7 +48,7 @@ class Hitbox():
         self.boum = boum
         path = sound.split("/")
 
-        self.sound = SFXDicoEvent[path[0]][path[1]+"'"]
+        self.sound = SFXDicoEvent[path[0]][path[1]+""]
 
         if not own.look_right:
             self.relativex = change_left(x, sizex)
@@ -717,7 +717,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     try :
                         projectile.sound.play()
                     except:
-                        SFXDicoEvent['hits']["8bit hit'"].play()
+                        SFXDicoEvent['hits']["8bit hit"].play()
                 else:
                     if self.parry:
                         other.BOUM = 8
