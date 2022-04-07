@@ -8,13 +8,15 @@ from DATA.utilities.Animations import get_sprite
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
-
 # Implémentation pas opti des sons mais on s'en fout OK
 print("Calcul fait 2 fois pour l'instant parce que vive la non optimisation")
 SoundSystem.studio_init()
 SFXEvents.SFX_init()
+# HRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+# FHDSKFBZEUILHRFIBURFPS°0EQ093E3EZF¨32%µMEZqsdgCXWµ
 
 SFXDicoEvent = SFXEvents.SFXDicoEvent
+
 
 def signe(val):
     if val == 0:
@@ -48,7 +50,7 @@ class Hitbox():
         self.boum = boum
         path = sound.split("/")
 
-        self.sound = SFXDicoEvent[path[0]][path[1]+""]
+        self.sound = SFXDicoEvent[path[0]][path[1] + ""]
 
         if not own.look_right:
             self.relativex = change_left(x, sizex)
@@ -211,26 +213,26 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
     def get_inputs(self, inputs, stage, other,
                    cancel):  # Cancel spécial pour reignaud (pour pas avoir à tout copier coller)
-        
+
         (left, right, up, down, fullhop, shorthop, attack, special, shield,
-        C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down) = inputs  # dissociation des inputs
+         C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down) = inputs  # dissociation des inputs
         jump = fullhop or shorthop
 
         self.direction = 90 if self.look_right else -90
 
-        if self.lenght_parry > 0 :
+        if self.lenght_parry > 0:
             self.lenght_parry += 1
-            if self.lenght_parry > 4 and self.lenght_parry < 10 :
+            if self.lenght_parry > 4 and self.lenght_parry < 10:
                 self.parry = True
-            else :
+            else:
                 self.parry = False
-            if self.lenght_parry > 10 :
+            if self.lenght_parry > 10:
                 self.animation = "idle"
                 if not self.parried and self.lenght_parry == 11:
                     self.lag = 10
                 if (not shield) or (left or right):
                     self.lenght_parry = 0
-            else :
+            else:
                 self.animation = "airdodge"
                 self.animeframe = self.lenght_parry
 
@@ -240,7 +242,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.tech = -20
         if self.tech < 0:
             self.tech += 1
-
 
         if not (left or right) or (left and self.look_right) or (
                 right and not self.look_right):  # Cancel le dash au changement de direction
@@ -285,7 +286,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.lenght_parry = 1
 
             if (shield and (not self.grounded) and (self.can_airdodge)
-                and self.attack is None and self.can_act and not self.jumping):
+                    and self.attack is None and self.can_act and not self.jumping):
                 self.animation = "airdodge"
                 self.can_airdodge = False
                 self.airdodge = True
@@ -300,15 +301,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.hitstun:
                 self.active_hitboxes = list()
             if (self.attack is None or cancel) and not self.lag and not (
-            self.airdodge) and self.lenght_parry < 5:  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
+                    self.airdodge) and self.lenght_parry < 5:  # Si aucune attaque n'est en cours d'exécution et si on n'est pas dans un lag (ex:landing lag)
                 if self.grounded:
                     self.animation = "idle"
                 elif self.vy > 0:
                     self.animation = "fall"
                 else:
                     self.animation = "jump"
-                
-                if self.parry :
+
+                if self.parry:
                     self.animation = "airdodge"
 
                 if right:  # Si on input à droite
@@ -625,9 +626,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             p.draw(window)
 
     def collide(self, other):
-        if self.intangibility > 0 :
+        if self.intangibility > 0:
             self.intangibility -= 1
-            if self.intangibility <= 0 :
+            if self.intangibility <= 0:
                 self.intangibility = False
         for i, hitbox in enumerate(other.active_hitboxes):  # Détection des hitboxes
             if self.rect.colliderect(hitbox.hit):
@@ -647,11 +648,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     if self.superarmor < knockback and not (self.superarmor == -1):
                         self.BOUM = hitbox.boum + 4
                         self.vx = (hitbox.knockback) * cos(hitbox.angle) * (
-                                    self.damages * hitbox.damages_stacking + 1)  # éjection x
+                                self.damages * hitbox.damages_stacking + 1)  # éjection x
                         self.vy = -(hitbox.knockback) * sin(hitbox.angle) * (
-                                    self.damages * hitbox.damages_stacking + 1)  # éjection y
+                                self.damages * hitbox.damages_stacking + 1)  # éjection y
                         self.hitstun = hitbox.stun * (self.damages * hitbox.damages_stacking + 2) - (
-                                    self.superarmor / 5)  # hitstun
+                                self.superarmor / 5)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages  # dommages
                         self.rect.y -= 1
@@ -696,9 +697,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
                     if self.superarmor < knockback and not (self.superarmor == -1):
                         self.vx = projectile.knockback * cos(projectile.angle) * (
-                                    self.damages * projectile.damages_stacking + 1)  # éjection x
+                                self.damages * projectile.damages_stacking + 1)  # éjection x
                         self.vy = -projectile.knockback * sin(projectile.angle) * (
-                                    self.damages * projectile.damages_stacking + 1)  # éjection y
+                                self.damages * projectile.damages_stacking + 1)  # éjection y
                         self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += projectile.damages  # dommages
@@ -714,7 +715,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         if self.superarmor != -1:
                             self.superarmor = max(self.superarmor - projectile.damages, 0)
                         self.damages += projectile.damages
-                    try :
+                    try:
                         projectile.sound.play()
                     except:
                         SFXDicoEvent['hits']["8bit hit"].play()
