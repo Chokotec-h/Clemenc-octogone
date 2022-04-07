@@ -8,10 +8,10 @@ from DATA.utilities.Animations import get_sprite
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
-# Implémentation pas opti des sons mais on s'en fout OK
+# Implémentation pas opti des sons mais on s'en fout OK      (iwan) ps : non
 print("Calcul fait 2 fois pour l'instant parce que vive la non optimisation")
-SoundSystem.studio_init()
-SFXEvents.SFX_init()
+SoundSystem.studio_init()  #fdsbdhjbfdksqdsfqsdfsdqfq
+SFXEvents.SFX_init() #fdbshjkdsbhjkdsfbhjkdsbhjebdcfvsqfsd
 # HRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 # FHDSKFBZEUILHRFIBURFPS°0EQ093E3EZF¨32%µMEZqsdgCXWµ
 
