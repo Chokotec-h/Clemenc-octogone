@@ -33,8 +33,8 @@ for j in joysticks:
     j.init()
 
 ##########################################################################################################
-SoundSystem.studio_init() # A NE FAIRE QUE UNE FOIS
-SFXEvents.SFX_init()  # A NE FAIRE QUE UNE FOIS
+#SoundSystem.studio_init() # A NE FAIRE QUE UNE FOIS
+#SFXEvents.SFX_init()  # A NE FAIRE QUE UNE FOIS
 
 UIDicoEvent = SFXEvents.SFXDicoEvent
 
