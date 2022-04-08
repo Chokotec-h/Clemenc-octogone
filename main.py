@@ -33,6 +33,9 @@ for j in joysticks:
     j.init()
 
 ##########################################################################################################
+
+# L'initialisation des sons a lieu dans Base_char.py
+
 #SoundSystem.studio_init() # A NE FAIRE QUE UNE FOIS
 #SFXEvents.SFX_init()  # A NE FAIRE QUE UNE FOIS
 
@@ -410,6 +413,8 @@ def main():
 
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
                 confirm = Game.confirm
+                
+                embient.changeParameter("pause", int(Game.pause))
 
                 if stage.name == "Salle de TP":
                     tremolo = 0
