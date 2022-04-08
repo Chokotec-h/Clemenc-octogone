@@ -1,5 +1,5 @@
 import pygame
-from math import cos, sin, pi
+from math import atan, cos, sin, pi
 from copy import deepcopy
 import DATA.utilities.SoundSystem as SoundSystem
 import DATA.utilities.SFXEvents as SFXEvents
@@ -248,16 +248,19 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if not self.fastfall:  # fastfall
                 self.vy = self.vy + self.fastfallspeed * 5
             self.fastfall = True
+
+        
+
         if self.hitstun:  # Directional Influence
             if self.totalhitstun - self.hitstun < 10:
                 if right:
-                    self.vx += self.airspeed / 3
+                    self.vx += self.airspeed / 4
                 if left:
-                    self.vx -= self.airspeed / 3
+                    self.vx -= self.airspeed / 4
                 if up:
-                    self.vy -= self.fallspeed / 3
+                    self.vy -= self.fallspeed / 4
                 if down:
-                    self.vy += self.fallspeed / 3
+                    self.vy += self.fallspeed / 4
             else:
                 if right:
                     self.vx += self.airspeed / 50
@@ -269,6 +272,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.vy += self.fallspeed / 50
             if shield and self.tech == 0:
                 self.tech = 10
+        
         else:
 
             if self.grounded and self.attack is None and not self.lag and shield and self.lenght_parry < 5:
@@ -622,12 +626,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         for p in self.projectiles:
             p.draw(window)
 
-    def collide(self, other):
+    def collide(self, other, inputs):
+        left,right,up,down = inputs[:4]
         if self.intangibility > 0:
             self.intangibility -= 1
             if self.intangibility <= 0:
                 self.intangibility = False
-        for i, hitbox in enumerate(other.active_hitboxes):  # Détection des hitboxes
+        
+        # Détection des hitboxes
+        for i, hitbox in enumerate(other.active_hitboxes):  
             if self.rect.colliderect(hitbox.hit):
                 if (not self.parry) and (not self.intangibility):  # Parry
                     if self.truecombo == 0:
@@ -643,10 +650,12 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback * (self.damages * hitbox.damages_stacking + 1)
                     if self.superarmor < knockback and not (self.superarmor == -1):
+
+                        angle = calculate_angle(hitbox.angle,left,right,up,down) # Calcul de DI
                         self.BOUM = hitbox.boum + 4
-                        self.vx = (hitbox.knockback) * cos(hitbox.angle) * (
+                        self.vx = (hitbox.knockback) * cos(angle) * (
                                 self.damages * hitbox.damages_stacking + 1)  # éjection x
-                        self.vy = -(hitbox.knockback) * sin(hitbox.angle) * (
+                        self.vy = -(hitbox.knockback) * sin(angle) * (
                                 self.damages * hitbox.damages_stacking + 1)  # éjection y
                         self.hitstun = hitbox.stun * (self.damages * hitbox.damages_stacking + 2) - (
                                 self.superarmor / 5)  # hitstun
@@ -673,7 +682,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 hitbox.sound.play()
                 del other.active_hitboxes[i]  # Supprime la hitbox
                 return
-        for i, projectile in enumerate(other.projectiles):  # Détection des projectiles
+
+
+        # Détection des projectiles
+        for i, projectile in enumerate(other.projectiles):  
             for h in self.active_hitboxes:
                 if h.deflect and h.hit.colliderect(projectile.rect):
                     self.projectiles.append(projectile)
@@ -693,9 +705,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     knockback = projectile.knockback * (self.damages * projectile.damages_stacking + 1)
 
                     if self.superarmor < knockback and not (self.superarmor == -1):
-                        self.vx = projectile.knockback * cos(projectile.angle) * (
+                        angle = calculate_angle(projectile.angle,left,right,up,down) # Calcul de DI
+                        self.vx = projectile.knockback * cos(angle) * (
                                 self.damages * projectile.damages_stacking + 1)  # éjection x
-                        self.vy = -projectile.knockback * sin(projectile.angle) * (
+                        self.vy = -projectile.knockback * sin(angle) * (
                                 self.damages * projectile.damages_stacking + 1)  # éjection y
                         self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
                         self.totalhitstun = self.hitstun
@@ -726,3 +739,22 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         other.attack = None
                         other.lag = min(projectile.damages * projectile.knockback / 10, 9)
                 return
+
+def calculate_angle(base_angle,left,right,up,down):
+
+    lr = right - left
+    ud = down - up
+    if abs(lr) < 0.1: 
+        if abs(ud) < 0.1:
+            return base_angle
+        stickangle = (pi/2)*signe(ud)
+    else :
+        if lr < 0 :
+            stickangle = pi-atan(ud/lr)
+        else :
+            stickangle = atan(ud/lr)
+    #print(base_angle)
+    #print(stickangle)
+    #print(base_angle + pi/10*sin(stickangle-base_angle))
+    #print()
+    return base_angle + pi/10*sin(stickangle-base_angle)

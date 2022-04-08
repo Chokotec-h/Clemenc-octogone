@@ -197,8 +197,8 @@ class Game():
             ########
 
             # détection des collision
-            self.Char_P2.collide(self.Char_P1)
-            self.Char_P1.collide(self.Char_P2)
+            self.Char_P2.collide(self.Char_P1,inputs_2)
+            self.Char_P1.collide(self.Char_P2,inputs_1)
 
         elif self.pause:
             self.pause_time += time.time() - self.pausefrom  # gestion du chrono en pause
