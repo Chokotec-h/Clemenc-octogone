@@ -76,6 +76,71 @@ class Game():
         else:
             self.hold_pause = False
 
+
+        ################### Affichage des éléments ###################
+
+        ### Debug
+        for h in self.Char_P1.active_hitboxes:
+            h.draw(window)
+        for h in self.Char_P2.active_hitboxes:
+            h.draw(window)
+        #########
+
+        # Fumée de hitstun
+        self.smokeframe += 1
+        self.smokeframe = self.smokeframe % 4
+        if self.Char_P1.hitstun and self.smokeframe == 0:
+            self.smoke.append(
+                Smoke(self.Char_P1.rect.x + self.Char_P1.rect.w / 2, self.Char_P1.rect.y + self.Char_P1.rect.h / 2))
+        if self.Char_P2.hitstun and self.smokeframe == 0:
+            self.smoke.append(
+                Smoke(self.Char_P2.rect.x + self.Char_P2.rect.w / 2, self.Char_P2.rect.y + self.Char_P2.rect.h / 2))
+        for i, s in enumerate(self.smoke):
+            s.draw(window)
+            if s.duration <= 0:
+                del self.smoke[i]
+
+        # Affichage du stage
+        stage.draw(window)
+
+        # Affichage des personnages
+        self.Char_P2.draw(window)
+        self.Char_P1.draw(window)
+
+        # Affichage des degats
+        self.Char_P1.damages = float(self.Char_P1.damages)
+        Texte(f"{str(round(self.Char_P1.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
+        255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
+              width // 3, height - 50, 800, format_="left").draw(window)
+        Texte(f".{str(round(self.Char_P1.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
+        255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
+              width // 3 + len(str(round(self.Char_P1.damages, 2)).split('.')[0]) * 25, height - 30, 800,
+              format_="left").draw(window)
+
+        self.Char_P2.damages = float(self.Char_P2.damages)
+        Texte(f"{str(round(self.Char_P2.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
+        255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
+              2 * width // 3, height - 50, 800, format_="left").draw(window)
+        Texte(f".{str(round(self.Char_P2.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
+        255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
+              2 * width // 3 + len(str(round(self.Char_P2.damages, 2)).split('.')[0]) * 25, height - 30, 800,
+              format_="left").draw(window)
+
+        # Affichage des vies
+        if not self.training:
+            for s in range(self.stock[0] // 5 + 1):  # colonnes de 5 icones à côté des dégâts
+                for k in range(min(self.stock[0] - 5 * s, 5)):
+                    window.blit(pygame.transform.scale(icons[self.Char_P1.name], (16, 16)),
+                                (width / 3 - 25 - 20 * s, height - 40 - 20 * k))
+
+            for s in range(self.stock[1] // 5 + 1):
+                for k in range(min(self.stock[1] - 5 * s, 5)):
+                    window.blit(pygame.transform.scale(icons[self.Char_P2.name], (16, 16)),
+                                (2 * width / 3 - 25 - 20 * s, height - 40 - 20 * k))
+
+        #########################################################
+
+
         # hors pause, si le jeu continue
         if self.game_running < 0 and not self.pause:
             self.pausefrom = time.time()  # gestion du chrono en pause
@@ -154,69 +219,6 @@ class Game():
                     # reinitialisation des controles
                     controls = reset_commands(joysticks, commands)
                     clock.tick(10)
-
-        ################### Affichage des éléments ###################
-
-        ### Debug
-        for h in self.Char_P1.active_hitboxes:
-            h.draw(window)
-        for h in self.Char_P2.active_hitboxes:
-            h.draw(window)
-        #########
-
-        # Fumée de hitstun
-        self.smokeframe += 1
-        self.smokeframe = self.smokeframe % 4
-        if self.Char_P1.hitstun and self.smokeframe == 0:
-            self.smoke.append(
-                Smoke(self.Char_P1.rect.x + self.Char_P1.rect.w / 2, self.Char_P1.rect.y + self.Char_P1.rect.h / 2))
-        if self.Char_P2.hitstun and self.smokeframe == 0:
-            self.smoke.append(
-                Smoke(self.Char_P2.rect.x + self.Char_P2.rect.w / 2, self.Char_P2.rect.y + self.Char_P2.rect.h / 2))
-        for i, s in enumerate(self.smoke):
-            s.draw(window)
-            if s.duration <= 0:
-                del self.smoke[i]
-
-        # Affichage du stage
-        stage.draw(window)
-
-        # Affichage des personnages
-        self.Char_P2.draw(window)
-        self.Char_P1.draw(window)
-
-        # Affichage des degats
-        self.Char_P1.damages = float(self.Char_P1.damages)
-        Texte(f"{str(round(self.Char_P1.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
-        255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
-              width // 3, height - 50, 800, format_="left").draw(window)
-        Texte(f".{str(round(self.Char_P1.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
-        255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
-              width // 3 + len(str(round(self.Char_P1.damages, 2)).split('.')[0]) * 25, height - 30, 800,
-              format_="left").draw(window)
-
-        self.Char_P2.damages = float(self.Char_P2.damages)
-        Texte(f"{str(round(self.Char_P2.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
-        255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
-              2 * width // 3, height - 50, 800, format_="left").draw(window)
-        Texte(f".{str(round(self.Char_P2.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
-        255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
-              2 * width // 3 + len(str(round(self.Char_P2.damages, 2)).split('.')[0]) * 25, height - 30, 800,
-              format_="left").draw(window)
-
-        # Affichage des vies
-        if not self.training:
-            for s in range(self.stock[0] // 5 + 1):  # colonnes de 5 icones à côté des dégâts
-                for k in range(min(self.stock[0] - 5 * s, 5)):
-                    window.blit(pygame.transform.scale(icons[self.Char_P1.name], (16, 16)),
-                                (width / 3 - 25 - 20 * s, height - 40 - 20 * k))
-
-            for s in range(self.stock[1] // 5 + 1):
-                for k in range(min(self.stock[1] - 5 * s, 5)):
-                    window.blit(pygame.transform.scale(icons[self.Char_P2.name], (16, 16)),
-                                (2 * width / 3 - 25 - 20 * s, height - 40 - 20 * k))
-
-        #########################################################
 
         ###################### Gestion de la fin de la partie ######################
         if not self.training:
