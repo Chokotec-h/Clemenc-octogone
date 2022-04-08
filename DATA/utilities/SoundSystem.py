@@ -109,12 +109,12 @@ class instance:
 
     def changeParameter(self, name, value):
         """
-        take a parameter and change its value  (may not work...)
+        take a parameter and change its value
         @param name: the name of the parameter
-        @param value: the new value convert in value * 1065353216
+        @param value: the new value
         """
         check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode("ascii"),
-                                                                             c_int(value), True))
+                                                                             c_float(value), True))
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))
@@ -141,3 +141,13 @@ def getAllEventFromBank(bank, Array, eventNumber):
     @return: a cArray with all events
     """
     check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(Array), eventNumber))
+
+
+def changeGlobalParameter(name, value):
+    """
+    set a global parameter
+    @param name: the parameter name
+    @param value: new value
+    """
+    check_result(studio_dll.FMOD_Studio_System_SetParameterByName(studio_sys, name.encode("ascii"),
+                                                                  c_float(value), True))
