@@ -114,6 +114,9 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame < 8 :
+                self.animation = "dtilt"
+                self.animeframe = self.frame
             if self.frame < 6 :
                 self.cancelable = True
             else :
@@ -130,6 +133,10 @@ class Reignaud(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
+            if self.frame < 9 :
+                self.animation = "ftilt"
+                self.animeframe = self.frame
+                self.animeframe = min(0,self.frame-5)
             if self.frame < 8 :
                 self.cancelable = True
             else :
@@ -243,6 +250,9 @@ class Reignaud(Char):
                     self.lag = 10 # Auto cancel frame 1-2 et 38+, 10 frames de landing lag
 
         if attack == "ForwardSmash":
+            if self.frame < 9 :
+                self.animation = "fsmash"
+                self.animeframe = self.frame
             if self.frame < 8 :
                 self.cancelable = True
             else :
@@ -259,6 +269,9 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "UpSmash":
+            if self.frame < 9 :
+                self.animation = "usmash"
+                self.animeframe = self.frame
             if self.frame < 8 :
                 if left :
                     self.look_right = False
@@ -279,6 +292,9 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "DownSmash":
+            if self.frame < 9 :
+                self.animation = "dsmash"
+                self.animeframe = self.frame
             if self.frame < 3 :
                 self.cancelable = True
             else :
