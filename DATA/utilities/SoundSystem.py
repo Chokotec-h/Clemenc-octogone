@@ -111,10 +111,10 @@ class instance:
         """
         take a parameter and change its value  (may not work...)
         @param name: the name of the parameter
-        @param value: the new value
+        @param value: the new value convert in value * 1065353216
         """
         check_result(studio_dll.FMOD_Studio_EventInstance_SetParameterByName(self.instance, name.encode("ascii"),
-                                                                             value * 1065353216, True))
+                                                                             c_int(value), True))
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))

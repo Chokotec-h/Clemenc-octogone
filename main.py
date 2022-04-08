@@ -41,8 +41,6 @@ UIDicoEvent = SFXEvents.SFXDicoEvent
 embient = SoundSystem.instance()
 embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
-pygame.mixer.init()  # Initialisation du module de musique
-
 
 ############################################################################################################
 
@@ -149,7 +147,6 @@ def main():
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
 
-                    # pygame.mixer.music.play(-1)
                     musicplaying = True
 
                 if not convert_inputs(controls[0], joysticks, 0)[6]:
