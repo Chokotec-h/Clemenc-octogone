@@ -384,6 +384,7 @@ def main():
                     elif time.time() - Game.begin_game > 5 or training:
                         musicplaying = False
                         Game.begin_game = time.time()
+                        Game.pausefrom = time.time()
                         Play = True
 
                 ######################################################################################################
