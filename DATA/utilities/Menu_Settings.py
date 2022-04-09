@@ -148,7 +148,7 @@ class SettingsMenu():
             if self.focusedbutton == 3:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
-                    self.UIDicoEvent["UI1 forward'"].play()
+                    self.UIDicoEvent["UI1 back"].play()
                     soundvolume = oldsoundvolume
                     musicvolume = oldmusicvolume
                     # DATA.utilities.Sound_manager.soundvolume = soundvolume
@@ -303,7 +303,7 @@ class SettingsMenu():
                                self.row, 3)
                     if self.focusedbutton == i and self.row == 3:
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
-                            self.UIDicoEvent["UI1 forward'"].play()
+                            self.UIDicoEvent["UI1 forward"].play()
                             self.inputget = i + 13
                             self.confirm = True
                 # Sauvegarde

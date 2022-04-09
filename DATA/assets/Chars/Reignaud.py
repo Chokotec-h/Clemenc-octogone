@@ -1,5 +1,5 @@
 from random import choice, randint
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent, calculate_angle
 import pygame
 from math import pi,cos,sin
 
@@ -322,6 +322,8 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "DashAttack":
+            if self.frame < 10 :
+                self.animation = "dashattack"
             if self.frame == 10 :
                 self.active_hitboxes.append(Hitbox(20,-5,40,125,pi/4,12,13,1/250,14,20,self,False))
             if self.frame > 5 and self.frame < 40 :
@@ -354,55 +356,128 @@ class Reignaud(Char):
                 self.attack = None
 
 
-    def collide(self,other): # Gestion du contre
+    def collide(self,other, inputs): # Gestion du contre
         self.parrying = False
-        for i,hitbox in enumerate(other.active_hitboxes): # Détection des hitboxes
+        left,right,up,down = inputs[:4]
+        if self.intangibility > 0:
+            self.intangibility -= 1
+            if self.intangibility <= 0:
+                self.intangibility = False
+        
+        # Détection des hitboxes
+        for i, hitbox in enumerate(other.active_hitboxes):  
             if self.rect.colliderect(hitbox.hit):
-                if (not self.parry) and (not self.intangibility) and not (self.counter): # Parry and counter
-                    self.tumble = True
-                    if hitbox.position_relative : # Reverse hit
-                        if self.x > hitbox.hit.x+hitbox.hit.w//2 and hitbox.own.direction < 0:
+                if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
+                    if self.truecombo == 0:
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += hitbox.damages
+                    self.truecombo += 1
+                    if hitbox.position_relative:  # Reverse hit
+                        if self.x > hitbox.hit.x + hitbox.hit.w // 2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
-                        if self.x < hitbox.hit.x-hitbox.hit.w//2 and hitbox.own.direction > 0:
+                        if self.x < hitbox.hit.x - hitbox.hit.w // 2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
-                        
-                    self.vx = hitbox.knockback*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection x
-                    self.vy = -hitbox.knockback*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1) # éjection y
-                    self.hitstun = hitbox.stun*(self.damages*hitbox.damages_stacking/2+1) # hitstun
-                    self.damages += hitbox.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None # cancel l'attacue en cours
-                else :
-                    if self.parry :
-                        self.parrying = True
+                    knockback = hitbox.knockback * (self.damages * hitbox.damages_stacking + 1)
+                    if self.superarmor < knockback and not (self.superarmor == -1):
+
+                        angle = calculate_angle(hitbox.angle,left,right,up,down) # Calcul de DI
+                        self.BOUM = hitbox.boum + 4
+                        self.vx = (hitbox.knockback) * cos(angle) * (
+                                self.damages * hitbox.damages_stacking + 1)  # éjection x
+                        self.vy = -(hitbox.knockback) * sin(angle) * (
+                                self.damages * hitbox.damages_stacking + 1)  # éjection y
+                        self.hitstun = hitbox.stun * (self.damages * hitbox.damages_stacking + 2) - (
+                                self.superarmor / 5)  # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += hitbox.damages  # dommages
+                        self.rect.y -= 1
+                        self.attack = None  # cancel l'attaque en cours
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5:
+                            self.tumble = True
+                    else:
+                        if self.superarmor != -1:
+                            self.superarmor = max(self.superarmor - hitbox.damages, 0)
+                        self.damages += hitbox.damages
+                else:
+                    if self.parry:
+                        other.BOUM = 8
+                        self.parried = True
+                        other.attack = None
+                        other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
                     if self.counter :
                         self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
-                del other.active_hitboxes[i] # Supprime la hitbox
+ 
+                hitbox.sound.play()
+                del other.active_hitboxes[i]  # Supprime la hitbox
                 return
-        for i,projectile in enumerate(other.projectiles): # Détection des projectiles
-            for h in self.active_hitboxes :
+
+
+        # Détection des projectiles
+        for i, projectile in enumerate(other.projectiles):  
+            for h in self.active_hitboxes:
                 if h.deflect and h.hit.colliderect(projectile.rect):
-                    projectile.deflect(h.modifier)
                     self.projectiles.append(projectile)
-                    del other.projectiles[i] # Supprime la hitbox
+                    projectile.deflect(h.modifier)
+                    del other.projectiles[i]  # Supprime la hitbox
                     return
 
             if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
-                if (not self.parry) and (not self.intangibility) and (not self.counter) : # Parry
+                if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
                     self.immune_to_projectiles.append(projectile)
-                    self.tumble = True
-                    self.vx = projectile.knockback*cos(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection x
-                    self.vy = -projectile.knockback*sin(projectile.angle)*(self.damages*projectile.damages_stacking+1) # éjection y
-                    self.hitstun = projectile.stun*(self.damages*projectile.damages_stacking/2+1) # hitstun
-                    self.damages += projectile.damages # dommages
-                    self.rect.y -= 1
-                    self.attack = None
-                else :
-                    if self.parry :
-                        self.parrying = True
+                    if self.truecombo == 0:
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += projectile.damages
+                    self.truecombo += 1
+                    knockback = projectile.knockback * (self.damages * projectile.damages_stacking + 1)
+
+                    if self.superarmor < knockback and not (self.superarmor == -1):
+                        angle = calculate_angle(projectile.angle,left,right,up,down) # Calcul de DI
+                        self.vx = projectile.knockback * cos(angle) * (
+                                self.damages * projectile.damages_stacking + 1)  # éjection x
+                        self.vy = -projectile.knockback * sin(angle) * (
+                                self.damages * projectile.damages_stacking + 1)  # éjection y
+                        self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += projectile.damages  # dommages
+                        self.rect.y -= 1
+                        self.attack = None
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5:
+                            self.tumble = True
+                    else:
+                        if self.superarmor != -1:
+                            self.superarmor = max(self.superarmor - projectile.damages, 0)
+                        self.damages += projectile.damages
+                    try:
+                        projectile.sound.play()
+                    except:
+                        SFXDicoEvent['hits']["8bit hit"].play()
+                else:
+                    if self.parry:
+                        other.BOUM = 8
+                        self.projectiles.append(projectile)  # Renvoie le projectile
+                        projectile.deflect(1)
+                        del other.projectiles[i]
+                        self.parried = True
+                        other.attack = None
+                        other.lag = min(projectile.damages * projectile.knockback / 10, 9)
                     if self.counter :
+                        self.immune_to_projectiles.append(projectile)
                         self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,projectile.knockback,projectile.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else projectile.damages,1/250,projectile.stun,3,self,False))
+ 
                 return
+                
 ###################          
 """ Projectiles """
 ###################

@@ -104,8 +104,13 @@ class Game():
         stage.draw(window)
 
         # Affichage des personnages
-        self.Char_P2.draw(window)
-        self.Char_P1.draw(window)
+        if self.Char_P1.rect.y > self.Char_P2.rect.y :
+            self.Char_P2.draw(window)
+            self.Char_P1.draw(window)
+        else :
+            self.Char_P1.draw(window)
+            self.Char_P2.draw(window)
+
 
         # Affichage des degats
         self.Char_P1.damages = float(self.Char_P1.damages)
