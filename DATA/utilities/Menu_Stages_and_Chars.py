@@ -93,6 +93,14 @@ class StagesMenu:
             window.blit(pygame.transform.scale(
                 pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), (216, 216)),
                 ((i % 5 * 250) - 108 + 450, (i // 5 * 250) - 108 + 200))
+        
+        if self.focused_button == -1 :
+            stage_sprite = pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
+            pygame.draw.rect(window,(0,0,0),(50,height//4,stage_sprite.get_size()[0]*0.66, stage_sprite.get_size()[1]*0.66))
+        else:
+            stage_sprite = pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
+            window.blit(pygame.transform.scale(stage_sprite, (stage_sprite.get_size()[0]*0.66, stage_sprite.get_size()[1]*0.66)),
+                (50, height//4))
         return Menu
 
 
