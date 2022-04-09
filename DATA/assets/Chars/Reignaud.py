@@ -263,7 +263,7 @@ class Reignaud(Char):
                 self.charge = self.charge+1
             if self.frame == 20:
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(32,42,72,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False,sound="hits/punch"))
+                self.active_hitboxes.append(Hitbox(32,42,64,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False,sound="hits/punch"))
             if self.frame > 45: # 21 frames de lag
                 self.attack = None
                 self.charge = 0
