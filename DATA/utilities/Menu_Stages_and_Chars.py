@@ -19,6 +19,8 @@ class StagesMenu:
         self.UIDicoEvent = UIDicoEvent
 
     def update(self, window, controls, joysticks, width, height):
+
+        # ajout du pandadrome (terrain d'entraînement)
         if self.training:
             self.actualstages = ["Pandadrome"] + stages
         else:
@@ -28,19 +30,34 @@ class StagesMenu:
         if not convert_inputs(controls[0], joysticks, 0)[6]:
             self.confirm = False
 
-        # ajout du pandadrome (terrain d'entraînement)
         # haut/bas/gauche/droite pour naviguer dans le menu
         if input_but_no_repeat(3, controls, joysticks, 0):
-            self.focused_button += 9
+            if self.focused_button == -1:
+                self.focused_button = 0
+            else :
+                self.focused_button += 5
+                if self.focused_button > len(self.actualstages) :
+                    self.focused_button = -1
 
         if input_but_no_repeat(2, controls, joysticks, 0):
-            self.focused_button -= 9
+            if self.focused_button == -1:
+                self.focused_button = len(self.actualstages)-1
+            else :
+                self.focused_button -= 5
+                if self.focused_button < -1 :
+                    self.focused_button = -1
 
         if input_but_no_repeat(0, controls, joysticks, 0):
-            self.focused_button -= 1
+            if self.focused_button != -1 :
+                self.focused_button -= 1
+                if self.focused_button < 0:
+                    self.focused_button = len(self.actualstages)-1
 
         if input_but_no_repeat(1, controls, joysticks, 0):
-            self.focused_button += 1
+            if self.focused_button != -1 :
+                self.focused_button += 1
+                if self.focused_button > len(self.actualstages)-1:
+                    self.focused_button = 0
 
         # bouclage de la navigation
         self.focused_button = ((self.focused_button + 1) % (len(self.actualstages) + 1)) - 1
@@ -61,8 +78,8 @@ class StagesMenu:
 
         # Boutons de sélection du stage
         for i in range(len(self.actualstages)):
-            Bouton = Button("", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", ((i % 9) * 150) + 250,
-                            (i // 9 * 150) + 100, 100, 100)
+            Bouton = Button("", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png",
+                            ((i % 5) * 250) + 450, (i // 5 * 250) + 200, 225, 225)
             if self.focused_button == i:
                 Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
 
@@ -74,8 +91,8 @@ class StagesMenu:
             Bouton.draw(window)
             # image du stage
             window.blit(pygame.transform.scale(
-                pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), (90, 90)),
-                ((i % 9 * 150) + 205, (i // 9 * 150) + 55))
+                pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), (216, 216)),
+                ((i % 5 * 250) - 108 + 450, (i // 5 * 250) - 108 + 200))
         return Menu
 
 
