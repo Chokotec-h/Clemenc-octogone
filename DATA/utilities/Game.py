@@ -170,27 +170,52 @@ class Game():
             if self.training:
                 ################### Gestion de la DI et de la tech en entraînement ###################
                 self.Char_P2.deceleration = self.deceleration
-                traininginputs = [False for _ in range(17)]
-                if self.Char_P2.hitstun or self.Char_P2.tumble:
-                    if self.TrainingHDI > 0:
-                        traininginputs[1] = True
-                    if self.TrainingHDI < 0:
-                        traininginputs[0] = True
-                    if self.TrainingVDI > 0:
-                        traininginputs[2] = True
-                    if self.TrainingVDI < 0:
-                        traininginputs[3] = True
-                    if self.Tech > 0:
-                        if randint(0, 1) == 1:
-                            self.Char_P2.tech = 5
-                        else:
-                            self.Char_P2.tech = 0
-                    if self.Tech < 0:
+                inputs_2 = [False for _ in range(17)]
+                if self.TrainingHDI == 1:
+                    inputs_2[0] = False
+                    inputs_2[1] = True
+                elif self.TrainingHDI == 2:
+                    inputs_2[0] = True
+                    inputs_2[1] = False
+                elif self.TrainingHDI == 3 :
+                    if not self.Char_P2.hitstun :
+                        if randint(0,1):
+                            inputs_2[0] = True
+                            inputs_2[1] = False
+                        else :
+                            inputs_2[0] = False
+                            inputs_2[1] = True
+                else :
+                    inputs_2[0] = False
+                    inputs_2[1] = False
+                if self.TrainingVDI == 2:
+                    inputs_2[2] = True
+                    inputs_2[3] = False
+                if self.TrainingVDI == 1:
+                    inputs_2[2] = False
+                    inputs_2[3] = True
+                elif self.TrainingVDI == 3 :
+                    if not self.Char_P2.hitstun :
+                        if randint(0,1):
+                            inputs_2[0] = True
+                            inputs_2[1] = False
+                        else :
+                            inputs_2[0] = False
+                            inputs_2[1] = True
+                else :
+                    inputs_2[2] = False
+                    inputs_2[3] = False
+                if self.Tech > 0:
+                    if randint(0, 1) == 1:
                         self.Char_P2.tech = 5
-                else:
+                    else:
+                        self.Char_P2.tech = 0
+                elif self.Tech < 0:
+                    self.Char_P2.tech = 5
+                else :
                     self.Char_P2.tech = 0
 
-                self.Char_P2.act(traininginputs, stage, self.Char_P1,
+                self.Char_P2.act([False]*17, stage, self.Char_P1,
                                  not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
                 ######################################################################################
             else:
@@ -315,7 +340,7 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton de gestion de DI (Horizontale)
-                    Bouton = Button(f"DI Horizontale : {['Aucune', 'Droite', 'Gauche'][self.TrainingHDI]}",
+                    Bouton = Button(f"DI Horizontale : {['Aucune', 'Droite', 'Gauche', 'Aléatoire'][self.TrainingHDI]}",
                                     ("Arial", 20, False, False), "./DATA/Images/Menu/Button.png", 150,
                                     3.5 * height / 12, 200, 60)
                     if self.focusedbutton == 1:
@@ -323,11 +348,11 @@ class Game():
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             self.TrainingHDI += 1
-                            self.TrainingHDI = (self.TrainingHDI + 1) % 3 - 1
+                            self.TrainingHDI = self.TrainingHDI % 4
                     Bouton.draw(window)
 
                     # Bouton de gestion de DI (Verticale)
-                    Bouton = Button(f"DI Verticale : {['Aucune', 'Haut', 'Bas'][self.TrainingVDI]}",
+                    Bouton = Button(f"DI Verticale : {['Aucune', 'Haut', 'Bas', 'Aléatoire'][self.TrainingVDI]}",
                                     ("Arial", 20, False, False), "./DATA/Images/Menu/Button.png", 150,
                                     4.5 * height / 12, 200, 60)
                     if self.focusedbutton == 2:
@@ -335,7 +360,7 @@ class Game():
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             self.TrainingVDI += 1
-                            self.TrainingVDI = (self.TrainingVDI + 1) % 3 - 1
+                            self.TrainingVDI = self.TrainingVDI % 4
                     Bouton.draw(window)
 
                     # Bouton de probabilité de tech

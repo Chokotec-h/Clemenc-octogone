@@ -550,6 +550,20 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if abs(self.vx) < 0.01:
                 self.vx = 0
 
+        # Tech
+        if self.touch_stage(stage, self.rect.move(0, 3)):
+            if self.tumble:
+                if self.airdodge:
+                    self.vx = self.airdodgespeed
+                    self.hitstun = 0
+                elif self.tech > 0:
+                    self.lag = 2
+                    self.vx = self.direction / 45
+                    self.vy = 0
+                    self.hitstun = 0
+                else:
+                    self.lag = 20
+                self.tumble = False
         # Détection de si le personnage est au sol
         if self.touch_stage(stage, self.rect.move(0, 1)):
             if self.hitstun:  # diminue la vitesse de hitstun
@@ -564,16 +578,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.airdodge = False
                 self.intangibility = False
             self.can_airdodge = True
-            if self.tumble:
-                if self.airdodge:
-                    self.vx = self.airdodgespeed
-                elif self.tech > 0:
-                    self.lag = 2
-                    self.vx = self.direction / 45
-                    self.vy = 0
-                else:
-                    self.lag = 20
-                self.tumble = False
             for dj in range(len(self.doublejump)):
                 self.doublejump[dj] = False
         else:

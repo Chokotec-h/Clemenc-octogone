@@ -27,7 +27,7 @@ def SFX_init():
         truc[3] = truc[3][:-1]
         folder = truc[2]  # NE  PAS  CHANGER
         song = truc[3]  # NE PAS CHANGER
-        print(truc)
+        print("Loading SE:",truc[3])
 
 
         # builde de dico
@@ -53,6 +53,6 @@ def SFX_init():
         truc = str(keys).split("/")
         truc[2] = truc[2][:-1]  # ne pas changer
         song = truc[2]  # ne pas changer
-        print(truc)
+        print("Loading UI effect:",truc[2])
 
         SFXDicoEvent[song] = event

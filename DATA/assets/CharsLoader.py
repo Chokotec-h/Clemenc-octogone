@@ -36,7 +36,7 @@ charobjects = {
     "Kebab": Kebab,
     "Poissonnier": Poissonnier,
     "Renault": Renault,
-    "Isaac": Isaac,
+    #"Isaac": Isaac,
 }
 
 airspeeds = {
@@ -50,7 +50,7 @@ airspeeds = {
     "Kebab": Kebab(0, 0, 0).airspeed,
     "Poissonnier": Poissonnier(0, 0, 0).airspeed,
     "Renault": Renault(0, 0, 0).airspeed,
-    "Isaac": Isaac(0, 0, 0).airspeed,
+    #"Isaac": Isaac(0, 0, 0).airspeed,
 }
 
 decelerations = {
@@ -64,7 +64,7 @@ decelerations = {
     "Kebab": Kebab(0, 0, 0).deceleration,
     "Poissonnier": Poissonnier(0, 0, 0).deceleration,
     "Renault": Renault(0, 0, 0).deceleration,
-    "Isaac": Isaac(0, 0, 0).deceleration,
+    #"Isaac": Isaac(0, 0, 0).deceleration,
 }
 
 fallspeeds = {
@@ -78,7 +78,7 @@ fallspeeds = {
     "Kebab": Kebab(0, 0, 0).fallspeed,
     "Poissonnier": Poissonnier(0, 0, 0).fallspeed,
     "Renault": Renault(0, 0, 0).fallspeed,
-    "Isaac": Isaac(0, 0, 0).fallspeed,
+    #"Isaac": Isaac(0, 0, 0).fallspeed,
 }
 
 fastfallspeeds = {
@@ -92,5 +92,5 @@ fastfallspeeds = {
     "Kebab": Kebab(0, 0, 0).fastfallspeed,
     "Poissonnier": Poissonnier(0, 0, 0).fastfallspeed,
     "Renault": Renault(0, 0, 0).fastfallspeed,
-    "Isaac": Isaac(0, 0, 0).fastfallspeed,
+    #"Isaac": Isaac(0, 0, 0).fastfallspeed,
 }
