@@ -56,6 +56,10 @@ Reignaud = {
     "usmash":("./DATA/Images/Sprites/Chars/Reignaud/Default/Usmash.png",((1,1,16,35),(20,1,17,35),(40,1,16,35)),6,False),
     "dsmash":("./DATA/Images/Sprites/Chars/Reignaud/Default/Dsmash.png",((1,1,13,35),(27,1,17,35),(53,1,19,35),(83,1,28,35),(121,1,44,35),(182,1,19,35)),8,False),
     "dashattack":("./DATA/Images/Sprites/Chars/Reignaud/Default/DashAttack.png",((1,1,13,35),(19,1,17,35)),8,False),
+    "dair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Dair.png",((1,1,13,35),(23,1,17,33),(43,1,15,31),(63,1,15,35),(83,1,14,35)),8,False),
+    "bair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Bair.png",((1,1,13,35),(21,1,14,35),(42,1,17,35),(64,1,17,35),(83,1,21,35),(108,1,16,35),(131,1,13,35)),12,False),
+    "fair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Fair.png",((0,1,14,35),(22,1,17,35),(44,1,13,35),(68,1,15,35),(85,1,14,35)),10,False),
+    "uair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Uair.png",((2,1,12,35),(24,1,13,35),(45,1,14,35),(60,1,13,35)),11,False),
 
 }
 

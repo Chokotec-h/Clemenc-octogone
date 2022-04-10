@@ -167,6 +167,9 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame < 9 :
+                self.animation = "uair"
+                self.animeframe = self.frame
             if self.frame < 8 :
                 self.cancelable = True
             else :
@@ -182,6 +185,9 @@ class Reignaud(Char):
                     self.lag = 10 # Auto cancel frame 1-8 et 23+, 8 frames de landing lag
 
         if attack == "ForwardAir":
+            if self.frame < 9 :
+                self.animation = "fair"
+                self.animeframe = self.frame
             if self.frame < 8 :
                 self.cancelable = True
             else :
@@ -198,11 +204,14 @@ class Reignaud(Char):
                     self.lag = 11 # Auto cancel frame 1-8 et 26+, 11 frames de landing lag
 
         if attack == "BackAir":
-            if self.frame < 10 :
+            if self.frame < 13 :
+                self.animation = "bair"
+                self.animeframe = self.frame
+            if self.frame < 12 :
                 self.cancelable = True
             else :
                 self.cancelable = False
-            if self.frame == 10 :
+            if self.frame == 12 :
                 self.active_hitboxes.append(Hitbox(-50,42,60,48,-3*pi/4,16,18,1/200,15,3,self,False,sound="hits/punch2"))
 
             if self.frame > 30: # 17 frames de lag
@@ -215,6 +224,9 @@ class Reignaud(Char):
                     self.lag = 16 # Auto cancel frame 1-10 et 28+, 16 frames de landing lag
 
         if attack == "DownAir":
+            if self.frame < 16 :
+                self.animation = "dair"
+                self.animeframe = self.frame
             if self.frame < 16 :
                 self.cancelable = True
             else :
