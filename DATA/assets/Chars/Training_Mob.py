@@ -14,11 +14,14 @@ class Training(Char):
         self.x = x
         self.rect.y = y
         self.player = player
+        self.basedamages = 0
 
     def __str__(self) -> str:
         return ""
 
     def special(self,inputs): 
+        if self.die :
+            self.damages = self.basedamages
         pass
 
     def animation_attack(self,attack,inputs,stage,other):

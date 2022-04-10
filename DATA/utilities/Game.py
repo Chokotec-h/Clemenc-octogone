@@ -57,11 +57,20 @@ class Game():
 
         self.UIDicoEvent = UIDicoEvent
 
+        self.traininginputs = [False for _ in range (17)]
+
     def play(self, controls, joysticks, stage, width, height, window, clock):
 
         Play = True
         musicplaying = True
         Menu = "game"
+
+        # Actualisation des stats du Panda
+        if self.training :
+            self.Char_P2.deceleration = self.deceleration
+            self.Char_P2.airspeed = self.airspeed
+            self.Char_P2.fastfallspeed = self.fastfallspeed
+            self.Char_P2.fallspeed = self.fallspeed
 
         # Recuperation des touches
         if self.game_running < 0 and (
@@ -169,42 +178,41 @@ class Game():
 
             if self.training:
                 ################### Gestion de la DI et de la tech en entraînement ###################
-                self.Char_P2.deceleration = self.deceleration
-                inputs_2 = [False for _ in range(17)]
+
                 if self.TrainingHDI == 1:
-                    inputs_2[0] = False
-                    inputs_2[1] = True
+                    self.traininginputs[0] = False
+                    self.traininginputs[1] = True
                 elif self.TrainingHDI == 2:
-                    inputs_2[0] = True
-                    inputs_2[1] = False
+                    self.traininginputs[0] = True
+                    self.traininginputs[1] = False
                 elif self.TrainingHDI == 3 :
                     if not self.Char_P2.hitstun :
                         if randint(0,1):
-                            inputs_2[0] = True
-                            inputs_2[1] = False
+                            self.traininginputs[0] = True
+                            self.traininginputs[1] = False
                         else :
-                            inputs_2[0] = False
-                            inputs_2[1] = True
+                            self.traininginputs[0] = False
+                            self.traininginputs[1] = True
                 else :
-                    inputs_2[0] = False
-                    inputs_2[1] = False
+                    self.traininginputs[0] = False
+                    self.traininginputs[1] = False
                 if self.TrainingVDI == 2:
-                    inputs_2[2] = True
-                    inputs_2[3] = False
+                    self.traininginputs[2] = True
+                    self.traininginputs[3] = False
                 if self.TrainingVDI == 1:
-                    inputs_2[2] = False
-                    inputs_2[3] = True
+                    self.traininginputs[2] = False
+                    self.traininginputs[3] = True
                 elif self.TrainingVDI == 3 :
                     if not self.Char_P2.hitstun :
                         if randint(0,1):
-                            inputs_2[0] = True
-                            inputs_2[1] = False
+                            self.traininginputs[0] = True
+                            self.traininginputs[1] = False
                         else :
-                            inputs_2[0] = False
-                            inputs_2[1] = True
+                            self.traininginputs[0] = False
+                            self.traininginputs[1] = True
                 else :
-                    inputs_2[2] = False
-                    inputs_2[3] = False
+                    self.traininginputs[2] = False
+                    self.traininginputs[3] = False
                 if self.Tech > 0:
                     if randint(0, 1) == 1:
                         self.Char_P2.tech = 5
@@ -214,7 +222,7 @@ class Game():
                     self.Char_P2.tech = 5
                 else :
                     self.Char_P2.tech = 0
-
+                inputs_2 = self.traininginputs
                 self.Char_P2.act([False]*17, stage, self.Char_P1,
                                  not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
                 ######################################################################################
@@ -249,6 +257,8 @@ class Game():
                     # reinitialisation des controles
                     controls = reset_commands(joysticks, commands)
                     clock.tick(10)
+            else :
+                Texte(f"Attaque + Spécial + Bouclier pour réinitialiser", ("Arial", 25, False, False), (0, 0, 0), width - 40, 40, 800,format_="right").draw(window)
 
         ###################### Gestion de la fin de la partie ######################
         if not self.training:
@@ -287,6 +297,9 @@ class Game():
         ############################################ Interface Entraînement ############################################
 
         if self.training:
+            inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
+            if (inputs_1[6] and inputs_1[7] and inputs_1[8]):
+                self.reset()
             # Combo counter
             pygame.draw.rect(window, (250, 250, 250), (width - 120, height / 2, 120, 60))
             Texte(str(self.Char_P2.combo), ("Arial", 40, False, False), (0, 0, 0), width - 80, height / 2 + 25).draw(
@@ -299,7 +312,6 @@ class Game():
             if self.pause:
                 if self.training:
                     # reset des dégâts
-                    self.Char_P2.damages = self.basedamages
                     pygame.draw.rect(window, (180, 180, 180), (0, 0, 300, height))
                     # gestion de la confirmation
                     if not convert_inputs(controls[0], joysticks, 0)[6]:
@@ -335,8 +347,7 @@ class Game():
                     if self.focusedbutton == 0:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
-                            self.confirm = True
-                            self.Char_P2 = Training(0, 0, 1)
+                            self.reset()
                     Bouton.draw(window)
 
                     # Bouton de gestion de DI (Horizontale)
@@ -375,22 +386,22 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton de gestion des dégâts
-                    Texte(f"Dégâts : {round(self.basedamages)}%", ("Arial", 20, False, False), (0, 0, 0), 150,
+                    Texte(f"Dégâts : {round(self.Char_P2.basedamages)}%", ("Arial", 20, False, False), (0, 0, 0), 150,
                           6.5 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (60, 6.5 * height / 12 - 2, 204, 4))
                     Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
-                                    self.basedamages / 999 * 200 + 60, 6.5 * height / 12, 12, 12)
+                                    self.Char_P2.basedamages / 999 * 200 + 60, 6.5 * height / 12, 12, 12)
                     if self.focusedbutton == 4:
                         Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
-                            self.basedamages += 1
-                            if self.basedamages > 999:
-                                self.basedamages = 0
+                            self.Char_P2.basedamages += 1
+                            if self.Char_P2.basedamages > 999:
+                                self.Char_P2.basedamages = 0
                         if convert_inputs(controls[0], joysticks, 0)[0]:
-                            self.basedamages -= 1
-                            if self.basedamages < 0:
-                                self.basedamages = 999
-                        self.Char_P2.damages = self.basedamages
+                            self.Char_P2.basedamages -= 1
+                            if self.Char_P2.basedamages < 0:
+                                self.Char_P2.basedamages = 999
+                        self.Char_P2.damages = self.Char_P2.basedamages
                     Bouton.draw(window)
 
                     ########################### Gestion des statistiques ###########################
@@ -543,3 +554,12 @@ class Game():
         #########################################################
 
         return Play, musicplaying, Menu, controls
+
+    def reset(self):
+        self.confirm = True
+        self.Char_P1.x = -100
+        self.Char_P1.rect.y = 0
+        basedamages = self.Char_P2.basedamages
+        self.Char_P2 = Training(0, 0, 1)
+        self.Char_P2.basedamages = basedamages
+        self.Char_P2.damages = basedamages
