@@ -5,7 +5,7 @@ stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info", "Salle de TP","T
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [("event:/BGM/let's_fight_!", "K201", True),("event:/BGM/Industrial class", "K201", "Renault"),("event:/BGM/THE WORLD of Mathematics", "K201", "Balan"),
           ("event:/BGM/Panda_Ball", "Pandadrome", True),
-          ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIG-SHOT", "Chapelle", "Spamton"),
+          ("event:/BGM/chapelle", "Chapelle", True), ("event:/BGM/BIGSHOT", "Chapelle", "Spamton"),
           ("event:/BGM/Honor winds", "Cour d'honneur", True),
           ("event:/BGM/Cyber Class", "Salle d'info", True),
           ("event:/BGM/Lunch time !", "Table de self", True),
