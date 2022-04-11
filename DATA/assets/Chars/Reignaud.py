@@ -36,6 +36,7 @@ class Reignaud(Char):
             if self.frame < 8 and self.frame > 6 and special and self.charge < 24:
                 self.frame = 6
                 self.vy = 0
+                self.fastfall = False
                 self.vx = 0
                 self.charge += 1
             if self.frame == 15: # Saute frame 15
@@ -82,13 +83,15 @@ class Reignaud(Char):
                 self.charge = 0
 
         if attack == "SideB":
-            if self.frame < 16 :
+            if self.frame < 17 :
+                self.animation = "sideB"
+                self.animeframe = self.frame
+            if self.frame < 8 :
                 self.cancelable = True
-                if self.frame < 8 :
-                    if left :
-                        self.look_right = False
-                    else :
-                        self.look_right = True
+                if left :
+                    self.look_right = False
+                else :
+                    self.look_right = True
             else :
                 self.cancelable = False
             if self.frame == 16 :
@@ -96,6 +99,8 @@ class Reignaud(Char):
                 self.active_hitboxes.append(Hitbox(24,32,64,32,pi/4,20 if other.look_right == self.look_right else 10,16 if other.look_right == self.look_right else 8,1/250,22 if other.look_right == self.look_right else 11,6,self,False,sound="hits/mini hit"))
             if self.frame < 25 :
                 self.vy = -self.fallspeed
+            if self.frame == 25 and not self.grounded :
+                self.vy = -15
             if self.frame > 66 : # 44 frames de lag
                 self.attack = None
 
