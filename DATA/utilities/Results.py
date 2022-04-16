@@ -6,7 +6,7 @@ import pygame
 
 Victorythemes = {
     "Balan":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Balan.mp3"),
-    "Joueur de air-president":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Air-President.mp3"), "Spamton":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Spamton.mp3"), 
+    "Joueur de Air-President":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Air-President.mp3"), "Spamton":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Spamton.mp3"), 
     "Millet":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Millet.mp3"), "Bowser":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Bowser.mp3"),
     "Gregoire":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Gregoire.mp3"),
     "Reignaud":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Reignaud.mp3"),
