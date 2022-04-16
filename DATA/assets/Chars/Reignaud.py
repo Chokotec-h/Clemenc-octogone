@@ -32,6 +32,8 @@ class Reignaud(Char):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
         if attack == "UpB":
+            self.animation = "UpB"+str(self.charge//6)
+            self.animeframe = self.frame
             self.cancelable = False
             if self.frame < 8 and self.frame > 6 and special and self.charge < 24:
                 self.frame = 6
@@ -70,6 +72,9 @@ class Reignaud(Char):
                     self.attack = None
 
         if attack == "DownB":
+            if self.frame < 9 :
+                self.animation = "DownB"
+                self.animeframe = 0
             if self.frame < 8 :
                 self.cancelable = True
             else :
@@ -78,6 +83,7 @@ class Reignaud(Char):
                 self.counter = True
             if self.frame > 29 :
                 self.counter = False
+                self.animeframe = 0
             if self.frame > 67 : # 46 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -428,6 +434,8 @@ class Reignaud(Char):
                         other.attack = None
                         other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
                     if self.counter :
+                        self.animation = "Counter"
+                        self.animeframe = 0
                         self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
  
                 hitbox.sound.play()

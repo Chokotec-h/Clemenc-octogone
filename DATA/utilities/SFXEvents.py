@@ -8,7 +8,6 @@ SFXDicoEvent = {}  # key per folder  and   song
 
 UIDicoEvent = {}  # a dico with all UI song
 
-
 def SFX_init():
     # SFX Loader
     SFXnumber = SoundSystem.getEventCount(SoundSystem.BankList[-2])
@@ -53,6 +52,6 @@ def SFX_init():
         truc = str(keys).split("/")
         truc[2] = truc[2][:-1]  # ne pas changer
         song = truc[2]  # ne pas changer
-        print("Loading UI effect:",truc[2])
+        print("Loading UI:",truc[2])
 
         SFXDicoEvent[song] = event
