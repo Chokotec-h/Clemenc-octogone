@@ -78,4 +78,4 @@ class Results():
                     Texte(f"{str(self.game.Char_P2).upper()}",("consolas",90,True,False),(0,0,0),width/2,370).draw(win)
 
         if self.frame > 300 :
-            Texte(f"Appuyer sur A pour continuer",("arial",40,False,False),(0,0,0),width/5,9*height/10,format_="left").draw(win)
+            Texte(f"Appuyer sur attaque pour continuer",("arial",40,False,False),(0,0,0),width/5,9*height/10,format_="left").draw(win)
