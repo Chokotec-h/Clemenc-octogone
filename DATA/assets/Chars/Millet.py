@@ -376,7 +376,7 @@ class Rayon():
         if rect.colliderect(stage.mainplat.rect):
             return True
         for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
+            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.v+4:
                 return True
         return False
 

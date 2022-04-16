@@ -12,7 +12,7 @@ Victorythemes = {
     "Reignaud":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Reignaud.mp3"),
     "Rey":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Rey.mp3"),
     "Pyro-Aubin":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Aubin.mp3"),
-    "Kebab":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Kebab.mp3"),
+    "Kebab du dimanche soir":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Kebab.mp3"),
     "Poissonnier":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Poissonnier.mp3"),
     "Renault":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Renault.mp3")
 }
