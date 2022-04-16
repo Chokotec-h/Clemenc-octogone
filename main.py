@@ -7,6 +7,7 @@ import traceback
 from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
+from DATA.utilities.Results import Results
 import DATA.utilities.SoundSystem as SoundSystem
 import DATA.utilities.SFXEvents as SFXEvents
 import time
@@ -139,7 +140,7 @@ def main():
             if not Play:
 
                 # Musique du menu
-                if not musicplaying and Menu != "title":
+                if not musicplaying and Menu not in ("title","results"):
                     if Menu == "credits":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/intro")
@@ -333,10 +334,12 @@ def main():
 
                         # conversion des contrôles
                         controls = [commands[Menu_Chars.namelist[names[0]]], commands[Menu_Chars.namelist[names[1]]]]
-                        del names
-
+                        # Création des objets game et result
                         Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
                                                Menu_Chars.alt, UIDicoEvent)
+                        results = Results(Game,width,height,Menu_Chars.namelist[names[0]],Menu_Chars.namelist[names[1]])
+                        del names
+
 
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(
@@ -391,14 +394,24 @@ def main():
                 ########################################  Ecran de résultats  ########################################
 
                 if Menu == "results":
-                    # réinitialisation des contrôles
-                    controls = reset_commands(joysticks, commands)
-                    Menu = "char"
+                    if results.frame == 1 :
+                        SoundSystem.stop_inst(embient.instance)
+                    window.fill((200,120,200))
+                    results.draw(window,width,height)
+                    
+                    if results.frame > 180 and convert_inputs(controls[0], joysticks, 0)[6]:
+                        UIDicoEvent["UI1 forward"].play()
+                        # réinitialisation des contrôles
+                        controls = reset_commands(joysticks, commands)
+                        Menu = "char"
+                        Menu_Chars.confirm = True
+                        confirm = True
 
             ######################################################################################################
             ############################################  En  combat  ############################################
 
             else:
+                results.check_winner()
 
                 # musique
                 if not musicplaying:

@@ -8,6 +8,8 @@ from DATA.assets.Misc import *
 from DATA.assets.Chars.Training_Mob import Training
 import time
 
+basetime = 7*60 / 60
+basestock = 7
 
 class Game():
     def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent) -> None:
@@ -46,7 +48,7 @@ class Game():
 
         # initialisation des vies et du temps
         self.stock = [7, 7]
-        self.time_game = 7 * 60
+        self.time_game = basetime
         self.begin_game = time.time()
         self.pause_time = 0
         self.pausefrom = 0
