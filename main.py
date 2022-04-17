@@ -9,7 +9,7 @@ from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 from DATA.utilities.Results import Results
 import DATA.utilities.SoundSystem as SoundSystem
-import DATA.utilities.SFXEvents as SFXEvents
+import DATA.utilities.EventsLibs as SFXEvents
 import time
 
 import DATA.assets.CharsLoader as Chars
@@ -140,7 +140,7 @@ def main():
             if not Play:
 
                 # Musique du menu
-                if not musicplaying and Menu not in ("title","results"):
+                if not musicplaying and Menu not in ("title", "results"):
                     if Menu == "credits":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/intro")
@@ -317,7 +317,7 @@ def main():
                 ######################################  Démarrage de la partie  ######################################
 
                 if Menu == "game":
-                    if not gamecreated :
+                    if not gamecreated:
                         SoundSystem.stop_inst(embient.instance)
                         beep = 0
                         stage = Menu_Stages.stage
@@ -337,9 +337,9 @@ def main():
                         # Création des objets game et result
                         Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
                                                Menu_Chars.alt, UIDicoEvent)
-                        results = Results(Game,width,height,Menu_Chars.namelist[names[0]],Menu_Chars.namelist[names[1]])
+                        results = Results(Game, width, height, Menu_Chars.namelist[names[0]],
+                                          Menu_Chars.namelist[names[1]])
                         del names
-
 
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(
@@ -356,7 +356,6 @@ def main():
                             Menu_Stages.actualstages[stage])
 
                         gamecreated = True
-
 
                     window.fill((255, 255, 255))
                     window.blit(background, (0, 0))
@@ -394,11 +393,11 @@ def main():
                 ########################################  Ecran de résultats  ########################################
 
                 if Menu == "results":
-                    if results.frame == 1 :
+                    if results.frame == 1:
                         SoundSystem.stop_inst(embient.instance)
-                    window.fill((200,120,200))
-                    results.draw(window,width,height)
-                    
+                    window.fill((200, 120, 200))
+                    results.draw(window, width, height)
+
                     if results.frame > 180 and convert_inputs(controls[0], joysticks, 0)[6]:
                         UIDicoEvent["UI1 forward"].play()
                         # réinitialisation des contrôles
@@ -424,7 +423,7 @@ def main():
 
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
                 confirm = Game.confirm
-                
+
                 SoundSystem.changeGlobalParameter("pause", int(Game.pause))
 
                 if stage.name == "Salle de TP":

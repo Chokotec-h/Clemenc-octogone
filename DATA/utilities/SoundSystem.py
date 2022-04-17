@@ -3,7 +3,7 @@ from ctypes import *
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
 VERSION = 0x00020206
-BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.bank"]
+BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.bank", "VT.bank"]
 
 BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
 

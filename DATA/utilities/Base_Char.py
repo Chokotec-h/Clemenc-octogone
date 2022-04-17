@@ -2,7 +2,7 @@ import pygame
 from math import atan, cos, sin, pi
 from copy import deepcopy
 import DATA.utilities.SoundSystem as SoundSystem
-import DATA.utilities.SFXEvents as SFXEvents
+import DATA.utilities.EventsLibs as SFXEvents
 
 from DATA.utilities.Animations import get_sprite
 
