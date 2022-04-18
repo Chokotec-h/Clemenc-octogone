@@ -7,7 +7,7 @@ import traceback
 from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
-from DATA.utilities.Results import Results
+from DATA.utilities.Results import *
 import DATA.utilities.SoundSystem as SoundSystem
 import DATA.utilities.EventsLibs as SFXEvents
 import time
@@ -395,10 +395,15 @@ def main():
                 if Menu == "results":
                     if results.frame == 1:
                         SoundSystem.stop_inst(embient.instance)
+                        if results.winner == 0:
+                            embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
+                        if results.winner == 1:
+                            embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
                     window.fill((200, 120, 200))
                     results.draw(window, width, height)
 
-                    if results.frame > 180 and convert_inputs(controls[0], joysticks, 0)[6]:
+                    if results.frame > 300 and convert_inputs(controls[0], joysticks, 0)[6]:
+                        SoundSystem.stop_inst(embient.instance)
                         UIDicoEvent["UI1 forward"].play()
                         # réinitialisation des contrôles
                         controls = reset_commands(joysticks, commands)

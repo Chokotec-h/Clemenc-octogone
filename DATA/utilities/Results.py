@@ -5,16 +5,16 @@ import pygame
 
 
 Victorythemes = {
-    "Balan":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Balan.mp3"),
-    "Joueur de Air-President":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Air-President.mp3"), "Spamton":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Spamton.mp3"), 
-    "Millet":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Millet.mp3"), "Bowser":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Bowser.mp3"),
-    "Gregoire":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Gregoire.mp3"),
-    "Reignaud":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Reignaud.mp3"),
-    "Rey":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Rey.mp3"),
-    "Pyro-Aubin":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Aubin.mp3"),
-    "Kebab du dimanche soir":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Kebab.mp3"),
-    "Poissonnier":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Poissonnier.mp3"),
-    "Renault":pygame.mixer.Sound("DATA\Musics\Victory themes (test)\Victory-Renault.mp3")
+    "Balan":"Balan",
+    "Joueur de Air-President":"Spamton 1", "Spamton":"Spamton 2", 
+    "Millet":"Science", "Bowser":"Science",
+    "Gregoire":"Science",
+    "Reignaud":"Classical",
+    "Rey":"Normal",
+    "Pyro-Aubin":"Lunch",
+    "Kebab du dimanche soir":"BDE",
+    "Poissonnier":"Poissonier",
+    "Renault":"Renault"
 }
 
 
@@ -44,11 +44,6 @@ class Results():
 
     def draw(self,win,width,height):
         self.frame += 1
-        if self.frame == 1 :
-            if self.winner == 0:
-                Victorythemes[str(self.game.Char_P1)].play()
-            if self.winner == 1:
-                Victorythemes[str(self.game.Char_P2)].play()
         if self.frame < 30 :
             self.x += self.vel
             self.vel -= 2
@@ -63,16 +58,16 @@ class Results():
                 if self.winner == 0 :
                     if self.names[0] == "Default" :
                         self.names = ("Joueur 1",self.names[1])
-                    if str(self.game.Char_P1) == "Spamton" :
-                        self.game.Char_P1 = "[[SPAMTON G. SPAMTON]]"
+                    #if str(self.game.Char_P1) == "Spamton" :
+                    #    self.game.Char_P1 = "[[SPAMTON G. SPAMTON]]"
                     Texte(f"{self.names[0].upper()}",("consolas",90,True,False),(0,0,0),width/2,250).draw(win)
                     Texte(f"avec",("consolas",70,False,True),(0,0,0),width/2,310).draw(win)
                     Texte(f"{str(self.game.Char_P1).upper()}",("consolas",90,True,False),(0,0,0),width/2,370).draw(win)
                 if self.winner == 1 :
                     if self.names[1] == "Default" :
                         self.names = (self.names[0],"Joueur 2")
-                    if str(self.game.Char_P2) == "Spamton" :
-                        self.game.Char_P2 = "[[SPAMTON G. SPAMTON]]"
+                    #if str(self.game.Char_P2) == "Spamton" :
+                    #    self.game.Char_P2 = "[[SPAMTON G. SPAMTON]]"
                     Texte(f"{self.names[1].upper()}",("consolas",90,True,False),(0,0,0),width/2,250).draw(win)
                     Texte(f"avec",("consolas",70,False,True),(0,0,0),width/2,310).draw(win)
                     Texte(f"{str(self.game.Char_P2).upper()}",("consolas",90,True,False),(0,0,0),width/2,370).draw(win)
