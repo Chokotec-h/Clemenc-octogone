@@ -399,10 +399,13 @@ def main():
                             embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
                         if results.winner == 1:
                             embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
+                        if results.winner == -1:
+                            embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[-1]}")
                     window.fill((200, 120, 200))
                     results.draw(window, width, height)
 
                     if results.frame > 300 and convert_inputs(controls[0], joysticks, 0)[6]:
+                        # retour au menu
                         SoundSystem.stop_inst(embient.instance)
                         UIDicoEvent["UI1 forward"].play()
                         # réinitialisation des contrôles
