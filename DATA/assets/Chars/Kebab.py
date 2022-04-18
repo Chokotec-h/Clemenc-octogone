@@ -63,24 +63,24 @@ class Kebab(Char):
                 self.current_sauce = -1
 
         if self.current_sauce == 0 : # Algérienne : damages x2
-            print("Algerienne")
+            #print("Algerienne")
             self.damagemodifier = 2
 
         if self.current_sauce == 1 : # Samouraï : knockback x1.5
-            print("Samourai")
+            #print("Samourai")
             self.knockbackmodifier = 1.5
 
         if self.current_sauce == 2 : # Blanche : superarmor
-            print("Blanche")
+            #print("Blanche")
             self.superarmor = -1
             self.sauces[self.current_sauce] -= 1
 
         if self.current_sauce == 3 : # Moutarde : -5 frames de lag
-            print("Moutarde")
+            #print("Moutarde")
             self.changeframe = -5
 
         if self.current_sauce == 4 : # Américaine : Meilleures caractéristiques aériennes
-            print("Americaine")
+            #print("Americaine")
             self.airspeed = 3
             self.fallspeed = 0.8
             self.fastfallspeed = 1.5
@@ -89,12 +89,12 @@ class Kebab(Char):
             self.doublejumpheight = 16
 
         if self.current_sauce == 5 : # Harissa : Meilleure Vitesse au sol
-            print("Harissa")
+            #print("Harissa")
             self.speed = 3
             self.dashspeed = 5.5
 
         if self.current_sauce == 6 : # BBQ : Airdodge plus rapide et moins de frictions
-            print("BBQ")
+            #print("BBQ")
             self.airdodgespeed = 11
             self.airdodgetime = 1
             self.deceleration = 0.9
@@ -102,7 +102,7 @@ class Kebab(Char):
             self.dashspeed = 2
 
         if self.current_sauce == 7 : # "Tabasco : Meilleur stun
-            print("Tabasco")
+            #print("Tabasco")
             self.stunmodifier = 1.8
 
     def animation_attack(self,attack,inputs,stage,other):
