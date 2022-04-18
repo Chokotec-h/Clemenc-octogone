@@ -12,8 +12,8 @@ saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") 
 
 class Kebab(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.3, dashspeed=2.3, airspeed=1.6, deceleration=0.75, fallspeed=0.3, fastfallspeed=1.3, fullhop=9, shorthop=7,
-                         doublejumpheight=8,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.2, dashspeed=2, airspeed=0.7, deceleration=0.75, fallspeed=0.3, fastfallspeed=1, fullhop=8, shorthop=6,
+                         doublejumpheight=5,airdodgespeed=6,airdodgetime=3,dodgeduration=18)
 
         self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso
         self.doublejump = [False,False,False]   # Possède 3 double sauts
