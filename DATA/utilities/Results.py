@@ -14,7 +14,7 @@ Victorythemes = {
     "Pyro-Aubin":"Lunch",
     "Kebab du dimanche soir":"BDE",
     "Poissonnier":"Poissonier",
-    "Renault":"Renault"
+    "Renault":"SI"
 }
 
 
