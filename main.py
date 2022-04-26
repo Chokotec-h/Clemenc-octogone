@@ -367,6 +367,7 @@ def main():
                     Game.Char_P2.draw(window)
                     Game.Char_P1.draw(window)
 
+                    # Compte à rebours
                     if 3 - round(time.time() - Game.begin_game - 0.2) < 1 and round(
                             time.time() - Game.begin_game) < 5 and not training:
                         if beep < 4:
