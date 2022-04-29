@@ -6,8 +6,8 @@ from math import exp, pi
 
 class Renault(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.7, dashspeed=5, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
-                         doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.7, dashspeed=5, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=14, shorthop=11,
+                         doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
         self.rect = pygame.Rect(100,0,56,144) # Crée le rectangle de perso
 
