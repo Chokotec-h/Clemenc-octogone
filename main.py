@@ -13,7 +13,7 @@ from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 from DATA.utilities.Results import *
 import DATA.utilities.SoundSystem as SoundSystem
-import DATA.utilities.EventsLibs as SFXEvents
+import DATA.utilities.SoundEventsLibs as SFXEvents
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 import DATA.utilities.Game as GameObject
@@ -429,8 +429,8 @@ def main():
                 if not musicplaying:
                     embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
-                
-                if Game.game_running == 29 :
+
+                if Game.game_running == 29:
                     SoundSystem.stop_inst(currentmusic)
 
                 # Réinitialisation de l'écran à chaque frame
@@ -440,7 +440,7 @@ def main():
                 Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
                 confirm = Game.confirm
 
-                SoundSystem.changeGlobalParameter("pause", int(Game.pause))
+                SoundSystem.changeGlobalParameter("pause", int(Game.pause))  # gestion du son de la pause
 
                 if stage.name == "Salle de TP":
                     tremolo = 0
@@ -466,10 +466,13 @@ def main():
         root = tk.Tk()
         root.withdraw()
         message = str(error)
-        messagebox.showerror('Erreur Critique', "Une erreur critique est survenue : \n" + message
-                             + "\nmerci de contacter l'equipe de dévlopement.\n"
-                             + "\nPour plus de detail veuillez consulter : "
-                             + "\nhttps://github.com/Chokotec-h/Clemenc-octogone")
+        messagebox.showerror('Erreur Critique',
+f"""Une erreur critique est survenue :
+{str(error.__class__)[7:-2]} : {message}
+
+merci de contacter l'equipe de dévlopement.
+Pour plus de detail veuillez consulter : 
+https://github.com/Chokotec-h/Clemenc-octogone""")
 
     finally:
         pygame.quit()
