@@ -590,6 +590,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.die < 1:
                 self.die = 30
                 self.damages = 0.
+                SFXDicoEvent['hits']["8bit hit"].play() # Son décès
             if self.die == 1:
                 self.rect.y = -200
                 self.x = 0
