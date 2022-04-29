@@ -429,6 +429,9 @@ def main():
                 if not musicplaying:
                     embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
+                
+                if Game.game_running == 29 :
+                    SoundSystem.stop_inst(currentmusic)
 
                 # Réinitialisation de l'écran à chaque frame
                 window.fill((255, 255, 255))
@@ -458,6 +461,7 @@ def main():
             clock.tick(60)  # FPS
 
     except Exception as error:
+        Menu = "error"
         traceback.print_exc()
         root = tk.Tk()
         root.withdraw()
