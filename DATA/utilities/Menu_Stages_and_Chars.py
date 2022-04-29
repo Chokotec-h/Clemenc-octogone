@@ -32,6 +32,7 @@ class StagesMenu:
 
         # haut/bas/gauche/droite pour naviguer dans le menu
         if input_but_no_repeat(3, controls, joysticks, 0):
+            self.UIDicoEvent["UI1 selection 2"].play()
             if self.focused_button == -1:
                 self.focused_button = 0
             else :
@@ -40,6 +41,7 @@ class StagesMenu:
                     self.focused_button = -1
 
         if input_but_no_repeat(2, controls, joysticks, 0):
+            self.UIDicoEvent["UI1 selection 2"].play()
             if self.focused_button == -1:
                 self.focused_button = len(self.actualstages)-1
             else :
@@ -48,12 +50,14 @@ class StagesMenu:
                     self.focused_button = -1
 
         if input_but_no_repeat(0, controls, joysticks, 0):
+            self.UIDicoEvent["UI1 selection 2"].play()
             if self.focused_button != -1 :
                 self.focused_button -= 1
                 if self.focused_button < 0:
                     self.focused_button = len(self.actualstages)-1
 
         if input_but_no_repeat(1, controls, joysticks, 0):
+            self.UIDicoEvent["UI1 selection 2"].play()
             if self.focused_button != -1 :
                 self.focused_button += 1
                 if self.focused_button > len(self.actualstages)-1:
