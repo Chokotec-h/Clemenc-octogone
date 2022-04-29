@@ -4,14 +4,16 @@
 
 import pygame
 import traceback
+import time
+import tkinter as tk
+from tkinter import messagebox
+
 from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
 from DATA.utilities.Menu_Stages_and_Chars import StagesMenu, CharsMenu
 from DATA.utilities.Results import *
 import DATA.utilities.SoundSystem as SoundSystem
 import DATA.utilities.EventsLibs as SFXEvents
-import time
-
 import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 import DATA.utilities.Game as GameObject
@@ -397,9 +399,11 @@ def main():
                     if results.frame == 1:
                         SoundSystem.stop_inst(embient.instance)
                         if results.winner == 0:
-                            embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
+                            embient.instance = SoundSystem.play_event(
+                                f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
                         if results.winner == 1:
-                            embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
+                            embient.instance = SoundSystem.play_event(
+                                f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
                         if results.winner == -1:
                             embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[-1]}")
                     window.fill((200, 120, 200))
@@ -453,8 +457,15 @@ def main():
             SoundSystem.tick_update()
             clock.tick(60)  # FPS
 
-    except Exception:
+    except Exception as error:
         traceback.print_exc()
+        root = tk.Tk()
+        root.withdraw()
+        message = str(error)
+        messagebox.showerror('Erreur Critique', "Une erreur critique est survenue : \n" + message
+                             + "\nmerci de contacter l'equipe de dévlopement.\n"
+                             + "\nPour plus de detail veuillez consulter : "
+                             + "\nhttps://github.com/Chokotec-h/Clemenc-octogone")
 
     finally:
         pygame.quit()
