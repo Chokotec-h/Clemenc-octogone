@@ -289,6 +289,7 @@ class Game():
                 self.game_running = 180  # attente de 3 secondes
                 pygame.mixer.music.stop()
             if self.game_running > 0:
+                self.UIDicoEvent["UI1 validation"].play() # Fin du match
                 Texte("FIN DU MATCH", ("Arial", 200, True, False), (150, 0, 0), width / 2, height / 2).draw(window)
                 self.game_running -= 1
                 if self.game_running < 1:
