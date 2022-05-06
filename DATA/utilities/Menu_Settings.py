@@ -27,9 +27,11 @@ class SettingsMenu():
         if self.menu == "settings":
             # inputs haut et bas pour se déplacer dans le menu
             if input_but_no_repeat(3, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.focusedbutton += 1
 
             if input_but_no_repeat(2, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.focusedbutton -= 1
 
             self.focusedbutton = self.focusedbutton % 3
@@ -75,9 +77,11 @@ class SettingsMenu():
         if self.menu == "musics":
             # inputs haut et bas pour se déplacer dans le menu
             if input_but_no_repeat(3, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.focusedbutton += 1
 
             if input_but_no_repeat(2, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
                 self.focusedbutton -= 1
 
             self.focusedbutton = self.focusedbutton % 4
@@ -167,12 +171,14 @@ class SettingsMenu():
             if self.commandconfig is None:
                 # Haut/Bas pour se déplacer dans le menu
                 if input_but_no_repeat(3, controls, joysticks, 0):
+                    self.UIDicoEvent["UI1 selection 2"].play()
                     self.focusedbutton += 1
 
                 if input_but_no_repeat(2, controls, joysticks, 0):
+                    self.UIDicoEvent["UI1 selection 2"].play()
                     self.focusedbutton -= 1
                 # bouclage du bouton
-                self.focusedbutton = (self.focusedbutton + 2) % (len(DATA.utilities.commands.commands) - 1) - 2
+                self.focusedbutton = (self.focusedbutton + 2) % (len(DATA.utilities.commands.commands) - 2) - 2
                 # liste des commandes
                 for i, n in enumerate(DATA.utilities.commands.commands):
                     # on ne paramètre pas les configurations par défaut et du menu
@@ -180,7 +186,7 @@ class SettingsMenu():
                         Bouton = Button(n, ("arial", 24, False, False), "./DATA/Images/Menu/Button.png", width / 2,
                                         (i + 1) * 60 - 180, 120, 50)
                         Bouton.resize(Bouton.textobject.width + 20, 50)
-                        if self.focusedbutton == i - 3:
+                        if self.focusedbutton == i - 4:
                             Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                                 self.UIDicoEvent["UI1 forward"].play()
@@ -234,15 +240,20 @@ class SettingsMenu():
                 if self.inputget <= -1:
                     # Haut/Bas/Gauche/Droite pour naviguer dans le menu
                     if input_but_no_repeat(3, controls, joysticks, 0):
+                        self.UIDicoEvent["UI1 selection 2"].play()
                         self.focusedbutton += 1
+                        
 
                     if input_but_no_repeat(2, controls, joysticks, 0):
+                        self.UIDicoEvent["UI1 selection 2"].play()
                         self.focusedbutton -= 1
 
                     if input_but_no_repeat(0, controls, joysticks, 0):
+                        self.UIDicoEvent["UI1 selection 2"].play()
                         self.row -= 1
 
                     if input_but_no_repeat(1, controls, joysticks, 0):
+                        self.UIDicoEvent["UI1 selection 2"].play()
                         self.row += 1
                 # Bouclage de la sélection selon la colonne (donc le nombre de boutons dans la colonne)
                 if self.row == 0:

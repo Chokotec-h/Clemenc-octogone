@@ -231,6 +231,7 @@ def main():
                     if focusedbutton == -1:
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 back"].play()
                             Menu = "title"
                             titleframe = 0
                             musicplaying = False
@@ -467,12 +468,12 @@ def main():
         root.withdraw()
         message = str(error)
         messagebox.showerror('Erreur Critique',
-f"""Une erreur critique est survenue :
-{str(error.__class__)[7:-2]} : {message}
+                            f"""Une erreur critique est survenue :
+                            {str(error.__class__)[7:-2]} : {message}
 
-merci de contacter l'equipe de dévlopement.
-Pour plus de detail veuillez consulter : 
-https://github.com/Chokotec-h/Clemenc-octogone""")
+                            merci de contacter l'equipe de dévlopement.
+                            Pour plus de detail veuillez consulter : 
+                            https://github.com/Chokotec-h/Clemenc-octogone""")
 
     finally:
         pygame.quit()
