@@ -7,6 +7,7 @@ import traceback
 import time
 import tkinter as tk
 from tkinter import messagebox
+import sys
 
 from DATA.assets.Chars.Gregoire import Rayon
 from DATA.utilities.Menu_Settings import SettingsMenu
@@ -462,18 +463,22 @@ def main():
             clock.tick(60)  # FPS
 
     except Exception as error:
+        exc_type, exc_value, exc_tb = sys.exc_info()
+        tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
         Menu = "error"
         traceback.print_exc()
         root = tk.Tk()
         root.withdraw()
-        message = str(error)
         messagebox.showerror('Erreur Critique',
-                            f"""Une erreur critique est survenue :
-                            {str(error.__class__)[7:-2]} : {message}
+f"""Une erreur critique est survenue :
 
-                            merci de contacter l'equipe de dévlopement.
-                            Pour plus de detail veuillez consulter : 
-                            https://github.com/Chokotec-h/Clemenc-octogone""")
+{tb.stack}
+
+{''.join(tb.format_exception_only())}
+
+merci de contacter l'equipe de développement.
+Pour plus de details veuillez consulter : 
+https://github.com/Chokotec-h/Clemenc-octogone""")
 
     finally:
         pygame.quit()
