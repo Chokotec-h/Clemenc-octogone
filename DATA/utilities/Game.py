@@ -8,7 +8,7 @@ from DATA.assets.Misc import *
 from DATA.assets.Chars.Training_Mob import Training
 import time
 
-basetime = 7*60 / 60
+basetime = 7*60 #/ 60
 basestock = 7
 
 class Game():
