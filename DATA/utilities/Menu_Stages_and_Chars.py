@@ -90,6 +90,7 @@ class StagesMenu:
                 # setup du mennu personnage
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.UIDicoEvent["UI1 ready"].play()
+
                     Menu = "game"
                     self.stage = i
             Bouton.draw(window)

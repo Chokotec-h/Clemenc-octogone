@@ -74,10 +74,10 @@ def SFX_init():
         truc[3] = truc[3][:-1]  # NE PAS CHANGER
         folder = truc[2]  # NE  PAS  CHANGER
         song = truc[3][5:]  # NE PAS CHANGER
-        print("Loading Voix:", song)
+        print("Loading Voix:", folder, song)
 
         # builde de dico
-        if folder not in SFXDicoEvent.keys():
+        if folder not in SFXDicoEvent["Voix"].keys():
             SFXDicoEvent["Voix"][folder] = {}
 
         SFXDicoEvent["Voix"][folder][song] = event

@@ -177,6 +177,8 @@ def main():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 validation"].play()
+                            print(UIDicoEvent["Voix"]["Autre"].keys())
+                            UIDicoEvent["Voix"]["Autre"]["Choix"].play()
                             Menu = "to char"
                             Menu_Stages.training = False
                             Menu_Chars.training = False
