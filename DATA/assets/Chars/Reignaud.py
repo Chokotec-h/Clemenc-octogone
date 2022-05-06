@@ -513,7 +513,7 @@ class Mot_invasif():
         self.other = other
         self.own = own
         self.duration=5
-        Texte = choice(["Ressenti","Construction","Subjectif"])
+        Texte = choice(["Ressenti","Construction","Subjectif","Problematique"])
         self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),(32,128))
         self.rect = self.sprite.get_rect()
         self.rect.x = x
