@@ -5,6 +5,7 @@ from DATA.assets.Stages import stages
 import DATA.assets.CharsLoader as Chars
 from DATA.assets.animations import icons64
 
+from DATA.utilities.Voicename import voicename
 
 class StagesMenu:
     def __init__(self, training, UIDicoEvent) -> None:
@@ -189,6 +190,7 @@ class CharsMenu:
         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
             if not self.selected_1:
                 self.UIDicoEvent["UI1 validation"].play()
+                self.UIDicoEvent["Voix"]["Personnages"][voicename[str(Chars.charobjects[chars[self.selectchar_1][self.alt[0]]](0, 0, 0))]].play()
             self.selected_1 = True
         if convert_inputs(controls[0], joysticks, 0)[7]:
             if self.selected_1:
@@ -321,6 +323,7 @@ class CharsMenu:
             if convert_inputs(controls[1], joysticks, 1)[6] and not self.confirm:
                 if not self.selected_2:
                     self.UIDicoEvent["UI1 validation"].play()
+                    self.UIDicoEvent["Voix"]["Personnages"][voicename[str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0, 0, 0))]].play()
                 self.selected_2 = True
             if convert_inputs(controls[1], joysticks, 1)[7]:
                 if self.selected_2:

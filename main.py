@@ -22,6 +22,7 @@ from DATA.utilities.Interface import *
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.functions import *
 from DATA.utilities.commands import *
+from DATA.utilities.Voicename import *
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
@@ -45,7 +46,7 @@ UIDicoEvent = SFXEvents.SFXDicoEvent
 embient = SoundSystem.instance()
 embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
-
+#print(UIDicoEvent["Voix"]["Personnages"])
 ############################################################################################################
 
 def main():
@@ -402,6 +403,11 @@ def main():
                 if Menu == "results":
                     if results.frame == 1:
                         SoundSystem.stop_inst(embient.instance)
+                        if results.winner == -1 :
+                            UIDicoEvent["Voix"]["Autre"]["Terminer"].play() # Egalite
+                        else :
+                            #UIDicoEvent["Voix"]["Autre"]["23 Fin du match"].play() # Le gagnant est
+                            pass
                         if results.winner == 0:
                             embient.instance = SoundSystem.play_event(
                                 f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
@@ -410,6 +416,13 @@ def main():
                                 f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
                         if results.winner == -1:
                             embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[-1]}")
+                    if results.frame == 80 :
+                        
+                        if results.winner == 0 :
+                            UIDicoEvent["Voix"]["Personnages"][voicename[str(results.game.Char_P1)]].play()
+
+                        if results.winner == 1 :
+                            UIDicoEvent["Voix"]["Personnages"][voicename[str(results.game.Char_P2)]].play()
                     window.fill((200, 120, 200))
                     results.draw(window, width, height)
 
