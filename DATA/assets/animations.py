@@ -43,7 +43,7 @@ Nonesprite = {
 
 Reignaud = {
     "idle":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),(21,2,13,34),(40,1,13,35)),2,True),
-    "walk":("./DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/Reignaud/Default/Walk.png",((4,1,15,35),(28,1,17,35),(55,1,19,34),(86,1,13,35),(104,1,14,35),(122,1,16,35)),8,True),
     "run":("./DATA/Images/Sprites/Chars/Reignaud/Default/Run.png",((4,1,15,35),(27,1,18,35),(52,1,24,35),(86,1,13,35),(103,1,15,35),(121,1,19,35)),10,True),
     "jump":("./DATA/Images/Sprites/Chars/Reignaud/Default/Jump.png",((0,5,15,31),(19,3,17,33),(39,2,13,34)),12,False),
     "fall":("./DATA/Images/Sprites/Chars/Reignaud/Default/Jump.png",((57,1,15,35),),1,True),
