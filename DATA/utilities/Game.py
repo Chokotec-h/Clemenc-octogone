@@ -8,7 +8,7 @@ from DATA.assets.Misc import *
 from DATA.assets.Chars.Training_Mob import Training
 import time
 
-basetime = 7*60 / 60
+basetime = 7*60 #/ 60
 basestock = 7
 
 class Game():
@@ -289,7 +289,7 @@ class Game():
                 self.game_running = 180  # attente de 3 secondes
                 self.UIDicoEvent["Voix"]["Autre"]["GAME"].play() # Fin du match
             if self.game_running > 0:
-                Texte("FIN DU MATCH", ("Arial", 200, True, False), (150, 0, 0), width / 2, height / 2).draw(window)
+                Texte("GAME", ("Arial black", 200, True, False), (150, 0, 0), width / 2, height / 2).draw(window)
                 self.game_running -= 1
                 if self.game_running < 1:
                     Play = False

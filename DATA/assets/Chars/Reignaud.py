@@ -254,6 +254,9 @@ class Reignaud(Char):
                     self.lag = 19 # Auto cancel frame 1-16 et 30+, 19 frames de landing lag
 
         if attack == "NeutralAir":
+            if self.frame < 11 :
+                self.animation = "nair"
+                self.animeframe = self.frame
             if self.frame < 10 :
                 self.cancelable = True
             else :

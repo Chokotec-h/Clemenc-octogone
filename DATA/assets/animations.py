@@ -60,6 +60,7 @@ Reignaud = {
     "bair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Bair.png",((1,1,13,35),(21,1,14,35),(42,1,17,35),(64,1,17,35),(83,1,21,35),(108,1,16,35),(131,1,13,35)),12,False),
     "fair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Fair.png",((0,1,14,35),(22,1,17,35),(44,1,13,35),(68,1,15,35),(85,1,14,35)),10,False),
     "uair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Uair.png",((2,1,12,35),(24,1,13,35),(45,1,14,35),(60,1,13,35)),11,False),
+    "nair":("./DATA/Images/Sprites/Chars/Reignaud/Default/Nair.png",((5,4,19,36),(27,4,24,36),(52,4,25,36),(105,0,21,44),(137,0,17,44),(161,0,23,44),(190,0,24,44),(218,0,23,44),(242,0,25,44),(295,0,21,44),(321,0,17,44),(346,0,17,44),(372,0,16,44),(389,0,13,44)),25,False),
     "sideB":("./DATA/Images/Sprites/Chars/Reignaud/Default/SideB.png",((0,1,15,35),(28,1,16,35),(47,1,19,35),(67,1,25,35)),11,False),
     "UpB0":("./DATA/Images/Sprites/Chars/Reignaud/Default/UpB.png",((19,2,17,33),(0,4,16,31),(19,2,17,33),(39,1,13,34)),11,False),
     "UpB1":("./DATA/Images/Sprites/Chars/Reignaud/Default/UpB1.png",((19,2,17,37),(0,4,16,35),(19,2,17,37),(39,1,13,34)),11,False),

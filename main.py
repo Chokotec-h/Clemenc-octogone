@@ -28,6 +28,8 @@ from DATA.utilities.Voicename import *
 ############################################## Initialisation ##############################################
 ############################################################################################################
 
+skip_intro = True
+
 pygame.init()  # Initialisation de pygame
 clock = pygame.time.Clock()  # Horloge
 
@@ -95,12 +97,42 @@ def main():
         titleanimation = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Logo/{i}.png"), (512, 512)) for i in
                           range(37)]
 
+        temp_image = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Intro.png"),(width,height))
+        temp_frames = 0
+
         ################################################################################################################       
 
         """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
         """""""""""""""""""""   INSTRUCTIONS   """""""""""""""""""""
         """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+        SoundSystem.stop_inst(embient.instance)
+        if not skip_intro :
+            # Test voix au lancement parce que rigolo
+            UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
+
+            # Intro  #4fun
+            while temp_frames < 300 :
+                events = pygame.event.get()
+                for e in events:
+                    if e.type == pygame.QUIT:  # Bouton croix en haut à droite de l'écran
+                        return
+                window.fill((0,0,0))
+                temp_frames += 1
+                if temp_frames < 100 :
+                    temp_image.set_alpha(temp_frames*255/100)
+                    
+                if temp_frames > 200 :
+                    temp_image.set_alpha((300-temp_frames)*255/100)
+                window.blit(temp_image,(0,0))
+                pygame.display.flip()
+                SoundSystem.tick_update()
+                clock.tick(60)  # FPS
+        del temp_frames
+        del temp_image
+
+        
+        embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
         # Boucle du programme
         while run:
             # gestion de répétition des touches lorsqu'elles sont maintenues (toutes les 10 frames)
@@ -178,7 +210,6 @@ def main():
                         Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 validation"].play()
-                            print(UIDicoEvent["Voix"]["Autre"].keys())
                             UIDicoEvent["Voix"]["Autre"]["Choix"].play()
                             Menu = "to char"
                             Menu_Stages.training = False
