@@ -38,6 +38,7 @@ joysticks = [pygame.joystick.Joystick(x) for x in range(pygame.joystick.get_coun
 
 for j in joysticks:
     j.init()
+    print(f"Initializing Joystick {j}")
 
 ##########################################################################################################
 
@@ -46,7 +47,6 @@ for j in joysticks:
 UIDicoEvent = SFXEvents.SFXDicoEvent
 
 embient = SoundSystem.instance()
-embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
 
 #print(UIDicoEvent["Voix"]["Personnages"])
 ############################################################################################################
@@ -106,10 +106,9 @@ def main():
         """""""""""""""""""""   INSTRUCTIONS   """""""""""""""""""""
         """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-        SoundSystem.stop_inst(embient.instance)
         if not skip_intro :
             # Test voix au lancement parce que rigolo
-            UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
+            #UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
 
             # Intro  #4fun
             while temp_frames < 300 :

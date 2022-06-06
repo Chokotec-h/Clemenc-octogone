@@ -131,16 +131,18 @@ for s in Balan:
     BalanJ[s] = (Balan[s][0].replace("Default","Jedi"),Balan[s][1],Balan[s][2],Balan[s][3])
 
 Air_President = {
-    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),1,True),
-    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),5,True),
-    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),10,True),
-    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),),1,True),
-    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),),1,True),
-    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/joueur_air_president_idle.png",((3,0,11,32),(19,2,11,30)),1,True),
+    "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),1,True),
+    "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-walk.png",((3,1,13,31),(18,0,14,32),(35,0,13,32),(52,0,12,32),(67,1,13,31),(82,0,14,32),(99,0,13,32),(116,0,12,32)),8,True),
+    "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),10,True),
+    "jump":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),),1,False),
+    "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),),1,True),
+    "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),1,True),
+    "dtilt":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-dtilt.png",((0,1,12,31),(16,1,13,31),(32,2,13,30),(48,1,13,31),(64,1,14,31)),15,False),
 
 }
 
-Spamton = {
+Spamton = Air_President
+"""{
     "idle":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
     "walk":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
     "run":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
@@ -148,7 +150,7 @@ Spamton = {
     "fall":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
     "airdodge":("./DATA/Images/Sprites/Chars/Joueur_de_Air_President/Spamton/spamton_idle.png",((1,1,16,31),(17,2,16,30)),2,True),
 
-}
+}"""
 
 Gregoire = {
     "idle":("./DATA/Images/Sprites/Chars/Gregoire/Default/gregoire_idle.png",((1,0,17,36),(18,1,18,35),(36,0,17,36),(55,1,16,35)),8,True),

@@ -139,6 +139,9 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "DownTilt":
+            if self.frame == 1:
+                self.animation = "dtilt"
+                self.animeframe = 0
             if self.frame == 5 : # Frames 5-10
                 self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/750,9,2,self,False,sound="hits/mini hit"))
             if self.frame > 15: # 5 frames de lag
