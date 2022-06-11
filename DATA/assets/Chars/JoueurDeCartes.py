@@ -25,7 +25,7 @@ class Air_President(Char):
     
     def __str__(self) -> str:
         return "Joueur de Air-President"
-
+ 
     def special(self,inputs): # Spécial
         if self.die :
             self.poutre = False
@@ -80,18 +80,12 @@ class Air_President(Char):
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if self.frame == 24 :
-                self.active_hitboxes.append(Hitbox(24,-32,256,256,0,0,0,0,0,6,self))
-            if self.frame > 24 and self.frame < 30:
-                if not self.active_hitboxes:
-                    if other.grounded :
-                        other.can_act = True
-                        other.inputattack("Jab")
-                        other.attack = "Jab"
-                    else :
-                        other.can_act = True
-                        other.inputattack("NeutralAir")
-                        other.attack = "NeutralAir"
+            if self.frame == 7 :
+                self.active_hitboxes.append(Hitbox(0,-32,24,32,pi/2,4,5.5,1/10,10,6,self))
+                self.active_hitboxes.append(Hitbox(40,40,24,32,pi/2,4,5.5,1/10,10,6,self))
+                self.active_hitboxes.append(Hitbox(-40,40,24,32,pi/2,4,5.5,1/10,10,6,self))
+                self.active_hitboxes.append(Hitbox(32,100,24,32,pi/2,4,5.5,1/10,10,6,self))
+                self.active_hitboxes.append(Hitbox(-32,100,24,32,pi/2,4,5.5,1/10,10,6,self))
             if self.frame > 33: # 3 frames de lag
                 self.attack = None
 

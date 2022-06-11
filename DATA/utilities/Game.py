@@ -47,7 +47,7 @@ class Game():
         ###
 
         # initialisation des vies et du temps
-        self.stock = [7, 7]
+        self.stock = [basestock, basestock]
         self.time_game = basetime
         self.begin_game = time.time()
         self.pause_time = 0
