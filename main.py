@@ -143,7 +143,7 @@ def main():
                 pygame.draw.rect(window, (60, 60, 60), (0, 0, width, resize(0,128,width,height)[1]))
                 pygame.draw.rect(window, (60, 60, 60), (0, height - resize(0,128,width,height)[1], width, resize(0,128,width,height)[1]))
                 # Affichage de la version
-                Texte("1.0.0 beta", ("Arial", 15, True, True), (0, 0, 0), 100, 64, format_="left").draw(window)
+                Texte("1.0.0 release", ("Arial", 15, True, True), (0, 0, 0), 100, 64, format_="left").draw(window)
 
                 key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
