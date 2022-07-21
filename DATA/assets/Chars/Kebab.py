@@ -1,12 +1,12 @@
 from random import random, choice
 from DATA.utilities.Animations import get_sprite
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
+from DATA.utilities.Base_Char import *
 import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
 
 ##### Kebab
-saucesprites = [pygame.image.load(f"./DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
+saucesprites = [pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
 
 
 
@@ -30,6 +30,7 @@ class Kebab(Char):
         self.current_sauce = -1
 
         self.eatleft = 3
+        self.resize_rect()
 
     def __str__(self) -> str:
         return "Kebab du dimanche soir"
@@ -499,7 +500,7 @@ class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
         self.sound = SFXDicoEvent['hits']["other hit"]
         self.sauce = str(own.current_sauce)
-        self.sprite = Sauce[self.sauce]
+        self.sprite = pygame.transform.scale(Sauce[self.sauce],resize(1,1,width,height))
         self.x = own.x
         self.y = own.rect.y
         self.own = own

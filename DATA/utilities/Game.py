@@ -327,10 +327,10 @@ class Game():
                         self.focusedbutton += 1
 
                     # Quitter
-                    Bouton = Button(f"Quitter", ("Arial", 20, False, False), "./DATA/Images/Menu/Button.png", 150,
+                    Bouton = Button(f"Quitter", ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
                                     height / 12, 200, 60)
                     if self.focusedbutton == -1:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             Menu = "to char"
@@ -344,20 +344,20 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton réinitialiser
-                    Bouton = Button("Réinitialiser", ("Arial", 40, False, False), "./DATA/Images/Menu/Button.png", 150,
+                    Bouton = Button("Réinitialiser", ("Arial", 40, False, False), "DATA/Images/Menu/Button.png", 150,
                                     2.5 * height / 12, 200, 60)
                     if self.focusedbutton == 0:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.reset()
                     Bouton.draw(window)
 
                     # Bouton de gestion de DI (Horizontale)
                     Bouton = Button(f"DI Horizontale : {['Aucune', 'Droite', 'Gauche', 'Aléatoire'][self.TrainingHDI]}",
-                                    ("Arial", 20, False, False), "./DATA/Images/Menu/Button.png", 150,
+                                    ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
                                     3.5 * height / 12, 200, 60)
                     if self.focusedbutton == 1:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             self.TrainingHDI += 1
@@ -366,10 +366,10 @@ class Game():
 
                     # Bouton de gestion de DI (Verticale)
                     Bouton = Button(f"DI Verticale : {['Aucune', 'Haut', 'Bas', 'Aléatoire'][self.TrainingVDI]}",
-                                    ("Arial", 20, False, False), "./DATA/Images/Menu/Button.png", 150,
+                                    ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
                                     4.5 * height / 12, 200, 60)
                     if self.focusedbutton == 2:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             self.TrainingVDI += 1
@@ -378,9 +378,9 @@ class Game():
 
                     # Bouton de probabilité de tech
                     Bouton = Button(f"Tech : {['Jamais', '1/2', 'Toujours'][self.Tech]}", ("Arial", 20, False, False),
-                                    "./DATA/Images/Menu/Button.png", 150, 5.5 * height / 12, 200, 60)
+                                    "DATA/Images/Menu/Button.png", 150, 5.5 * height / 12, 200, 60)
                     if self.focusedbutton == 3:
-                        Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.confirm = True
                             self.Tech += 1
@@ -391,10 +391,10 @@ class Game():
                     Texte(f"Dégâts : {round(self.Char_P2.basedamages)}%", ("Arial", 20, False, False), (0, 0, 0), 150,
                           6.5 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (60, 6.5 * height / 12 - 2, 204, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
+                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
                                     self.Char_P2.basedamages / 999 * 200 + 60, 6.5 * height / 12, 12, 12)
                     if self.focusedbutton == 4:
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
                             self.Char_P2.basedamages += 1
                             if self.Char_P2.basedamages > 999:
@@ -415,11 +415,11 @@ class Game():
                     Texte(f"Decéleration : {round(self.deceleration, 2)}", ("Arial", 20, True, False), (0, 0, 0), 150,
                           8 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (40, 8 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
+                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
                                     (self.deceleration - 0.5) * 500 + 40, 8 * height / 12 + 5, 12, 12)
                     if self.focusedbutton == 5:
                         # Compris entre 0.5 et 1
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
                             self.deceleration += 0.005
                             if self.deceleration > 1:
@@ -451,11 +451,11 @@ class Game():
                     Texte(f"Vitesse aérienne : {round(self.airspeed, 1)}", ("Arial", 20, True, False), (0, 0, 0), 150,
                           9 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (40, 9 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
+                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
                                     (self.airspeed - 0.5) / 1.5 * 250 + 40, 9 * height / 12 + 5, 12, 12)
                     if self.focusedbutton == 6:
                         # Compris entre 0.5 et 2
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
                             self.airspeed += 0.05
                             if self.airspeed > 2:
@@ -487,11 +487,11 @@ class Game():
                     Texte(f"Vitesse de chute : {round(self.fallspeed, 1)}", ("Arial", 20, True, False), (0, 0, 0), 150,
                           10 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (40, 10 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
+                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
                                     (self.fallspeed - 0.25) / 1.25 * 250 + 40, 10 * height / 12 + 5, 12, 12)
                     if self.focusedbutton == 7:
                         # Compris entre 0.25 et 1.5
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
                             self.fallspeed += 0.05
                             if self.fallspeed > 1.5:
@@ -523,11 +523,11 @@ class Game():
                     Texte(f"Vitesse de Fastfall : {round(self.fastfallspeed, 1)}", ("Arial", 20, True, False),
                           (0, 0, 0), 150, 11 * height / 12 - 25).draw(window)
                     pygame.draw.rect(window, (10, 10, 10), (40, 11 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
+                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
                                     (self.fastfallspeed - 0.5) / 1.5 * 250 + 40, 11 * height / 12 + 5, 12, 12)
                     if self.focusedbutton == 8:
                         # Compris entre 0.5 et 2
-                        Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                        Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
                             self.fastfallspeed += 0.05
                             if self.fastfallspeed > 2:

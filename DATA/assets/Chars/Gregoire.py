@@ -26,6 +26,7 @@ class Gregoire(Char):
         self.angle_rayon = -pi / 300000
         self.rapidjab = False
         self.strongfair = False
+        self.resize_rect()
 
     def __str__(self) -> str:
         return "Gregoire"
@@ -493,7 +494,7 @@ class Rayon():
 
 
 thundersprite = pygame.transform.scale(
-    pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), (48, 48))
+    pygame.image.load(f"DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), (48, 48))
 
 
 class Thunder():

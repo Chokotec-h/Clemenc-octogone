@@ -17,6 +17,7 @@ class Renault(Char):
         self.player = player
         self.daccord = 0
         self.cling = False
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Renault"
@@ -394,7 +395,7 @@ class Drill():
         self.stun = 12
         self.knockback = 10
         self.damages_stacking = 1/200
-        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Renault/Drill.png")
+        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
     
     def update(self):
@@ -430,7 +431,7 @@ class Gear():
         self.stun = 11
         self.knockback = 10
         self.damages_stacking = 1/200
-        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Renault/Gear.png")
+        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         self.sound = SFXDicoEvent['hits']["hitting metal"]
     

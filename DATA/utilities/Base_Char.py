@@ -3,6 +3,7 @@ from math import atan, cos, sin, pi
 from copy import deepcopy
 import DATA.utilities.SoundSystem as SoundSystem
 import DATA.utilities.SoundEventsLibs as SFXEvents
+from DATA.utilities.functions import *
 
 from DATA.utilities.Animations import get_sprite
 
@@ -30,10 +31,8 @@ class Hitbox():
     def __init__(self, x, y, sizex, sizey, angle, knockback, damages, damage_stacking, stun, duration, own,
                  position_relative=False, deflect=False, modifier=1, boum=0,
                  sound="hits/8bit hit") -> None:
-        self.relativex = x  # Position relative
-        self.relativey = y
-        self.sizex = sizex
-        self.sizey = sizey
+        self.relativex,self.relativey = resize(x,y,width,height)
+        self.sizex,self.sizey = resize(sizex,sizey,width,height)
         self.angle = angle
         self.knockback = knockback
         self.damages = damages
@@ -66,7 +65,7 @@ class Hitbox():
         if sizex < 0:
             x = self.x + self.sizex
             sizex = abs(self.sizex)
-        pygame.draw.rect(window, (255, 0, 0), (x + 800, self.y + 450, sizex, self.sizey))
+        pygame.draw.rect(window, (255, 0, 0), (x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1], sizex, self.sizey))
 
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
@@ -152,6 +151,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.crouch = 0
 
         self.sizescale = 4
+
+    def resize_rect(self):
+        self.rect.w, self.rect.h = resize(self.rect.w, self.rect.h,width,height)
 
     def inputattack(self, attack):
         if self.attack != attack:
@@ -535,8 +537,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vy = 0
 
         # Déplacement
-        self.rect.y += self.vy
-        self.x += round(self.vx)
+        vx,vy = resize(round(self.vx),self.vy,width,height)
+        self.x += vx
+        self.rect.y += vy
+
         if self.airdodge:
             self.vx *= 0.8
         elif (not self.hitstun) and (not self.tumble):
@@ -586,7 +590,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.rect.x = self.x - self.rect.w / 2
         # respawn
         self.die = max(0, self.die - 1)
-        if self.rect.y > 1000 or self.rect.y < -1000 or self.x < -1000 or self.x > 1000:
+        if self.rect.y > resize(0,1000,width,height)[1] or self.rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]:
             if self.die < 1:
                 self.die = 30
                 self.damages = 0.
@@ -600,15 +604,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.hitstun = 0
 
     def draw(self, window):
+        sizescalex,sizescaley = resize(self.sizescale,self.sizescale,width,height)
         drawing_sprite, size, self.animeframe = get_sprite(self.animation, self.name, self.animeframe, self.look_right)
         drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0], size[1], size[2], size[3]),
                                                not self.look_right, False)
-        drawing_sprite = pygame.transform.scale(drawing_sprite, (round(drawing_sprite.get_size()[0] * self.sizescale),
-                                                                 round(drawing_sprite.get_size()[
-                                                                           1] * self.sizescale)))  # Rescale
-        size = [size[0] * self.sizescale, size[1] * self.sizescale, size[2] * self.sizescale,
-                size[3] * self.sizescale]  # Rescale
-        pos = [self.x + 800 - size[2] / 2, self.rect.y - size[3] + self.rect.h + 449]  # Position réelle du sprite
+        drawing_sprite = pygame.transform.scale(drawing_sprite, (round(drawing_sprite.get_size()[0] * sizescalex),
+                                                                 round(drawing_sprite.get_size()[1] * sizescaley)))  # Rescale
+        size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
+                size[3] * sizescaley]  # Rescale
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect.y - size[3] + self.rect.h + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
         if self.show:
             window.blit(drawing_sprite, pos)  # on dessine le sprite
         # self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage

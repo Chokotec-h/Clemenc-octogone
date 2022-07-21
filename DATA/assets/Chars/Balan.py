@@ -20,6 +20,7 @@ class Balan(Char):
         self.x = x
         self.rect.y = y
         self.player = player
+        self.resize_rect()
 
     def __str__(self) -> str:
         return "Balan"
@@ -392,7 +393,7 @@ class Projo_Craie():
         SFXDicoEvent["wooshs"]["mini woosh"].play()
         self.id = id + 1
         self.sprite = pygame.transform.scale(pygame.image.load(
-            "./DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_" + ["blanche", "rouge", "bleue", "verte", "jaune"][
+            "DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_" + ["blanche", "rouge", "bleue", "verte", "jaune"][
                 id] + ".png"), (30, 9))
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
@@ -413,7 +414,7 @@ class Projo_Craie():
     def update(self):
         if self.rect.colliderect(self.stage.mainplat.rect):
             self.sprite = pygame.transform.scale(pygame.image.load(
-                "./DATA/Images/Sprites/Projectiles/Balan/Craies/Explosion_" +
+                "DATA/Images/Sprites/Projectiles/Balan/Craies/Explosion_" +
                 ["blanche", "rouge", "bleue", "verte", "jaune"][self.id - 1] + ".png"), (33, 50))
             self.y -= 3
             self.duration -= 1

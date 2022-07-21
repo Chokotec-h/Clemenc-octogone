@@ -3,6 +3,31 @@ from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.Interface import *
 import pygame
 
+
+def savesettings(musicvolume,soundvolume,width,heigth):
+    with open("DATA/utilities/Settings.txt","w") as settings :
+        settings.write(f"Music :\n"+ 
+        f"musicvolume={musicvolume}\n"+
+        f"soundvolume={soundvolume}\n"+
+        f"\nGraphics :\n"+
+        f"size={width}:{heigth}")
+
+def loadsettings():
+    #try :
+        with open("DATA/utilities/Settings.txt","r") as settings :
+            text = str(settings.read())
+            text = text.split("\n")
+            musicvolume = text[1].split("=")[1]
+            soundvolume = text[2].split("=")[1]
+            size = text[5]
+            size = size.split("=")[1].split(":")
+            size = (int(size[0]),int(size[1]))
+        return int(musicvolume),int(soundvolume),size
+    #except :
+    #    print("EXCEPTION RAISED : COULDN'T LOAD SETTINGS")
+    #    savesettings(100,100,800,600)
+    #    return 100,100,(800,600)
+
 keyrepeat = [[],[]]
 repeat = [[],[]]
 
@@ -88,55 +113,61 @@ def reset_commands(joysticks,commands):
         controls = [commands["Keyboard"],commands["Keyboard"]]
     return controls
 
-bouton = pygame.image.load("./DATA/Images/Menu/Controls/Button.png")
+musicvolume,soundvolume,size = loadsettings()
+width,height = size
+
+
+bouton = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Button.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Button.png").get_size(),width,height))
+
 dpad = {
-    (0,1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-R.png"),
-    (0,-1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-L.png"),
-    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-U.png"),
-    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/D_Pad-D.png"),
+    (0,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-R.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-R.png").get_size(),width,height)),
+    (0,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-L.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-L.png").get_size(),width,height)),
+    (1,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-U.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-U.png").get_size(),width,height)),
+    (1,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-D.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-D.png").get_size(),width,height)),
 }
+
 joy = {
-    (0,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Right.png"),
-    (0,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Left.png"),
-    (1,-1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Up.png"),
-    (1,1):pygame.image.load("./DATA/Images/Menu/Controls/Joy-Down.png"),
+    (0,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Right.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Right.png").get_size(),width,height)),
+    (0,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Left.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Left.png").get_size(),width,height)),
+    (1,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png").get_size(),width,height)),
+    (1,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png").get_size(),width,height)),
 }
 text = ["Gauche","Droite","Haut","Bas","Fullhop","Shorthop","Attaque","Special","Garde","Smash (G)","Smash (D)","Smash (H)","Smash (B)","Taunt (G)","Taunt (D)","Taunt (H)","Taunt (B)","Pause"]
 
-def specialkeysgestion(t,window,x,y,input_,j):
+def specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x):
     size = 55
     if t == "LEFT" :
         t = "<   "
-        Texte("__",("arial",38,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("__",("arial",resize(0,38,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
         size = 38
     if t == "RIGHT" :
         t = "   >"
-        Texte("__",("arial",38,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("__",("arial",resize(0,38,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
         size = 38
     if t == "DOWN" :
-        Texte("|",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("|",("arial",resize(0,40,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
         t = "|"
-        Texte("v",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        Texte("v",("arial",resize(0,40,width,height)[1],True,False),(0,0,0),x+j*modif_x,y+15).draw(window)
         size = 40
     if t == "UP" :
-        Texte("^",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-10).draw(window)
+        Texte("^",("arial",resize(0,40,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-10).draw(window)
         t = "|"
-        Texte("|",("arial",40,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+10).draw(window)
+        Texte("|",("arial",resize(0,40,width,height)[1],True,False),(0,0,0),x+j*modif_x,y+10).draw(window)
         size = 40
     if t == "SPACE" :
         pygame.draw.rect(window,(200,200,200),(x+j*64-42-(len(input_)-1)*32,y-32,84,64))
         size = 30
     if t == "RETURN" :
         t = "__|"
-        Texte("<",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32-24,y+15).draw(window)
+        Texte("<",("arial",resize(0,35,width,height)[1],True,False),(0,0,0),x+j*modif_x-24,y+15).draw(window)
         size = 35
     if t == "ENTER" :
         t = "[ __|]"
-        Texte("<",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32-24,y+15).draw(window)
+        Texte("<",("arial",resize(0,35,width,height)[1],True,False),(0,0,0),x+j*modif_x-24,y+15).draw(window)
         size = 35
     if t == "BACKSPACE" :
         t = "[<   ]"
-        Texte("__",("arial",35,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
+        Texte("__",("arial",resize(0,35,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
         size = 35
     if t == "LEFT CTRL" :
         t = "L_Ctrl"
@@ -174,13 +205,13 @@ def specialkeysgestion(t,window,x,y,input_,j):
         t = "Pause"
         size = 30
     if t == "CAPS LOCK" :
-        Texte("Caps",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
-        Texte("lock",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        Texte("Caps",("arial",resize(0,30,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
+        Texte("lock",("arial",resize(0,30,width,height)[1],True,False),(0,0,0),x+j*modif_x,y+15).draw(window)
         t = ""
         size = 0
     if t == "NUMLOCK" :
-        Texte("Num",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y-15).draw(window)
-        Texte("lock",("arial",30,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y+15).draw(window)
+        Texte("Num",("arial",resize(0,30,width,height)[1],True,False),(0,0,0),x+j*modif_x,y-15).draw(window)
+        Texte("lock",("arial",resize(0,30,width,height)[1],True,False),(0,0,0),x+j*modif_x,y+15).draw(window)
         t = ""
         size = 0
     if t == "HOME" :
@@ -190,33 +221,39 @@ def specialkeysgestion(t,window,x,y,input_,j):
 
     return size,t
 
-def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n):
+def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n,width,height):
     if row_n%2 == 0 :
-        Texte(text[number],("arial",24,True,False),(0,0,0),x-120,y,format_="right").draw(window)
+        Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x-resize(120,0,width,height)[0],y,format_="right").draw(window)
     if row_n%2 == 1 :
-        Texte(text[number],("arial",24,True,False),(0,0,0),x+120,y,format_="left").draw(window)
+        Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x+resize(120,0,width,height)[0],y,format_="left").draw(window)
     if select==number :
-        Bouton = Button("[input]",("arial",24,True,False),"./DATA/Images/Menu/Button.png",x,y,200,70)
+        Bouton = Button("[input]",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
         if focusedbutton == line and row == row_n:
-            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
 
         Bouton.draw(window)
     else :
-        Bouton = Button("",("arial",24,True,False),"./DATA/Images/Menu/Button.png",x,y,200,70)
+        Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
         if focusedbutton == line and row == row_n:
-            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
 
         Bouton.draw(window)
         for j,i in enumerate(input_) :
+            modif_x = j*resize(64,0,width,height)[0]-(len(input_)-1)*resize(32,0,width,height)[0]
+            withdraw_x = resize(32,0,width,height)[0]
+            withdraw_y = resize(32,0,width,height)[0]
             if i[0] == "Button" :
-                window.blit(bouton,(x+j*64-32-(len(input_)-1)*32,y-32))
-                Texte(str(i[1]),("arial",55,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y).draw(window)
+                window.blit(bouton,(x+j*modif_x-withdraw_x,y-withdraw_y))
+                Texte(str(i[1]),("arial",resize(0,55,width,height)[1],True,False),(0,0,0),x+j*modif_x,y).draw(window)
             if i[0] == "D-Pad" :
-                window.blit(dpad[(i[2],i[3])],(x+j*64-32-(len(input_)-1)*32,y-32))
+                window.blit(dpad[(i[2],i[3])],(x+modif_x-withdraw_x,y-withdraw_y))
             if i[0] == "Joy" :
-                window.blit(joy[(i[1]%2,i[2])],(x+j*64-32-(len(input_)-1)*32,y-32))
+                window.blit(joy[(i[1]%2,i[2])],(x+modif_x-withdraw_x,y-withdraw_y))
             if i[0] == "Keyboard" :
-                pygame.draw.rect(window,(200,200,200),(x+j*64-30-(len(input_)-1)*32,y-32,60,64))
+                pygame.draw.rect(window,(200,200,200),(x+modif_x-withdraw_x,
+                                y-withdraw_y,resize(60,64,width,height)[0],resize(60,64,width,height)[1]))
                 t = pygame.key.name(i[1]).upper()
-                size,t = specialkeysgestion(t,window,x,y,input_,j)
-                Texte(t,("arial",size,True,False),(0,0,0),x+j*64-(len(input_)-1)*32,y).draw(window)
+                size,t = specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x)
+                Texte(t,("arial",resize(0,size,width,height)[1],True,False),(0,0,0),
+                    x+modif_x,
+                    y).draw(window)

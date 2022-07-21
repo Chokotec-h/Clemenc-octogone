@@ -19,6 +19,7 @@ class Rey(Char):
         self.player = player
         self.foodvy = 0
         self.door = None
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Rey"
@@ -344,7 +345,7 @@ class Rey(Char):
 """ Projectiles """
 ###################
 
-doorsprites = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
+doorsprites = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
@@ -358,7 +359,7 @@ class Door():
         self.knockback = 0
         self.damages_stacking = 0
         self.angle = 0
-        self.sprite = pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
+        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
         self.duration = 7
         self.rect = pygame.Rect(0,0,0,0)
 

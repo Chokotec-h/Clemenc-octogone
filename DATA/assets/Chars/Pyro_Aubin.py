@@ -27,6 +27,7 @@ class Pyro_Aubin(Char):
         self.hold = 0
         self.turnaround = 0
         self.sizescale = 2.5
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
@@ -556,7 +557,7 @@ class Pyro_Aubin(Char):
             x = 1066
         
         for i,key in enumerate(self.konami) :
-            window.blit(pygame.image.load(f"./DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
+            window.blit(pygame.image.load(f"DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
         pygame.draw.rect(window,(0,0,0),(x,770,100,20))
         pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
         Texte(str(floor(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
@@ -564,7 +565,7 @@ class Pyro_Aubin(Char):
 """ Projectiles """
 ###################
 
-boulet = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
+boulet = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
@@ -605,7 +606,7 @@ class Boulet():
     def draw(self,window):
         window.blit(boulet, (self.x+800,self.y+450)) # on dessine le sprite
 
-fusee = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
+fusee = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
@@ -687,7 +688,7 @@ class Fusee():
         self.done = True
         self.frame = 0
 
-grenade = pygame.image.load("./DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
+grenade = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
 
 class Grenade():
     def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
@@ -757,7 +758,7 @@ class Explosion():
         self.stun = stun
         self.damages_stacking = damages_stacking
         self.size = size
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(size,size))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(size,size))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         self.duration = 10
 
@@ -769,7 +770,7 @@ class Explosion():
     def update(self):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         print(spritenumber)
-        self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
+        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         

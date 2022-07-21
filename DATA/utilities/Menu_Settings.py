@@ -3,9 +3,8 @@ from DATA.utilities.Interface import *
 from DATA.utilities.Entry import TextInput
 import DATA.utilities.commands
 
-
 class SettingsMenu():
-    def __init__(self, UIDicoEvent) -> None:
+    def __init__(self, UIDicoEvent, width, height) -> None:
         self.menu = "settings"
         self.focusedbutton = 0
         self.row = 0
@@ -14,11 +13,21 @@ class SettingsMenu():
         self.inputget = -1
         self.getting = list()
         self.name = ""
+        self.formatlist = [(800,450),(1024,576),(1280,720),(1600,900),(1920,1080)]
         self.UIDicoEvent = UIDicoEvent
+        self.formatnumber = 0
+        self.width = width
+        self.height = height
 
     def update(self, window, width, height, events, controls, joysticks, musicvolume, soundvolume):
+        for i,s in enumerate(self.formatlist) :
+            if self.width == s[0] and self.height == s[1]:
+                self.formatnumber = i
+        changescreen = False
         oldmusicvolume = musicvolume
         oldsoundvolume = soundvolume
+        oldwidth = width
+        oldheight = height
 
         if not convert_inputs(controls[0], joysticks, 0)[6]:
             self.confirm = False
@@ -34,13 +43,13 @@ class SettingsMenu():
                 self.UIDicoEvent["UI1 selection 2"].play()
                 self.focusedbutton -= 1
 
-            self.focusedbutton = self.focusedbutton % 3
+            self.focusedbutton = self.focusedbutton % 4
 
             # Bouton "Paramètres audio"
-            Bouton = Button("Paramètres audio", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", width / 2,
-                            height / 3, 600, 100)
+            Bouton = Button("Paramètres audio", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
+                            height / 4, resize(600,100,width,height))
             if self.focusedbutton == 0:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.UIDicoEvent["UI1 forward"].play()
                     self.menu = "musics"
@@ -50,11 +59,25 @@ class SettingsMenu():
                     self.confirm = True
             Bouton.draw(window)
 
-            # Bouton "Controles"
-            Bouton = Button("Configuration des contrôles", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png",
-                            width / 2, 2 * height / 3, 600, 100)
+            # Bouton "Paramètres graphiques"
+            Bouton = Button("Paramètres graphiques", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
+                            2*height / 4, resize(600,100,width,height))
             if self.focusedbutton == 1:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 forward"].play()
+                    self.menu = "graphics"
+                    oldheight = height
+                    oldwidth = width
+                    self.focusedbutton = 0
+                    self.confirm = True
+            Bouton.draw(window)
+
+            # Bouton "Controles"
+            Bouton = Button("Configuration des contrôles", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png",
+                            width / 2, 3 * height / 4, resize(600,100,width,height))
+            if self.focusedbutton == 2:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.menu = "commands"
                     self.focusedbutton = 0
@@ -62,9 +85,10 @@ class SettingsMenu():
             Bouton.draw(window)
 
             # Retour
-            Bouton = Button("<--", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", 100, 850, 100, 60)
-            if self.focusedbutton == 2:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+            Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, 
+                    height - resize(0,50,width,height)[1], resize(100,60,width,height))
+            if self.focusedbutton == 3:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.UIDicoEvent["UI1 back"].play()
                     Menu = "main"
@@ -72,7 +96,7 @@ class SettingsMenu():
             Bouton.draw(window)
 
         ######################################################################################################
-        ##########################################  Menu commandes  ##########################################
+        ##########################################  Menu musiques  ##########################################
 
         if self.menu == "musics":
             # inputs haut et bas pour se déplacer dans le menu
@@ -90,12 +114,12 @@ class SettingsMenu():
 
             Texte(f"Volume musique : {round(musicvolume * 100)}%", ("Arial", 20, True, False), (0, 0, 0), width / 2,
                   height / 3 - 25).draw(window)
-            pygame.draw.rect(window, (10, 10, 10), (width / 2 - 122, height / 3, 254, 4))
-            Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
-                            (musicvolume) * 250 + width / 2 - 125, height / 3, 12, 12)
+            pygame.draw.rect(window, (10, 10, 10), (width / 2 - resize(0,122,width,height)[1], height / 3, resize(254,0,width,height)[0], 4))
+            Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
+                            (musicvolume) * 250 + width / 2 - resize(0,125,width,height)[1], height / 3, (12,12))
             if self.focusedbutton == 0:
                 # Compris entre 0.5 et 1
-                Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[1]:
                     musicvolume += 0.01
                     if musicvolume > 1:
@@ -110,12 +134,12 @@ class SettingsMenu():
 
             Texte(f"Volume sons : {round(soundvolume * 100)}%", ("Arial", 20, True, False), (0, 0, 0), width / 2,
                   2 * height / 3 - 25).draw(window)
-            pygame.draw.rect(window, (10, 10, 10), (width / 2 - 122, 2 * height / 3, 254, 4))
-            Bouton = Button(f"", ("Arial", 20, False, False), "./DATA/Images/Menu/Slider.png",
-                            (soundvolume) * 250 + width / 2 - 125, 2 * height / 3, 12, 12)
+            pygame.draw.rect(window, (10, 10, 10), (width / 2 - resize(0,122,width,height)[1], 2 * height / 3, resize(254,0,width,height)[0], 4))
+            Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
+                            (soundvolume) * 250 + width / 2 - resize(0,125,width,height)[1], 2 * height / 3, (12, 12))
             if self.focusedbutton == 1:
                 # Compris entre 0.5 et 1
-                Bouton.changeImage("./DATA/Images/Menu/Slider_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[1]:
                     soundvolume += 0.01
                     if soundvolume > 1:
@@ -133,24 +157,23 @@ class SettingsMenu():
             Bouton.draw(window)
 
             # Sauvegarder
-            Bouton = Button("Sauvegarder", ("arial", 40, True, False), "./DATA/Images/Menu/Button.png", 150, 750, 200,
-                            60)
+            Bouton = Button("Sauvegarder", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,150,width,height)[1], 
+                            resize(200,60,width,height))
             if self.focusedbutton == 2:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.UIDicoEvent["UI1 validation"].play()
-                    with open("DATA/utilities/Settings.txt", "w") as settings:
-                        settings.write(
-                            f"Music :\nmusicvolume={round(musicvolume, 2)}\nsoundvolume={round(soundvolume, 2)}\n")
+                    savesettings(musicvolume,soundvolume,width,height)
                     self.menu = "settings"
                     self.focusedbutton = 0
                     self.confirm = True
             Bouton.draw(window)
 
             # Annuler
-            Bouton = Button("Annuler", ("arial", 40, True, False), "./DATA/Images/Menu/Button.png", 150, 850, 200, 60)
+            Bouton = Button("Annuler", ("arial", 40, True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
+                            resize(200,60,width,height))
             if self.focusedbutton == 3:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                     self.UIDicoEvent["UI1 back"].play()
                     soundvolume = oldsoundvolume
@@ -183,10 +206,10 @@ class SettingsMenu():
                 for i, n in enumerate(DATA.utilities.commands.commands):
                     # on ne paramètre pas les configurations par défaut et du menu
                     if n not in ["Keyboard", "Menu", "DefaultKeyboard", "Default"]:
-                        Bouton = Button(n, ("arial", 24, False, False), "./DATA/Images/Menu/Button.png", width/2,
-                                        (i - self.focusedbutton - 4) * 60 + 180, width, 50)
+                        Bouton = Button(n, ("arial", 24, False, False), "DATA/Images/Menu/Button.png", width/2,
+                                        (i - self.focusedbutton - 4) * resize(0,60,width,height)[1] + resize(0,180,width,height)[1], resize(width-10,60,width,height))
                         if self.focusedbutton == i - 4:
-                            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                             if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                                 self.UIDicoEvent["UI1 forward"].play()
                                 self.commandconfig = n
@@ -195,10 +218,10 @@ class SettingsMenu():
                         Bouton.draw(window)
 
                 # Ajout d'un profil
-                Bouton = Button("+", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", width/2,
-                                (-1 - self.focusedbutton) * 60 + 180, width-10, 50)
+                Bouton = Button("+", ("arial", 50, True, False), "DATA/Images/Menu/Button.png", width/2,
+                                (-1 - self.focusedbutton) * resize(0,60,width,height)[1] + resize(0,180,width,height)[1], resize(width-10,60,width,height))
                 if self.focusedbutton == -1:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                         self.UIDicoEvent["UI1 forward"].play()
                         self.commandconfig = 0
@@ -207,10 +230,10 @@ class SettingsMenu():
                 Bouton.draw(window)
 
                 # Retour
-                Bouton = Button("<--", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", width/2,
-                                (-2 - self.focusedbutton) * 60 + 180, width-10, 50)
+                Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width/2,
+                                (-2 - self.focusedbutton) * resize(0,60,width,height)[1] + resize(0,180,width,height)[1], resize(width-10,60,width,height))
                 if self.focusedbutton == -2:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                         self.UIDicoEvent["UI1 back"].play()
                         self.menu = "settings"
@@ -225,9 +248,9 @@ class SettingsMenu():
                 Entry = TextInput(self.name)
                 enter = Entry.update(events)
                 self.name = Entry.get_text()
-                Texte("Enter name :  " + Entry.get_text(), ("arial", 30, False, False), (0, 0, 0), width / 2,
+                Texte("Enter name :  " + Entry.get_text(), ("arial", resize(30,0,width,height)[0], False, False), (0, 0, 0), width / 2,
                       height / 2).draw(window)
-                Texte("<A/Enter to self.confirm>", ("arial", 30, False, False), (0, 0, 0), width / 2,
+                Texte("<A/Enter to self.confirm>", ("arial", resize(30,0,width,height) [0], False, False), (0, 0, 0), width / 2,
                       50 + height / 2).draw(window)
                 if enter:
                     DATA.utilities.commands.commands[self.name] = deepcopy(DATA.utilities.commands.commands["Default"])
@@ -285,7 +308,7 @@ class SettingsMenu():
 
                 # Stick
                 for i, k in enumerate(DATA.utilities.commands.commands[self.commandconfig][0:4]):
-                    draw_input(window, width / 6, (i + 1) * 80, i, k, self.inputget, i, self.focusedbutton, self.row, 0)
+                    draw_input(window, width / 6, (i + 1) * 80, i, k, self.inputget, i, self.focusedbutton, self.row, 0,width,height)
                     if self.focusedbutton == i and self.row == 0:
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.UIDicoEvent["UI1 forward"].play()
@@ -294,7 +317,7 @@ class SettingsMenu():
                 # Jump, Attack, Special, Shield
                 for i, k in enumerate(DATA.utilities.commands.commands[self.commandconfig][4:9]):
                     draw_input(window, 2 * width / 6, (i + 1) * 80, i + 4, k, self.inputget, i, self.focusedbutton,
-                               self.row, 1)
+                               self.row, 1,width,height)
                     if self.focusedbutton == i and self.row == 1:
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.UIDicoEvent["UI1 forward"].play()
@@ -303,7 +326,7 @@ class SettingsMenu():
                 # C-Stick
                 for i, k in enumerate(DATA.utilities.commands.commands[self.commandconfig][9:13]):
                     draw_input(window, 4 * width / 6, (i + 1) * 80, i + 9, k, self.inputget, i, self.focusedbutton,
-                               self.row, 2)
+                               self.row, 2,width,height)
                     if self.focusedbutton == i and self.row == 2:
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.UIDicoEvent["UI1 forward"].play()
@@ -312,20 +335,20 @@ class SettingsMenu():
                 # D-Pad + Pause
                 for i, k in enumerate(DATA.utilities.commands.commands[self.commandconfig][13:]):
                     draw_input(window, 5 * width / 6, (i + 1) * 80, i + 13, k, self.inputget, i, self.focusedbutton,
-                               self.row, 3)
+                               self.row, 3,width,height)
                     if self.focusedbutton == i and self.row == 3:
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                             self.UIDicoEvent["UI1 forward"].play()
                             self.inputget = i + 13
                             self.confirm = True
                 # Sauvegarde
-                Bouton = Button("Sauvegarder", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", 200, 850,
-                                250, 60)
+                Bouton = Button("Sauvegarder", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 200, height-resize(0,150,width,height)[1],
+                                resize(250,60,width,height))
                 if self.focusedbutton == -1 and self.row % 2 == 0:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                         self.UIDicoEvent["UI1 validation"].play()
-                        with open("./DATA/utilities/commands.py", "w") as commandfile:
+                        with open("DATA/utilities/commands.py", "w") as commandfile:
                             commandfile.write("commands = {\n")
                             for k in DATA.utilities.commands.commands:
                                 commandfile.write(f'\t"{k}":{DATA.utilities.commands.commands[k]},\n')
@@ -337,14 +360,14 @@ class SettingsMenu():
                 Bouton.draw(window)
 
                 # Suppression
-                Bouton = Button("Supprimer", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", 1450, 850,
-                                200, 60)
+                Bouton = Button("Supprimer", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width-resize(250,0,width,height)[0], height-resize(0,50,width,height)[1],
+                                resize(200,60,width,height))
                 if self.focusedbutton == -1 and self.row % 2 == 1:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                         self.UIDicoEvent["UI1 forward"].play()
                         del DATA.utilities.commands.commands[self.commandconfig]
-                        with open("./DATA/utilities/commands.py", "w") as commandfile:
+                        with open("DATA/utilities/commands.py", "w") as commandfile:
                             commandfile.write("commands = {\n")
                             for k in DATA.utilities.commands.commands:
                                 commandfile.write(f'\t"{k}":{DATA.utilities.commands.commands[k]},\n')
@@ -354,4 +377,72 @@ class SettingsMenu():
                         self.confirm = True
                         self.focusedbutton = 0
                 Bouton.draw(window)
-        return Menu  # , musicvolume, soundvolume
+
+        ######################################################################################################
+        ##########################################  Menu musiques  ##########################################
+
+        if self.menu == "graphics":
+            # inputs haut et bas pour se déplacer dans le menu
+            if input_but_no_repeat(3, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
+                self.focusedbutton += 1
+
+            if input_but_no_repeat(2, controls, joysticks, 0):
+                self.UIDicoEvent["UI1 selection 2"].play()
+                self.focusedbutton -= 1
+
+            self.focusedbutton = self.focusedbutton % 3
+            
+
+            Texte("Format : ", ("arial", resize(0,40,width,height)[1], True, False), (0,0,0), 4*width/9,height/2)
+            Bouton = Button(f"{self.width}x{self.height}", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 5*width/9, height/2, 
+                            resize(200,60,width,height))
+            if self.focusedbutton == 0 :
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                if input_but_no_repeat(0, controls, joysticks, 0):
+                    self.UIDicoEvent["UI1 validation"].play()
+                    self.formatnumber = self.formatnumber - 1
+                    if self.formatnumber < 0:
+                        self.formatnumber = len(self.formatlist) - 1
+                    self.width,self.height = self.formatlist[self.formatnumber]
+
+                if input_but_no_repeat(1, controls, joysticks, 0) or input_but_no_repeat(5, controls, joysticks, 0) :
+                    self.UIDicoEvent["UI1 validation"].play()
+                    self.formatnumber = self.formatnumber + 1
+                    if self.formatnumber >= len(self.formatlist):
+                        self.formatnumber = 0
+                    self.width,self.height = self.formatlist[self.formatnumber]
+            Bouton.draw(window)
+
+            # Sauvegarder
+            Bouton = Button("Sauvegarder", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,150,width,height)[1], 
+                            resize(200,60,width,height))
+            if self.focusedbutton == 1:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 validation"].play()
+                    width = self.width
+                    height = self.height
+                    savesettings(musicvolume,soundvolume,width,height)
+                    self.menu = "settings"
+                    self.focusedbutton = 0
+                    self.confirm = True
+                    changescreen = True
+            Bouton.draw(window)
+
+            # Annuler
+            Bouton = Button("Annuler", ("arial", 40, True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
+                            resize(200,60,width,height))
+            if self.focusedbutton == 2:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 back"].play()
+                    self.width = oldwidth
+                    self.height = oldheight
+                    # DATA.utilities.Sound_manager.soundvolume = soundvolume
+                    self.menu = "settings"
+                    self.focusedbutton = 0
+                    self.confirm = True
+            Bouton.draw(window)
+            
+        return Menu, width, height, changescreen  # , musicvolume, soundvolume

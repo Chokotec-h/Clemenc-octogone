@@ -68,25 +68,25 @@ class StagesMenu:
         self.focused_button = ((self.focused_button + 1) % (len(self.actualstages) + 1)) - 1
 
         # retour
-        Bouton = Button("<--", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png", 100, 850, 100, 60)
+        Bouton = Button("<--", ("arial", 50, True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], resize(100,60,width,height))
         if self.focused_button == -1:
-            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
             if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                 self.UIDicoEvent["UI1 back"].play()
                 Menu = "to char"
                 self.confirm = True
         else:
             # Affichage du nom du stage sélectionné
-            Texte(self.actualstages[self.focused_button], ("arial", 50, True, False), (0, 0, 0), 30, height // 2,
+            Texte(self.actualstages[self.focused_button], ("arial", resize(0,50,width,height)[1], True, False), (0, 0, 0), 30, height // 2,
                   format_="left").draw(window)
         Bouton.draw(window)
 
         # Boutons de sélection du stage
         for i in range(len(self.actualstages)):
-            Bouton = Button("", ("arial", 50, True, False), "./DATA/Images/Menu/Button.png",
-                            ((i % 5) * 250) + 450, (i // 5 * 250) + 200, 225, 225)
+            Bouton = Button("", ("arial", 50, True, False), "DATA/Images/Menu/Button.png",
+                            ((i % 5) * resize(250,0,width,height)[0]) + resize(450,0,width,height)[0], (i // 5 * resize(0,250,width,height)[1]) + resize(0,200,width,height)[1], resize(225,225,width,height))
             if self.focused_button == i:
-                Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
 
                 # setup du mennu personnage
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -97,16 +97,16 @@ class StagesMenu:
             Bouton.draw(window)
             # image du stage
             window.blit(pygame.transform.scale(
-                pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), (216, 216)),
-                ((i % 5 * 250) - 108 + 450, (i // 5 * 250) - 108 + 200))
+                pygame.image.load(f"DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), resize(216,216,width,height)),
+                ((i % 5 * resize(250,0,width,height)[0]) - resize(108,0,width,height)[0] + resize(450,0,width,height)[0], (i // 5 * resize(0,250,width,height)[1]) - resize(0,108,width,height)[1] + resize(0,200,width,height)[1]))
         
         if self.focused_button == -1 :
-            stage_sprite = pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
-            pygame.draw.rect(window,(0,0,0),(50,height//4,stage_sprite.get_size()[0]*0.66, stage_sprite.get_size()[1]*0.66))
+            stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
+            pygame.draw.rect(window,(0,0,0),(resize(50,0,width,height)[0],height//4,stage_sprite.get_size()[0]*resize(0.66,0,width,height)[0], stage_sprite.get_size()[1]*resize(0,0.66,width,height)[1]))
         else:
-            stage_sprite = pygame.image.load(f"./DATA/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
-            window.blit(pygame.transform.scale(stage_sprite, (stage_sprite.get_size()[0]*0.66, stage_sprite.get_size()[1]*0.66)),
-                (50, height//4))
+            stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
+            window.blit(pygame.transform.scale(stage_sprite, (stage_sprite.get_size()[0]*resize(0.66,0,width,height)[0], stage_sprite.get_size()[1]*resize(0,0.66,width,height)[1])),
+                (resize(50,0,width,height)[0], height//4))
         return Menu
 
 
@@ -142,20 +142,21 @@ class CharsMenu:
             self.confirm = False
 
         # retour
-        Bouton = Button("", ("arial", 30, True, False), "./DATA/Images/Menu/Button.png", width / 2, 40, 100, 60)
+        Bouton = Button("", ("arial", 30, True, False), "DATA/Images/Menu/Button.png", width / 2, 40, resize(100,60,width,height))
         # le retour se fait en maintenant le bouton B
         if not convert_inputs(controls[0], joysticks, 0)[7]:
             self.b = 0
         else:
             self.b += 1
         if self.b > 0:
-            Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
         if self.b >= 10:
             self.UIDicoEvent["UI1 back"].play()
             Menu = "main"
         Bouton.draw(window)
         Texte("<--", ("arial", 30, True, False), (0, 0, 0), width / 2, 25).draw(window)
-        Texte("(B)", ("arial", 30, True, False), (0, 0, 0), width / 2, 50).draw(window)
+        key = "B" if len(joysticks) > 0 else "X"
+        Texte(f"({key})", ("arial", 30, True, False), (0, 0, 0), width / 2, 50).draw(window)
 
         # Haut/Bas pour choisir un personnage
         if convert_inputs(controls[0], joysticks, 0)[3] and not self.selected_1 and self.scroll1 == self.selectchar_1:
@@ -204,35 +205,35 @@ class CharsMenu:
                 # Roulette
                 if i < 5:
                     Bouton = Button("", ("arial", 50, True, False), standard, 0,
-                                    105 * (i - self.scroll1 + len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll1 + len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
                 if len(chars) - i < 5:
                     Bouton = Button("", ("arial", 50, True, False), standard, 0,
-                                    105 * (i - self.scroll1 - len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll1 - len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
-                Bouton = Button("", ("arial", 50, True, False), standard, 0, 105 * (i - self.scroll1 + 4), 384, 100)
+                Bouton = Button("", ("arial", 50, True, False), standard, 0, resize(0,105,width,height)[1] * (i - self.scroll1 + 4), resize(384,100,width,height))
                 if self.selectchar_1 == i:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                    Bouton.resize(400, 100)
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
             for i in range(len(chars)):
                 # icones sur la roulette
                 if self.selectchar_1 == i:
-                    window.blit(icons64[chars[i][self.alt[0]]], (64, 105 * (i - self.scroll1 + 4) - 32))
+                    window.blit(icons64[chars[i][self.alt[0]]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 if i < 5:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4 + len(chars)) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
                 if len(chars) - i < 5:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4 - len(chars)) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
 
             ### Interface personnages P2
             # Pandapluche (Peluche Panda des A-L)
-            Bouton = Button("", ("arial", 50, True, False), standard, width, height / 2, 384, 100)
+            Bouton = Button("", ("arial", 50, True, False), standard, width, height / 2, resize(384,100,width,height))
             Bouton.draw(window)
             window.blit(
-                pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Misc/Training/Training_icon.png"),
-                                       (64, 64)), (width - 128, height / 2 - 32))
+                pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Misc/Training/Training_icon.png"),
+                                        resize(64,64,width,height)), (width - 64 - resize(0,64,width,height)[1], height / 2 - resize(0,32,width,height)[1]))
 
         else:
 
@@ -241,52 +242,52 @@ class CharsMenu:
                 # Roulette
                 if i < 4:
                     Bouton = Button("", ("arial", 50, True, False), standard, 0,
-                                    105 * (i - self.scroll1 + len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll1 + len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
                 if i - len(chars) > -5:
                     Bouton = Button("", ("arial", 50, True, False), standard, 0,
-                                    105 * (i - self.scroll1 - len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll1 - len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
-                Bouton = Button("", ("arial", 50, True, False), standard, 0, 105 * (i - self.scroll1 + 4), 384, 100)
+                Bouton = Button("", ("arial", 50, True, False), standard, 0, resize(0,105,width,height)[1] * (i - self.scroll1 + 4), resize(384,100,width,height))
                 if self.selectchar_1 == i:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                    Bouton.resize(400, 100)
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
 
                 ### Interface personnages P2
                 # Roulette
                 if i < 4:
                     Bouton = Button("", ("arial", 50, True, False), standard, width,
-                                    105 * (i - self.scroll2 + len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll2 + len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
                 if i - len(chars) > -5:
                     Bouton = Button("", ("arial", 50, True, False), standard, width,
-                                    105 * (i - self.scroll2 - len(chars) + 4), 384, 100)
+                                    resize(0,105,width,height)[1] * (i - self.scroll2 - len(chars) + 4), resize(384,100,width,height))
                     Bouton.draw(window)
-                Bouton = Button("", ("arial", 50, True, False), standard, width, 105 * (i - self.scroll2 + 4), 384, 100)
+                Bouton = Button("", ("arial", 50, True, False), standard, width, resize(0,105,width,height)[1] * (i - self.scroll2 + 4), resize(384,100,width,height))
                 if self.selectchar_2 == i:
-                    Bouton.changeImage("./DATA/Images/Menu/Button_focused.png")
-                    Bouton.resize(400, 100)
+                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
 
             for i in range(len(chars)):
                 # icones sur la roulette
                 if self.selectchar_1 == i:
-                    window.blit(icons64[chars[i][self.alt[0]]], (64, 105 * (i - self.scroll1 + 4) - 32))
+                    window.blit(icons64[chars[i][self.alt[0]]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 if self.selectchar_2 == i:
-                    window.blit(icons64[chars[i][self.alt[1]]], (width - 128, 105 * (i - self.scroll2 + 4) - 32))
+                    window.blit(icons64[chars[i][self.alt[1]]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (width - 128, 105 * (i - self.scroll2 + 4) - 32))
+                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
 
                 if i - len(chars) > -5:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4 - len(chars)) - 32))
-                    window.blit(icons64[chars[i][0]], (width - 128, 105 * (i - self.scroll2 + 4 - len(chars)) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 - len(chars)) - resize(0,32,width,height)[1]))
 
                 if i < 4:
-                    window.blit(icons64[chars[i][0]], (64, 105 * (i - self.scroll1 + 4 + len(chars)) - 32))
-                    window.blit(icons64[chars[i][0]], (width - 128, 105 * (i - self.scroll2 + 4 + len(chars)) - 32))
+                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 + len(chars)) - resize(0,32,width,height)[1]))
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1], joysticks, 1)[
@@ -335,12 +336,14 @@ class CharsMenu:
             name = "Player 1"
         else:
             name = self.namelist[self.names[0]]
-        Bouton = Button(name, ("arial", 24, True, False), "./DATA/Images/Menu/Button.png", 3 * width / 10, height - 150,
-                        200, 32)
+        Bouton = Button(name, ("arial", 24, True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,150,width,height)[1],
+                        resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
         try:
             convert_inputs(commands[self.namelist[self.names[0]]], joysticks, 0)
+            if self.names[0] == 1:
+                self.names[0] += self.movename1
         except:
             self.names[0] += self.movename1
             if self.names[0] >= len(self.namelist):
@@ -366,12 +369,14 @@ class CharsMenu:
             name = "Player 2"
         else:
             name = self.namelist[self.names[1]]
-        Bouton = Button(name, ("arial", 24, True, False), "./DATA/Images/Menu/Button.png", 7 * width / 10, height - 150,
-                        200, 32)
+        Bouton = Button(name, ("arial", 24, True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,150,width,height)[1],
+                        resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
         try:
             convert_inputs(commands[self.namelist[self.names[1]]], joysticks, 1)
+            if self.names[1] == 1:
+                self.names[1] += self.movename2
         except:
             self.names[1] += self.movename2
             if self.names[1] >= len(self.namelist):
@@ -415,23 +420,23 @@ class CharsMenu:
         # Affichage si le joueur est prêt
         if self.selected_1:
             pygame.draw.rect(window, (230, 230, 230), (width / 8, height - 120, width / 4, 30))
-            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), width / 4, height - 110, format_="center").draw(window)
+            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), width / 4, height - resize(0,110,width,height)[1], format_="center").draw(window)
         if self.selected_2:
             pygame.draw.rect(window, (230, 230, 230), (5 * width / 8, height - 120, width / 4, 30))
-            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), 3 * width / 4, height - 110, format_="center").draw(
+            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), 3 * width / 4, height - resize(0,110,width,height)[1], format_="center").draw(
                 window)
 
         # Affichage des noms
-        pygame.draw.rect(window, (200, 200, 200), (0, height - 90, width, 90))
-        Texte(str(Chars.charobjects[chars[self.selectchar_1][self.alt[0]]](0, 0, 0)), ("arial", 64, True, False),
-              (0, 0, 0), width / 2 - 30, height - 50, format_="right").draw(window)
+        pygame.draw.rect(window, (200, 200, 200), (0, height - resize(0,90,width,height)[1], width, resize(0,90,width,height)[1]))
+        Texte(str(Chars.charobjects[chars[self.selectchar_1][self.alt[0]]](0, 0, 0)), ("arial", resize(0,64,width,height)[1], True, False),
+              (0, 0, 0), width / 2 - 30, height - resize(0,64,width,height)[1], format_="right").draw(window)
         if self.training:
-            Texte("Pandapluche", ("arial", 64, True, False), (0, 0, 0), width / 2 + 30, height - 50,
+            Texte("Pandapluche", ("arial", resize(0,64,width,height)[1], True, False), (0, 0, 0), width / 2 + 30, height - resize(0,50,width,height)[1],
                   format_="left").draw(window)
         else:
             Texte(str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0, 0, 0)), ("arial", 64, True, False),
-                  (0, 0, 0), width / 2 + 30, height - 50, format_="left").draw(window)
-        Texte("|", ("arial", 80, True, False), (0, 0, 0), width / 2, height - 50, format_="center").draw(window)
+                  (0, 0, 0), width / 2 + 30, height - resize(0,50,width,height)[1], format_="left").draw(window)
+        Texte("|", ("arial", resize(0,80,width,height)[1], True, False), (0, 0, 0), width / 2, height - resize(0,50,width,height)[1], format_="center").draw(window)
         ##
 
         if (self.selected_2 or self.training) and self.selected_1:

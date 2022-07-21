@@ -1,6 +1,6 @@
 
 from DATA.utilities.Animations import get_sprite
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
+from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, sin
 
@@ -22,6 +22,7 @@ class Poissonnier(Char):
         self.damagesdealt = 0
         self.damagestaken = 0
         self.otherdamages = 0
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Poissonnier"
@@ -342,7 +343,7 @@ class Fireball():
         self.x = x-charge/4
         self.y = y-charge/4
         self.vx = signe(own.direction)*20
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(charge),round(charge)))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(charge),round(charge)))
         self.damages_stacking=1/200
         if not own.look_right :
             self.angle = 5*pi/6
@@ -376,7 +377,7 @@ class Smokeball():
         self.y = y
         self.vx = signe(own.direction)*20
         self.vy = (i-16)*5
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/0.png"),(round(30),round(30)))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/0.png"),(round(30),round(30)))
         self.damages_stacking=1/200
         if not own.look_right :
             self.angle = 41*pi/42
@@ -408,7 +409,7 @@ class Surchauffe():
     def __init__(self,x,y,own:Poissonnier):
         self.x = x-150+own.rect.w/2
         self.y = y-150+own.rect.h/2
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Fire/1.png"),(300,300))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(300,300))
         self.damages_stacking=1/180
         if not own.look_right :
             self.angle = 3*pi/4
@@ -427,7 +428,7 @@ class Surchauffe():
 
     def update(self):
         spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
-        self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(300,300))
+        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(300,300))
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
@@ -436,7 +437,7 @@ class Surchauffe():
 
 class Cerveau():
     def __init__(self,own:Poissonnier,other:Char,stage) -> None:
-        self.sprite = pygame.image.load("./DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
+        self.sprite = pygame.image.load("DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
         self.x = own.x
         self.y = own.rect.y
         self.own = own

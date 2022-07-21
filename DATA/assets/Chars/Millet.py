@@ -1,5 +1,5 @@
 from random import randint,choice
-from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent
+from DATA.utilities.Base_Char import *
 import pygame
 from math import pi,cos,sin,asin, sqrt
 import DATA.utilities.Animations as Animations
@@ -23,6 +23,7 @@ class Millet(Char):
         self.angle_rayon = -pi/300000
         self.rapidjab = False
         self.strongfair = False
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Millet"
@@ -405,7 +406,7 @@ class Rayon():
         self.v *= -modifier
 
 
-firesprite = [pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
+firesprite = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
 for i in range(len(firesprite)):
     firesprite[i] = pygame.transform.scale(firesprite[i],(3*firesprite[i].get_size()[0],3*firesprite[i].get_size()[1]))
 

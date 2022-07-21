@@ -19,6 +19,7 @@ class Reignaud(Char):
         self.counter = False
         self.duration_mot_invasif = 0
         self.player = player
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Reignaud"
@@ -517,7 +518,7 @@ class Mot_invasif():
         self.own = own
         self.duration=5
         Texte = choice(["Ressenti","Construction","Subjectif","Problematique"])
-        self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),(32,128))
+        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),(32,128))
         self.rect = self.sprite.get_rect()
         self.rect.x = x
         self.rect.y = y

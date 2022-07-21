@@ -1,5 +1,5 @@
 from DATA.assets.Stages import Stage
-from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
+from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, cos, sin, sqrt
 from random import randint
@@ -22,6 +22,7 @@ class Air_President(Char):
         self.currentblahaj = 0
         self.poutre = False
         self.stage = Stage
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Joueur de Air-President"
@@ -344,7 +345,7 @@ class Carte():
         if number == "R":
             SFXDicoEvent['mincelious']["Its-pronounced-rules"].play()
             self.sound = SFXDicoEvent['hits']["cool hit"]
-            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(48,64))
+            self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
             self.knockback = 1000
             self.damages = 999
             self.stun = 1000
@@ -354,7 +355,7 @@ class Carte():
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
-            self.sprite = pygame.transform.scale(pygame.image.load(f"./DATA/Images/Sprites/Projectiles/Air_President/Cartes/{self.number}.png"),(48,64))
+            self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/{self.number}.png"),(resize(48,64,width,height)))
             self.number = number
             self.angle = angle
             self.knockback = (self.number/2+1)*3
@@ -375,14 +376,14 @@ class Carte():
         self.duration = 0
     
     def draw(self,window):
-        window.blit(self.sprite,(self.x+self.own.x+800,self.y+self.own.rect.y+450))
+        window.blit(self.sprite,(self.x+self.own.x+resize(800,0,width,height)[0],self.y+self.own.rect.y+resize(0,450,width,height)[1]))
 
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
         # Blahaj
         SFXDicoEvent['wooshs']["encore un woosh"].play()
         self.sound = SFXDicoEvent['boings']["boing"]
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(72,36))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(resize(72,36,width,height)))
         self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
@@ -438,14 +439,15 @@ class Blahaj():
     def update(self):
         if self.touch_stage(self.stage,self.rect):
             self.duration = 0
-        self.x += round(self.vx)
-        self.y += self.vy
+        vx,vy = resize(self.vx,self.vy,width,height)
+        self.x += round(vx)
+        self.y += vy
         if self.color == "fatty":
             self.vy += 0.7
         else :
             self.vy += 0.4
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.y > 800 :
+        if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
 
     def deflect(self,modifier):
@@ -456,11 +458,11 @@ class Blahaj():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
 
 class Poutre():
     def __init__(self,vx,vy,stage,own:Air_President) -> None:
-        self.sprite = pygame.transform.scale(pygame.image.load("./DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(48,48))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
         self.x = own.x
         self.y = own.rect.y
         self.vx = vx
@@ -487,8 +489,9 @@ class Poutre():
         self.damages = 24
         self.stun = sqrt(self.vx**2+self.vy**2)/3
         self.damages_stacking = 1/500
-        self.x += round(self.vx)
-        self.y += self.vy
+        vx,vy = resize(self.vx,self.vy,width,height)
+        self.x += round(vx)
+        self.y += vy
         self.vy += 1.8
         self.vx *= 0.96
         self.angle = -signe(self.vy)*pi/4
@@ -500,7 +503,7 @@ class Poutre():
             else :
                 self.angle = pi/2
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.y > 800 :
+        if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
         if self.rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
@@ -515,7 +518,7 @@ class Poutre():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
 
 
 class Spamton(Air_President):
