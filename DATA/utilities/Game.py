@@ -125,34 +125,34 @@ class Game():
 
         # Affichage des degats
         self.Char_P1.damages = float(self.Char_P1.damages)
-        Texte(f"{str(round(self.Char_P1.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
+        Texte(f"{str(round(self.Char_P1.damages, 2)).split('.')[0]}  %", ("Arial", resize(0,60,width,height)[1], False, False), (
         255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
-              width // 3, height - 50, 800, format_="left").draw(window)
-        Texte(f".{str(round(self.Char_P1.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
+              width // 3, height - resize(0,50,width,height)[1], 800, format_="left").draw(window)
+        Texte(f".{str(round(self.Char_P1.damages, 2)).split('.')[1]}", ("Arial", resize(0,30,width,height)[1], False, False), (
         255 - (self.Char_P1.damages / 5), max(255 - self.Char_P1.damages, 0), max(255 - self.Char_P1.damages * 2, 0)),
-              width // 3 + len(str(round(self.Char_P1.damages, 2)).split('.')[0]) * 25, height - 30, 800,
+              width // 3 + len(str(round(self.Char_P1.damages, 2)).split('.')[0]) * resize(25,0,width,height)[0], height - resize(0,30,width,height)[1], 800,
               format_="left").draw(window)
 
         self.Char_P2.damages = float(self.Char_P2.damages)
-        Texte(f"{str(round(self.Char_P2.damages, 2)).split('.')[0]}  %", ("Arial", 60, False, False), (
+        Texte(f"{str(round(self.Char_P2.damages, 2)).split('.')[0]}  %", ("Arial", resize(0,60,width,height)[1], False, False), (
         255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
-              2 * width // 3, height - 50, 800, format_="left").draw(window)
-        Texte(f".{str(round(self.Char_P2.damages, 2)).split('.')[1]}", ("Arial", 30, False, False), (
+              2 * width // 3, height - resize(0,50,width,height)[1], 800, format_="left").draw(window)
+        Texte(f".{str(round(self.Char_P2.damages, 2)).split('.')[1]}", ("Arial", resize(0,30,width,height)[1], False, False), (
         255 - (self.Char_P2.damages / 5), max(255 - self.Char_P2.damages, 0), max(255 - self.Char_P2.damages * 2, 0)),
-              2 * width // 3 + len(str(round(self.Char_P2.damages, 2)).split('.')[0]) * 25, height - 30, 800,
+              2 * width // 3 + len(str(round(self.Char_P2.damages, 2)).split('.')[0]) * resize(25,0,width,height)[0], height - resize(0,30,width,height)[1], 800,
               format_="left").draw(window)
 
         # Affichage des vies
         if not self.training:
             for s in range(self.stock[0] // 5 + 1):  # colonnes de 5 icones à côté des dégâts
                 for k in range(min(self.stock[0] - 5 * s, 5)):
-                    window.blit(pygame.transform.scale(icons[self.Char_P1.name], (16, 16)),
-                                (width / 3 - 25 - 20 * s, height - 40 - 20 * k))
+                    window.blit(pygame.transform.scale(icons[self.Char_P1.name], resize(16,16,width,height)),
+                                (width / 3 - resize(25,0,width,height)[0] - resize(20,0,width,height)[0] * s, height - resize(0,40,width,height)[1] - resize(0,20,width,height)[1] * k))
 
             for s in range(self.stock[1] // 5 + 1):
                 for k in range(min(self.stock[1] - 5 * s, 5)):
-                    window.blit(pygame.transform.scale(icons[self.Char_P2.name], (16, 16)),
-                                (2 * width / 3 - 25 - 20 * s, height - 40 - 20 * k))
+                    window.blit(pygame.transform.scale(icons[self.Char_P2.name], resize(16,16,width,height)),
+                                (2 * width / 3 - resize(25,0,width,height)[0] - resize(20,0,width,height)[0] * s, height - resize(0,40,width,height)[1] - resize(0,20,width,height)[1] * k))
 
         #########################################################
 
@@ -243,10 +243,10 @@ class Game():
         elif self.pause:
             self.pause_time += time.time() - self.pausefrom  # gestion du chrono en pause
             self.pausefrom = time.time()
-            pygame.draw.rect(window,(100,100,100),(width // 2-80, height // 2 - 40 , 160, 80))
-            Texte(f"Pause", ("Arial", 60, False, False), (0, 0, 0), width // 2, height // 2, 800).draw(window)
+            pygame.draw.rect(window,(100,100,100),(width // 2-resize(80,0,width,height)[0], height // 2 - resize(0,40,width,height)[1] , resize(160,0,width,height)[0], resize(0,80,width,height)[1]))
+            Texte(f"Pause", ("Arial",  resize(0,60,width,height)[1], False, False), (0, 0, 0), width // 2, height // 2, 800).draw(window)
             if not self.training : 
-                Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", 25, False, False), (0, 0, 0), 40, 40, 800,format_="left").draw(window)
+                Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", resize(0,25,width,height)[1], False, False), (0, 0, 0), resize(40,0,width,height)[0], resize(0,40,width,height)[1], 800,format_="left").draw(window)
                 inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
                 inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
                 if (inputs_1[6] and inputs_1[7] and inputs_1[8]) or (inputs_2[6] and inputs_2[7] and inputs_2[8]):
@@ -260,7 +260,7 @@ class Game():
                     controls = reset_commands(joysticks, commands)
                     clock.tick(10)
             else :
-                Texte(f"Attaque + Spécial + Bouclier pour réinitialiser", ("Arial", 25, False, False), (0, 0, 0), width - 40, 40, 800,format_="right").draw(window)
+                Texte(f"Attaque + Spécial + Bouclier pour réinitialiser", ("Arial", resize(0,25,width,height)[1], False, False), (0, 0, 0), width - resize(40,0,width,height)[0], resize(0,40,width,height)[1], 800,format_="right").draw(window)
 
         ###################### Gestion de la fin de la partie ######################
         if not self.training:
@@ -278,18 +278,18 @@ class Game():
                     s = str(s)
                     if len(s) == 1:
                         s = "0" + str(s)
-                    Texte(f"{str(m)}:{str(s)}'{str(ms)}", ("Arial", 60, True, False), (255, 255, 255), width / 2,
+                    Texte(f"{str(m)}:{str(s)}'{str(ms)}", ("Arial", resize(0,60,width,height)[1], True, False), (255, 255, 255), width / 2,
                           75).draw(window)
                     s = int(s)
                 else:
-                    Texte(f"{str(s)}", ("Arial", 180, True, False), (100, 0, 0), width / 2, height / 2).draw(window)
+                    Texte(f"{str(s)}", ("Arial", resize(0,180,width,height)[1], True, False), (100, 0, 0), width / 2, height / 2).draw(window)
 
             # fin de la partie
             if (m * 60 + s < 1 or min(self.stock) <= 0) and self.game_running < 0:
                 self.game_running = 180  # attente de 3 secondes
                 self.UIDicoEvent["Voix"]["Autre"]["GAME"].play() # Fin du match
             if self.game_running > 0:
-                Texte("GAME", ("Arial black", 200, True, False), (150, 0, 0), width / 2, height / 2).draw(window)
+                Texte("GAME", ("Arial black", resize(0,200,width,height)[1], True, False), (150, 0, 0), width / 2, height / 2).draw(window)
                 self.game_running -= 1
                 if self.game_running < 1:
                     Play = False
@@ -303,18 +303,18 @@ class Game():
             if (inputs_1[6] and inputs_1[7] and inputs_1[8]):
                 self.reset()
             # Combo counter
-            pygame.draw.rect(window, (250, 250, 250), (width - 120, height / 2, 120, 60))
-            Texte(str(self.Char_P2.combo), ("Arial", 40, False, False), (0, 0, 0), width - 80, height / 2 + 25).draw(
+            pygame.draw.rect(window, (250, 250, 250), (width - 120, height / 2, 120, resize(0,60,width,height)[1]))
+            Texte(str(self.Char_P2.combo), ("Arial", resize(0,40,width,height)[1], False, False), (0, 0, 0), width - 80, height / 2 + resize(0,25,width,height)[1]).draw(
                 window)
-            pygame.draw.rect(window, (250, 250, 250), (width - 120, height / 2 + 75, 120, 60))
-            Texte(str(round(self.Char_P2.combodamages, 2)) + "%", ("Arial", 40, False, False), (0, 0, 0), width - 80,
-                  height / 2 + 100).draw(window)
+            pygame.draw.rect(window, (250, 250, 250), (width - 120, height / 2 + resize(0,75,width,height)[1], 120, resize(0,60,width,height)[1]))
+            Texte(str(round(self.Char_P2.combodamages, 2)) + "%", ("Arial", resize(0,40,width,height)[1], False, False), (0, 0, 0), width - 80,
+                  height / 2 + resize(0,100,width,height)[1]).draw(window)
 
             # Menu
             if self.pause:
                 if self.training:
                     # reset des dégâts
-                    pygame.draw.rect(window, (180, 180, 180), (0, 0, 300, height))
+                    pygame.draw.rect(window, (180, 180, 180), (0, 0, resize(300,0,width,height)[0], height))
                     # gestion de la confirmation
                     if not convert_inputs(controls[0], joysticks, 0)[6]:
                         self.confirm = False
@@ -327,8 +327,8 @@ class Game():
                         self.focusedbutton += 1
 
                     # Quitter
-                    Bouton = Button(f"Quitter", ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
-                                    height / 12, 200, 60)
+                    Bouton = Button(f"Quitter", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Button.png", resize(150,0,width,height)[0],
+                                    height / 12, resize(200,60,width,height))
                     if self.focusedbutton == -1:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -344,8 +344,8 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton réinitialiser
-                    Bouton = Button("Réinitialiser", ("Arial", 40, False, False), "DATA/Images/Menu/Button.png", 150,
-                                    2.5 * height / 12, 200, 60)
+                    Bouton = Button("Réinitialiser", ("Arial", resize(0,40,width,height)[1], False, False), "DATA/Images/Menu/Button.png", resize(150,0,width,height)[0],
+                                    2.5 * height / 12, resize(200,60,width,height))
                     if self.focusedbutton == 0:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -354,8 +354,8 @@ class Game():
 
                     # Bouton de gestion de DI (Horizontale)
                     Bouton = Button(f"DI Horizontale : {['Aucune', 'Droite', 'Gauche', 'Aléatoire'][self.TrainingHDI]}",
-                                    ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
-                                    3.5 * height / 12, 200, 60)
+                                    ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Button.png", resize(150,0,width,height)[0],
+                                    3.5 * height / 12, resize(200,60,width,height))
                     if self.focusedbutton == 1:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -366,8 +366,8 @@ class Game():
 
                     # Bouton de gestion de DI (Verticale)
                     Bouton = Button(f"DI Verticale : {['Aucune', 'Haut', 'Bas', 'Aléatoire'][self.TrainingVDI]}",
-                                    ("Arial", 20, False, False), "DATA/Images/Menu/Button.png", 150,
-                                    4.5 * height / 12, 200, 60)
+                                    ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Button.png", resize(150,0,width,height)[0],
+                                    4.5 * height / 12, resize(200,60,width,height))
                     if self.focusedbutton == 2:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -377,8 +377,8 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton de probabilité de tech
-                    Bouton = Button(f"Tech : {['Jamais', '1/2', 'Toujours'][self.Tech]}", ("Arial", 20, False, False),
-                                    "DATA/Images/Menu/Button.png", 150, 5.5 * height / 12, 200, 60)
+                    Bouton = Button(f"Tech : {['Jamais', '1/2', 'Toujours'][self.Tech]}", ("Arial", resize(0,20,width,height)[1], False, False),
+                                    "DATA/Images/Menu/Button.png", resize(150,0,width,height)[0], 5.5 * height / 12, resize(200,60,width,height))
                     if self.focusedbutton == 3:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -388,11 +388,11 @@ class Game():
                     Bouton.draw(window)
 
                     # Bouton de gestion des dégâts
-                    Texte(f"Dégâts : {round(self.Char_P2.basedamages)}%", ("Arial", 20, False, False), (0, 0, 0), 150,
-                          6.5 * height / 12 - 25).draw(window)
-                    pygame.draw.rect(window, (10, 10, 10), (60, 6.5 * height / 12 - 2, 204, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
-                                    self.Char_P2.basedamages / 999 * 200 + 60, 6.5 * height / 12, 12, 12)
+                    Texte(f"Dégâts : {round(self.Char_P2.basedamages)}%", ("Arial", resize(0,20,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0],
+                          6.5 * height / 12 - resize(0,25,width,height)[1]).draw(window)
+                    pygame.draw.rect(window, (10, 10, 10), (resize(60,0,width,height)[0], 6.5 * height / 12 - 2, resize(204,0,width,height)[0], 4))
+                    Bouton = Button(f"", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Slider.png",
+                                    self.Char_P2.basedamages / 999 * resize(200,0,width,height)[0] + resize(60,0,width,height)[0], 6.5 * height / 12, resize(12,12,width,height))
                     if self.focusedbutton == 4:
                         Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[1]:
@@ -407,16 +407,16 @@ class Game():
                     Bouton.draw(window)
 
                     ########################### Gestion des statistiques ###########################
-                    Texte(f"Caractéristiques :", ("Arial black", 24, False, False), (0, 0, 0), 150,
-                          7.5 * height / 12 - 20).draw(window)
+                    Texte(f"Caractéristiques :", ("Arial black", resize(0,24,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0],
+                          7.5 * height / 12 - resize(0,20,width,height)[1]).draw(window)
 
                     #### Décélération 
 
-                    Texte(f"Decéleration : {round(self.deceleration, 2)}", ("Arial", 20, True, False), (0, 0, 0), 150,
-                          8 * height / 12 - 25).draw(window)
-                    pygame.draw.rect(window, (10, 10, 10), (40, 8 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
-                                    (self.deceleration - 0.5) * 500 + 40, 8 * height / 12 + 5, 12, 12)
+                    Texte(f"Decéleration : {round(self.deceleration, 2)}", ("Arial", resize(0,20,width,height)[1], True, False), (0, 0, 0), resize(150,0,width,height)[0],
+                          8 * height / 12 - resize(0,25,width,height)[1]).draw(window)
+                    pygame.draw.rect(window, (10, 10, 10), (resize(40,0,width,height)[0], 8 * height / 12 + 3, resize(254,0,width,height)[0], 4))
+                    Bouton = Button(f"", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Slider.png",
+                                    (self.deceleration - 0.5) * resize(500,0,width,height)[0] + resize(40,0,width,height)[0], 8 * height / 12 + 5, resize(12,12,width,height))
                     if self.focusedbutton == 5:
                         # Compris entre 0.5 et 1
                         Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
@@ -431,8 +431,8 @@ class Game():
                     equal = []
                     # affichage des équivalents personnages
                     for p in Chars.decelerations:
-                        window.blit(pygame.transform.scale(icons[p], (20, 20)),
-                                    ((Chars.decelerations[p] - 0.5) * 500 + 30, 8 * height / 12 + 15))
+                        window.blit(pygame.transform.scale(icons[p], resize(20,20,width,height)),
+                                    ((Chars.decelerations[p] - 0.5) * resize(500,0,width,height)[0] + resize(30,0,width,height)[0], 8 * height / 12 + resize(0,15,width,height)[1]))
                         if abs(self.deceleration - Chars.decelerations[p]) < 0.01 and (not (
                                 convert_inputs(controls[0], joysticks, 0)[1] or
                                 convert_inputs(controls[0], joysticks, 0)[0]) or self.focusedbutton != 5):
@@ -442,17 +442,17 @@ class Game():
                         txt = ""
                         for e in equal:
                             txt += e + "/"
-                        Texte(f"({txt[:-1]})", ("Arial", 15, False, False), (0, 0, 0), 150, 8 * height / 12 - 10).draw(
+                        Texte(f"({txt[:-1]})", ("Arial", resize(0,15,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0], 8 * height / 12 - resize(0,10,width,height)[1]).draw(
                             window)
                     Bouton.draw(window)
 
                     #### Vitesse aérienne 
 
-                    Texte(f"Vitesse aérienne : {round(self.airspeed, 1)}", ("Arial", 20, True, False), (0, 0, 0), 150,
-                          9 * height / 12 - 25).draw(window)
-                    pygame.draw.rect(window, (10, 10, 10), (40, 9 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
-                                    (self.airspeed - 0.5) / 1.5 * 250 + 40, 9 * height / 12 + 5, 12, 12)
+                    Texte(f"Vitesse aérienne : {round(self.airspeed, 1)}", ("Arial", resize(0,20,width,height)[1], True, False), (0, 0, 0), resize(150,0,width,height)[0],
+                          9 * height / 12 - resize(0,25,width,height)[1]).draw(window)
+                    pygame.draw.rect(window, (10, 10, 10), (resize(40,0,width,height)[0], 9 * height / 12 + 3, resize(254,0,width,height)[0], 4))
+                    Bouton = Button(f"", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Slider.png",
+                                    (self.airspeed - 0.5) / 1.5 * resize(250,0,width,height)[0] + resize(40,0,width,height)[0], 9 * height / 12 + 5, resize(12,12,width,height))
                     if self.focusedbutton == 6:
                         # Compris entre 0.5 et 2
                         Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
@@ -467,8 +467,8 @@ class Game():
                     equal = []
                     # affichage des équivalents personnages
                     for p in Chars.airspeeds:
-                        window.blit(pygame.transform.scale(icons[p], (20, 20)),
-                                    ((Chars.airspeeds[p] - 0.5) / 1.5 * 250 + 30, 9 * height / 12 + 15))
+                        window.blit(pygame.transform.scale(icons[p], resize(20,20,width,height)),
+                                    ((Chars.airspeeds[p] - 0.5) / 1.5 * resize(250,0,width,height)[0] + resize(30,0,width,height)[0], 9 * height / 12 + resize(0,15,width,height)[1]))
                         if abs(self.airspeed - Chars.airspeeds[p]) < 0.03 and (not (
                                 convert_inputs(controls[0], joysticks, 0)[1] or
                                 convert_inputs(controls[0], joysticks, 0)[0]) or self.focusedbutton != 6):
@@ -478,17 +478,17 @@ class Game():
                         txt = ""
                         for e in equal:
                             txt += e + "/"
-                        Texte(f"({txt[:-1]})", ("Arial", 15, False, False), (0, 0, 0), 150, 9 * height / 12 - 10).draw(
+                        Texte(f"({txt[:-1]})", ("Arial", resize(0,15,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0], 9 * height / 12 - resize(0,10,width,height)[1]).draw(
                             window)
                     Bouton.draw(window)
 
                     #### Vitesse de chute 
 
-                    Texte(f"Vitesse de chute : {round(self.fallspeed, 1)}", ("Arial", 20, True, False), (0, 0, 0), 150,
-                          10 * height / 12 - 25).draw(window)
-                    pygame.draw.rect(window, (10, 10, 10), (40, 10 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
-                                    (self.fallspeed - 0.25) / 1.25 * 250 + 40, 10 * height / 12 + 5, 12, 12)
+                    Texte(f"Vitesse de chute : {round(self.fallspeed, 1)}", ("Arial", resize(0,20,width,height)[1], True, False), (0, 0, 0), resize(150,0,width,height)[0],
+                          10 * height / 12 - resize(0,25,width,height)[1]).draw(window)
+                    pygame.draw.rect(window, (10, 10, 10), (resize(40,0,width,height)[0], 10 * height / 12 + 3, resize(254,0,width,height)[0], 4))
+                    Bouton = Button(f"", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Slider.png",
+                                    (self.fallspeed - 0.25) / 1.25 * resize(250,0,width,height)[0] + resize(40,0,width,height)[0], 10 * height / 12 + 5, resize(12,12,width,height))
                     if self.focusedbutton == 7:
                         # Compris entre 0.25 et 1.5
                         Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
@@ -503,8 +503,8 @@ class Game():
                     equal = []
                     # affichage des équivalents personnages
                     for p in Chars.fallspeeds:
-                        window.blit(pygame.transform.scale(icons[p], (20, 20)),
-                                    ((Chars.fallspeeds[p] - 0.25) / 1.25 * 250 + 30, 10 * height / 12 + 15))
+                        window.blit(pygame.transform.scale(icons[p], resize(20,20,width,height)),
+                                    ((Chars.fallspeeds[p] - 0.25) / 1.25 * resize(250,0,width,height)[0] + resize(30,0,width,height)[0], 10 * height / 12 + resize(0,15,width,height)[1]))
                         if abs(self.fallspeed - Chars.fallspeeds[p]) < 0.03 and (not (
                                 convert_inputs(controls[0], joysticks, 0)[1] or
                                 convert_inputs(controls[0], joysticks, 0)[0]) or self.focusedbutton != 7):
@@ -514,17 +514,17 @@ class Game():
                         txt = ""
                         for e in equal:
                             txt += e + "/"
-                        Texte(f"({txt[:-1]})", ("Arial", 15, False, False), (0, 0, 0), 150, 10 * height / 12 - 10).draw(
+                        Texte(f"({txt[:-1]})", ("Arial", resize(0,15,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0], 10 * height / 12 - resize(0,10,width,height)[1]).draw(
                             window)
                     Bouton.draw(window)
 
                     #### Vitesse de fastfall 
 
-                    Texte(f"Vitesse de Fastfall : {round(self.fastfallspeed, 1)}", ("Arial", 20, True, False),
-                          (0, 0, 0), 150, 11 * height / 12 - 25).draw(window)
-                    pygame.draw.rect(window, (10, 10, 10), (40, 11 * height / 12 + 3, 254, 4))
-                    Bouton = Button(f"", ("Arial", 20, False, False), "DATA/Images/Menu/Slider.png",
-                                    (self.fastfallspeed - 0.5) / 1.5 * 250 + 40, 11 * height / 12 + 5, 12, 12)
+                    Texte(f"Vitesse de Fastfall : {round(self.fastfallspeed, 1)}", ("Arial", resize(0,20,width,height)[1], True, False),
+                          (0, 0, 0), resize(150,0,width,height)[0], 11 * height / 12 - resize(0,25,width,height)[1]).draw(window)
+                    pygame.draw.rect(window, (10, 10, 10), (resize(40,0,width,height)[0], 11 * height / 12 + 3, resize(254,0,width,height)[0], 4))
+                    Bouton = Button(f"", ("Arial", resize(0,20,width,height)[1], False, False), "DATA/Images/Menu/Slider.png",
+                                    (self.fastfallspeed - 0.5) / 1.5 * resize(250,0,width,height)[0] + resize(40,0,width,height)[0], 11 * height / 12 + 5, resize(12,12,width,height))
                     if self.focusedbutton == 8:
                         # Compris entre 0.5 et 2
                         Bouton.changeImage("DATA/Images/Menu/Slider_focused.png")
@@ -539,8 +539,8 @@ class Game():
                     equal = []
                     # affichage des équivalents personnages
                     for p in Chars.fastfallspeeds:
-                        window.blit(pygame.transform.scale(icons[p], (20, 20)),
-                                    ((Chars.fastfallspeeds[p] - 0.5) / 1.5 * 250 + 30, 11 * height / 12 + 15))
+                        window.blit(pygame.transform.scale(icons[p], resize(20,20,width,height)),
+                                    ((Chars.fastfallspeeds[p] - 0.5) / 1.5 * resize(250,0,width,height)[0] + resize(30,0,width,height)[0], 11 * height / 12 + resize(0,15,width,height)[1]))
                         if abs(self.fastfallspeed - Chars.fastfallspeeds[p]) < 0.03 and (not (
                                 convert_inputs(controls[0], joysticks, 0)[1] or
                                 convert_inputs(controls[0], joysticks, 0)[0]) or self.focusedbutton != 8):
@@ -550,7 +550,7 @@ class Game():
                         txt = ""
                         for e in equal:
                             txt += e + "/"
-                        Texte(f"({txt[:-1]})", ("Arial", 15, False, False), (0, 0, 0), 150, 11 * height / 12 - 10).draw(
+                        Texte(f"({txt[:-1]})", ("Arial", resize(0,15,width,height)[1], False, False), (0, 0, 0), resize(150,0,width,height)[0], 11 * height / 12 - resize(0,10,width,height)[1]).draw(
                             window)
                     Bouton.draw(window)
         #########################################################

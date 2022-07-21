@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, cos, sin, sqrt
 from random import randint
+from DATA.utilities.functions import *
 
 ##### Joueur de Air-Président
 

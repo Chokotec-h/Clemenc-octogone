@@ -4,10 +4,12 @@ from DATA.utilities.Base_Char import *
 import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
+from DATA.utilities.functions import *
 
 ##### Kebab
-saucesprites = [pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/{s}.png") for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
-
+image = pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/Algerienne.png")
+saucesprites = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/{s}.png"),resize(image.get_size()[0],image.get_size()[1],width,height)) for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
+del image
 
 
 class Kebab(Char):
@@ -409,60 +411,63 @@ class Kebab(Char):
 
     def draw(self, window): # Dessine aussi les smashes et la jauge sauce
 
+        modifier = resize(4,0,width,height)[0]
+        sizescalex,sizescaley = resize(self.sizescale,self.sizescale,width,height)
+
         drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
         drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0],size[1],size[2],size[3]),not self.look_right,False)
-        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*self.sizescale),round(drawing_sprite.get_size()[1]*self.sizescale))) # Rescale
-        size = [size[0]*self.sizescale,size[1]*self.sizescale,size[2]*self.sizescale,size[3]*self.sizescale] # Rescale
-        pos = [self.x + 800 - size[2]/2, self.rect.y-size[3]+self.rect.h + 449] # Position réelle du sprite
+        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*sizescalex),round(drawing_sprite.get_size()[1]*sizescaley))) # Rescale
+        size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex, size[3] * sizescaley]  # Rescale
+        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.rect.y-size[3]+self.rect.h + resize(0,450,width,height)[1]-1] # Position réelle du sprite
         if self.show :
             window.blit(drawing_sprite, pos) # on dessine le sprite
         
         if self.attack == "ForwardSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
             drawsmash = Attacks["fsmash"+str(self.current_sauce)+t]
-            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*modifier),round(drawsmash[0].get_size()[1]*modifier))) # Rescale
             size = drawsmash[1][min((self.animeframe-14)//4,len(drawsmash[1])-1)]
-            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            size = [size[0]*modifier,size[1]*modifier,size[2]*modifier,size[3]*modifier] # Rescale
             if not self.look_right :
-                pos[0] -= size[2] - 48
+                pos[0] -= size[2] - resize(48,0,width,height)[0]
             window.blit(drawing_smash, pos,size) # on dessine le sprite
-            pos[0] += 15*signe(self.direction)
+            pos[0] += resize(15,0,width,height)[0]*signe(self.direction)
         
         if self.attack == "UpSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
             drawsmash = Attacks["usmash"+str(self.current_sauce)+t]
-            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*modifier),round(drawsmash[0].get_size()[1]*modifier))) # Rescale
             size = drawsmash[1][min((self.animeframe-14)//4,len(drawsmash[1])-1)]
-            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            size = [size[0]*modifier,size[1]*modifier,size[2]*modifier,size[3]*modifier] # Rescale
             if not self.look_right :
-                pos[0] -= size[2] - 48
-            pos[0] += 40*signe(self.direction)
-            pos[1] -= size[3] - 48
+                pos[0] -= size[2] - resize(48,0,width,height)[0]
+            pos[0] += resize(40,0,width,height)[0]*signe(self.direction)
+            pos[1] -= size[3] - resize(48,0,width,height)[0]
             window.blit(drawing_smash, pos,size) # on dessine le sprite
         
         if self.attack == "DownSmash" and self.animeframe > 6:
             t = "" if self.look_right else "l"
             drawsmash = Attacks["dsmash"+str(self.current_sauce)+t]
-            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*4),round(drawsmash[0].get_size()[1]*4))) # Rescale
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*modifier),round(drawsmash[0].get_size()[1]*modifier))) # Rescale
             size = drawsmash[1][min((self.animeframe-6)//3,len(drawsmash[1])-1)]
-            size = [size[0]*4,size[1]*4,size[2]*4,size[3]*4] # Rescale
+            size = [size[0]*modifier,size[1]*modifier,size[2]*modifier,size[3]*modifier] # Rescale
             if not self.look_right :
-                pos[0] -= size[2] - 48
-            pos[0] += 40*signe(self.direction)
+                pos[0] -= size[2] - resize(48,0,width,height)[0]
+            pos[0] += resize(40,0,width,height)[0]*signe(self.direction)
             pos[1] -= size[3]
             if self.animeframe > 16 :
-                pos[1] += (min(self.animeframe-16,8))*8
+                pos[1] += (min(self.animeframe-16,8))*resize(0,8,width,height)[1]
             window.blit(drawing_smash, pos,size) # on dessine le sprite
         
         if self.attack == "NeutralAir" and self.animeframe < 12:
             drawsmash = Attacks["nair"+str(self.current_sauce)]
-            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*6),round(drawsmash[0].get_size()[1]*6))) # Rescale
+            drawing_smash = pygame.transform.scale(drawsmash[0],(round(drawsmash[0].get_size()[0]*modifier*1.5),round(drawsmash[0].get_size()[1]*modifier*1.5))) # Rescale
             size = drawsmash[1][min((self.animeframe)//2,len(drawsmash[1])-1)]
-            size = [size[0]*6,size[1]*6,size[2]*6,size[3]*6] # Rescale
+            size = [size[0]*modifier*1.5,size[1]*modifier*1.5,size[2]*modifier*1.5,size[3]*modifier*1.5] # Rescale
             if not self.look_right :
-                pos[0] -= size[2] - 48
-            pos[0] -= 20*signe(self.direction)
-            pos[1] -= 24
+                pos[0] -= size[2] - resize(48,0,width,height)[0]
+            pos[0] -= resize(20,0,width,height)[0]*signe(self.direction)
+            pos[1] -= resize(24,0,width,height)[0]
             window.blit(drawing_smash, pos,size) # on dessine le sprite
 
 
@@ -483,15 +488,15 @@ class Kebab(Char):
                 x = 550
             else :
                 x = 1100
-            window.blit(saucesprites[self.current_sauce],(x,750))
-            pygame.draw.rect(window,(0,0,0),(x-1,798,50,5))
-            pygame.draw.rect(window,(200,200,100),(x-1,798,self.sauces[self.current_sauce]/12,5))
+            window.blit(saucesprites[self.current_sauce],resize(x,750,width,height))
+            pygame.draw.rect(window,(0,0,0),(resize(x,0,width,height)[0]-1,resize(0,800,width,height)[1]-2,resize(50,0,width,height)[0],5))
+            pygame.draw.rect(window,(200,200,100),(resize(x,0,width,height)[0]-1,resize(0,800,width,height)[1]-2,resize(self.sauces[self.current_sauce]/12,0,width,height)[0],5))
         if self.attack == "NeutralB":
             for i in range(8):
                 if self.sauces[i] >= 599 :
                     if self.sauce == i :
-                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*75+self.rect.x+800+24,sin(i*2*pi/8)*75+self.rect.y+450+24),30,width=2)
-                    window.blit(saucesprites[i],(cos(i*2*pi/8)*75+self.rect.x+800,sin(i*2*pi/8)*75+self.rect.y+450))
+                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect.x+resize(824,0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect.y+resize(0,474,width,height)[1]),resize(30,0,width,height)[0],width=2)
+                    window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect.x+resize(800,0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect.y+resize(0,450,width,height)[1]))
 ###################          
 """ Projectiles """
 ###################

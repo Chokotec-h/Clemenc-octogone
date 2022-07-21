@@ -1,9 +1,10 @@
 from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent
 import pygame
 from math import pi
+from DATA.utilities.functions import *
 
 exposant_sprite = [
-    pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"), (36, 36)) for
+    pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"), resize(36, 36, width, height)) for
     i in range(5)]
 
 
@@ -394,7 +395,7 @@ class Projo_Craie():
         self.id = id + 1
         self.sprite = pygame.transform.scale(pygame.image.load(
             "DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_" + ["blanche", "rouge", "bleue", "verte", "jaune"][
-                id] + ".png"), (30, 9))
+                id] + ".png"), resize(30, 9,width,height))
         self.rect = self.sprite.get_rect()
         self.x = own.rect.x
         self.y = own.rect.y + own.rect.h // 2
@@ -415,7 +416,7 @@ class Projo_Craie():
         if self.rect.colliderect(self.stage.mainplat.rect):
             self.sprite = pygame.transform.scale(pygame.image.load(
                 "DATA/Images/Sprites/Projectiles/Balan/Craies/Explosion_" +
-                ["blanche", "rouge", "bleue", "verte", "jaune"][self.id - 1] + ".png"), (33, 50))
+                ["blanche", "rouge", "bleue", "verte", "jaune"][self.id - 1] + ".png"), resize(33, 50,width,height))
             self.y -= 3
             self.duration -= 1
             self.vx = 0
@@ -423,8 +424,8 @@ class Projo_Craie():
             self.damages = 2.5
             self.stun = 12
             self.knockback = 5
-        self.x += round(self.vx)
-        self.y += self.vy
+        self.x += resize(round(self.vx),0,width,height)[0]
+        self.y += resize(0,self.vy,width,height)[1]
         self.vy += 0.3
         self.rect = self.sprite.get_rect(topleft=(self.x, self.y))
         self.rect.w *= 1.5  # Rescale
@@ -440,7 +441,7 @@ class Projo_Craie():
         self.angle = pi - self.angle
 
     def draw(self, window):
-        window.blit(self.sprite, (self.x + 800, self.y + 450))  # on dessine le sprite
+        window.blit(self.sprite, (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1]))  # on dessine le sprite
 
 
 class Exposant:
@@ -463,8 +464,8 @@ class Exposant:
 
     def draw(self, window):
         x = self.opponent.rect.x + self.opponent.rect.w
-        y = self.opponent.rect.y - 50
-        window.blit(exposant_sprite[self.duration // 120], (x + 800, y + 450))
+        y = self.opponent.rect.y - resize(0,50,width,height)[1]
+        window.blit(exposant_sprite[self.duration // 120], (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
 
 
 ##### Autres skins

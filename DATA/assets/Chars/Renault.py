@@ -1,6 +1,7 @@
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import exp, pi
+from DATA.utilities.functions import *
 
 ##### Copier
 

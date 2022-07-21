@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent
 import pygame
 from math import pi, cos, sin, asin, sqrt
 import DATA.utilities.Animations as Animations
+from DATA.utilities.functions import *
 
 
 def incertitude(x):
@@ -444,7 +445,7 @@ class Rayon():
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 9 * signe(own.direction)
-        self.rect = pygame.Rect(x - 20, y - 20, 25, 25)
+        self.rect = pygame.Rect(x - resize(20,0,width,height)[0], y - 20, resize(25,0,width,height)[0], 25)
         self.damages_stacking = 1 / 300
         if own.look_right:
             self.angle = pi / 4
@@ -455,8 +456,8 @@ class Rayon():
         self.stun = 4
         self.duration = 10
         self.g = -6.74 / 4
-        nextx = self.x + cos(self.angle_fwd) * self.v
-        nexty = self.y + sin(self.angle_fwd) * self.v + self.g
+        nextx = self.x + resize(cos(self.angle_fwd) * self.v,0,width,height)[0]
+        nexty = self.y + resize(0,sin(self.angle_fwd) * self.v + self.g,width,height)[1]
         self.g += 0.0981
         self.x = nextx
         self.y = nexty
@@ -470,7 +471,7 @@ class Rayon():
         return False
 
     def update(self):
-        nexty = self.y + sin(self.angle_fwd) * self.v + self.g
+        nexty = self.y + resize(0,sin(self.angle_fwd) * self.v + self.g,width,height)[1]
         if self.touch_stage(self.stage, pygame.Rect(self.x, nexty, 5, 5)):
             self.g = -6.74 / 4
             if self.rect.y < self.stage.mainplat.rect.y - self.g + abs(self.v) + 5:
@@ -478,7 +479,7 @@ class Rayon():
             else:
                 self.angle_fwd = pi - self.angle_fwd
 
-        nextx = self.x + cos(self.angle_fwd) * self.v
+        nextx = self.x + resize(cos(self.angle_fwd) * self.v,0,width,height)[0]
         self.g += 0.0981 * 2
         self.x = nextx
         self.y = nexty
@@ -487,14 +488,14 @@ class Rayon():
             self.duration = 0
 
     def draw(self, window):
-        pygame.draw.rect(window, (250, 0, 0), (self.x + 800, self.y + 450, 10, 10))
+        pygame.draw.rect(window, (250, 0, 0), (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1], resize(10,0,width,height)[0], resize(0,10,width,height)[1]))
 
     def deflect(self, modifier):
         self.v *= -modifier
 
 
 thundersprite = pygame.transform.scale(
-    pygame.image.load(f"DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), (48, 48))
+    pygame.image.load(f"DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), resize(48, 48,width,height))
 
 
 class Thunder():
@@ -518,11 +519,11 @@ class Thunder():
 
     def update(self):
         self.rect = thundersprite.get_rect(topleft=(self.x, self.y))
-        self.x += self.vx
+        self.x += resize(self.vx,0,width,height)[0]
         self.duration -= 1
 
     def draw(self, window):
-        window.blit(thundersprite, (self.x + 800, self.y + 450))
+        window.blit(thundersprite, (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1]))
 
     def deflect(self, modifier):
         self.vx = -self.vx
@@ -533,7 +534,7 @@ class Thunder():
 class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
         self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect(x, y, 5, 5)
+        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 15
@@ -543,11 +544,11 @@ class Sinusoide():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect.x += self.v
+        self.rect.x += resize(self.v,0,width,height)[0]
         self.duration -= 1
 
     def draw(self, window):
-        pygame.draw.rect(window, (220, 200, 120), (self.rect.x + 800, self.rect.y + 450, self.rect.w, self.rect.h))
+        pygame.draw.rect(window, (220, 200, 120), (self.rect.x + resize(800,0,width,height)[0], self.rect.y + resize(0,450,width,height)[1], self.rect.w, self.rect.h))
 
     def deflect(self, modifier):
         self.duration = 0
@@ -573,7 +574,7 @@ class Quantique():
         self.duration -= 1
         if self.g:
             self.vy += 1
-        self.y += self.vy
+        self.y = self.y + resize(0,self.vy,width,height)
 
     def deflect(self, modifier):
         self.vy = modifier * 10
@@ -586,5 +587,5 @@ class Quantique():
         drawing_sprite = pygame.transform.scale(drawing_sprite, (
         round(drawing_sprite.get_size()[0] * 4), round(drawing_sprite.get_size()[1] * 4)))  # Rescale
         size = [size[0] * 4, size[1] * 4, size[2] * 4, size[3] * 4]  # Rescale
-        pos = [self.x + 800 - size[2] / 2, self.y - size[3] + self.rect.h + 449]  # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.y - size[3] + self.rect.h + resize(0,450,width,height)[1]]  # Position réelle du sprite
         window.blit(drawing_sprite, pos, size)

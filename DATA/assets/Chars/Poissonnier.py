@@ -3,6 +3,7 @@ from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, sin
+from DATA.utilities.functions import *
 
 from DATA.utilities.Interface import Texte
 

@@ -68,7 +68,7 @@ class StagesMenu:
         self.focused_button = ((self.focused_button + 1) % (len(self.actualstages) + 1)) - 1
 
         # retour
-        Bouton = Button("<--", ("arial", 50, True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], resize(100,60,width,height))
+        Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], resize(100,60,width,height))
         if self.focused_button == -1:
             Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
             if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -77,7 +77,7 @@ class StagesMenu:
                 self.confirm = True
         else:
             # Affichage du nom du stage sélectionné
-            Texte(self.actualstages[self.focused_button], ("arial", resize(0,50,width,height)[1], True, False), (0, 0, 0), 30, height // 2,
+            Texte(self.actualstages[self.focused_button], ("arial", resize(0,50,width,height)[1], True, False), (0, 0, 0), resize(20,0,width,height)[0], height // 2,
                   format_="left").draw(window)
         Bouton.draw(window)
 
@@ -336,7 +336,7 @@ class CharsMenu:
             name = "Player 1"
         else:
             name = self.namelist[self.names[0]]
-        Bouton = Button(name, ("arial", 24, True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,150,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,150,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
@@ -369,7 +369,7 @@ class CharsMenu:
             name = "Player 2"
         else:
             name = self.namelist[self.names[1]]
-        Bouton = Button(name, ("arial", 24, True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,150,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,150,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
@@ -429,12 +429,12 @@ class CharsMenu:
         # Affichage des noms
         pygame.draw.rect(window, (200, 200, 200), (0, height - resize(0,90,width,height)[1], width, resize(0,90,width,height)[1]))
         Texte(str(Chars.charobjects[chars[self.selectchar_1][self.alt[0]]](0, 0, 0)), ("arial", resize(0,64,width,height)[1], True, False),
-              (0, 0, 0), width / 2 - 30, height - resize(0,64,width,height)[1], format_="right").draw(window)
+              (0, 0, 0), width / 2 - 30, height - resize(0,50,width,height)[1], format_="right").draw(window)
         if self.training:
             Texte("Pandapluche", ("arial", resize(0,64,width,height)[1], True, False), (0, 0, 0), width / 2 + 30, height - resize(0,50,width,height)[1],
                   format_="left").draw(window)
         else:
-            Texte(str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0, 0, 0)), ("arial", 64, True, False),
+            Texte(str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0, 0, 0)), ("arial", resize(0,64,width,height)[1], True, False),
                   (0, 0, 0), width / 2 + 30, height - resize(0,50,width,height)[1], format_="left").draw(window)
         Texte("|", ("arial", resize(0,80,width,height)[1], True, False), (0, 0, 0), width / 2, height - resize(0,50,width,height)[1], format_="center").draw(window)
         ##

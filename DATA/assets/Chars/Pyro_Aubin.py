@@ -2,6 +2,7 @@ from DATA.utilities.Animations import get_sprite
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import atan, degrees, floor, pi, sqrt, sin, cos
+from DATA.utilities.functions import *
 
 from DATA.utilities.Interface import Texte
 

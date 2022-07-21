@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import *
 import pygame
 from math import pi,cos,sin,asin, sqrt
 import DATA.utilities.Animations as Animations
+from DATA.utilities.functions import *
 
 def incertitude(x):
     return x + randint(round(-x/(2*sqrt(3)))*10,round(x/(2*sqrt(3)))*10)/10

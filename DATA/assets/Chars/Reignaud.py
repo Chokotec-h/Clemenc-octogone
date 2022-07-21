@@ -2,6 +2,7 @@ from random import choice, randint
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent, calculate_angle
 import pygame
 from math import pi,cos,sin
+from DATA.utilities.functions import *
 
 ##### Reignaud
 

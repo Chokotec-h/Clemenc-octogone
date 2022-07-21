@@ -23,6 +23,7 @@ from DATA.utilities.Gamepad_gestion import *
 import DATA.utilities.functions as functions
 from DATA.utilities.commands import *
 from DATA.utilities.Voicename import *
+import DATA.assets.animations as animations
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
@@ -143,12 +144,12 @@ def main():
                 pygame.draw.rect(window, (60, 60, 60), (0, 0, width, resize(0,128,width,height)[1]))
                 pygame.draw.rect(window, (60, 60, 60), (0, height - resize(0,128,width,height)[1], width, resize(0,128,width,height)[1]))
                 # Affichage de la version
-                Texte("1.0.0 release", ("Arial", 15, True, True), (0, 0, 0), 100, 64, format_="left").draw(window)
+                Texte("1.0.0 release", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
 
                 key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
-                    Texte(f"Appuyez sur {key}", ("Arial black", 50, True, False), (0, 0, 0), width / 2,
-                          height - 64).draw(window)
+                    Texte(f"Appuyez sur {key}", ("Arial black", resize(0,50,width,height)[1], True, False), (0, 0, 0), width / 2,
+                          height - resize(0,64,width,height)[1]).draw(window)
 
                 window.blit(titleanimation[round(min(titleframe, 54) / 1.5)], (width / 2 - resize(512,512,width,height)[0]/2, height / 2 - resize(512,512,width,height)[1]/2 - resize(64,64,width,height)[1]))
                 Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (40, 40, 40), width / 2 + 5, 
@@ -321,9 +322,11 @@ def main():
                 ##########################################  Menu paramètres  ##########################################
 
                 if Menu == "settings":
-                    Menu, width, height, changescreen = Menu_Settings.update(window, width, height, events, controls, joysticks, 0, 0)
+                    Menu, changescreen = Menu_Settings.update(window, width, height, events, controls, joysticks, 0, 0)
                     if changescreen :
-                        window = pygame.display.set_mode((width, height))
+                        root = tk.Tk()
+                        root.withdraw()
+                        messagebox.showerror('Avertissement',"Certaines modifications ne prendront effet qu'au redémarrrage")
                     confirm = Menu_Settings.confirm
 
                 ######################################################################################################

@@ -3,6 +3,7 @@ import DATA.utilities.Animations as Animations
 from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEvent
 import pygame
 from math import pi
+from DATA.utilities.functions import *
 
 ##### Rey
 

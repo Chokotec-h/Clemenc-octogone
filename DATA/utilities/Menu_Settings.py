@@ -439,10 +439,9 @@ class SettingsMenu():
                     self.UIDicoEvent["UI1 back"].play()
                     self.width = oldwidth
                     self.height = oldheight
-                    # DATA.utilities.Sound_manager.soundvolume = soundvolume
                     self.menu = "settings"
                     self.focusedbutton = 0
                     self.confirm = True
             Bouton.draw(window)
             
-        return Menu, width, height, changescreen  # , musicvolume, soundvolume
+        return Menu, changescreen  # , musicvolume, soundvolume
