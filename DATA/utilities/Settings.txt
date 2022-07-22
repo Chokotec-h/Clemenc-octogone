@@ -3,4 +3,4 @@ musicvolume=0
 soundvolume=0
 
 Graphics :
-size=800:450
+size=1280:720

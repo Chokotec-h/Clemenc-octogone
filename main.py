@@ -257,9 +257,9 @@ def main():
                     Bouton.draw(window)
 
                     # Bouton "Credits"
-                    Bouton = Button("Credits", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 4,
+                    Bouton = Button("Credits", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
                                     7 * height / 8, resize(120,80,width,height))
-                    if focusedbutton == -3:
+                    if focusedbutton == -2:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             # UIDicoEvent["UI1 forward"].play()   rien c est bien pour les crédit
@@ -285,9 +285,9 @@ def main():
                     Bouton.draw(window)
 
                     # Bouton "Quitter"
-                    Bouton = Button("Quitter", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
+                    Bouton = Button("Quitter", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 4,
                                     7 * height / 8, resize(120,80,width,height))
-                    if focusedbutton == -2:
+                    if focusedbutton == -3:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             run = False

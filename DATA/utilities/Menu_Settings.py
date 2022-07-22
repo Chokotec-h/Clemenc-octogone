@@ -395,8 +395,8 @@ class SettingsMenu():
             self.focusedbutton = self.focusedbutton % 3
             
 
-            Texte("Format : ", ("arial", resize(0,40,width,height)[1], True, False), (0,0,0), 4*width/9,height/2)
-            Bouton = Button(f"{self.width}x{self.height}", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 5*width/9, height/2, 
+            Texte("Format : ", ("arial", resize(0,40,width,height)[1], True, False), (0,0,0), 3*width/7,height/2).draw(window)
+            Bouton = Button(f"{self.width}x{self.height}", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 4*width/7, height/2, 
                             resize(200,60,width,height))
             if self.focusedbutton == 0 :
                 Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
