@@ -79,6 +79,7 @@ class SettingsMenu():
             if self.focusedbutton == 2:
                 Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
+                    self.UIDicoEvent["UI1 forward"].play()
                     self.menu = "commands"
                     self.focusedbutton = 0
                     self.confirm = True
@@ -170,7 +171,7 @@ class SettingsMenu():
             Bouton.draw(window)
 
             # Annuler
-            Bouton = Button("Annuler", ("arial", 40, True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
+            Bouton = Button("Annuler", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
                             resize(200,60,width,height))
             if self.focusedbutton == 3:
                 Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
@@ -342,7 +343,7 @@ class SettingsMenu():
                             self.inputget = i + 13
                             self.confirm = True
                 # Sauvegarde
-                Bouton = Button("Sauvegarder", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 200, height-resize(0,150,width,height)[1],
+                Bouton = Button("Sauvegarder", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 200, height-resize(0,30,width,height)[1],
                                 resize(250,60,width,height))
                 if self.focusedbutton == -1 and self.row % 2 == 0:
                     Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
@@ -360,7 +361,7 @@ class SettingsMenu():
                 Bouton.draw(window)
 
                 # Suppression
-                Bouton = Button("Supprimer", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width-resize(250,0,width,height)[0], height-resize(0,50,width,height)[1],
+                Bouton = Button("Supprimer", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width-resize(250,0,width,height)[0], height-resize(0,30,width,height)[1],
                                 resize(200,60,width,height))
                 if self.focusedbutton == -1 and self.row % 2 == 1:
                     Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
@@ -431,7 +432,7 @@ class SettingsMenu():
             Bouton.draw(window)
 
             # Annuler
-            Bouton = Button("Annuler", ("arial", 40, True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
+            Bouton = Button("Annuler", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 150, height-resize(0,50,width,height)[1],
                             resize(200,60,width,height))
             if self.focusedbutton == 2:
                 Bouton.changeImage("DATA/Images/Menu/Button_focused.png")

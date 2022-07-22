@@ -519,7 +519,7 @@ class Mot_invasif():
         self.own = own
         self.duration=5
         Texte = choice(["Ressenti","Construction","Subjectif","Problematique"])
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),(32,128))
+        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),resize(32,128,width,height))
         self.rect = self.sprite.get_rect()
         self.rect.x = x
         self.rect.y = y
@@ -555,7 +555,7 @@ class Mot_invasif():
             self.vy = -1
         else :
             self.vy += 1
-        self.rect.y += self.vy
+        self.rect.y += resize(0,self.vy,width,height)[1]
         for hitbox in self.other.active_hitboxes :
             if self.rect.colliderect(hitbox.hit):
                 self.other.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.other.superarmor/5),1) # éjection x
@@ -587,6 +587,6 @@ class Mot_invasif():
         self.own.projectiles.append(self)
         self.other.projectiles.pop(-1)
     def draw(self,window):
-        window.blit(self.sprite, (self.rect.x+800,self.rect.y+450)) # on dessine le sprite
+        window.blit(self.sprite, (self.rect.x+width/2,self.rect.y+height/2)) # on dessine le sprite
 
 ##### Autres skins

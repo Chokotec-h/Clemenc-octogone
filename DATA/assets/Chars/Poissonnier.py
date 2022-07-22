@@ -328,11 +328,11 @@ class Poissonnier(Char):
         if self.player == 0 :
             x = 500
         else :
-            x = 1050
+            x = 1030
         self.overheat = min(200,max(0,self.overheat))
-        pygame.draw.rect(window,(self.overheat,100-self.overheat/2,200-self.overheat),(x-1,798,5,50))
-        pygame.draw.rect(window,(0,0,0),(x-1,798,5,50-self.overheat/4))
-        Texte(str(round(self.overheat))+"°C",("arial",25,False,False),(0,0,0),x-50,800).draw(window)
+        pygame.draw.rect(window,(self.overheat,100-self.overheat/2,200-self.overheat),(resize(x,0,width,height)[0]-1,resize(0,798,width,height)[1],resize(5,0,width,height)[0],resize(0,50,width,height)[1]))
+        pygame.draw.rect(window,(0,0,0),(resize(x,0,width,height)[0]-1,resize(0,798,width,height)[1],resize(5,0,width,height)[0],resize(0,50-self.overheat/4,width,height)[1]))
+        Texte(str(round(self.overheat))+"°C",("arial",resize(0,25,width,height)[1],False,False),(0,0,0),resize(x-50,0,width,height)[0],resize(0,800,width,height)[1]).draw(window)
 
 
 ###################          
@@ -344,7 +344,7 @@ class Fireball():
         self.x = x-charge/4
         self.y = y-charge/4
         self.vx = signe(own.direction)*20
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(round(charge),round(charge)))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(round(charge),round(charge),width,height))
         self.damages_stacking=1/200
         if not own.look_right :
             self.angle = 5*pi/6
@@ -358,7 +358,7 @@ class Fireball():
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
     def update(self):
-        self.x += self.vx
+        self.x = self.x + resize(self.vx,0,width,height)[0]
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
     
@@ -369,7 +369,7 @@ class Fireball():
         self.angle = pi-self.angle
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+800,self.y+450))
+        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
 
 
 class Smokeball():
@@ -378,7 +378,7 @@ class Smokeball():
         self.y = y
         self.vx = signe(own.direction)*20
         self.vy = (i-16)*5
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/0.png"),(round(30),round(30)))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/0.png"),resize(30,30,width,height))
         self.damages_stacking=1/200
         if not own.look_right :
             self.angle = 41*pi/42
@@ -392,8 +392,8 @@ class Smokeball():
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
     def update(self):
-        self.x += self.vx
-        self.y += self.vy
+        self.x = self.x + resize(self.vx,0,width,height)[0]
+        self.y = self.y + resize(0,self.vy,width,height)[1]
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
     
@@ -404,13 +404,13 @@ class Smokeball():
         self.angle = pi-self.angle
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+800,self.y+450))
+        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
 
 class Surchauffe():
     def __init__(self,x,y,own:Poissonnier):
         self.x = x-150+own.rect.w/2
         self.y = y-150+own.rect.h/2
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(300,300))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(300,300,width,height))
         self.damages_stacking=1/180
         if not own.look_right :
             self.angle = 3*pi/4
@@ -429,16 +429,17 @@ class Surchauffe():
 
     def update(self):
         spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(300,300))
+        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(300,300,width,height))
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+800,self.y+450))
+        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
 
 class Cerveau():
     def __init__(self,own:Poissonnier,other:Char,stage) -> None:
-        self.sprite = pygame.image.load("DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
+        sprite = pygame.image.load("DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
+        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.x = own.x
         self.y = own.rect.y
         self.own = own
@@ -463,8 +464,8 @@ class Cerveau():
     
     def update(self):
         self.duration -= 1
-        self.y += self.vy
-        self.x += self.vx
+        self.y = self.y + resize(0,self.vy,width,height)[1]
+        self.x = self.x + resize(self.vx,0,width,height)[0]
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         if self.touch_stage(self.stage,self.rect):
             if self.y < self.stage.mainplat.y :
@@ -488,7 +489,7 @@ class Cerveau():
         self.own,self.other = self.other,self.own
 
     def draw(self,window):
-        window.blit(self.sprite, (self.rect.x+800,self.rect.y+450)) # on dessine le sprite
+        window.blit(self.sprite, (self.rect.x+width/2,self.rect.y+height/2)) # on dessine le sprite
         
 
 ##### Autres skins

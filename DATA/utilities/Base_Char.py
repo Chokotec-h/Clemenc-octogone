@@ -24,7 +24,7 @@ def signe(val):
 
 
 def change_left(x, size):
-    return -x - size + 48
+    return -x - resize(size,0,width,height)[0] + 48
 
 
 class Hitbox():

@@ -53,7 +53,7 @@ class Gregoire(Char):
                 if right:
                     self.look_right = True
             if self.frame == 12:
-                self.projectiles.append(Quantique(self.x, self.rect.y, self))
+                self.projectiles.append(Quantique(self))
             if self.frame > 12 and self.frame < 25:  # Saute frame 12
                 self.can_act = False  # ne peut pas agir après un grounded up B
                 self.vx = (right - left) * 20
@@ -125,7 +125,7 @@ class Gregoire(Char):
                 if right:
                     self.look_right = True
             if 23 < self.frame < 48:
-                self.projectiles.append(Thunder(self.x + 24 * signe(self.direction) - 48, self.rect.y + 24, self))
+                self.projectiles.append(Thunder(self.x + resize(24 * signe(self.direction) - 48,0,width,height)[0], self.rect.y + resize(0,24,width,height)[1], self))
             if self.frame == 49:
                 self.active_hitboxes.append(
                     Hitbox(32, 32, 32, 64, pi / 4, 14, incertitude(7), 1 / 150, 15, 3, self, False))
@@ -149,7 +149,7 @@ class Gregoire(Char):
                 else:
                     x = -29
                     angle = pi / 4
-                self.projectiles.append(Sinusoide(self.x + x, self.rect.y + 50 + 20 * cos(self.frame / 2), angle, self))
+                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect.y + resize(0,50 + 20 * cos(self.frame / 2),width,height)[1], angle, self))
             if self.rapidjab and not attack_button:
                 self.rapidjab = False
                 self.frame = 0
@@ -555,10 +555,9 @@ class Sinusoide():
 
 
 class Quantique():
-    def __init__(self, x, y, own: Gregoire) -> None:
+    def __init__(self, own: Gregoire) -> None:
         self.rect = pygame.Rect(own.rect.x, own.rect.y, own.rect.w, own.rect.h)
-        self.x = x
-        self.y = y
+        self.x,self.y = own.x,own.rect.y
         self.own = own
         self.animeframe = self.own.animeframe
         self.duration = 120
@@ -574,18 +573,22 @@ class Quantique():
         self.duration -= 1
         if self.g:
             self.vy += 1
-        self.y = self.y + resize(0,self.vy,width,height)
+        self.y = self.y + resize(0,self.vy,width,height)[1]
 
     def deflect(self, modifier):
         self.vy = modifier * 10
         self.g = True
 
     def draw(self, window):
-        drawing_sprite, size, self.animeframe = Animations.get_sprite(self.own.animation, self.own.name,
-                                                                      self.animeframe + 1, self.own.look_right)
+        sizescalex,sizescaley = resize(self.own.sizescale,self.own.sizescale,width,height)
+        drawing_sprite,size,self.animeframe = Animations.get_sprite(self.own.animation,self.own.name,self.animeframe+1,self.own.look_right)
+        drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0], size[1], size[2], size[3]),
+                                               not self.own.look_right, False)
+        drawing_sprite = pygame.transform.scale(drawing_sprite, (round(drawing_sprite.get_size()[0] * sizescalex),
+                                                                 round(drawing_sprite.get_size()[1] * sizescaley)))  # Rescale
+        size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
+                size[3] * sizescaley]  # Rescale
 
-        drawing_sprite = pygame.transform.scale(drawing_sprite, (
-        round(drawing_sprite.get_size()[0] * 4), round(drawing_sprite.get_size()[1] * 4)))  # Rescale
-        size = [size[0] * 4, size[1] * 4, size[2] * 4, size[3] * 4]  # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.y - size[3] + self.rect.h + resize(0,450,width,height)[1]]  # Position réelle du sprite
-        window.blit(drawing_sprite, pos, size)
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect.y - size[3] + self.rect.h + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+
+        window.blit(drawing_sprite, pos)

@@ -261,7 +261,7 @@ class Rey(Char):
                 self.superarmor = 0
             if self.frame == 20 :
                 self.charge = min(100,self.charge)
-                self.active_hitboxes.append(Hitbox(32,50,72,48,pi/10,22+9*(self.charge/100),17,1/130,20+11*(self.charge/100),3,self,False,sound="hits/cool hit"))
+                self.active_hitboxes.append(Hitbox(32,50,72,48,pi/10,21+8*(self.charge/100),17,1/130,20+11*(self.charge/100),3,self,False,sound="hits/cool hit"))
             if self.frame > 65: # 42 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -347,6 +347,8 @@ class Rey(Char):
 ###################
 
 doorsprites = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
+for i in range(len(doorsprites)):
+    doorsprites[i] = pygame.transform.scale(doorsprites[i],resize(doorsprites[i].get_width(),doorsprites[i].get_height(),width,height))
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
@@ -360,7 +362,8 @@ class Door():
         self.knockback = 0
         self.damages_stacking = 0
         self.angle = 0
-        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
+        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
+        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.duration = 7
         self.rect = pygame.Rect(0,0,0,0)
 
@@ -375,7 +378,7 @@ class Door():
 
     def draw(self,window):
         sprite = self.sprite if self.duration > 6 else doorsprites[round(self.duration)-1] if self.duration > 2 else doorsprites[0]
-        window.blit(sprite, (self.x+800-8,self.y+450-8)) # on dessine le sprite
+        window.blit(sprite, (self.x+resize(800-8,0,width,height)[0],self.y+resize(0,450-8,width,height)[1])) # on dessine le sprite
 
     def deflect(self,modifier):
         return
@@ -387,7 +390,7 @@ class Spectre_de_rey():
         self.y = own.rect.y+own.rect.h/12
         self.own = own
         self.sprite = Animations.get_sprite(own.animation,own.name,own.animeframe+1,own.look_right)[0]
-        self.sprite = pygame.transform.scale(self.sprite,(self.sprite.get_size()[0]*3,self.sprite.get_size()[1]*3))
+        self.sprite = pygame.transform.scale(self.sprite,resize(self.sprite.get_size()[0]*3,self.sprite.get_size()[1]*3,width,height))
         self.vx = 20*signe(own.direction)
         self.other = other
         self.damages = 2
@@ -400,7 +403,7 @@ class Spectre_de_rey():
 
     
     def update(self):
-        self.x += self.vx
+        self.x += resize(self.vx,0,width,height)[0]
         self.rect = self.sprite.get_rect(topleft = (self.x,self.y))
         if self.rect.colliderect(self.other.rect):
             self.duration -= 1
@@ -408,7 +411,7 @@ class Spectre_de_rey():
             self.own.x,self.own.rect.y,self.other.x,self.other.rect.y = self.other.x-abs(self.own.vx),self.other.rect.y-abs(self.own.vy),self.own.x-abs(self.other.vx),self.own.rect.y-abs(self.other.vy)
             # inverse les positions
     def draw(self,window):
-        window.blit(self.sprite, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(self.sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
     def deflect(self,modifier):
         self.own, self.other = self.other,self.own
         self.vx *= -modifier

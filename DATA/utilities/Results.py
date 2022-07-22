@@ -1,5 +1,6 @@
 from DATA.utilities.Game import Game
 from DATA.utilities.Interface import Texte
+from DATA.utilities.functions import *
 
 
 # Themes de victoire
@@ -24,7 +25,7 @@ class Results():
         self.frame = 0
         self.game = game
         self.x = 0
-        self.y = 80
+        self.y = resize(0,80,width,height)[1]
         self.vel = 60
         self.names = (names1,names2)
         self.winner = -1
@@ -49,16 +50,16 @@ class Results():
         # Actualisation
         self.frame += 1
         if self.frame < 30 :
-            self.x += self.vel
+            self.x += resize(self.vel,0,width,height)[0]
             self.vel -= 2
-            Texte("LE GAGNANT EST",("consolas",90,True,False),(0,0,0),self.x,self.y).draw(win)
+            Texte("LE GAGNANT EST",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),self.x,self.y).draw(win)
         elif self.frame < 60 :
-            Texte("LE GAGNANT EST",("consolas",90,True,False),(0,0,0),self.x,self.y).draw(win)
+            Texte("LE GAGNANT EST",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),self.x,self.y).draw(win)
         else :
             if self.winner == -1 :
-                Texte("EGALITE",("consolas",90,True,False),(0,0,0),width/2,height/2).draw(win)
+                Texte("EGALITE",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),width/2,height/2).draw(win)
             else :
-                Texte("LE GAGNANT EST",("consolas",90,True,False),(0,0,0),self.x,self.y).draw(win)
+                Texte("LE GAGNANT EST",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),self.x,self.y).draw(win)
 
                 # Affichage du nom du joueur et du personnage
                 if self.winner == 0 :
@@ -68,9 +69,9 @@ class Results():
                     #if str(self.game.Char_P1) == "Spamton" :
                     #    self.game.Char_P1 = "[[SPAMTON G. SPAMTON]]"
 
-                    Texte(f"{self.names[0].upper()}",("consolas",90,True,False),(0,0,0),width/2,250).draw(win)
-                    Texte(f"avec",("consolas",70,False,True),(0,0,0),width/2,310).draw(win)
-                    Texte(f"{str(self.game.Char_P1).upper()}",("consolas",90,True,False),(0,0,0),width/2,370).draw(win)
+                    Texte(f"{self.names[0].upper()}",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),width/2,resize(0,250,width,height)[1]).draw(win)
+                    Texte(f"avec",("consolas",resize(0,70,width,height)[1],False,True),(0,0,0),width/2,resize(0,310,width,height)[1]).draw(win)
+                    Texte(f"{str(self.game.Char_P1).upper()}",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),width/2,resize(0,370,width,height)[1]).draw(win)
                 if self.winner == 1 :
                     # Spécial
                     if self.names[1] == "Default" :
@@ -78,10 +79,10 @@ class Results():
                     #if str(self.game.Char_P2) == "Spamton" :
                     #    self.game.Char_P2 = "[[SPAMTON G. SPAMTON]]"
 
-                    Texte(f"{self.names[1].upper()}",("consolas",90,True,False),(0,0,0),width/2,250).draw(win)
-                    Texte(f"avec",("consolas",70,False,True),(0,0,0),width/2,310).draw(win)
-                    Texte(f"{str(self.game.Char_P2).upper()}",("consolas",90,True,False),(0,0,0),width/2,370).draw(win)
+                    Texte(f"{self.names[1].upper()}",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),width/2,resize(0,250,width,height)[1]).draw(win)
+                    Texte(f"avec",("consolas",resize(0,70,width,height)[1],False,True),(0,0,0),width/2,resize(0,310,width,height)[1]).draw(win)
+                    Texte(f"{str(self.game.Char_P2).upper()}",("consolas",resize(0,90,width,height)[1],True,False),(0,0,0),width/2,resize(0,370,width,height)[1]).draw(win)
 
         # Affichage de texte de retour
         if self.frame > 300 :
-            Texte(f"Appuyer sur attaque pour continuer",("arial",40,False,False),(0,0,0),width/5,9*height/10,format_="left").draw(win)
+            Texte(f"Appuyer sur attaque pour continuer",("arial",resize(0,40,width,height)[1],False,False),(0,0,0),width/5,9*height/10,format_="left").draw(win)

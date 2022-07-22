@@ -250,14 +250,10 @@ class Air_President(Char):
                 self.frame = 7
                 self.charge = self.charge+1
 
-            elif self.frame == 19 : # Active on 19-24
+            elif self.frame == 20 : # Active on 20-25
                 self.charge = min(self.charge,100)
-                self.active_hitboxes.append(Hitbox(-26,0,52,52,pi/3,15+12.5*(self.charge/250),17,1/250,20+9*(self.charge/150),5,self,False,sound="hits/punch1"))
-            if self.frame > 18 and self.frame < 23 :
-                if self.active_hitboxes :
-                    self.active_hitboxes[-1].relativex += (60-self.frame*2)*signe(self.direction)
-                    self.active_hitboxes[-1].relativey += 20
-           
+                self.active_hitboxes.append(Hitbox(45,50,52,52,pi/3,15+12.5*(self.charge/250),17,1/250,20+9*(self.charge/150),5,self,False,sound="hits/punch1"))
+            
             if self.frame > 52: # 25 frames de lag
                 self.attack = None
                 self.charge = 0

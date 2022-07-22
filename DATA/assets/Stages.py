@@ -41,7 +41,6 @@ class MainPlat:
         
         # Recalcul de l'ordonnée
         self.y = self.y + height - self.sprite.get_size()[1] - resize(0,450,width,height)[1]
-        print(self.y)
 
         # Rectangle
         self.rect = self.sprite.get_rect(midtop=(x, self.y))

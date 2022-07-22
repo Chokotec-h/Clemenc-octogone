@@ -118,7 +118,6 @@ class Pyro_Aubin(Char):
                     self.look_right = True
             if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right"] and not self.konamiadd:
                 self.konamiadd = True
-                print("B")
                 self.konami.append("B")
             #elif not self.konamiadd :
             #    self.konami = []
@@ -230,7 +229,6 @@ class Pyro_Aubin(Char):
         if attack == "Jab":
             if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right","B"] and not self.konamiadd:
                 self.konamiadd = True
-                print("A")
                 self.konami.append("A")
                 self.attack = None
             #elif not self.konamiadd :
@@ -345,7 +343,6 @@ class Pyro_Aubin(Char):
         if attack == "NeutralAir":
             if self.konami == ["Up","Up","Down","Down","Left","Right","Left","Right","B"] and not self.konamiadd:
                 self.konamiadd = True
-                print("A")
                 self.konami.append("A")
                 self.attack = None
             #elif not self.konamiadd :
@@ -475,7 +472,6 @@ class Pyro_Aubin(Char):
         
         if attack == "UpTaunt":
             if (self.konami == [] or self.konami == ["Up"]) and not self.konamiadd:
-                print("Up")
                 self.konamiadd = True
                 self.konami.append("Up")
                 self.attack = None
@@ -489,7 +485,6 @@ class Pyro_Aubin(Char):
         if attack == "DownTaunt":
             if (self.konami == ["Up","Up"] or self.konami == ["Up","Up","Down"]) and not self.konamiadd:
                 self.konamiadd = True
-                print("Down")
                 self.konami.append("Down")
             #elif not self.konamiadd :
             #    self.konami = []
@@ -501,7 +496,6 @@ class Pyro_Aubin(Char):
         if attack == "LeftTaunt":
             if (self.konami == ["Up","Up","Down","Down"] or self.konami == ["Up","Up","Down","Down","Left","Right"]) and not self.konamiadd:
                 self.konamiadd = True
-                print("Left")
                 self.konami.append("Left")
             #elif not self.konamiadd :
             #    self.konami = []
@@ -513,7 +507,6 @@ class Pyro_Aubin(Char):
         if attack == "RightTaunt":
             if (self.konami == ["Up","Up","Down","Down","Left"] or self.konami == ["Up","Up","Down","Down","Left","Right","Left"]) and not self.konamiadd:
                 self.konamiadd = True
-                print("Right")
                 self.konami.append("Right")
             #elif not self.konamiadd :
             #    self.konami = []
@@ -538,7 +531,6 @@ class Pyro_Aubin(Char):
             if self.frame == 8 :
                 if self.explosifs > 49.5 :
                     self.explosifs = 0
-                    print("boum")
                     self.konami = []
                     self.konamiadd = False
                     SFXDicoEvent['explosions']["Explosion"].play()
@@ -558,20 +550,22 @@ class Pyro_Aubin(Char):
             x = 1066
         
         for i,key in enumerate(self.konami) :
-            window.blit(pygame.image.load(f"DATA/Images/Sprites/Misc/Konami_Code/{key}.png"),(i*20+x,800))
-        pygame.draw.rect(window,(0,0,0),(x,770,100,20))
-        pygame.draw.rect(window,(100,100,0),(x,770,self.explosifs*2,20))
-        Texte(str(floor(self.explosifs))+"/50",("Arial",12,True,False),(200,200,200),x+50,780).draw(window)
+            sprite = pygame.image.load(f"DATA/Images/Sprites/Misc/Konami_Code/{key}.png")
+            window.blit(pygame.transform.scale(sprite,resize(sprite.get_width(),sprite.get_height(),width,height)),resize(i*20+x,800,width,height))
+        pygame.draw.rect(window,(0,0,0),(resize(x,0,width,height)[0],resize(0,770,width,height)[1],resize(100,0,width,height)[0],resize(0,20,width,height)[1]))
+        pygame.draw.rect(window,(100,100,0),(resize(x,0,width,height)[0],resize(0,770,width,height)[1],resize(self.explosifs*2,0,width,height)[0],resize(0,20,width,height)[1]))
+        Texte(str(floor(self.explosifs))+"/50",("Arial",resize(0,12,width,height)[1],True,False),(200,200,200),resize(x+50,0,width,height)[0],resize(0,780,width,height)[1]).draw(window)
 ###################          
 """ Projectiles """
 ###################
 
 boulet = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
+boulet = pygame.transform.scale(boulet,resize(boulet.get_width(),boulet.get_height(),width,height))
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
-        self.x = own.x + 48*signe(own.direction)
-        self.y = own.rect.y + 48
+        self.x = own.x + resize(48,0,width,height)[0]*signe(own.direction)
+        self.y = own.rect.y + resize(0,48,width,height)[1]
         self.charge = charge
         self.vx = (10+charge)*signe(own.direction)*0.2
         self.vy = -5-charge*0.1
@@ -589,8 +583,8 @@ class Boulet():
 
     def update(self):
         self.knockback = (abs(self.vy)+abs(self.vx))/2
-        self.x += self.vx
-        self.y += self.vy
+        self.x += resize(self.vx,0,width,height)[0]
+        self.y += resize(0,self.vy,width,height)[1]
         self.rect = boulet.get_rect(topleft=(self.x,self.y))
         if self.rect.colliderect(self.stage.mainplat.rect) :
             self.vy = -1
@@ -605,14 +599,15 @@ class Boulet():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(boulet, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(boulet, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
 fusee = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
+fusee = pygame.transform.scale(fusee,resize(fusee.get_width(),fusee.get_height(),width,height))
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
-        self.x = own.x + signe(own.direction)*48
-        self.y = own.rect.y + 86
+        self.x = own.x + signe(own.direction)*resize(48,0,width,height)[0]
+        self.y = own.rect.y + resize(0,86,width,height)[1]
         self.vx = 0.5*signe(own.direction)
         self.vy = -10
         self.damages = 5
@@ -638,8 +633,8 @@ class Fusee():
         return False
     
     def update(self):
-        self.x += self.vx
-        self.y += self.vy
+        self.x += resize(self.vx,0,width,height)[0]
+        self.y += resize(0,self.vy,width,height)[1]
         self.frame += 1
         if not self.done :
             if not self.homing :
@@ -678,7 +673,7 @@ class Fusee():
         self.rect = sprite.get_rect(topleft=(self.x,self.y))
         if self.rect.colliderect(self.stage.mainplat.rect):
             sprite = fusee
-        window.blit(sprite, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -690,6 +685,7 @@ class Fusee():
         self.frame = 0
 
 grenade = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
+grenade = pygame.transform.scale(grenade,resize(grenade.get_width(),grenade.get_height(),width,height))
 
 class Grenade():
     def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
@@ -697,7 +693,7 @@ class Grenade():
         self.vy = -15
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect.y + 48
+        self.y = own.rect.y + resize(0,48,width,height)[1]
         self.own = own
         self.other = other
         self.duration = 80
@@ -733,8 +729,8 @@ class Grenade():
             dx = 0.001
         self.angle = atan(dy/dx)
         self.rect = grenade.get_rect(topleft=(self.x,self.y))
-        self.x += self.vx
-        self.y += self.vy
+        self.x += resize(self.vx,0,width,height)[0]
+        self.y += resize(0,self.vy,width,height)[1]
         self.vy += 0.8
         if self.touch_stage(self.stage,self.rect):
             self.basevy *= 0.8
@@ -746,7 +742,7 @@ class Grenade():
     def draw(self,window):
         self.rotate += self.vx
         sprite = pygame.transform.rotate(grenade,degrees(self.rotate))
-        window.blit(sprite, (self.x+800,self.y+450)) # on dessine le sprite
+        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
@@ -759,7 +755,7 @@ class Explosion():
         self.stun = stun
         self.damages_stacking = damages_stacking
         self.size = size
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),(size,size))
+        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(size,size,width,height))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         self.duration = 10
 
@@ -770,13 +766,12 @@ class Explosion():
 
     def update(self):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        print(spritenumber)
         self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
         self.duration -= 1
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+800,self.y+450))
+        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
 
 
 ##### Autres skins

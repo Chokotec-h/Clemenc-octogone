@@ -385,24 +385,26 @@ class Drill():
         self.vx = vx
         self.direction = signe(own.direction)
         if own.look_right :
-            self.x = own.x + 48
+            self.x = own.x + resize(48,0,width,height)[0]
             self.angle = pi/4
         else :
-            self.x = own.x+change_left(48,64)-48
+            self.x = own.x + resize(change_left(48,64)-48,0,width,height)[0]
             self.angle = 3*pi/4
-        self.y = own.rect.y + 42
+        self.y = own.rect.y + resize(0,42,width,height)[1]
+
         self.duration = 120
         self.damages = 4
         self.stun = 12
         self.knockback = 10
         self.damages_stacking = 1/200
-        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
+        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
+        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
     
     def update(self):
         self.duration -= 1
         self.vx = self.basevx + (120-self.duration)/5*self.direction
-        self.x += self.vx
+        self.x += resize(self.vx,0,width,height)[0]
     
     def deflect(self,modifier):
         self.basevx = -self.basevx*modifier
@@ -413,32 +415,35 @@ class Drill():
         self.knockback *= modifier
 
     def draw(self,window):
-        window.blit(pygame.transform.flip(self.sprite,self.direction<0,False),(self.x+800,self.y+450))
+        window.blit(pygame.transform.flip(self.sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
 class Gear():
     def __init__(self,vx,own:Char) -> None:
         self.vx = vx
         self.direction = signe(own.direction)
+
         if own.look_right :
-            self.x = own.x + 12
+            self.x = own.x + resize(12,0,width,height)[0]
             self.angle = pi/4
         else :
-            self.x = own.x+change_left(48,64)-12
+            self.x = own.x+resize(change_left(48,64)-12,0,width,height)[0]
             self.angle = 3*pi/4
-        self.y = own.rect.y + 42
+        self.y = own.rect.y + resize(0,42,width,height)[1]
+
         self.duration = 120
         self.damages = 5
         self.stun = 11
         self.knockback = 10
         self.damages_stacking = 1/200
-        self.sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
+        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
+        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         self.sound = SFXDicoEvent['hits']["hitting metal"]
     
     def update(self):
         self.duration -= 1
-        self.x += self.vx
+        self.x += resize(self.vx,0,width,height)[0]
     
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -450,7 +455,7 @@ class Gear():
     def draw(self,window):        
         sprite = pygame.transform.rotate(self.sprite,self.duration*self.vx/10)
 
-        window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+800,self.y+450))
+        window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
         self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
 
 ##### Autres skins

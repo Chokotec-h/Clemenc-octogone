@@ -142,7 +142,7 @@ class CharsMenu:
             self.confirm = False
 
         # retour
-        Bouton = Button("", ("arial", 30, True, False), "DATA/Images/Menu/Button.png", width / 2, 40, resize(100,60,width,height))
+        Bouton = Button("", ("arial", 30, True, False), "DATA/Images/Menu/Button.png", width / 2, resize(0,40,width,height)[1], resize(100,75,width,height))
         # le retour se fait en maintenant le bouton B
         if not convert_inputs(controls[0], joysticks, 0)[7]:
             self.b = 0
@@ -154,9 +154,9 @@ class CharsMenu:
             self.UIDicoEvent["UI1 back"].play()
             Menu = "main"
         Bouton.draw(window)
-        Texte("<--", ("arial", 30, True, False), (0, 0, 0), width / 2, 25).draw(window)
+        Texte("<--", ("arial", resize(0,30,width,height)[1], True, False), (0, 0, 0), width / 2, resize(0,25,width,height)[1]).draw(window)
         key = "B" if len(joysticks) > 0 else "X"
-        Texte(f"({key})", ("arial", 30, True, False), (0, 0, 0), width / 2, 50).draw(window)
+        Texte(f"({key})", ("arial", resize(0,30,width,height)[1], True, False), (0, 0, 0), width / 2, resize(0,50,width,height)[1]).draw(window)
 
         # Haut/Bas pour choisir un personnage
         if convert_inputs(controls[0], joysticks, 0)[3] and not self.selected_1 and self.scroll1 == self.selectchar_1:
