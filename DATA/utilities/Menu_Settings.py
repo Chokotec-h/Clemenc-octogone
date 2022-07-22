@@ -407,9 +407,10 @@ class SettingsMenu():
                         self.formatnumber = len(self.formatlist) - 1
                     self.width,self.height = self.formatlist[self.formatnumber]
 
-                if input_but_no_repeat(1, controls, joysticks, 0) or input_but_no_repeat(5, controls, joysticks, 0) :
+                if input_but_no_repeat(1, controls, joysticks, 0) or (convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm) :
                     self.UIDicoEvent["UI1 validation"].play()
                     self.formatnumber = self.formatnumber + 1
+                    self.confirm = True
                     if self.formatnumber >= len(self.formatlist):
                         self.formatnumber = 0
                     self.width,self.height = self.formatlist[self.formatnumber]
