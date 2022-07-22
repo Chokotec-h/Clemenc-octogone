@@ -48,7 +48,8 @@ UIDicoEvent = SFXEvents.SFXDicoEvent
 
 embient = SoundSystem.instance()
 
-#print(UIDicoEvent["Voix"]["Personnages"])
+
+# print(UIDicoEvent["Voix"]["Personnages"])
 ############################################################################################################
 
 def main():
@@ -96,7 +97,7 @@ def main():
         titleanimation = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Logo/{i}.png"), resize(512,512,width,height)) for i in
                           range(37)]
 
-        temp_image = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Intro.png"),(width,height))
+        temp_image = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Intro.png"), (width, height))
         temp_frames = 0
 
         ################################################################################################################       
@@ -110,26 +111,25 @@ def main():
             #UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
 
             # Intro  #4fun
-            while temp_frames < 300 :
+            while temp_frames < 300:
                 events = pygame.event.get()
                 for e in events:
                     if e.type == pygame.QUIT:  # Bouton croix en haut à droite de l'écran
                         return
-                window.fill((0,0,0))
+                window.fill((0, 0, 0))
                 temp_frames += 1
-                if temp_frames < 100 :
-                    temp_image.set_alpha(temp_frames*255/100)
-                    
-                if temp_frames > 200 :
-                    temp_image.set_alpha((300-temp_frames)*255/100)
-                window.blit(temp_image,(0,0))
+                if temp_frames < 100:
+                    temp_image.set_alpha(temp_frames * 255 / 100)
+
+                if temp_frames > 200:
+                    temp_image.set_alpha((300 - temp_frames) * 255 / 100)
+                window.blit(temp_image, (0, 0))
                 pygame.display.flip()
                 SoundSystem.tick_update()
                 clock.tick(60)  # FPS
         del temp_frames
         del temp_image
 
-        
         embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
         # Boucle du programme
         while run:
@@ -151,9 +151,9 @@ def main():
                           height - resize(0,64,width,height)[1]).draw(window)
 
                 window.blit(titleanimation[round(min(titleframe, 54) / 1.5)], (width / 2 - resize(512,512,width,height)[0]/2, height / 2 - resize(512,512,width,height)[1]/2 - resize(64,64,width,height)[1]))
-                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (40, 40, 40), width / 2 + 5, 
+                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (40, 40, 40), width / 2 + 5,
                     height / 2 + resize(512,512,width,height)[1]/2 + 5).draw(window)
-                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (128, 0, 128), width / 2, height / 2 + 
+                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (128, 0, 128), width / 2, height / 2 +
                     resize(512,512,width,height)[1]/2).draw(window)
                 if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                     UIDicoEvent["UI1 ready"].play()
@@ -325,7 +325,7 @@ def main():
                           4 * height / 8 + 20).draw(window)
 
                     # retour
-                    Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], 
+                    Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1],
                                     resize(100,60,width,height))
                     Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -455,10 +455,10 @@ def main():
                 if Menu == "results":
                     if results.frame == 1:
                         SoundSystem.stop_inst(embient.instance)
-                        if results.winner == -1 :
-                            UIDicoEvent["Voix"]["Autre"]["Terminer"].play() # Egalite
-                        else :
-                            #UIDicoEvent["Voix"]["Autre"]["23 Fin du match"].play() # Le gagnant est
+                        if results.winner == -1:
+                            UIDicoEvent["Voix"]["Autre"]["Terminer"].play()  # Egalite
+                        else:
+                            # UIDicoEvent["Voix"]["Autre"]["23 Fin du match"].play() # Le gagnant est
                             pass
                         if results.winner == 0:
                             embient.instance = SoundSystem.play_event(
@@ -468,12 +468,12 @@ def main():
                                 f"event:/VT/{Victorythemes[str(results.game.Char_P2)]}")
                         if results.winner == -1:
                             embient.instance = SoundSystem.play_event(f"event:/VT/{Victorythemes[-1]}")
-                    if results.frame == 80 :
-                        
-                        if results.winner == 0 :
+                    if results.frame == 80:
+
+                        if results.winner == 0:
                             UIDicoEvent["Voix"]["Personnages"][voicename[str(results.game.Char_P1)]].play()
 
-                        if results.winner == 1 :
+                        if results.winner == 1:
                             UIDicoEvent["Voix"]["Personnages"][voicename[str(results.game.Char_P2)]].play()
                     window.fill((200, 120, 200))
                     results.draw(window, width, height)
@@ -537,7 +537,7 @@ def main():
         root = tk.Tk()
         root.withdraw()
         messagebox.showerror('Erreur Critique',
-f"""Une erreur critique est survenue :
+                             f"""Une erreur critique est survenue :
 
 {tb.stack}
 
