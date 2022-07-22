@@ -23,13 +23,12 @@ from DATA.utilities.Gamepad_gestion import *
 import DATA.utilities.functions as functions
 from DATA.utilities.commands import *
 from DATA.utilities.Voicename import *
-import DATA.assets.animations as animations
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
 ############################################################################################################
 
-skip_intro = True
+skip_intro = False
 
 pygame.init()  # Initialisation de pygame
 clock = pygame.time.Clock()  # Horloge
