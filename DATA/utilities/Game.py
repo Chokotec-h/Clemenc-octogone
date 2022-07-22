@@ -11,7 +11,8 @@ import time
 basetime = 7*60 #/ 60
 basestock = 5
 
-class Game():
+
+class Game:
     def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent) -> None:
 
         # Gestion de la fumee de hitstun
@@ -59,7 +60,7 @@ class Game():
 
         self.UIDicoEvent = UIDicoEvent
 
-        self.traininginputs = [False for _ in range (17)]
+        self.traininginputs = [False for _ in range(17)]
 
     def play(self, controls, joysticks, stage, width, height, window, clock):
 
@@ -68,7 +69,7 @@ class Game():
         Menu = "game"
 
         # Actualisation des stats du Panda
-        if self.training :
+        if self.training:
             self.Char_P2.deceleration = self.deceleration
             self.Char_P2.airspeed = self.airspeed
             self.Char_P2.fastfallspeed = self.fastfallspeed
@@ -79,14 +80,13 @@ class Game():
                 convert_inputs(controls[0], joysticks, 0)[-1] or convert_inputs(controls[1], joysticks, 1)[-1]):
             if not self.hold_pause:
                 self.pause = not self.pause
-                if self.pause :
+                if self.pause:
                     self.UIDicoEvent["UI1 pause"].play()
-                else :
+                else:
                     self.UIDicoEvent["UI1 unpause"].play()
                 self.hold_pause = True
         else:
             self.hold_pause = False
-
 
         ################### Affichage des éléments ###################
 
@@ -115,13 +115,12 @@ class Game():
         stage.draw(window)
 
         # Affichage des personnages
-        if self.Char_P1.rect.y > self.Char_P2.rect.y :
+        if self.Char_P1.rect.y > self.Char_P2.rect.y:
             self.Char_P2.draw(window)
             self.Char_P1.draw(window)
-        else :
+        else:
             self.Char_P1.draw(window)
             self.Char_P2.draw(window)
-
 
         # Affichage des degats
         self.Char_P1.damages = float(self.Char_P1.damages)
@@ -156,7 +155,6 @@ class Game():
 
         #########################################################
 
-
         # hors pause, si le jeu continue
         if self.game_running < 0 and not self.pause:
             self.pausefrom = time.time()  # gestion du chrono en pause
@@ -187,15 +185,15 @@ class Game():
                 elif self.TrainingHDI == 2:
                     self.traininginputs[0] = True
                     self.traininginputs[1] = False
-                elif self.TrainingHDI == 3 :
-                    if not self.Char_P2.hitstun :
-                        if randint(0,1):
+                elif self.TrainingHDI == 3:
+                    if not self.Char_P2.hitstun:
+                        if randint(0, 1):
                             self.traininginputs[0] = True
                             self.traininginputs[1] = False
-                        else :
+                        else:
                             self.traininginputs[0] = False
                             self.traininginputs[1] = True
-                else :
+                else:
                     self.traininginputs[0] = False
                     self.traininginputs[1] = False
                 if self.TrainingVDI == 2:
@@ -204,12 +202,12 @@ class Game():
                 if self.TrainingVDI == 1:
                     self.traininginputs[2] = False
                     self.traininginputs[3] = True
-                elif self.TrainingVDI == 3 :
-                    if not self.Char_P2.hitstun :
-                        if randint(0,1):
+                elif self.TrainingVDI == 3:
+                    if not self.Char_P2.hitstun:
+                        if randint(0, 1):
                             self.traininginputs[0] = True
                             self.traininginputs[1] = False
-                        else :
+                        else:
                             self.traininginputs[0] = False
                             self.traininginputs[1] = True
                 else :
@@ -222,10 +220,10 @@ class Game():
                         self.Char_P2.tech = 0
                 elif self.Tech < 0:
                     self.Char_P2.tech = 5
-                else :
+                else:
                     self.Char_P2.tech = 0
                 inputs_2 = self.traininginputs
-                self.Char_P2.act([False]*17, stage, self.Char_P1,
+                self.Char_P2.act([False] * 17, stage, self.Char_P1,
                                  not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
                 ######################################################################################
             else:
@@ -237,15 +235,15 @@ class Game():
             ########
 
             # détection des collision
-            self.Char_P2.collide(self.Char_P1,inputs_2)
-            self.Char_P1.collide(self.Char_P2,inputs_1)
+            self.Char_P2.collide(self.Char_P1, inputs_2)
+            self.Char_P1.collide(self.Char_P2, inputs_1)
 
         elif self.pause:
             self.pause_time += time.time() - self.pausefrom  # gestion du chrono en pause
             self.pausefrom = time.time()
             pygame.draw.rect(window,(100,100,100),(width // 2-resize(80,0,width,height)[0], height // 2 - resize(0,40,width,height)[1] , resize(160,0,width,height)[0], resize(0,80,width,height)[1]))
             Texte(f"Pause", ("Arial",  resize(0,60,width,height)[1], False, False), (0, 0, 0), width // 2, height // 2, 800).draw(window)
-            if not self.training : 
+            if not self.training :
                 Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", resize(0,25,width,height)[1], False, False), (0, 0, 0), resize(40,0,width,height)[0], resize(0,40,width,height)[1], 800,format_="left").draw(window)
                 inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
                 inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
@@ -287,7 +285,7 @@ class Game():
             # fin de la partie
             if (m * 60 + s < 1 or min(self.stock) <= 0) and self.game_running < 0:
                 self.game_running = 180  # attente de 3 secondes
-                self.UIDicoEvent["Voix"]["Autre"]["GAME"].play() # Fin du match
+                self.UIDicoEvent["Voix"]["Autre"]["GAME"].play()  # Fin du match
             if self.game_running > 0:
                 Texte("GAME", ("Arial black", resize(0,200,width,height)[1], True, False), (150, 0, 0), width / 2, height / 2).draw(window)
                 self.game_running -= 1
