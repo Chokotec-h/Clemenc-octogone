@@ -219,13 +219,13 @@ class CharsMenu:
             for i in range(len(chars)):
                 # icones sur la roulette
                 if self.selectchar_1 == i:
-                    window.blit(icons64[chars[i][self.alt[0]]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][self.alt[0]]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 if i < 5:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
                 if len(chars) - i < 5:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
 
             ### Interface personnages P2
             # Pandapluche (Peluche Panda des A-L)
@@ -233,7 +233,7 @@ class CharsMenu:
             Bouton.draw(window)
             window.blit(
                 pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Misc/Training/Training_icon.png"),
-                                        resize(64,64,width,height)), (width - 64 - resize(0,64,width,height)[1], height / 2 - resize(0,32,width,height)[1]))
+                                        resize(64,64,width,height)), (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], height / 2 - resize(0,32,width,height)[1]))
 
         else:
 
@@ -273,21 +273,21 @@ class CharsMenu:
             for i in range(len(chars)):
                 # icones sur la roulette
                 if self.selectchar_1 == i:
-                    window.blit(icons64[chars[i][self.alt[0]]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][self.alt[0]]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4) - resize(0,32,width,height)[1]))
                 if self.selectchar_2 == i:
-                    window.blit(icons64[chars[i][self.alt[1]]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][self.alt[1]]], (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
                 else:
-                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4) - resize(0,32,width,height)[1]))
 
                 if i - len(chars) > -5:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
-                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 - len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4 - len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 - len(chars)) - resize(0,32,width,height)[1]))
 
                 if i < 4:
-                    window.blit(icons64[chars[i][0]], (64, resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
-                    window.blit(icons64[chars[i][0]], (width - 64 - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 + len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (resize(64,0,width,height)[0], resize(0,105,width,height)[1] * (i - self.scroll1 + 4 + len(chars)) - resize(0,32,width,height)[1]))
+                    window.blit(icons64[chars[i][0]], (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 + len(chars)) - resize(0,32,width,height)[1]))
 
             # Haut/Bas pour choisir un personnage
             if convert_inputs(controls[1], joysticks, 1)[
