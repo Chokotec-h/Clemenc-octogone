@@ -14,9 +14,9 @@ icons ={
     "Rey":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
     "Pyro-Aubin":pygame.image.load("DATA/Images/Sprites/Chars/Pyro_Aubin/icon.png"),
     "Kebab":pygame.image.load("DATA/Images/Sprites/Chars/Kebab/icon.png"),
-    "Poissonnier":pygame.image.load("DATA/Images/Sprites/Chars/Poissonnier/icon.png"),
+    "Poissonnier":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
     "Renault":pygame.image.load("DATA/Images/Sprites/Chars/Renault/icon.png"),
-    "Isaac":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
+    #"Isaac":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
 }
 icons64 ={
     "Balan":pygame.transform.scale(icons["Balan"],resize(64,64,width,height)),"BalanM":pygame.transform.scale(icons["BalanM"],resize(64,64,width,height)),
@@ -29,7 +29,7 @@ icons64 ={
     "Kebab":pygame.transform.scale(icons["Kebab"],resize(64,64,width,height)),
     "Poissonnier":pygame.transform.scale(icons["Poissonnier"],resize(64,64,width,height)),
     "Renault":pygame.transform.scale(icons["Renault"],resize(64,64,width,height)),
-    "Isaac":pygame.transform.scale(icons["Isaac"],resize(64,64,width,height)),
+    #"Isaac":pygame.transform.scale(icons["Isaac"],resize(64,64,width,height)),
 }
 
 # Forme : (sheet,((posx,posy,sizex,sizey),(posx...),...),time between frames,looped)
@@ -75,15 +75,15 @@ Reignaud = {
 
 }
 
-Poissonnier = {
-    "idle":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),2,True),
-    "walk":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
-    "run":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
-    "jump":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
-    "fall":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
-    "airdodge":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
+# Poissonnier = {
+#     "idle":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),2,True),
+#     "walk":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
+#     "run":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
+#     "jump":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
+#     "fall":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
+#     "airdodge":("DATA/Images/Sprites/Chars/Poissonnier/Default/Idle.png",((0,2,13,34),),1,True),
 
-}
+# }
 
 Renault = {
     "idle":("DATA/Images/Sprites/Chars/Renault/Default/idle.png",((2,1,14,35),(21,1,14,35),(42,3,14,33),(59,2,14,34)),9,True),
@@ -261,7 +261,7 @@ animations = {
     "Rey":Nonesprite,
     "Pyro-Aubin":Pyro_Aubin,
     "Kebab":Kebab,
-    "Poissonnier":Poissonnier,
+    "Poissonnier":Nonesprite,
     "Renault":Renault,
     #"Isaac":Nonesprite,
     "Training":Training
