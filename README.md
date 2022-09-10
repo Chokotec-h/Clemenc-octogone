@@ -35,6 +35,6 @@ Le release devrait marcher sans installation ^^.
 </p>
 
 ## Contactez nous !
-rejoindre/contacter l'équipe de développement :
+Rejoindre/contacter l'équipe de développement :
 server discord : https://discord.gg/7qnKYZbYmX <br>
 mp : @Chokotrec'h#0587 | idimension-_-#0523
