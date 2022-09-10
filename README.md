@@ -15,8 +15,8 @@ Le release devrait marcher sans installation ^^.
 |----|---|
 | A : attaque/confirmer | espace : attaque/confirmer |
 | B : spécial/annuler| X : spécial/annuler |
-| Y : Fullhop/Costume alternatif|  0[pavé numérique] : Shorthop |
-|  R : Shield/Run|  .[pavé numérique] : Fullhop|
+| Y : Fullhop/Costume alternatif|  0 [pavé numérique] : Shorthop |
+|  R : Shield/Run|  . [pavé numérique] : Fullhop|
 |  Stick gauche : mouvement|  C : Shield/Run|
 |  Stick droit : attaques puissantes|  Q/D : costume alternatif|
 |  +/start : pause|  Flèches directionnelles : mouvement|
