@@ -5,6 +5,11 @@ Jeu de combat (style smash bros) regroupant les personalités marquantes de la M
 ## Installation
 Le release devrait marcher sans installation ^^.
 
+## Dépendences
+ - [FMOD](https://www.fmod.com) - Made for games : FMOD is the solution for adaptive audio.
+ - [Pygame](https://www.pygame.org) - A game engine for Python
+ - [Pyinstaller](https://pyinstaller.org) - PyInstaller bundles a Python application and all its dependencies into a single package
+
 ## _Comment jouer ?_
 |Configuration par défaut (manettes) | Configuration par défaut (clavier) |
 |----|---|
@@ -28,11 +33,6 @@ Le release devrait marcher sans installation ^^.
   <img src="https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%202.png" width="350" alt="accessibility text">
   <img src="https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%203.png" width="350" title="hover text">
 </p>
-
-## Dépendences
- - [FMOD](https://www.fmod.com) - Made for games : FMOD is the solution for adaptive audio.
- - [Pygame](https://www.pygame.org) - A game engine for Python
- - [Pyinstaller](https://pyinstaller.org) - PyInstaller bundles a Python application and all its dependencies into a single package
 
 ## Contactez nous !
 rejoindre/contacter l'équipe de développement :
