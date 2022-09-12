@@ -1,3 +1,5 @@
+import os
+import platform
 from ctypes import *
 
 # initialisation value
@@ -8,8 +10,13 @@ BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.
 BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
 
 # api value
-core_dll = WinDLL("DATA/FMOD/api/core/lib/x64/fmodL.dll")
-studio_dll = WinDLL("DATA/FMOD/api/studio/lib/x64/fmodstudioL.dll")
+if platform.system() == "Windows":
+    core_dll = WinDLL("DATA/FMOD/windows/core/lib/x64/fmodL.dll")
+    studio_dll = WinDLL("DATA/FMOD/windows/studio/lib/x64/fmodstudioL.dll")
+else:
+    core_dll = CDLL("DATA/FMOD/linux/core/lib/arm64/libfmodL.so.13.8")
+    studio_dll = CDLL("DATA/FMOD/linux/studio/lib/arm64/libfmodstudioL.so.13.8")
+
 studio_sys = c_void_p()
 
 BankList = []  # a list of all bank
