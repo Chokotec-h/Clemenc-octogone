@@ -19,14 +19,14 @@ Le release devrait marcher sans installation ^^.
 |----|---|
 | A : attaque/confirmer | espace : attaque/confirmer |
 | B : spécial/annuler| X : spécial/annuler |
-| Y : Fullhop/Costume alternatif|  0 [pavé numérique] : Shorthop |
-|  R : Shield/Run|  . [pavé numérique] : Fullhop|
-|  Stick gauche : mouvement|  C : Shield/Run|
-|  Stick droit : attaques puissantes|  Q/D : costume alternatif|
-|  +/start : pause|  Flèches directionnelles : mouvement|
-|  L1/R1 : Changer de nom (menu personnage)| ZQSD : attaques puissantes|
-||  +/start : pause|
-||  J/L : Changer de nom (menu personnage)|
+||  0 [pavé numérique] : Shorthop |
+| Y : Fullhop/Costume alternatif|  . [pavé numérique] : Fullhop|
+|  R : Shield/Run|  C : Shield/Run|
+||  Q/D : costume alternatif|
+|  Stick gauche : mouvement  +/start : pause|  Flèches directionnelles : mouvement|
+|  Stick droit : attaques puissantes| ZQSD : attaques puissantes|
+|  +/start : pause| entrée : pause|
+|  L1/R1 : Changer de nom (menu personnage)|  J/L : Changer de nom (menu personnage)|
 
 (Vous pouvez modifier vos configurations de combat dans le menu paramètres/configuration des contrôles)
 
