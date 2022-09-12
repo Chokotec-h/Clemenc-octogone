@@ -23,7 +23,7 @@ Le release devrait marcher sans installation ^^.
 | Y : Fullhop/Costume alternatif|  . [pavé numérique] : Fullhop|
 |  R : Shield/Run|  C : Shield/Run|
 ||  Q/D : costume alternatif|
-|  Stick gauche : mouvement  +/start : pause|  Flèches directionnelles : mouvement|
+|  Stick gauche : mouvement|  Flèches directionnelles : mouvement|
 |  Stick droit : attaques puissantes| ZQSD : attaques puissantes|
 |  +/start : pause| entrée : pause|
 |  L1/R1 : Changer de nom (menu personnage)|  J/L : Changer de nom (menu personnage)|
