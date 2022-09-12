@@ -19,7 +19,7 @@ Le release devrait marcher sans installation ^^.
 |----|---|
 | A : attaque/confirmer | espace : attaque/confirmer |
 | B : spécial/annuler| X : spécial/annuler |
-||  0 [pavé numérique] : Shorthop |
+|  X : Shorthop/Cosutme alternatif|  0 [pavé numérique] : Shorthop |
 | Y : Fullhop/Costume alternatif|  . [pavé numérique] : Fullhop|
 |  R : Shield/Run|  C : Shield/Run|
 ||  Q/D : costume alternatif|
