@@ -49,7 +49,7 @@ class Balan(Char):
                 if right:
                     self.look_right = True
             if self.frame == 6:  # Hitbox frame 6-11
-                self.active_hitboxes.append(Hitbox(-1.5, 75, 51, 48, -pi / 3, 20, 32, 1 / 150, 40, 5, self, False,
+                self.active_hitboxes.append(Hitbox(-1.5, 75, 51, 48, pi+pi / 2.25, 23, 32, 1 / 150, 30, 5, self, False,
                                                    sound="hits/cool hit"))
 
         if attack == "DownB":
