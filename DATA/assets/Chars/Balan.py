@@ -28,7 +28,7 @@ class Balan(Char):
 
     def special(self, inputs):  # Spécial à Balan, pour son upB
         if self.upB:  # Vitesse de merde après upB
-            self.vx *= 0.3
+            self.vx *= 0.6
         return False
 
     def animation_attack(self, attack, inputs, stage, other):
@@ -38,6 +38,7 @@ class Balan(Char):
             if self.frame == 11:  # Saute frame 11
                 self.can_act = False  # ne peut pas agir après un grounded up B
                 self.vy = -19
+                self.vx = self.direction/10
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump]  # Annule tout les sauts
             elif self.frame > 6:  # Sort frame 7
@@ -48,27 +49,31 @@ class Balan(Char):
                 if right:
                     self.look_right = True
             if self.frame == 6:  # Hitbox frame 6-11
-                self.active_hitboxes.append(Hitbox(-1.5, 88.5, 51, 48, 2 * pi / 3, 20, 32, 1 / 150, 40, 5, self, False,
+                self.active_hitboxes.append(Hitbox(-1.5, 75, 51, 48, -pi / 2, 20, 32, 1 / 150, 40, 5, self, False,
                                                    sound="hits/cool hit"))
 
-        if attack == "NeutralB":
-            # self.can_act = False
-            if self.frame < 5 and special:  # Chargement jusqu'à 100 frames
-                self.frame = 0
-                self.animeframe -= 1
-                self.charge = min(100, self.charge + 1)
-                if left:  # peut changer de direction
-                    self.look_right = False
-                if right:
-                    self.look_right = True
-            elif self.frame == 5:  # 5 frames après relache
-                for i in range(0, (self.charge - 1) // 20 + 1):
-                    self.projectiles.append(Projo_Craie(i, self, stage))
-            if self.frame > 15:  # 10 frames de lag
-                self.attack = None
-                self.charge = 0
-
         if attack == "DownB":
+            # self.can_act = False
+            if self.frame == 5 :
+                self.grab = False
+                self.active_hitboxes.append(Hitbox(40, 32, 32, 32, 0, 0, 0, 0, 0, 5, self))
+            if self.frame < 9 and len(self.active_hitboxes) == 0 :
+                self.grab = True
+                other.hitstun = 5
+                other.vy = self.vy
+                other.vx = 0
+            if self.frame > 10 and self.grab and self.frame < 20:
+                if self.frame < 12 :
+                    self.vy = 15
+                if self.frame > 16 :
+                    self.vy -= 15
+                other.hitstun = 5
+                other.vy = self.vy
+                other.vx = 0
+            if self.frame == 20 :
+                self.active_hitboxes.append(Hitbox(40,32,32,32,pi/4,20,16,1/200,18,3,self))
+
+        if attack == "NeutralB":
             if self.frame < 5 and special:  # Chargement jusqu'à 200 frames
                 self.frame = 0
                 self.animeframe -= 1
@@ -99,9 +104,9 @@ class Balan(Char):
                 self.active_hitboxes.append(Hitbox(16, 30, 32, 32, pi / 4, 28, 10, 0, 12, 3, self, False))
             if self.frame == 10:  # Active on 10-60
                 self.active_hitboxes.append(Hitbox(8, 82, 32, 10, pi / 4, 3, 4, 1 / 250, 3, 50, self, False))
-            if 9 < self.frame < 60:  # Déplacement
-                self.vx = 15 * signe(self.direction) / (self.frame / 10)
-                self.vy = 1
+            if self.frame == 10:  # Déplacement
+                self.vx = 25 * signe(self.direction)
+                self.vy = 15
             if self.frame > 80:  # 20 frames de lag
                 self.attack = None
 
@@ -277,12 +282,12 @@ class Balan(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge + 1
-            elif self.frame == 12:  # Active on 12-18
+            elif self.frame == 24:  # Active on 24-30
                 self.charge = min(self.charge, 100)
-                self.active_hitboxes.append(Hitbox(60, 16, 52, 64, pi / 4, 12 + 6 * (self.charge / 150), 14, 1 / 120,
-                                                   24 + 4 * (self.charge / 100), 4, self, True, True, 1.2,
-                                                   sound="hits/cool hit"))
-            if self.frame > 45:  # 30 frames de lag
+                self.active_hitboxes.append(Hitbox(60, 30, 52, 34, pi/10, 3 * (self.charge / 150), 16, 1 / 120,
+                                                   28 + 4 * (self.charge / 100), 6, self, False, True, 1.4,
+                                                   sound="lasers/laser3"))
+            if self.frame > 42:  # 12 frames de lag
                 self.attack = None
                 self.charge = 0
 
@@ -329,17 +334,12 @@ class Balan(Char):
                 self.animeframe -= 1
                 self.frame = 4
                 self.charge = self.charge + 1
-            elif self.frame == 7:  # Active on 7-9
+            elif self.frame == 10:  # Active on 10-13
                 self.charge = min(self.charge, 100)
-                self.active_hitboxes.append(Hitbox(40, 60, 32, 32, pi / 6, 7 * (self.charge / 200 + 1), 12.5, 1 / 250,
+                self.active_hitboxes.append(Hitbox(40, 60, 32, 32, -pi / 6, 7 * (self.charge / 200 + 1), 13, 1 / 250,
                                                    19 + 5 * (self.charge / 100), 3, self, False,
                                                    sound="hits/cool hit"))
 
-            elif self.frame == 15:  # Active on 15-17
-                self.charge = min(self.charge, 100)
-                self.active_hitboxes.append(
-                    Hitbox(-40, 60, 32, 32, 5 * pi / 6, 9 * (self.charge / 200 + 1), 14.5, 1 / 250,
-                           19 + 5 * (self.charge / 100), 3, self, False, sound="hits/cool hit"))
 
             if self.frame > 40:  # 23 frames de lag
                 self.attack = None
@@ -353,12 +353,9 @@ class Balan(Char):
                 else:
                     self.vx -= self.dashspeed * signe(self.direction)
 
-            if 21 > self.frame > 4 and self.frame % 5 == 0:  # active on 5/10/15/20
-                self.active_hitboxes.append(
-                    Hitbox(40, 32, 32, 32, pi / 12, abs(self.vx), 1.5, 0, 12, 2, self, False, boum=-1))
-            if self.frame == 26:  # active on 26
-                self.active_hitboxes.append(Hitbox(40, 32, 64, 64, pi / 4, 9, 3.5, 1 / 250, 10, 3, self, False))
-            if self.frame > 50:  # 24 frames de lag
+            if self.frame == 15:  # active on 15-18
+                self.active_hitboxes.append(Hitbox(40, 38, 48, 48, pi / 4, 9, 7, 1 / 225, 10, 3, self, False))
+            if self.frame > 30:  # 12 frames de lag
                 self.attack = None
 
         if attack == "UpTaunt":
