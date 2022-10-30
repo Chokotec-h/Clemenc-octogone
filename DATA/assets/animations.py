@@ -140,7 +140,7 @@ Air_President = {
     "jump":("DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),),1,False),
     "fall":("DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),),1,True),
     "airdodge":("DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),1,True),
-    "dtilt":("DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-dtilt.png",((0,1,12,31),(16,1,13,31),(32,2,13,30),(48,1,13,31),(64,1,14,31)),15,False),
+    "dtilt":("DATA/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-dtilt.png",((0,1,12,31),(16,1,13,31),(32,2,13,30),(48,1,13,31)),15,False),
 
 }
 

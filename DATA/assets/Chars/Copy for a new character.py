@@ -1,3 +1,4 @@
+from DATA.assets.Chars.Gourmelin import Gourmelin
 from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent
 import pygame
 from math import pi
@@ -207,5 +208,6 @@ class Nom_Personnage(Char):
 ###################          
 """ Projectiles """
 ###################
+
 
 ##### Autres skins

@@ -397,61 +397,6 @@ class Balan(Char):
 
 ###################
 
-class Projo_Craie():
-    def __init__(self, id, own, stage):
-        # Craies de M Balan
-        SFXDicoEvent["wooshs"]["mini woosh"].play()
-        self.id = id + 1
-        self.sprite = pygame.transform.scale(pygame.image.load(
-            "DATA/Images/Sprites/Projectiles/Balan/Craies/Craie_" + ["blanche", "rouge", "bleue", "verte", "jaune"][
-                id] + ".png"), resize(30, 9,width,height))
-        self.rect = self.sprite.get_rect()
-        self.x = own.rect.x
-        self.y = own.rect.y + own.rect.h // 2
-        self.vx = 10 * signe(own.direction)
-        self.vy = -3 * self.id
-        self.duration = 5
-        self.stage = stage
-        self.damages_stacking = 0
-        if not own.look_right:
-            self.angle = 3 * pi / 4
-        else:
-            self.angle = pi / 4
-        self.knockback = 3
-        self.damages = 1.2
-        self.stun = 4
-
-    def update(self):
-        if self.rect.colliderect(self.stage.mainplat.rect):
-            self.sprite = pygame.transform.scale(pygame.image.load(
-                "DATA/Images/Sprites/Projectiles/Balan/Craies/Explosion_" +
-                ["blanche", "rouge", "bleue", "verte", "jaune"][self.id - 1] + ".png"), resize(33, 50,width,height))
-            self.y -= 3
-            self.duration -= 1
-            self.vx = 0
-            self.vy = 0
-            self.damages = 2.5
-            self.stun = 12
-            self.knockback = 5
-        self.x += resize(round(self.vx),0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
-        self.vy += 0.3
-        self.rect = self.sprite.get_rect(topleft=(self.x, self.y))
-        self.rect.w *= 1.5  # Rescale
-        self.rect.h *= 1.5  # Rescale
-        if self.y > 800:
-            self.duration = 0
-
-    def deflect(self, modifier):
-        self.vy = -self.id
-        self.vx = -self.vx * modifier
-        self.damages = self.damages * modifier
-        self.knockback = self.damages * modifier
-        self.angle = pi - self.angle
-
-    def draw(self, window):
-        window.blit(self.sprite, (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1]))  # on dessine le sprite
-
 
 class Exposant:
     def __init__(self, opponent, own: Balan, charge) -> None:
