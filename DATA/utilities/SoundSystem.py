@@ -1,5 +1,7 @@
 from ctypes import *
 import os
+import signal
+signal.signal(signal.SIGSEGV, signal.SIG_IGN)
 
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
@@ -13,8 +15,6 @@ studio_sys = c_void_p()
 BankList = []  # a list of all bank
 string_buffer = create_string_buffer(100)
 bufferSize = 100
-
-import os
 
 if os.name == 'nt':  # windows
     core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
