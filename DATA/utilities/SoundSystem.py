@@ -1,4 +1,5 @@
 from ctypes import *
+import os
 
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
@@ -7,14 +8,22 @@ BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.
 
 BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
 
-# api value
-core_dll = WinDLL("DATA/FMOD/api/core/lib/x64/fmodL.dll")
-studio_dll = WinDLL("DATA/FMOD/api/studio/lib/x64/fmodstudioL.dll")
 studio_sys = c_void_p()
 
 BankList = []  # a list of all bank
 string_buffer = create_string_buffer(100)
 bufferSize = 100
+
+import os
+
+if os.name == 'nt':  # windows
+    core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
+    studio_dll = WinDLL("DATA/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
+else:  # pas windows
+    core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
+    studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
+
+studio_sys = c_void_p()
 
 
 def check_result(r):
