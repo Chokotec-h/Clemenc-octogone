@@ -9,9 +9,10 @@ from DATA.utilities.Animations import get_sprite
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
-# A FAIRE QUE UNE FOIS
+# À FAIRE QUE UNE FOIS
 SoundSystem.studio_init()
 SFXEvents.SFX_init()
+print("SFX inited")
 
 SFXDicoEvent = SFXEvents.SFXDicoEvent
 
