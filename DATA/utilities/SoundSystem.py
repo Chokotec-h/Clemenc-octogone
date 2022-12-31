@@ -20,8 +20,8 @@ if os.name == 'nt':  # windows
     core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
     studio_dll = WinDLL("DATA/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
 else:  # pas windows
-    core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmod.so")
-    studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudio.so")
+    core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
+    studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
 
 studio_sys = c_void_p()
 
@@ -127,8 +127,9 @@ class instance:
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))
+        retrieved = c_int()
         check_result(
-            studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1))
+            studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1, byref(retrieved)))
         return tempBuffer.value
 
 
@@ -149,7 +150,8 @@ def getAllEventFromBank(bank, array, eventNumber):
     @param eventNumber : the number of event
     @return: a cArray with all events
     """
-    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(array), c_int(eventNumber)))
+    count = c_int()
+    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(array), c_int(eventNumber), byref(count)))
 
 
 def changeGlobalParameter(name, value):
