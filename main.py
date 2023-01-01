@@ -529,7 +529,7 @@ def main():
             SoundSystem.tick_update()
             clock.tick(60)  # FPS
 
-    except Exception as error:
+    except Exception:
         exc_type, exc_value, exc_tb = sys.exc_info()
         tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
 
