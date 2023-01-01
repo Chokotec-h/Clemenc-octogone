@@ -532,10 +532,8 @@ def main():
     except Exception as error:
         exc_type, exc_value, exc_tb = sys.exc_info()
         tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
-        Menu = "error"
+
         traceback.print_exc()
-        root = tk.Tk()
-        root.withdraw()
         messagebox.showerror('Erreur Critique',
                              f"""Une erreur critique est survenue :
 
