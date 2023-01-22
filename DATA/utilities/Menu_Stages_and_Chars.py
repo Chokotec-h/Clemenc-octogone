@@ -336,7 +336,7 @@ class CharsMenu:
             name = "Player 1"
         else:
             name = self.namelist[self.names[0]]
-        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,150,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,200,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
@@ -369,7 +369,7 @@ class CharsMenu:
             name = "Player 2"
         else:
             name = self.namelist[self.names[1]]
-        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,150,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,200,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
@@ -420,10 +420,10 @@ class CharsMenu:
         # Affichage si le joueur est prêt
         if self.selected_1:
             pygame.draw.rect(window, (230, 230, 230), (width / 8, height - 120, width / 4, 30))
-            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), width / 4, height - resize(0,110,width,height)[1], format_="center").draw(window)
+            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), width / 4, height - resize(0,110+24,width,height)[1], format_="center").draw(window)
         if self.selected_2:
             pygame.draw.rect(window, (230, 230, 230), (5 * width / 8, height - 120, width / 4, 30))
-            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), 3 * width / 4, height - resize(0,110,width,height)[1], format_="center").draw(
+            Texte("PRET", ("arial", 24, True, False), (0, 0, 0), 3 * width / 4, height - resize(0,110+24,width,height)[1], format_="center").draw(
                 window)
 
         # Affichage des noms

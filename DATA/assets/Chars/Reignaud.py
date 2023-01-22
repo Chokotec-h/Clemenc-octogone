@@ -54,23 +54,21 @@ class Reignaud(Char):
                 self.attack = None
 
         if attack == "NeutralB":
+            if self.frame < 9 :
+                self.animation = "NeutralB"
+                self.animeframe = self.frame
             if self.frame < 5 :
                 if left :
                     self.look_right = False
                 if right :
                     self.look_right = True
-            if not self.projectiles:
-                if self.frame < 5 :
-                    self.cancelable = True
-                else :
-                    self.cancelable = False
-                if self.frame == 5 :
-                    self.duration_mot_invasif = 5
-                    self.projectiles.append(Mot_invasif(self.x,self.rect.y,other,self,stage))
-                if self.frame > 15: # 10 frames de lag
-                    self.attack = None
+            if self.frame < 8 :
+                self.cancelable = True
             else :
-                if self.frame > 15 :
+                self.cancelable = False
+            if self.frame == 16 :
+                self.active_hitboxes.append(Hitbox(30,50,68,68,pi/4,10,9.4,1/300,9,3,self))
+            if self.frame > 35 :
                     self.attack = None
 
         if attack == "DownB":

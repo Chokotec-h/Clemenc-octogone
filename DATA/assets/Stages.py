@@ -2,7 +2,7 @@ import pygame
 from DATA.utilities.functions import *
 
 # Nom des stages
-stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info", "Salle de TP","Table de self","BDE"]
+stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info", "Salle de TP","Table de self","BDE","I211","H010"]
 # Ajouter les musiques : (Nom de fichier,durée,stage,True si musique par défaut, sinon nom du personnage qui active la musique)
 musics = [
     ("event:/BGM/let's_fight_!", "K201", True),("event:/BGM/Industrial class", "K201", "Renault"),("event:/BGM/THE WORLD of Mathematics", "K201", "Balan"),
@@ -12,7 +12,9 @@ musics = [
     ("event:/BGM/Cyber Class", "Salle d'info", True),
     ("event:/BGM/Lunch time !", "Table de self", True),
     ("event:/BGM/City night", "BDE", True),
-    ("event:/BGM/optic'mind", "Salle de TP", True)
+    ("event:/BGM/optic'mind", "Salle de TP", True),
+    ("event:/BGM/let's_fight_!", "I211", True),
+    ("event:/BGM/let's_fight_!", "H010", True),
 ]
 
 
@@ -104,3 +106,11 @@ def create_stage(stage):
         return (Stage(stage,f"{stage}/BDE_platform", 0, 0,
                 [(0, 156, 640, 4, (0, 0, 0))]),
                 [resize(-200,-50,width,height), resize(200,-50,width,height)])
+    if stage == "H010":
+        return (Stage(stage,f"{stage}/H010_platform", 0, 0,
+                    []),
+                [resize(-150,10,width,height), resize(150,10,width,height)])
+    if stage == "I211":
+        return (Stage(stage,f"{stage}/I211_plateforme", 0, 0,
+                    []),
+                [resize(-350,0,width,height), resize(350,0,width,height)])

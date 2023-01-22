@@ -548,8 +548,8 @@ class Flaque():
             self.other.vx *= 2-self.other.deceleration
             self.other.hitstun = max(4,self.other.hitstun)
     
-    def deflect(self):
-        self.vx = -self.vx
+    def deflect(self,modifier):
+        self.vx = -self.vx*modifier
         self.own,self.other = self.other,self.own
 
     def draw(self,window):

@@ -73,7 +73,7 @@ class Balan(Char):
                 other.vy = -1
                 other.vx = 0
             if self.frame == 30 and self.grab:
-                other.rect.y = self.rect.y - 32
+                other.rect.y = self.rect.y - resize(0,32,width,height)[1]
                 other.vy = 0
                 other.vx = 0
                 self.active_hitboxes.append(Hitbox(40,32,32,32,pi/3,20,16,1/200,18,3,self))

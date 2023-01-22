@@ -132,7 +132,7 @@ joy = {
     (1,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png").get_size(),width,height)),
     (1,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png").get_size(),width,height)),
 }
-text = ["Gauche","Droite","Haut","Bas","Fullhop","Shorthop","Attaque","Special","Garde","Smash (G)","Smash (D)","Smash (H)","Smash (B)","Taunt (G)","Taunt (D)","Taunt (H)","Taunt (B)","Pause"]
+text = ["Gauche","Droite","Haut","Bas","Fullhop","Shorthop","Attaque","Special","Garde","Smash (G)","Smash (D)","Smash (H)","Smash (B)","Taunt (G)","Taunt (D)","Taunt (H)","Taunt (B)","Pause","Fulhop 2","Tilt (G)","Tilt (D)","Tilt (H)","Tilt (B)"]
 
 def specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x):
     size = 55
@@ -221,39 +221,78 @@ def specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x):
 
     return size,t
 
-def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n,width,height):
-    if row_n%2 == 0 :
-        Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x-resize(120,0,width,height)[0],y,format_="right").draw(window)
-    if row_n%2 == 1 :
-        Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x+resize(120,0,width,height)[0],y,format_="left").draw(window)
-    if select==number :
-        Bouton = Button("[input]",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
-        if focusedbutton == line and row == row_n:
-            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n,width,height,frames=0):
+    if row == -1 :
+        Texte(text[-5+number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x-resize(120,0,width,height)[0],y,format_="right").draw(window)
+        if select==-5+number :
+            sec = str(round(frames/60))
+            Bouton = Button("[input] ("+sec+"s)",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            if focusedbutton == line:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
 
-        Bouton.draw(window)
+            Bouton.draw(window)
+        else :
+            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            if focusedbutton == line:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+            Bouton.draw(window)
+            if input_ :
+                for j,i in enumerate(input_) :
+                    modif_x = j*resize(64,0,width,height)[0]-(len(input_)-1)*resize(32,0,width,height)[0]
+                    withdraw_x = resize(32,0,width,height)[0]
+                    withdraw_y = resize(32,0,width,height)[0]
+                    if i[0] == "Button" :
+                        window.blit(bouton,(x+j*modif_x-withdraw_x,y-withdraw_y))
+                        Texte(str(i[1]),("arial",resize(0,55,width,height)[1],True,False),(0,0,0),x+j*modif_x,y).draw(window)
+                    if i[0] == "D-Pad" :
+                        window.blit(dpad[(i[2],i[3])],(x+modif_x-withdraw_x,y-withdraw_y))
+                    if i[0] == "Joy" :
+                        window.blit(joy[(i[1]%2,i[2])],(x+modif_x-withdraw_x,y-withdraw_y))
+                    if i[0] == "Keyboard" :
+                        pygame.draw.rect(window,(200,200,200),(x+modif_x-withdraw_x,
+                                        y-withdraw_y,resize(60,64,width,height)[0],resize(60,64,width,height)[1]))
+                        t = pygame.key.name(i[1]).upper()
+                        size,t = specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x)
+                        Texte(t,("arial",resize(0,size,width,height)[1],True,False),(0,0,0),
+                            x+modif_x,
+                            y).draw(window)
+            else :
+                modif_x = resize(64,0,width,height)[0]
+                Texte("Aucun",("arial",resize(0,32,width,height)[1],True,False),(0,0,0),x,y).draw(window)
+
     else :
-        Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
-        if focusedbutton == line and row == row_n:
-            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+        if row_n%2 == 0 :
+            Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x-resize(120,0,width,height)[0],y,format_="right").draw(window)
+        if row_n%2 == 1 :
+            Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x+resize(120,0,width,height)[0],y,format_="left").draw(window)
+        if select==number :
+            Bouton = Button("[input]",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            if focusedbutton == line and row == row_n:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
 
-        Bouton.draw(window)
-        for j,i in enumerate(input_) :
-            modif_x = j*resize(64,0,width,height)[0]-(len(input_)-1)*resize(32,0,width,height)[0]
-            withdraw_x = resize(32,0,width,height)[0]
-            withdraw_y = resize(32,0,width,height)[0]
-            if i[0] == "Button" :
-                window.blit(bouton,(x+j*modif_x-withdraw_x,y-withdraw_y))
-                Texte(str(i[1]),("arial",resize(0,55,width,height)[1],True,False),(0,0,0),x+j*modif_x,y).draw(window)
-            if i[0] == "D-Pad" :
-                window.blit(dpad[(i[2],i[3])],(x+modif_x-withdraw_x,y-withdraw_y))
-            if i[0] == "Joy" :
-                window.blit(joy[(i[1]%2,i[2])],(x+modif_x-withdraw_x,y-withdraw_y))
-            if i[0] == "Keyboard" :
-                pygame.draw.rect(window,(200,200,200),(x+modif_x-withdraw_x,
-                                y-withdraw_y,resize(60,64,width,height)[0],resize(60,64,width,height)[1]))
-                t = pygame.key.name(i[1]).upper()
-                size,t = specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x)
-                Texte(t,("arial",resize(0,size,width,height)[1],True,False),(0,0,0),
-                    x+modif_x,
-                    y).draw(window)
+            Bouton.draw(window)
+        else :
+            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            if focusedbutton == line and row == row_n:
+                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+
+            Bouton.draw(window)
+            for j,i in enumerate(input_) :
+                modif_x = j*resize(64,0,width,height)[0]-(len(input_)-1)*resize(32,0,width,height)[0]
+                withdraw_x = resize(32,0,width,height)[0]
+                withdraw_y = resize(32,0,width,height)[0]
+                if i[0] == "Button" :
+                    window.blit(bouton,(x+j*modif_x-withdraw_x,y-withdraw_y))
+                    Texte(str(i[1]),("arial",resize(0,55,width,height)[1],True,False),(0,0,0),x+j*modif_x,y).draw(window)
+                if i[0] == "D-Pad" :
+                    window.blit(dpad[(i[2],i[3])],(x+modif_x-withdraw_x,y-withdraw_y))
+                if i[0] == "Joy" :
+                    window.blit(joy[(i[1]%2,i[2])],(x+modif_x-withdraw_x,y-withdraw_y))
+                if i[0] == "Keyboard" :
+                    pygame.draw.rect(window,(200,200,200),(x+modif_x-withdraw_x,
+                                    y-withdraw_y,resize(60,64,width,height)[0],resize(60,64,width,height)[1]))
+                    t = pygame.key.name(i[1]).upper()
+                    size,t = specialkeysgestion(t,window,x,y,input_,j,width,height,modif_x)
+                    Texte(t,("arial",resize(0,size,width,height)[1],True,False),(0,0,0),
+                        x+modif_x,
+                        y).draw(window)

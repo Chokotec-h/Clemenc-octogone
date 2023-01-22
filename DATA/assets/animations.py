@@ -16,6 +16,11 @@ icons ={
     "Kebab":pygame.image.load("DATA/Images/Sprites/Chars/Kebab/icon.png"),
     "Poissonnier":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
     "Renault":pygame.image.load("DATA/Images/Sprites/Chars/Renault/icon.png"),
+    "Gourmelen":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
+    "Journault":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
+    "Le Berre":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
+    "EnglishTeacher":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
+    "Thevenet":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
     #"Isaac":pygame.image.load("DATA/Images/Sprites/Chars/None/icon.png"),
 }
 icons64 ={
@@ -29,6 +34,11 @@ icons64 ={
     "Kebab":pygame.transform.scale(icons["Kebab"],resize(64,64,width,height)),
     "Poissonnier":pygame.transform.scale(icons["Poissonnier"],resize(64,64,width,height)),
     "Renault":pygame.transform.scale(icons["Renault"],resize(64,64,width,height)),
+    "Gourmelen":pygame.transform.scale(icons["Gourmelen"],resize(64,64,width,height)),
+    "Journault":pygame.transform.scale(icons["Journault"],resize(64,64,width,height)),
+    "Le Berre":pygame.transform.scale(icons["Le Berre"],resize(64,64,width,height)),
+    "EnglishTeacher":pygame.transform.scale(icons["EnglishTeacher"],resize(64,64,width,height)),
+    "Thevenet":pygame.transform.scale(icons["Thevenet"],resize(64,64,width,height)),
     #"Isaac":pygame.transform.scale(icons["Isaac"],resize(64,64,width,height)),
 }
 
@@ -43,6 +53,12 @@ Nonesprite = {
     "airdodge":("DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True),
 
 }
+
+None_Journault = Nonesprite
+None_Journault["UpB0"] = ("DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True)
+None_Journault["UpB1"] = ("DATA/Images/Sprites/Chars/None/Nameless_sprite90.png",((0,0,30,12),),1,True)
+None_Journault["UpB2"] = ("DATA/Images/Sprites/Chars/None/Nameless_sprite.png",((0,0,12,30),),1,True)
+None_Journault["UpB3"] = ("DATA/Images/Sprites/Chars/None/Nameless_sprite90.png",((0,0,30,12),),1,True)
 
 Reignaud = {
     "idle":("DATA/Images/Sprites/Chars/Reignaud/Default/Idle.png",((1,1,13,35),(21,2,13,34),(40,1,13,35)),2,True),
@@ -71,6 +87,7 @@ Reignaud = {
     "UpB3":("DATA/Images/Sprites/Chars/Reignaud/Default/UpB3.png",((19,2,17,45),(0,4,16,43),(19,2,17,45),(39,1,13,34)),11,False),
     "UpB4":("DATA/Images/Sprites/Chars/Reignaud/Default/UpB4.png",((19,2,17,49),(0,4,16,47),(19,2,17,49),(39,1,13,34)),11,False),
     "DownB":("DATA/Images/Sprites/Chars/Reignaud/Default/DownB.png",((0,1,12,35),(16,1,12,35)),2,False),
+    "NeutralB":("DATA/Images/Sprites/Chars/Reignaud/Default/NeutralB.png",((2,1,30,35),(52,1,30,35),(96,1,30,35),(142,1,32,35),(176,1,35,35),(219,1,12,35)),8,False),
     "Counter":("DATA/Images/Sprites/Chars/Reignaud/Default/Counter.png",((2,1,12,35),(21,1,18,35),(45,1,18,35),(69,1,21,35)),12,False),
 
 }
@@ -263,6 +280,11 @@ animations = {
     "Kebab":Kebab,
     "Poissonnier":Nonesprite,
     "Renault":Renault,
+    "Gourmelen":Nonesprite,
+    "Journault":Nonesprite,
+    "Le Berre":Nonesprite,
+    "EnglishTeacher":Nonesprite,
+    "Thevenet":Nonesprite,
     #"Isaac":Nonesprite,
     "Training":Training
 }

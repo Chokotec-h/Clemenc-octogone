@@ -58,7 +58,7 @@ class Dash_Smoke():
 
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*scalex),round(drawing_sprite.get_size()[1]*scaley))) # Rescale
         size = [size[0]*scalex,size[1]*scaley,size[2]*scalex,size[3]*scaley] # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.y-size[3] + self.y+resize(0,520,width,height)[1]] # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, size[3] + self.y+resize(0,280,width,height)[1]] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
 
         if self.life_time >= 0 :
@@ -81,7 +81,7 @@ class Double_Jump():
 
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*scalex),round(drawing_sprite.get_size()[1]*scaley))) # Rescale
         size = [size[0]*scalex,size[1]*scaley,size[2]*scalex,size[3]*scaley] # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.y-size[3] + self.y+resize(0,520,width,height)[1]] # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, size[3] + self.y+resize(0,280,width,height)[1]] # Position réelle du sprite
         window.blit(drawing_sprite, pos,size) # on dessine le sprite
 
         if self.life_time >= 0 :
