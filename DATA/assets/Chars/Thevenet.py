@@ -325,6 +325,7 @@ class Radis():
         self.basevy = self.vy
         self.x = own.x + resize(x,0,width,height)[0]
         self.y = own.rect.y + resize(0,y,width,height)[1]
+        self.dir = signe(own.direction)
         self.own = own
         self.other = other
         self.duration = 120
@@ -361,8 +362,7 @@ class Radis():
             self.duration -= 20
         if self.rect.colliderect(self.other.rect):
             self.vy = -6
-            self.vx = 5*-signe(self.vx)
-            self.duration -= 20
+            self.vx = 5*-self.dir
         self.duration -= 1
         
     def deflect(self,modifier):
