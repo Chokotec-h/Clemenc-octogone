@@ -43,6 +43,7 @@ class Button :
         self.y = y
         w,h = size
 
+        font = ("arial",font[1]*0.8,font[2],font[3])
         self.textobject = Texte(text,font,(0,0,0),self.x,self.y)
         if isinstance(image,str):
             self.image = pygame.image.load(image)

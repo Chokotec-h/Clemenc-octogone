@@ -117,7 +117,7 @@ def main():
                     if e.type == pygame.QUIT:  # Bouton croix en haut à droite de l'écran
                         return
                 window.fill((0, 0, 0))
-                temp_frames += 1
+                temp_frames += 2
                 if temp_frames < 100:
                     temp_image.set_alpha(temp_frames * 255 / 100)
 

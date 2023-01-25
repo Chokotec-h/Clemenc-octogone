@@ -39,7 +39,7 @@ class MainPlat:
         self.x, self.y = resize(x,y,width,height)
         self.sprite = pygame.image.load(sprite).convert_alpha()
         self.sprite = pygame.transform.scale(self.sprite,
-                                             (self.sprite.get_size()[0] * resize(4,4,width,height)[0], self.sprite.get_size()[1] * resize(4,4,width,height)[1]))
+                                             (resize(self.sprite.get_size()[0] * 4,4,width,height)[0], resize(4,self.sprite.get_size()[1] * 4,width,height)[1]))
         
         # Recalcul de l'ordonnée
         self.y = self.y + height - self.sprite.get_size()[1] - resize(0,450,width,height)[1]

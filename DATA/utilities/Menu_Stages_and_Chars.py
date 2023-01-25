@@ -77,7 +77,7 @@ class StagesMenu:
                 self.confirm = True
         else:
             # Affichage du nom du stage sélectionné
-            Texte(self.actualstages[self.focused_button], ("arial", resize(0,50,width,height)[1], True, False), (0, 0, 0), resize(20,0,width,height)[0], height // 2,
+            Texte(self.actualstages[self.focused_button], ("arial", resize(0,50,width,height)[1]*0.8, True, False), (0, 0, 0), resize(20,0,width,height)[0], height // 2,
                   format_="left").draw(window)
         Bouton.draw(window)
 
@@ -102,10 +102,10 @@ class StagesMenu:
         
         if self.focused_button == -1 :
             stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
-            pygame.draw.rect(window,(0,0,0),(resize(50,0,width,height)[0],height//4,stage_sprite.get_size()[0]*resize(0.66,0,width,height)[0], stage_sprite.get_size()[1]*resize(0,0.66,width,height)[1]))
+            pygame.draw.rect(window,(0,0,0),(resize(50,0,width,height)[0],height//4,resize(stage_sprite.get_size()[0]*0.66,0,width,height)[0], resize(0,stage_sprite.get_size()[1]*0.66,width,height)[1]))
         else:
             stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
-            window.blit(pygame.transform.scale(stage_sprite, (stage_sprite.get_size()[0]*resize(0.66,0,width,height)[0], stage_sprite.get_size()[1]*resize(0,0.66,width,height)[1])),
+            window.blit(pygame.transform.scale(stage_sprite, (resize(stage_sprite.get_size()[0]*0.66,0,width,height)[0], resize(0,stage_sprite.get_size()[1]*0.66,width,height)[1])),
                 (resize(50,0,width,height)[0], height//4))
         return Menu
 
