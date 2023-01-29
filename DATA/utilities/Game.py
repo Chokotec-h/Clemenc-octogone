@@ -234,6 +234,8 @@ class Game:
                 self.Char_P2.jumping = False
 
             if self.training:
+
+                Texte(f"Vous pouvez utiliser la souris pour déplacer les personnages", ("Arial", resize(0,20,width,height)[1], False, False), (0, 0, 0), width//3, height-resize(0,20,width,height)[1], 800,format_="right").draw(window)
                 ################### Gestion de la DI et de la tech en entraînement ###################
 
                 if self.TrainingHDI == 1:
