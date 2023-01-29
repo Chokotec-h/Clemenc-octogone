@@ -1,3 +1,5 @@
+import os
+import platform
 from ctypes import *
 import os
 import signal
