@@ -130,7 +130,7 @@ def main():
         del temp_frames
         del temp_image
 
-        embient.instance = SoundSystem.play_event("event:/BGM/clemenc'octogone")
+        embient.instance = SoundSystem.play_event("event:/BGM/Beijing de zhuren")
         # Boucle du programme
         while run:
             # gestion de répétition des touches lorsqu'elles sont maintenues (toutes les 10 frames)
