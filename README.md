@@ -6,8 +6,17 @@
 
 Jeu de combat (style smash bros) regroupant les personalités marquantes de la MP2I
 
-## Installation
-Le release devrait marcher sans installation ^^.
+## Installation (linux uniquement)
+### Setup
+ - installez la dernière version de python
+ - installez pip (si il n'est pas présent dans python)
+ - installez pygame : `pip install pygame`
+ 
+### Build (optionel)
+ - installez pyinstaller : `pip install pyinstaller`
+ - puis enfin de le repertoire du jeu executez
+ `./build.sh`
+ - le jeu apparaitra dans le répértoire dist
 
 ## Dépendences
  - [FMOD](https://www.fmod.com) - Made for games : FMOD is the solution for adaptive audio.
