@@ -13,7 +13,7 @@ musics = [
     ("event:/BGM/Lunch time !", "Table de self", True),
     ("event:/BGM/City night", "BDE", True),
     ("event:/BGM/optic'mind", "Salle de TP", True),
-    ("event:/BGM/let's_fight_!", "I211", True),
+    ("event:/BGM/Beijing de zhuren", "I211", True),
     ("event:/BGM/let's_fight_!", "H010", True),
 ]
 
