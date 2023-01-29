@@ -82,7 +82,7 @@ class Game:
                 self.select = 0
             if click and (self.select == 1 or mousex > self.Char_P1.rect.x+width/2 and mousex < self.Char_P1.rect.x + self.Char_P1.rect.w+width/2 and mousey > self.Char_P1.rect.y+height/2 and mousey < self.Char_P1.rect.y + self.Char_P1.rect.h+height/2) :
                 self.Char_P1.x = mousex-width/2
-                self.Char_P1.rect.y = mousey-height/2
+                self.Char_P1.rect.y = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P1.rect.h/2
                 self.Char_P1.boom = 2
                 self.Char_P1.vx = 0
                 self.Char_P1.vy = 0
@@ -92,7 +92,7 @@ class Game:
                 self.Char_P1.basecoords = (self.Char_P1.x,self.Char_P1.rect.y)
             if click and (self.select == 2 or mousex > self.Char_P2.rect.x+width/2 and mousex < self.Char_P2.rect.x + self.Char_P2.rect.w+width/2 and mousey > self.Char_P2.rect.y+height/2 and mousey < self.Char_P2.rect.y + self.Char_P2.rect.h+height/2) :
                 self.Char_P2.x = mousex-width/2
-                self.Char_P2.rect.y = mousey-height/2
+                self.Char_P2.rect.y = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P2.rect.h/2
                 self.Char_P2.boom = 2
                 self.Char_P2.vx = 0
                 self.Char_P2.vy = 0
