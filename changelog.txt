@@ -3,10 +3,11 @@ v1.0.0 -first release- :
         - 10 personnages (Balan, Rey, Grégoire, Millet, Poissonnier, Renault, Reignaud, Joueur de Air-Président, Kebab, Pyro-Aubin)
         - 7 Stages (BDE, K201, Salle d'info, Self, Cour d'honneur, TP Optique, Chapelle)
 
-v1.0.1 -MPI(*)- :
+v1.3.0 -MPI(*)- :
     Content :
         - 5 Personnages supplémentaires (Gourmelin, Le Berre, Journault, Thévenet, English Teachers)
         - 2 Nouveaux stages (I211, H010)
     Updates :
         - Refonte de Balan
-        - Le joueur de Air-Président ne peut désormais plus porter de poutre
+        - Le joueur de Air-Président ne peut désormais plus porter de poutre ; nouveau neutral B
+        - Suppression des mots invasifs au profit de la destruction de table

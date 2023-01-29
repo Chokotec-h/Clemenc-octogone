@@ -62,6 +62,8 @@ class Game:
 
         self.traininginputs = [False for _ in range(17)]
 
+        self.select = 0
+
     def play(self, controls, joysticks, stage, width, height, window, clock):
 
         Play = True
@@ -74,10 +76,35 @@ class Game:
             self.Char_P2.airspeed = self.airspeed
             self.Char_P2.fastfallspeed = self.fastfallspeed
             self.Char_P2.fallspeed = self.fallspeed
+            mousex,mousey = pygame.mouse.get_pos()
+            click = True in pygame.mouse.get_pressed()
+            if not click :
+                self.select = 0
+            if click and (self.select == 1 or mousex > self.Char_P1.rect.x+width/2 and mousex < self.Char_P1.rect.x + self.Char_P1.rect.w+width/2 and mousey > self.Char_P1.rect.y+height/2 and mousey < self.Char_P1.rect.y + self.Char_P1.rect.h+height/2) :
+                self.Char_P1.x = mousex-width/2
+                self.Char_P1.rect.y = mousey-height/2
+                self.Char_P1.boom = 2
+                self.Char_P1.vx = 0
+                self.Char_P1.vy = 0
+                self.select = 1
+                while self.Char_P1.touch_stage(stage, self.Char_P1.rect) :
+                    self.Char_P1.rect.y -= 2
+                self.Char_P1.basecoords = (self.Char_P1.x,self.Char_P1.rect.y)
+            if click and (self.select == 2 or mousex > self.Char_P2.rect.x+width/2 and mousex < self.Char_P2.rect.x + self.Char_P2.rect.w+width/2 and mousey > self.Char_P2.rect.y+height/2 and mousey < self.Char_P2.rect.y + self.Char_P2.rect.h+height/2) :
+                self.Char_P2.x = mousex-width/2
+                self.Char_P2.rect.y = mousey-height/2
+                self.Char_P2.boom = 2
+                self.Char_P2.vx = 0
+                self.Char_P2.vy = 0
+                self.select = 2
+                while self.Char_P2.touch_stage(stage, self.Char_P2.rect) :
+                    self.Char_P2.rect.y -= 2
+                self.Char_P2.basecoords = (self.Char_P2.x,self.Char_P2.rect.y)
+                
 
         # Recuperation des touches
         if self.game_running < 0 and (
-                convert_inputs(controls[0], joysticks, 0)[-1] or convert_inputs(controls[1], joysticks, 1)[-1]):
+                convert_inputs(controls[0], joysticks, 0)[-6] or convert_inputs(controls[1], joysticks, 1)[-6]):
             if not self.hold_pause:
                 self.pause = not self.pause
                 if self.pause:
@@ -161,7 +188,22 @@ class Game:
 
             #### récupération des inputs du joueur 1
 
-            inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
+            inputs_1 = convert_inputs(controls[0], joysticks, 0)
+            if inputs_1[-5] :
+                inputs_1[4] = True
+            if inputs_1[-4] :
+                inputs_1[6] = True
+                inputs_1[0] = True
+            if inputs_1[-3] :
+                inputs_1[6] = True
+                inputs_1[1] = True
+            if inputs_1[-2] :
+                inputs_1[6] = True
+                inputs_1[2] = True
+            if inputs_1[-1] :
+                inputs_1[6] = True
+                inputs_1[3] = True
+            inputs_1 = inputs_1[0:-5][0:-1]
             if not (inputs_1[4] or inputs_1[5]):  # gestion du saut
                 self.Char_P1.jumping = False
 
@@ -172,11 +214,28 @@ class Game:
 
             ####  récupération des inputs du joueur 2
 
-            inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
+            inputs_2 = convert_inputs(controls[1], joysticks, 1)
+            if inputs_2[-5] :
+                inputs_2[4] = True
+            if inputs_2[-4] :
+                inputs_2[6] = True
+                inputs_2[0] = True
+            if inputs_2[-3] :
+                inputs_2[6] = True
+                inputs_2[1] = True
+            if inputs_2[-2] :
+                inputs_2[6] = True
+                inputs_2[2] = True
+            if inputs_2[-1] :
+                inputs_2[6] = True
+                inputs_2[3] = True
+            inputs_2 = inputs_2[0:-5][0:-1]
             if not (inputs_2[4] or inputs_2[5]):  # gestion du saut
                 self.Char_P2.jumping = False
 
             if self.training:
+
+                Texte(f"Vous pouvez utiliser la souris pour déplacer les personnages", ("Arial", resize(0,20,width,height)[1], False, False), (0, 0, 0), width//3, height-resize(0,20,width,height)[1], 800,format_="right").draw(window)
                 ################### Gestion de la DI et de la tech en entraînement ###################
 
                 if self.TrainingHDI == 1:
@@ -557,9 +616,10 @@ class Game:
 
     def reset(self):
         self.confirm = True
-        self.Char_P1.x = -100
-        self.Char_P1.rect.y = 0
+        self.Char_P1.x,self.Char_P1.rect.y = self.Char_P1.basecoords
         basedamages = self.Char_P2.basedamages
-        self.Char_P2 = Training(0, 0, 1)
+        basecoords = self.Char_P2.basecoords
+        self.Char_P2 = Training(basecoords[0], basecoords[1], 1)
+        self.Char_P2.basecoords = basecoords
         self.Char_P2.basedamages = basedamages
         self.Char_P2.damages = basedamages

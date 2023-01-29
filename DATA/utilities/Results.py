@@ -14,6 +14,11 @@ Victorythemes = {
     "Kebab du dimanche soir": "BDE",
     "Poissonnier": "Poissonier",
     "Renault": "SI",
+    "Gourmelen": "Normal",
+    "Journault": "Normal",
+    "Le Berre": "Normal",
+    "English Teacher": "Normal",
+    "Thévenet": "Normal",
     -1: "Bonus"
 }
 

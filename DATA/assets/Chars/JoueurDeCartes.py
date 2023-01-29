@@ -83,7 +83,7 @@ class Air_President(Char):
                 else :
                     if not self.look_right:
                         angle = 3*pi/4
-                        x = change_left(64,48)
+                        x = change_left(64,48) - self.rect.w/2
                     else:
                         angle = pi/4
                         x = 24

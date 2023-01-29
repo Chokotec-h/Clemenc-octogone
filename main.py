@@ -88,14 +88,16 @@ def main():
         focusedbutton = 0  # numéro de bouton
         confirm = False  # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
 
-        Menu_Settings = SettingsMenu(UIDicoEvent,width,height)
+        Menu_Settings = SettingsMenu(UIDicoEvent, width, height)
         Menu_Stages = StagesMenu(False, UIDicoEvent)
         Menu_Chars = CharsMenu(False, UIDicoEvent)
 
         # Animation de l'ecran titre
         titleframe = 0
-        titleanimation = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Logo/{i}.png"), resize(512,512,width,height)) for i in
-                          range(37)]
+        titleanimation = [
+            pygame.transform.scale(pygame.image.load(f"DATA/Images/Logo/{i}.png"), resize(512, 512, width, height)) for
+            i in
+            range(37)]
 
         temp_image = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Intro.png"), (width, height))
         temp_frames = 0
@@ -106,9 +108,9 @@ def main():
         """""""""""""""""""""   INSTRUCTIONS   """""""""""""""""""""
         """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-        if not skip_intro :
+        if not skip_intro:
             # Test voix au lancement parce que rigolo
-            #UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
+            # UIDicoEvent["Voix"]["Bonus"]["ratage"].play()
 
             # Intro  #4fun
             while temp_frames < 300:
@@ -117,7 +119,7 @@ def main():
                     if e.type == pygame.QUIT:  # Bouton croix en haut à droite de l'écran
                         return
                 window.fill((0, 0, 0))
-                temp_frames += 1
+                temp_frames += 2
                 if temp_frames < 100:
                     temp_image.set_alpha(temp_frames * 255 / 100)
 
@@ -140,21 +142,27 @@ def main():
 
             if Menu == "title":
                 window.fill((0x99, 0x55, 0x99))  # Arrière plan
-                pygame.draw.rect(window, (60, 60, 60), (0, 0, width, resize(0,128,width,height)[1]))
-                pygame.draw.rect(window, (60, 60, 60), (0, height - resize(0,128,width,height)[1], width, resize(0,128,width,height)[1]))
+                pygame.draw.rect(window, (60, 60, 60), (0, 0, width, resize(0, 128, width, height)[1]))
+                pygame.draw.rect(window, (60, 60, 60), (
+                0, height - resize(0, 128, width, height)[1], width, resize(0, 128, width, height)[1]))
                 # Affichage de la version
-                Texte("1.0.0 release", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
+
+                Texte("1.3.0 MPI(*)", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
 
                 key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
-                    Texte(f"Appuyez sur {key}", ("Arial black", resize(0,50,width,height)[1], True, False), (0, 0, 0), width / 2,
-                          height - resize(0,64,width,height)[1]).draw(window)
+                    Texte(f"Appuyez sur {key}", ("Arial black", resize(0, 50, width, height)[1], True, False),
+                          (0, 0, 0), width / 2,
+                          height - resize(0, 64, width, height)[1]).draw(window)
 
-                window.blit(titleanimation[round(min(titleframe, 54) / 1.5)], (width / 2 - resize(512,512,width,height)[0]/2, height / 2 - resize(512,512,width,height)[1]/2 - resize(64,64,width,height)[1]))
-                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (40, 40, 40), width / 2 + 5,
-                    height / 2 + resize(512,512,width,height)[1]/2 + 5).draw(window)
-                Texte("OCTOGONE", ("Comic", resize(0,128,width,height)[1], True, False), (128, 0, 128), width / 2, height / 2 +
-                    resize(512,512,width,height)[1]/2).draw(window)
+                window.blit(titleanimation[round(min(titleframe, 54) / 1.5)], (
+                width / 2 - resize(512, 512, width, height)[0] / 2,
+                height / 2 - resize(512, 512, width, height)[1] / 2 - resize(64, 64, width, height)[1]))
+                Texte("OCTOGONE", ("Comic", resize(0, 128, width, height)[1], True, False), (40, 40, 40), width / 2 + 5,
+                      height / 2 + resize(512, 512, width, height)[1] / 2 + 5).draw(window)
+                Texte("OCTOGONE", ("Comic", resize(0, 128, width, height)[1], True, False), (128, 0, 128), width / 2,
+                      height / 2 +
+                      resize(512, 512, width, height)[1] / 2).draw(window)
                 if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                     UIDicoEvent["UI1 ready"].play()
                     confirm = True
@@ -212,8 +220,9 @@ def main():
                     focusedbutton = ((focusedbutton + 3) % 6) - 3
 
                     # Bouton "Combat"
-                    Bouton = Button("Combat", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
-                                    height / 8, resize(250,100,width,height))
+                    Bouton = Button("Combat", ("arial", resize(0, 50, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", width / 2,
+                                    height / 8, resize(250, 100, width, height))
                     if focusedbutton == 0:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -227,8 +236,9 @@ def main():
                     Bouton.draw(window)
 
                     # Bouton "Pandaball"
-                    Bouton = Button("", ("arial", resize(0,45,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
-                                    2 * height / 8, resize(250,100,width,height))
+                    Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", width / 2,
+                                    2 * height / 8, resize(250, 100, width, height))
                     if focusedbutton == 1:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -239,26 +249,30 @@ def main():
                             training = True
                             confirm = True
                     Bouton.draw(window)
-                    Texte("Pandaball", ("arial", resize(0,45,width,height)[1], True, False), (0, 0, 0), width / 2, 2 * height / 8 - resize(0,20,width,height)[1]).draw(
+                    Texte("Pandaball", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
+                          2 * height / 8 - resize(0, 20, width, height)[1]).draw(
                         window)
-                    Texte("(Entraînement)", ("arial", resize(0,30,width,height)[1], True, False), (0, 0, 0), width / 2, 2 * height / 8 + resize(0,20,width,height)[1]).draw(
+                    Texte("(Entraînement)", ("arial", resize(0, 30, width, height)[1], True, False), (0, 0, 0),
+                          width / 2, 2 * height / 8 + resize(0, 20, width, height)[1]).draw(
                         window)
 
                     # Bouton "Paramètres"
-                    Bouton = Button("Paramètres", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png",
-                                    width / 2, 3 * height / 8, resize(250,100,width,height))
+                    Bouton = Button("Paramètres", ("arial", resize(0, 50, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png",
+                                    width / 2, 3 * height / 8, resize(250, 100, width, height))
                     if focusedbutton == 2:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 forward"].play()
                             Menu = "settings"
-                            Menu_Settings = SettingsMenu(UIDicoEvent,width,height)
+                            Menu_Settings = SettingsMenu(UIDicoEvent, width, height)
                             confirm = True
                     Bouton.draw(window)
 
                     # Bouton "Credits"
-                    Bouton = Button("Credits", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 2,
-                                    7 * height / 8, resize(120,80,width,height))
+                    Bouton = Button("Credits", ("arial", resize(0, 40, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", width / 2,
+                                    7 * height / 8, resize(120, 80, width, height))
                     if focusedbutton == -2:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -269,8 +283,9 @@ def main():
                     Bouton.draw(window)
 
                     # Bouton "Title"
-                    Bouton = Button("Ecran titre", ("arial", resize(0,30,width,height)[1], True, False), "DATA/Images/Menu/Button.png",
-                                    3 * width / 4, 7 * height / 8, resize(120,80,width,height))
+                    Bouton = Button("Ecran titre", ("arial", resize(0, 30, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png",
+                                    3 * width / 4, 7 * height / 8, resize(120, 80, width, height))
                     if focusedbutton == -1:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -285,8 +300,9 @@ def main():
                     Bouton.draw(window)
 
                     # Bouton "Quitter"
-                    Bouton = Button("Quitter", ("arial", resize(0,40,width,height)[1], True, False), "DATA/Images/Menu/Button.png", width / 4,
-                                    7 * height / 8, resize(120,80,width,height))
+                    Bouton = Button("Quitter", ("arial", resize(0, 40, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", width / 4,
+                                    7 * height / 8, resize(120, 80, width, height))
                     if focusedbutton == -3:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
@@ -297,36 +313,50 @@ def main():
                 #############################################  Credits  #############################################
 
                 if Menu == "credits":
-                    Texte("CREDITS", ("arial", resize(0,45,width,height)[1], True, False), (0, 0, 0), width / 2, 40).draw(window)
+                    Texte("CREDITS", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
+                          40).draw(window)
 
-                    Texte("Game director", ("arial", resize(0,25,width,height)[1], True, False), (0, 0, 0), width / 3, height / 8).draw(window)
-                    Texte("Elsa", ("arial", resize(0,28,width,height)[1], False, False), (0xBC, 0x79, 0xE4), 2 * width / 3, height / 8).draw(
+                    Texte("Game director", ("arial", resize(0, 25, width, height)[1], True, False), (0, 0, 0),
+                          width / 3, height / 8).draw(window)
+                    Texte("Elsa", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0x79, 0xE4),
+                          2 * width / 3, height / 8).draw(
                         window)
 
-                    Texte("Graphics", ("arial", resize(0,28,width,height)[1], True, False), (0, 0, 0), width / 3, 2 * height / 8).draw(window)
-                    Texte("Loïc", ("arial", resize(0,28,width,height)[1], False, False), (0x20, 0x50, 0xF0), 2 * width / 3,
+                    Texte("Graphics", ("arial", resize(0, 28, width, height)[1], True, False), (0, 0, 0), width / 3,
+                          2 * height / 8).draw(window)
+                    Texte("Loïc", ("arial", resize(0, 28, width, height)[1], False, False), (0x20, 0x50, 0xF0),
+                          2 * width / 3,
                           2 * height / 8 - 15).draw(window)
-                    Texte("Elsa", ("arial", resize(0,28,width,height)[1], False, False), (0xBC, 0x79, 0xE4), 2 * width / 3,
+                    Texte("Elsa", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0x79, 0xE4),
+                          2 * width / 3,
                           2 * height / 8 + 15).draw(window)
-                    Texte("Nicolas", ("arial", resize(0,28,width,height)[1], False, False), (120, 120, 120), 3 * width / 4,
+                    Texte("Nicolas", ("arial", resize(0, 28, width, height)[1], False, False), (120, 120, 120),
+                          3 * width / 4,
                           2 * height / 8 - 15).draw(window)
-                    Texte("Aubin", ("arial", resize(0,28,width,height)[1], False, False), (0x55, 0x77, 0xBB), 3 * width / 4,
+                    Texte("Aubin", ("arial", resize(0, 28, width, height)[1], False, False), (0x55, 0x77, 0xBB),
+                          3 * width / 4,
                           2 * height / 8 + 15).draw(window)
 
-                    Texte("Musics & Sounds", ("arial", resize(0,28,width,height)[1], True, False), (0, 0, 0), width / 3, 3 * height / 8).draw(
+                    Texte("Musics & Sounds", ("arial", resize(0, 28, width, height)[1], True, False), (0, 0, 0),
+                          width / 3, 3 * height / 8).draw(
                         window)
-                    Texte("Iwan", ("arial", resize(0,28,width,height)[1], False, False), (0xBC, 0xBC, 0x10), 2 * width / 3, 3 * height / 8).draw(
+                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0xBC, 0x10),
+                          2 * width / 3, 3 * height / 8).draw(
                         window)
 
-                    Texte("Programation", ("arial", resize(0,28,width,height)[1], True, False), (0, 0, 0), width / 3, 4 * height / 8).draw(window)
-                    Texte("Nicolas", ("arial", resize(0,28,width,height)[1], False, False), (120, 120, 120), 2 * width / 3,
+                    Texte("Programation", ("arial", resize(0, 28, width, height)[1], True, False), (0, 0, 0), width / 3,
+                          4 * height / 8).draw(window)
+                    Texte("Nicolas", ("arial", resize(0, 28, width, height)[1], False, False), (120, 120, 120),
+                          2 * width / 3,
                           4 * height / 8 - 20).draw(window)
-                    Texte("Iwan", ("arial", resize(0,28,width,height)[1], False, False), (0xBC, 0xBC, 0x10), 2 * width / 3,
+                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0xBC, 0x10),
+                          2 * width / 3,
                           4 * height / 8 + 20).draw(window)
 
                     # retour
-                    Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1],
-                                    resize(100,60,width,height))
+                    Bouton = Button("<--", ("arial", resize(0, 50, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", 100, height - resize(0, 50, width, height)[1],
+                                    resize(100, 60, width, height))
                     Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                     if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                         UIDicoEvent["UI1 back"].play()
@@ -340,10 +370,11 @@ def main():
 
                 if Menu == "settings":
                     Menu, changescreen = Menu_Settings.update(window, width, height, events, controls, joysticks, 0, 0)
-                    if changescreen :
+                    if changescreen:
                         root = tk.Tk()
                         root.withdraw()
-                        messagebox.showerror('Avertissement',"Certaines modifications ne prendront effet qu'au redémarrrage")
+                        messagebox.showerror('Avertissement',
+                                             "Certaines modifications ne prendront effet qu'au redémarrrage")
                     confirm = Menu_Settings.confirm
 
                 ######################################################################################################
@@ -403,7 +434,7 @@ def main():
                         # importation de l'arrière-plan et de la musique
                         background = pygame.transform.scale(pygame.image.load(
                             f"DATA/Images/Stages/{Menu_Stages.actualstages[stage]}/{Menu_Stages.actualstages[stage]}.png"),
-                            (width,height))
+                            (width, height))
                         for m in musics:
                             if m[1] == Menu_Stages.actualstages[stage] and (
                                     str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
@@ -433,14 +464,16 @@ def main():
                             UIDicoEvent["UI1 ready"].play()
                             beep += 1
 
-                        Texte(f"PARTEZ !", ("Arial", resize(0,180,width,height)[1], True, False), (120, 0, 120), width / 2, height / 2).draw(
+                        Texte(f"PARTEZ !", ("Arial", resize(0, 180, width, height)[1], True, False), (120, 0, 120),
+                              width / 2, height / 2).draw(
                             window)
 
                     elif 4 > time.time() - Game.begin_game > 0.2 and not training:
                         if beep < round(time.time() - Game.begin_game + 0.2):
                             UIDicoEvent["UI1 selection 2"].play()
                             beep += 1
-                        Texte(f"{str(3 - round(time.time() - Game.begin_game - 0.2))}", ("Arial", resize(0,180,width,height)[1], True, False),
+                        Texte(f"{str(3 - round(time.time() - Game.begin_game - 0.2))}",
+                              ("Arial", resize(0, 180, width, height)[1], True, False),
                               (0, 0, 100), width / 2, height / 2).draw(window)
 
                     elif time.time() - Game.begin_game > 5 or training:
@@ -510,6 +543,7 @@ def main():
                 confirm = Game.confirm
 
                 SoundSystem.changeGlobalParameter("pause", int(Game.pause))  # gestion du son de la pause
+
 
                 if stage.name == "Salle de TP":
                     tremolo = 0
