@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{40452dcc-6b5c-4b2b-a61a-b0f5fd842a26}">
+		<property name="assetPath">
+			<value>VT/Science.mp3</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>8.016</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{96539f1d-789e-46d9-aaa1-db5f926466b7}</destination>
+		</relationship>
+	</object>
+</objects>

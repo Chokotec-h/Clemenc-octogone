@@ -1,7 +1,7 @@
 # Clemenc-octogone
 
 ![tests](https://badgen.net/badge/windows/passing/green?icon=windows)
-![tests](https://badgen.net/badge/linux/failure/red?icon=github)
+![tests](https://badgen.net/badge/linux/passing/green?icon=github)
 
 
 Jeu de combat (style smash bros) regroupant les personalités marquantes de la MP2I
@@ -15,18 +15,18 @@ Le release devrait marcher sans installation ^^.
  - [Pyinstaller](https://pyinstaller.org) - PyInstaller bundles a Python application and all its dependencies into a single package
 
 ## _Comment jouer ?_
-|Configuration par défaut (manettes) | Configuration par défaut (clavier) |
-|----|---|
-| A : attaque/confirmer | espace : attaque/confirmer |
-| B : spécial/annuler| X : spécial/annuler |
-| Y : Fullhop/Costume alternatif|  0 [pavé numérique] : Shorthop |
-|  R : Shield/Run|  . [pavé numérique] : Fullhop|
-|  Stick gauche : mouvement|  C : Shield/Run|
-|  Stick droit : attaques puissantes|  Q/D : costume alternatif|
-|  +/start : pause|  Flèches directionnelles : mouvement|
-|  L1/R1 : Changer de nom (menu personnage)| ZQSD : attaques puissantes|
-||  +/start : pause|
-||  J/L : Changer de nom (menu personnage)|
+| Configuration par défaut (manettes)      | Configuration par défaut (clavier)     |
+|------------------------------------------|----------------------------------------|
+| A : attaque/confirmer                    | espace : attaque/confirmer             |
+| B : spécial/annuler                      | X : spécial/annuler                    |
+| X : Shorthop/Cosutme alternatif          | 0 [pavé numérique] : Shorthop          |
+| Y : Fullhop/Costume alternatif           | . [pavé numérique] : Fullhop           |
+| R : Shield/Run                           | C : Shield/Run                         |
+|| Q/D : costume alternatif                 |
+| Stick gauche : mouvement                 | Flèches directionnelles : mouvement    |
+| Stick droit : attaques puissantes        | ZQSD : attaques puissantes             |
+| +/start : pause                          | entrée : pause                         |
+| L1/R1 : Changer de nom (menu personnage) | J/L : Changer de nom (menu personnage) |
 
 (Vous pouvez modifier vos configurations de combat dans le menu paramètres/configuration des contrôles)
 

@@ -1,6 +1,9 @@
 import os
 import platform
 from ctypes import *
+import os
+import signal
+signal.signal(signal.SIGSEGV, signal.SIG_IGN)
 
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
@@ -9,19 +12,20 @@ BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.
 
 BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
 
-# api value
-if platform.system() == "Windows":
-    core_dll = WinDLL("DATA/FMOD/windows/core/lib/x64/fmodL.dll")
-    studio_dll = WinDLL("DATA/FMOD/windows/studio/lib/x64/fmodstudioL.dll")
-else:
-    core_dll = CDLL("DATA/FMOD/linux/core/lib/arm64/libfmodL.so.13.8")
-    studio_dll = CDLL("DATA/FMOD/linux/studio/lib/arm64/libfmodstudioL.so.13.8")
-
 studio_sys = c_void_p()
 
 BankList = []  # a list of all bank
 string_buffer = create_string_buffer(100)
 bufferSize = 100
+
+if os.name == 'nt':  # windows
+    core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
+    studio_dll = WinDLL("DATA/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
+else:  # pas windows
+    core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
+    studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
+
+studio_sys = c_void_p()
 
 
 def check_result(r):
@@ -125,8 +129,9 @@ class instance:
 
     def getPath(self):
         tempBuffer = (c_char * bufferSize).from_address(addressof(string_buffer))
+        retrieved = c_int()
         check_result(
-            studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1))
+            studio_dll.FMOD_Studio_EventDescription_GetPath(self.event_desc, byref(tempBuffer), bufferSize - 1, byref(retrieved)))
         return tempBuffer.value
 
 
@@ -140,14 +145,15 @@ def getEventCount(bank):
     return eventNumber.value
 
 
-def getAllEventFromBank(bank, Array, eventNumber):
+def getAllEventFromBank(bank, array, eventNumber):
     """
     @param bank: a bank to get all his event
-    @param Array : an Array to stack all event
+    @param array : an Array to stack all event
     @param eventNumber : the number of event
     @return: a cArray with all events
     """
-    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(Array), eventNumber))
+    count = c_int()
+    check_result(studio_dll.FMOD_Studio_Bank_GetEventList(bank, byref(array), c_int(eventNumber), byref(count)))
 
 
 def changeGlobalParameter(name, value):

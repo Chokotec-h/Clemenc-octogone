@@ -4,10 +4,10 @@ import pygame
 standard = pygame.image.load("DATA/Images/Menu/Button.png")
 
 def resize(w,h,width,height,basewidth=1600,baseheight=900):
-    return (w*width/basewidth,h*height/baseheight)
+    return (round(w*width/basewidth),round(h*height/baseheight))
 
 def resize_t(s,width,height,basewidth=1600,baseheight=900):
-    return (s[0]*width/basewidth,s[1]*height/baseheight)
+    return (round(s[0]*width/basewidth),round(s[1]*height/baseheight))
 
 class Texte:
     def __init__(self,text,sysfont,color,x,y,show=True,format_ = "center"):
@@ -43,6 +43,7 @@ class Button :
         self.y = y
         w,h = size
 
+        font = ("arial",font[1]*0.8,font[2],font[3])
         self.textobject = Texte(text,font,(0,0,0),self.x,self.y)
         if isinstance(image,str):
             self.image = pygame.image.load(image)

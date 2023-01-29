@@ -21,7 +21,6 @@ class Air_President(Char):
         self.basefallspeed = 0.8
         self.blahaj = ["fatty","flat","flying","spiky"]
         self.currentblahaj = 0
-        self.poutre = False
         self.stage = Stage
         self.resize_rect()
     
@@ -29,35 +28,10 @@ class Air_President(Char):
         return "Joueur de Air-President"
  
     def special(self,inputs): # Spécial
-        if self.die :
-            self.poutre = False
-        if self.poutre :
-            self.speed = 0.9
-            self.airspeed = 0.5
-            self.deceleration = 0.2
-            self.dashspeed = 1
-            self.fallspeed = 2
-            self.fastfallspeed = 3
-            self.fullhop = 13
-            self.shorthop = 10
-            if self.hitstun :
-                self.projectiles.append(Poutre(0,0,self.stage,self))
-                self.poutre = False
-        else :
-            self.speed = 1.9
-            self.airspeed = 1.4
-            self.deceleration = 0.6
-            self.dashspeed = 3.6
-            self.fallspeed = 0.5
-            self.fullhop = 15
-            self.shorthop = 12
         return False
 
     def animation_attack(self,attack,inputs,stage,other):
         self.stage = stage
-        if self.poutre and attack != "DownB":
-            attack = None
-            self.attack = None
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
         smash = C_Down or C_Left or C_Right or C_Up
 
@@ -92,14 +66,8 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "DownB":
-            if self.poutre :
-                if self.frame == 25 :
-                    self.poutre = False
-                    self.projectiles.append(Poutre(signe(self.direction)*15,-15,stage,self))
-            else :
-                if self.frame == 22 :
-                    self.poutre = True
-                    self.attack = None
+            if self.frame == 25 :
+                self.projectiles.append(Poutre(signe(self.direction)*15,-15,stage,self))
             if self.frame > 45 : # 20 frames de lag
                 self.attack = None
 
@@ -115,7 +83,7 @@ class Air_President(Char):
                 else :
                     if not self.look_right:
                         angle = 3*pi/4
-                        x = change_left(64,48)
+                        x = change_left(64,48) - self.rect.w/2
                     else:
                         angle = pi/4
                         x = 24

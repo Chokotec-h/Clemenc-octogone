@@ -9,9 +9,10 @@ from DATA.utilities.Animations import get_sprite
 
 from DATA.assets.Misc import Dash_Smoke, Double_Jump
 
-# A FAIRE QUE UNE FOIS
+# À FAIRE QUE UNE FOIS
 SoundSystem.studio_init()
 SFXEvents.SFX_init()
+print("SFX inited")
 
 SFXDicoEvent = SFXEvents.SFXDicoEvent
 
@@ -23,14 +24,14 @@ def signe(val):
         return val / abs(val)
 
 
-def change_left(x, size):
-    return -x - resize(size,0,width,height)[0] + 48
+def change_left(x, size, w=48):
+    return resize(-x -size,0,width,height)[0]+w
 
 
 class Hitbox():
     def __init__(self, x, y, sizex, sizey, angle, knockback, damages, damage_stacking, stun, duration, own,
                  position_relative=False, deflect=False, modifier=1, boum=0,
-                 sound="hits/8bit hit") -> None:
+                 sound="hits/8bit hit",linked=False) -> None:
         self.relativex,self.relativey = resize(x,y,width,height)
         self.sizex,self.sizey = resize(sizex,sizey,width,height)
         self.angle = angle
@@ -44,12 +45,13 @@ class Hitbox():
         self.deflect = deflect
         self.modifier = modifier
         self.boum = boum
+        self.linked = linked
         path = sound.split("/")
 
         self.sound = SFXDicoEvent[path[0]][path[1] + ""]
 
         if not own.look_right:
-            self.relativex = change_left(x, sizex)
+            self.relativex = change_left(x, sizex,own.rect.w)
             self.angle = pi - angle
         self.update()
 
@@ -152,6 +154,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.sizescale = 4
 
+        self.basecoords = (0,-200)
+
     def resize_rect(self):
         self.rect.w, self.rect.h = resize(self.rect.w, self.rect.h,width,height)
 
@@ -196,10 +200,15 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             cancel = self.special(inputs)
             self.get_inputs(inputs, stage, other, cancel)
             self.move(stage)
+            delete = False
             for i, hitbox in enumerate(self.active_hitboxes):
                 hitbox.update()
                 if hitbox.duration <= 0:
+                    if self.active_hitboxes[i].linked :
+                        delete = True
                     del self.active_hitboxes[i]
+            if delete :
+                self.active_hitboxes = list()
             for i, projectile in enumerate(self.projectiles):
                 self.projectiles[i].update()
                 if projectile.duration <= 0:
@@ -590,14 +599,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.rect.x = self.x - self.rect.w / 2
         # respawn
         self.die = max(0, self.die - 1)
-        if self.rect.y > resize(0,1000,width,height)[1] or self.rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]:
+        if (not (self.name == "Le Berre" and self.attack == "ForwardSmash")) and (self.rect.y > resize(0,1000,width,height)[1] or self.rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]):
             if self.die < 1:
                 self.die = 30
                 self.damages = 0.
                 SFXDicoEvent['hits']["8bit hit"].play() # Son décès
             if self.die == 1:
-                self.rect.y = -200
-                self.x = 0
+                self.x,self.rect.y = self.basecoords
                 self.damages = 0.
                 self.vy = 0
                 self.vx = 0
@@ -634,6 +642,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # draw projectiles
         for p in self.projectiles:
             p.draw(window)
+        
+        for d in self.smoke_dash :
+            d.draw(window)
 
     def collide(self, other, inputs):
         left,right,up,down = inputs[:4]
@@ -689,7 +700,10 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         other.attack = None
                         other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
                 hitbox.sound.play()
-                del other.active_hitboxes[i]  # Supprime la hitbox
+                if other.active_hitboxes[i].linked :
+                    other.active_hitboxes = list()
+                else :
+                    del other.active_hitboxes[i]  # Supprime la hitbox
                 return
 
 

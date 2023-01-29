@@ -208,4 +208,5 @@ class Nom_Personnage(Char):
 """ Projectiles """
 ###################
 
+
 ##### Autres skins

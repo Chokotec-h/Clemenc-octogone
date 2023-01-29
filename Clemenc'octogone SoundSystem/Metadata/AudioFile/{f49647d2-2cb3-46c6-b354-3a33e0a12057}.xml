@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{f49647d2-2cb3-46c6-b354-3a33e0a12057}">
+		<property name="assetPath">
+			<value>VT/Poissonier.mp3</value>
+		</property>
+		<property name="isStreaming">
+			<value>true</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>10.007999999999999</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{96539f1d-789e-46d9-aaa1-db5f926466b7}</destination>
+		</relationship>
+	</object>
+</objects>

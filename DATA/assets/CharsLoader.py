@@ -8,7 +8,11 @@ from DATA.assets.Chars.Rey import *
 from DATA.assets.Chars.Kebab import *
 from DATA.assets.Chars.Poissonnier import *
 from DATA.assets.Chars.Renault import *
-from DATA.assets.Chars.Isaac import *
+from DATA.assets.Chars.Gourmelen import *
+from DATA.assets.Chars.Journault import *
+from DATA.assets.Chars.Le_Berre import *
+from DATA.assets.Chars.EnglishTeacher import *
+from DATA.assets.Chars.Thevenet import *
 from DATA.assets.Chars.Training_Mob import *
 
 # Nom des personnages
@@ -21,7 +25,12 @@ chars = [["Balan","BalanM"],
          ["Rey"],
          ["Joueur de air-president", "Spamton"],
          ["Pyro-Aubin"],
-         ["Kebab"]]
+         ["Kebab"],
+         ["Gourmelen"],
+         ["Journault"],
+         ["Le Berre"],
+         ["EnglishTeacher"],
+         ["Thevenet"]]
 
 pygame.mixer.init()
 
@@ -36,7 +45,11 @@ charobjects = {
     "Kebab": Kebab,
     "Poissonnier": Poissonnier,
     "Renault": Renault,
-    #"Isaac": Isaac,
+    "Gourmelen": Gourmelen,
+    "Journault": Journault,
+    "Le Berre": LeBerre,
+    "EnglishTeacher": EnglishTeacher,
+    "Thevenet": Thevenet,
 }
 
 airspeeds = {
@@ -50,7 +63,11 @@ airspeeds = {
     "Kebab": Kebab(0, 0, 0).airspeed,
     "Poissonnier": Poissonnier(0, 0, 0).airspeed,
     "Renault": Renault(0, 0, 0).airspeed,
-    #"Isaac": Isaac(0, 0, 0).airspeed,
+    "Gourmelen": Gourmelen(0, 0, 0).airspeed,
+    "Journault": Journault(0, 0, 0).airspeed,
+    "Le Berre": LeBerre(0, 0, 0).airspeed,
+    "EnglishTeacher": EnglishTeacher(0, 0, 0).airspeed,
+    "Thevenet": Thevenet(0, 0, 0).airspeed,
 }
 
 decelerations = {
@@ -64,7 +81,11 @@ decelerations = {
     "Kebab": Kebab(0, 0, 0).deceleration,
     "Poissonnier": Poissonnier(0, 0, 0).deceleration,
     "Renault": Renault(0, 0, 0).deceleration,
-    #"Isaac": Isaac(0, 0, 0).deceleration,
+    "Gourmelen": Gourmelen(0, 0, 0).deceleration,
+    "Journault": Journault(0, 0, 0).deceleration,
+    "Le Berre": LeBerre(0, 0, 0).deceleration,
+    "EnglishTeacher": EnglishTeacher(0, 0, 0).deceleration,
+    "Thevenet": Thevenet(0, 0, 0).deceleration,
 }
 
 fallspeeds = {
@@ -78,7 +99,11 @@ fallspeeds = {
     "Kebab": Kebab(0, 0, 0).fallspeed,
     "Poissonnier": Poissonnier(0, 0, 0).fallspeed,
     "Renault": Renault(0, 0, 0).fallspeed,
-    #"Isaac": Isaac(0, 0, 0).fallspeed,
+    "Gourmelen": Gourmelen(0, 0, 0).fallspeed,
+    "Journault": Journault(0, 0, 0).fallspeed,
+    "Le Berre": LeBerre(0, 0, 0).fallspeed,
+    "EnglishTeacher": EnglishTeacher(0, 0, 0).fallspeed,
+    "Thevenet": Thevenet(0, 0, 0).fallspeed,
 }
 
 fastfallspeeds = {
@@ -92,5 +117,9 @@ fastfallspeeds = {
     "Kebab": Kebab(0, 0, 0).fastfallspeed,
     "Poissonnier": Poissonnier(0, 0, 0).fastfallspeed,
     "Renault": Renault(0, 0, 0).fastfallspeed,
-    #"Isaac": Isaac(0, 0, 0).fastfallspeed,
+    "Gourmelen": Gourmelen(0, 0, 0).fastfallspeed,
+    "Journault": Journault(0, 0, 0).fastfallspeed,
+    "Le Berre": LeBerre(0, 0, 0).fastfallspeed,
+    "EnglishTeacher": EnglishTeacher(0, 0, 0).fastfallspeed,
+    "Thevenet": Thevenet(0, 0, 0).fastfallspeed,
 }

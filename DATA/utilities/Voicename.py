@@ -9,4 +9,9 @@ voicename = {
     "Gregoire": "Gregoire",
     "Kebab du dimanche soir": "Kebab",
     "Rey": "Reynaud",
+    "Gourmelen": "Balan",
+    "Journault": "Balan",
+    "Le Berre": "Balan",
+    "English Teacher": "Balan",
+    "Thévenet": "Balan",
 }

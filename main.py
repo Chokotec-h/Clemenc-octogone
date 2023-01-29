@@ -119,7 +119,7 @@ def main():
                     if e.type == pygame.QUIT:  # Bouton croix en haut à droite de l'écran
                         return
                 window.fill((0, 0, 0))
-                temp_frames += 1
+                temp_frames += 2
                 if temp_frames < 100:
                     temp_image.set_alpha(temp_frames * 255 / 100)
 
@@ -146,8 +146,8 @@ def main():
                 pygame.draw.rect(window, (60, 60, 60), (
                 0, height - resize(0, 128, width, height)[1], width, resize(0, 128, width, height)[1]))
                 # Affichage de la version
-                Texte("1.0.0 release", ("Arial", resize(0, 32, width, height)[1], True, True), (0, 0, 0),
-                      resize(100, 0, width, height)[0], resize(0, 64, width, height)[1], format_="left").draw(window)
+
+                Texte("1.3.0 MPI(*)", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
 
                 key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
@@ -544,6 +544,7 @@ def main():
 
                 SoundSystem.changeGlobalParameter("pause", int(Game.pause))  # gestion du son de la pause
 
+
                 if stage.name == "Salle de TP":
                     tremolo = 0
                     if Game.Char_P1.name == "Gregoire":
@@ -565,10 +566,8 @@ def main():
     except Exception as error:
         exc_type, exc_value, exc_tb = sys.exc_info()
         tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
-        Menu = "error"
+
         traceback.print_exc()
-        root = tk.Tk()
-        root.withdraw()
         messagebox.showerror('Erreur Critique',
                              f"""Une erreur critique est survenue :
 
