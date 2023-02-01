@@ -49,7 +49,9 @@ UIDicoEvent = SFXEvents.SFXDicoEvent
 embient = SoundSystem.instance()
 
 
-# print(UIDicoEvent["Voix"]["Personnages"])
+# print(UIDicoEvent["Voix"])
+
+# 1/0
 ############################################################################################################
 
 def main():
@@ -487,12 +489,10 @@ def main():
 
                 if Menu == "results":
                     if results.frame == 1:
-                        SoundSystem.stop_inst(embient.instance)
                         if results.winner == -1:
                             UIDicoEvent["Voix"]["Autre"]["Terminer"].play()  # Egalite
                         else:
-                            # UIDicoEvent["Voix"]["Autre"]["23 Fin du match"].play() # Le gagnant est
-                            pass
+                            UIDicoEvent["Voix"]["Autre"]["23 Fin du match"].play() # Le gagnant est
                         if results.winner == 0:
                             embient.instance = SoundSystem.play_event(
                                 f"event:/VT/{Victorythemes[str(results.game.Char_P1)]}")
@@ -556,6 +556,8 @@ def main():
                             if isinstance(p, Rayon):
                                 tremolo = 1
                     embient.changeParameter("tremolo", tremolo)
+                if Game.game_running > 0:
+                    SoundSystem.stop_inst(embient.instance)
 
             ######################################################################################################
 
