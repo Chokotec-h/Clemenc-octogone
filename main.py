@@ -271,7 +271,7 @@ def main():
                           width / 2, 2 * height / 8 + resize(0, 20, width, height)[1]).draw(
                         window)
 
-                    # Bouton "Multijoueur Local"
+                    # Bouton "En ligne Local"
                     Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
                                     "DATA/Images/Menu/Button.png", width / 2,
                                     3 * height / 8, resize(250, 100, width, height))
@@ -284,7 +284,7 @@ def main():
                             online = True
                             confirm = True
                     Bouton.draw(window)
-                    Texte("Multijoueur", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
+                    Texte("En ligne", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
                           3 * height / 8 - resize(0, 20, width, height)[1]).draw(
                         window)
                     Texte("Local", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0),
