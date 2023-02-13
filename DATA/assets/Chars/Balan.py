@@ -16,10 +16,10 @@ class Balan(Char):
                          fullhop=14, shorthop=11,
                          doublejumpheight=15, airdodgespeed=6, airdodgetime=3, dodgeduration=15)
 
-        self.rect = pygame.Rect(100, 0, 48, 120)  # Crée le rectangle de perso
+        self.rect = [100, 0, 48, 120]  # Crée le rectangle de perso
         self.name = "Balan"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.resize_rect()
 
@@ -42,7 +42,7 @@ class Balan(Char):
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump]  # Annule tout les sauts
             elif self.frame > 6:  # Sort frame 7
-                self.rect.move_ip(0, -6)
+                self.rect[1] -= 6
             if self.frame < 6:
                 if left:  # peut reverse netre les frames 1 et 5
                     self.look_right = False
@@ -69,11 +69,11 @@ class Balan(Char):
                 if self.frame > 20 :
                     self.vy += 35
                 other.hitstun = 10
-                other.rect.y = self.rect.y
+                other.rect[1] = self.rect[1]
                 other.vy = -1
                 other.vx = 0
             if self.frame == 30 and self.grab:
-                other.rect.y = self.rect.y - resize(0,32,width,height)[1]
+                other.rect[1] = self.rect[1] - resize(0,32,width,height)[1]
                 other.vy = 0
                 other.vx = 0
                 self.active_hitboxes.append(Hitbox(40,32,32,32,pi/3,20,16,1/200,18,3,self))
@@ -96,7 +96,9 @@ class Balan(Char):
             if self.frame == 8:  # 8 frames après relache
                 self.active_hitboxes.append(Hitbox(40, 32, 32, 64, 0, 0, 0, 0, 0, 20, self, True))
                 self.active_hitboxes[-1].update()
-                if self.active_hitboxes[-1].hit.colliderect(other.rect):
+                hitbox = self.active_hitboxes[-1]
+                hit = pygame.Rect(hitbox.x, hitbox.y, hitbox.sizex, hitbox.sizey) 
+                if hit.colliderect(pygame.Rect(other.rect)):
                     self.projectiles.append(Exposant(other, self, self.charge // 40))
             if self.frame > 20:  # 15 frames de lag
                 self.attack = None
@@ -169,14 +171,15 @@ class Balan(Char):
 
             # Dessin du cercle
             if self.active_hitboxes:
+                x,y = resize(12 * signe(self.direction),10,width,height)
+                self.active_hitboxes[-1].y -= y
                 if self.frame < 9:  # Frames 7-8
-                    self.active_hitboxes[-1].y -= 10
-                    self.active_hitboxes[-1].sizey += 10
-                    self.active_hitboxes[-1].sizex -= 12 * signe(self.direction)
+                    self.active_hitboxes[-1].sizey += y
+                    self.active_hitboxes[-1].sizex -= x
                 if self.frame < 11:  # Frames 9-10
-                    self.active_hitboxes[-1].sizex -= 12 * signe(self.direction)
+                    self.active_hitboxes[-1].sizex -= x
                 if self.frame < 13:  # Frames 11-12
-                    self.active_hitboxes[-1].sizey += 10
+                    self.active_hitboxes[-1].sizey += y
             if self.frame > 25:  # 11 Frames de lag
                 self.attack = None
 
@@ -400,14 +403,15 @@ class Balan(Char):
 
 class Exposant:
     def __init__(self, opponent, own: Balan, charge) -> None:
+        self.id = 0
         self.opponent = opponent
         self.charge = charge + 1
         self.duration = (charge + 1) * 120
         self.own = own
-        self.rect = pygame.Rect(-1000, 1000, 0, 0)
+        self.rect = [-1000,-1000,0,0]
 
     def update(self):
-        if self.opponent.rect.y > 750 or self.opponent.rect.y < -750 or self.opponent.rect.x > 750 or self.opponent.rect.x < -750:
+        if self.opponent.rect[1] > 750 or self.opponent.rect[1] < -750 or self.opponent.rect[0] > 750 or self.opponent.rect[0] < -750:
             self.duration = 0
             self.charge = 0
         if self.duration == 1:
@@ -417,8 +421,8 @@ class Exposant:
         self.duration -= 1
 
     def draw(self, window):
-        x = self.opponent.rect.x + self.opponent.rect.w
-        y = self.opponent.rect.y - resize(0,50,width,height)[1]
+        x = self.opponent.rect[0] + self.opponent.rect[2]
+        y = self.opponent.rect[1] - resize(0,50,width,height)[1]
         window.blit(exposant_sprite[self.duration // 120], (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
 
 

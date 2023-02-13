@@ -10,14 +10,15 @@ class Thevenet(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Thevenet"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.navet = False
         self.holdb = False
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Thévenet"
@@ -27,11 +28,13 @@ class Thevenet(Char):
             delete = False
             for h in self.active_hitboxes :
                 for p in self.projectiles:
-                    if h.hit.colliderect(p.rect):
+                    hit = pygame.Rect(h.x, h.y, h.sizex, h.sizey) 
+                    if isinstance(p,Radis) and hit.colliderect(pygame.Rect(p.rect)):
                         delete = p
                         self.navet = True
             if delete :
-                del delete
+                self.attack = None
+                del p
 
     def animation_attack(self,attack,inputs,stage,other):
         left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
@@ -320,17 +323,18 @@ radis = pygame.transform.scale(radis,resize(radis.get_width()*3,radis.get_height
 
 class Radis():
     def __init__(self,x,y,own:Thevenet,other,vx,vy,stage,g=0.8) -> None:
+        self.id = 0
         self.vx = vx*signe(own.direction)
         self.vy = vy
         self.basevy = self.vy
         self.x = own.x + resize(x,0,width,height)[0]
-        self.y = own.rect.y + resize(0,y,width,height)[1]
+        self.y = own.rect[1] + resize(0,y,width,height)[1]
         self.dir = signe(own.direction)
         self.own = own
         self.other = other
         self.duration = 120
         self.stage = stage
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.g = g
         self.rotate = 0
         self.angle = pi/4 if own.look_right else 3*pi/4
@@ -349,21 +353,23 @@ class Radis():
     
     def update(self):
         dx = (self.x - self.other.x)
-        dy = (self.y - self.other.rect.y)
+        dy = (self.y - self.other.rect[1])
         if dx == 0 :
             dx = 0.001
         self.angle = atan(dy/dx)
-        self.rect = radis.get_rect(topleft=(self.x,self.y))
+        rect = radis.get_rect(topleft=(self.x,self.y))
         self.x += resize(self.vx,0,width,height)[0]
         self.y += resize(0,self.vy,width,height)[1]
         self.vy += self.g
-        if self.touch_stage(self.stage,self.rect):
+        if self.touch_stage(self.stage,rect):
             self.vy = -abs(self.vy)/2
             self.duration -= 20
-        if self.rect.colliderect(self.other.rect):
+        if rect.colliderect(pygame.Rect(self.other.rect)):
             self.vy = -6
             self.vx = 5*-self.dir
+            self.g = 0.2
         self.duration -= 1
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -375,11 +381,13 @@ class Radis():
         sprite = pygame.transform.rotate(radis,degrees(self.rotate))
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
+pq = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
+
 class PQ():
     def __init__(self,stage,own:Thevenet) -> None:
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
+        self.id = 0
         self.x = own.x+24
-        self.y = own.rect.y+50
+        self.y = own.rect[1]+50
         self.vx = 6*signe(own.direction)
         self.vy = -8
         self.angle = -pi/2
@@ -389,21 +397,23 @@ class PQ():
         self.damages_stacking = 1/900
         self.duration = 10
         self.stage = stage
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = SFXDicoEvent['hits']["hit"]
+        rect = pq.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.sound = 'hits/hit'
 
     def update(self):
         vx,vy = resize(self.vx,self.vy,width,height)
         self.x += vx
         self.y += vy
         self.vy += 1.4
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        rect = pq.get_rect(topleft=(self.x,self.y))
         if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        if rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
             self.vx = 0
             self.vy = 0
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def deflect(self,modifier):
         self.vy = -self.vy*modifier
@@ -413,16 +423,18 @@ class PQ():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(pq, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+
+machine = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Machine.png"),(resize(52,52,width,height)))
 
 class Machine():
     def __init__(self,stage,own:Thevenet) -> None:
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Machine.png"),(resize(52,52,width,height)))
+        self.id = 0
         if own.look_right :
             self.x = own.x + 24
         else :
             self.x = own.x - 24 - 48
-        self.y = own.rect.y+50
+        self.y = own.rect[1]+50
         self.vy = -1
         self.angle = -pi/2
         self.knockback = 3
@@ -431,20 +443,22 @@ class Machine():
         self.damages_stacking = 1/900
         self.duration = 5
         self.stage = stage
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = SFXDicoEvent['hits']["hitting metal"]
+        rect = machine.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.sound = 'hits/hitting metal'
 
     def update(self):
         vy = resize(0,self.vy,width,height)[1]
         self.y += vy
         self.vy += 4
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        rect = machine.get_rect(topleft=(self.x,self.y))
         if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        if rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
             self.vx = 0
             self.vy = 0
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def deflect(self,modifier):
         self.vy = -8
@@ -453,7 +467,7 @@ class Machine():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(machine, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
 
 
 ##### Autres skins

@@ -10,15 +10,16 @@ class LeBerre(Char):
         super().__init__(speed=1.2, dashspeed=2.4, airspeed=1.2, deceleration=0.9, fallspeed=0.8, fastfallspeed=1.3, fullhop=15, shorthop=11,
                          doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Le Berre"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
 
         self.oldx = self.x
-        self.oldy = self.rect.y - 1
+        self.oldy = self.rect[1] - 1
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Le Berre"
@@ -38,7 +39,7 @@ class LeBerre(Char):
                 self.vy = -28
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
-                self.projectiles.append(Explosion(self.x,self.rect.y+120,9,10,-pi/2,9,1/200,40))
+                self.projectiles.append(Explosion(self.x,self.rect[1]+120,9,10,-pi/2,9,1/200,40))
 
         if attack == "NeutralB":
             if self.frame < 5 :
@@ -47,14 +48,14 @@ class LeBerre(Char):
                 if right :
                     self.look_right = True
             if 18 >= self.frame >= 10 :
-                self.projectiles.append(Rayon(stage,self.x,self.rect.y+60,0,self))
+                self.projectiles.append(Rayon(stage,self.x,self.rect[1]+60,0,self))
             if self.frame > 28: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
 
         if attack == "DownB":
             if self.frame == 8 :
-                self.projectiles.append(Tornade(self.x+20*signe(self.direction),self.rect.y,self,other))
+                self.projectiles.append(Tornade(self.x+20*signe(self.direction),self.rect[1],self,other))
             if self.frame > 20 : # 15 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -85,7 +86,7 @@ class LeBerre(Char):
                 else:
                     x = -29
                     angle = pi / 4
-                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect.y + resize(0,50 + 20 * round(cos(self.frame / 2)),width,height)[1], angle, self))
+                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect[1] + resize(0,50 + 20 * (1 if cos(self.frame/2) > 0 else -1),width,height)[1], angle, self))
             if self.rapidjab and not attack_button:
                 self.rapidjab = False
                 self.frame = 0
@@ -209,8 +210,8 @@ class LeBerre(Char):
         if attack == "ForwardSmash":
             if self.frame == 1 :
                 self.oldx = self.x
-                self.oldy = self.rect.y - 5
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 and not (self.rect.y > resize(0,1000,width,height)[1] or self.rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]): # Chargement jusqu'à 200 frames
+                self.oldy = self.rect[1] - 5
+            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 and not (self.rect[1] > resize(0,1000,width,height)[1] or self.rect[1] < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]): # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
@@ -221,7 +222,7 @@ class LeBerre(Char):
                 self.attack = None
                 self.charge = 0
                 self.x = self.oldx
-                self.rect.y = self.oldy
+                self.rect[1] = self.oldy
                 self.vx = 0
                 self.vy = 0
 
@@ -302,13 +303,14 @@ class LeBerre(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own:LeBerre) -> None:
-        self.sound = SFXDicoEvent['lasers']["cool lazer"]
+        self.id = 0
+        self.sound = 'lasers/cool lazer'
         self.stage = stage
         self.x = x
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 20*signe(own.direction)
-        self.rect = pygame.Rect(x-resize(20,0,width,height)[0],y-resize(0,20,width,height)[1],resize(6,0,width,height)[0],resize(0,22,width,height)[1])
+        self.rect = [x-resize(20,0,width,height)[0],y-resize(0,20,width,height)[1],resize(6,0,width,height)[0],resize(0,22,width,height)[1]]
         self.damages_stacking=1/300
         if own.look_right :
             self.angle = pi/4
@@ -334,9 +336,10 @@ class Rayon():
         return False
 
     def update(self):
+        rect = pygame.Rect(self.rect)
         if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])):
             #self.g = -self.g*2
-            if self.rect.y < self.stage.mainplat.rect.y+10 :
+            if rect.y < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd
             else :
                 self.angle_fwd = pi-self.angle_fwd
@@ -347,7 +350,7 @@ class Rayon():
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
-        self.rect = pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])
+        self.rect = [self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
         if self.x < -2000 or self.x > 2000:
             self.duration = 0
 
@@ -359,8 +362,9 @@ class Rayon():
 
 class Sinusoide():
     def __init__(self, x, y, angle, own: LeBerre) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
+        self.id = 0
+        self.sound = 'hits/hit'
+        self.rect = [x, y] + list(resize(5, 5,width,height))
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 15
@@ -370,11 +374,11 @@ class Sinusoide():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect.x += resize(self.v,0,width,height)[0]
+        self.rect[0] += resize(self.v,0,width,height)[0]
         self.duration -= 1
 
     def draw(self, window):
-        pygame.draw.rect(window, (220, 200, 120), (self.rect.x + resize(800,0,width,height)[0], self.rect.y + resize(0,450,width,height)[1], self.rect.w, self.rect.h))
+        pygame.draw.rect(window, (220, 200, 120), (self.rect[0] + resize(800,0,width,height)[0], self.rect[1] + resize(0,450,width,height)[1], self.rect[2], self.rect[3]))
 
     def deflect(self, modifier):
         self.duration = 0
@@ -385,16 +389,17 @@ eprouvette = pygame.transform.scale(eprouvette,resize(round(eprouvette.get_width
 
 class Eprouvette():
     def __init__(self,own:LeBerre,other,speed,stage) -> None:
+        self.id = 0
         self.vx = (20+speed)*signe(own.direction)
         self.vy = speed
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect.y + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + resize(0,48,width,height)[1]
         self.own = own
         self.other = other
         self.duration = 80
         self.stage = stage
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.rotate = 0
         self.angle = 0
         self.damages = 1.3
@@ -412,20 +417,21 @@ class Eprouvette():
     
     def update(self):
         dx = (self.x - self.other.x)
-        dy = (self.y - self.other.rect.y)
+        dy = (self.y - self.other.rect[1])
         if dx == 0 :
             dx = 0.001
         self.angle = atan(dy/dx)
-        self.rect = eprouvette.get_rect(topleft=(self.x,self.y))
+        rect = eprouvette.get_rect(topleft=(self.x,self.y))
         self.x += resize(self.vx,0,width,height)[0]
         self.y += resize(0,self.vy,width,height)[1]
         self.vy += 0.8
-        if self.touch_stage(self.stage,self.rect):
+        if self.touch_stage(self.stage,rect):
             self.duration = 0
         self.duration -= 1
-        if self.duration < 1 or self.rect.colliderect(self.other.rect) :
+        if self.duration < 1 or rect.colliderect(pygame.Rect(self.other.rect)) :
             self.duration = 0
             self.own.projectiles.append(Explosion(self.x,self.y,12,11,pi/4,9,1/150,64))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -439,6 +445,7 @@ class Eprouvette():
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
+        self.id = 0
         SFXDicoEvent['explosions']["gun shot"].play()
         self.x = x
         self.y = y
@@ -448,8 +455,7 @@ class Explosion():
         self.stun = stun
         self.damages_stacking = damages_stacking
         self.size = size
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(size,size,width,height))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [0,0,0,0]
         self.duration = 10
 
     def deflect(self,modifier):
@@ -458,13 +464,14 @@ class Explosion():
         self.stun = 0
 
     def update(self):
-        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
         self.duration -= 1
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
+        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 
 tornado = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Tornade.png")
@@ -473,8 +480,9 @@ tornado = pygame.transform.scale(tornado,resize(round(tornado.get_width()*2),rou
 
 class Tornade():
     def __init__(self, x, y, own: LeBerre, other) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
+        self.id = 0
+        self.sound = 'hits/hit'
+        self.rect = [x, y] + list(resize(5, 5,width,height))
         self.own = own
         self.other = other
         self.angle = pi/2
@@ -491,7 +499,8 @@ class Tornade():
         if self in self.other.immune_to_projectiles :
             self.other.immune_to_projectiles.pop(self.other.immune_to_projectiles.index(self))
         self.x += self.v
-        self.rect = tornado.get_rect(topleft=(self.x,self.y))
+        rect = tornado.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.duration -= 1
 
     def draw(self, window):

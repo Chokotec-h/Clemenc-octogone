@@ -17,12 +17,12 @@ class Kebab(Char):
         super().__init__(speed=1.2, dashspeed=2, airspeed=0.7, deceleration=0.75, fallspeed=0.3, fastfallspeed=1, fullhop=8, shorthop=6,
                          doublejumpheight=5,airdodgespeed=6,airdodgetime=3,dodgeduration=18)
 
-        self.rect = pygame.Rect(100,0,48,64) # Crée le rectangle de perso
+        self.rect = [100,0,48,64] # Crée le rectangle de perso
         self.doublejump = [False,False,False]   # Possède 3 double sauts
 
         self.name = "Kebab"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.damagemodifier = 1
         self.knockbackmodifier = 1
@@ -418,7 +418,7 @@ class Kebab(Char):
         drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0],size[1],size[2],size[3]),not self.look_right,False)
         drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*sizescalex),round(drawing_sprite.get_size()[1]*sizescaley))) # Rescale
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex, size[3] * sizescaley]  # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.rect.y-size[3]+self.rect.h + resize(0,450,width,height)[1]-1] # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.rect[1]-size[3]+self.rect[3] + resize(0,450,width,height)[1]-1] # Position réelle du sprite
         if self.show :
             window.blit(drawing_sprite, pos) # on dessine le sprite
         
@@ -495,19 +495,19 @@ class Kebab(Char):
             for i in range(8):
                 if self.sauces[i] >= 599 :
                     if self.sauce == i :
-                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect.x+resize(824,0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect.y+resize(0,474,width,height)[1]),resize(30,0,width,height)[0],width=2)
-                    window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect.x+resize(800,0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect.y+resize(0,450,width,height)[1]))
+                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(824,0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,474,width,height)[1]),resize(30,0,width,height)[0],width=2)
+                    window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(800,0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,450,width,height)[1]))
 ###################          
 """ Projectiles """
 ###################
 
 class Flaque():
     def __init__(self,own:Kebab,other:Char,stage) -> None:
-        self.sound = SFXDicoEvent['hits']["other hit"]
+        self.id = 0
+        self.sound = 'hits/other hit'
         self.sauce = str(own.current_sauce)
-        self.sprite = pygame.transform.scale(Sauce[self.sauce],resize(1,1,width,height))
         self.x = own.x
-        self.y = own.rect.y
+        self.y = own.rect[1]
         self.own = own
         self.other = other
         self.stage = stage
@@ -519,7 +519,8 @@ class Flaque():
         self.angle = -pi/2
         self.duration = 1000
         self.damages_stacking = 0
-        self.rect = self.sprite.get_rect(bottomleft=(self.x,self.y))
+        self.rect = [0,0,0,0]
+        self.onfloor = False
     
     def touch_stage(self,stage,rect):
         if rect.colliderect(stage.mainplat.rect):
@@ -533,10 +534,10 @@ class Flaque():
         self.duration -= 1
         self.y += self.vy
         self.x += self.vx
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        if self.touch_stage(self.stage,self.rect):
+        rect = pygame.Rect(self.rect)
+        if self.touch_stage(self.stage,rect):
             if self.y < self.stage.mainplat.y :
-                self.sprite = Sauce[self.sauce+"f"]
+                self.onfloor = True
                 self.vy = -0.1
                 self.vx = 0
             else :
@@ -544,7 +545,7 @@ class Flaque():
         else :
             self.vy += 1
         
-        if self.rect.colliderect(self.other.rect):
+        if rect.colliderect(pygame.Rect(self.other.rect)):
             self.other.vx *= 2-self.other.deceleration
             self.other.hitstun = max(4,self.other.hitstun)
     
@@ -553,5 +554,11 @@ class Flaque():
         self.own,self.other = self.other,self.own
 
     def draw(self,window):
-        window.blit(self.sprite, (self.rect.x+800,self.rect.y+450)) # on dessine le sprite
+        if self.onfloor :
+            sprite = pygame.transform.scale(Sauce[self.sauce],resize(1,1,width,height))
+        else :
+            sprite = Sauce[self.sauce+"f"]
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite, (rect.x+800,rect.y+450)) # on dessine le sprite
 ##### Autres skins

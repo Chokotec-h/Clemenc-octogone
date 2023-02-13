@@ -1,0 +1,513 @@
+from random import choice, randint
+from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, calculate_angle
+import pygame
+from math import pi,cos,sin
+from DATA.utilities.functions import *
+
+##### Reignaud
+
+class Reignaud(Char):
+    def __init__(self,x,y,player) -> None:
+        super().__init__(speed=2.2, dashspeed=4.1, airspeed=1, deceleration=0.5, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
+                         doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
+
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
+
+        self.name = "Reignaud"
+        self.x = x
+        self.rect[1] = y
+        self.cancelable = False
+        self.counter = False
+        self.duration_mot_invasif = 0
+        self.player = player
+        self.resize_rect()
+    
+    def __str__(self) -> str:
+        return "Reignaud"
+
+    def special(self,inputs):
+        if self.attack is None :
+            self.cancelable = False
+        return self.cancelable
+
+    def animation_attack(self,attack,inputs,stage,other):
+        left, right, up, down, fullhop, shorthop, attack_button, special, shield, C_Left, C_Right, C_Up, C_Down, D_Left, D_Right, D_Up, D_Down = inputs # dissociation des inputs
+        smash = C_Down or C_Left or C_Right or C_Up
+        if attack == "UpB":
+            self.animation = "UpB"+str(self.charge//6)
+            self.animeframe = self.frame
+            self.cancelable = False
+            if self.frame < 8 and self.frame > 6 and special and self.charge < 24:
+                self.frame = 6
+                self.vy = 0
+                self.fastfall = False
+                self.vx = 0
+                self.charge += 1
+            if self.frame == 15: # Saute frame 15
+                self.can_act = False # ne peut pas agir après un grounded up B
+                self.vy = -self.charge - 10
+                self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
+                if self.charge // 6 == 4 :
+                    self.active_hitboxes.append(Hitbox(0,0,48,120,3*pi/4,12,15,1/200,14,10,self,True,sound="hits/cool hit"))
+                self.charge = 0
+            if self.frame > 25 :
+                self.attack = None
+
+        if attack == "NeutralB":
+            if self.frame < 9 :
+                self.animation = "NeutralB"
+                self.animeframe = self.frame
+            if self.frame < 5 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 16 :
+                self.active_hitboxes.append(Hitbox(30,50,68,68,pi/4,10,9.4,1/300,9,3,self))
+            if self.frame > 35 :
+                    self.attack = None
+
+        if attack == "DownB":
+            if self.frame < 9 :
+                self.animation = "DownB"
+                self.animeframe = 0
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 8 :
+                self.counter = True
+            if self.frame > 29 :
+                self.counter = False
+                self.animeframe = 0
+            if self.frame > 67 : # 46 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "SideB":
+            if self.frame < 17 :
+                self.animation = "sideB"
+                self.animeframe = self.frame
+            if self.frame < 8 :
+                self.cancelable = True
+                if left :
+                    self.look_right = False
+                else :
+                    self.look_right = True
+            else :
+                self.cancelable = False
+            if self.frame == 16 :
+                self.vx = signe(self.direction)*30
+                self.active_hitboxes.append(Hitbox(24,32,64,32,pi/4,20 if other.look_right == self.look_right else 10,16 if other.look_right == self.look_right else 8,1/250,22 if other.look_right == self.look_right else 11,6,self,False,sound="hits/mini hit"))
+            if self.frame < 25 :
+                self.vy = -self.fallspeed
+            if self.frame == 25 and not self.grounded :
+                self.vy = -15
+            if self.frame > 66 : # 44 frames de lag
+                self.attack = None
+
+        if attack == "Jab":
+            if self.frame < 8 :
+                self.animation = "jab"
+                self.animeframe = self.frame
+            if self.frame < 7 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 7 :
+                self.active_hitboxes.append(Hitbox(40,42,50,42,pi/4,10,10,1/300,12,3,self,False,sound="hits/punch"))
+
+            if self.frame > 20: # 14 frames de lag
+                self.attack = None
+
+        if attack == "DownTilt":
+            if self.frame < 8 :
+                self.animation = "dtilt"
+                self.animeframe = self.frame
+            if self.frame < 6 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 6 :
+                self.active_hitboxes.append(Hitbox(40,62,60,42,pi/6,11,9,1/250,17,4,self,False,sound="hits/cool hit"))
+
+            if self.frame > 20: # 15 frames de lag
+                self.attack = None
+
+        if attack == "ForwardTilt":
+            if self.frame < 3 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame < 9 :
+                self.animation = "ftilt"
+                self.animeframe = self.frame
+                self.animeframe = min(0,self.frame-5)
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 8 and self.frame < 24 :
+                self.intangibility = True
+            else :
+                self.intangibility = False
+            if self.frame == 24:
+                self.active_hitboxes.append(Hitbox(32,8,48,70,pi/4,13,10,1/240,13,8,self,False,sound="hits/punch1"))
+
+            if self.frame > 52: # 20 frames de lag
+                self.attack = None
+
+        if attack == "UpTilt":
+            if self.frame < 9 :
+                self.animation = "utilt"
+                self.animeframe = min(0,self.frame-7)
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame >= 8 and self.frame < 17 and self.frame%4 == 0:
+                self.active_hitboxes.append(Hitbox(-5,-25,58,32,pi/2,1,1.2,0,6,3,self,False))
+            if self.frame == 20:
+                self.active_hitboxes.append(Hitbox(-6,-25,60,32,pi/2,15,4.8,1/200,15,3,self,False))
+            if self.frame > 27: # 11 Frames de lag
+                self.attack = None
+
+        if attack == "UpAir":
+            if self.frame < 9 :
+                self.animation = "uair"
+                self.animeframe = self.frame
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 8 :
+                self.active_hitboxes.append(Hitbox(20,-5,68,80,2*pi/5,14,11,1/200,13,7,self,False,sound="hits/punch1"))
+            if self.frame > 25: # 10 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 23 and self.frame > 8 :
+                    self.lag = 10 # Auto cancel frame 1-8 et 23+, 8 frames de landing lag
+
+        if attack == "ForwardAir":
+            if self.frame < 9 :
+                self.animation = "fair"
+                self.animeframe = self.frame
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 8:
+                self.active_hitboxes.append(Hitbox(22,42,64,64,-pi/6,11,9,1/250,12,8,self,False,sound="hits/cool hit"))
+
+            if self.frame > 28: # 12 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 26 and self.frame > 8 :
+                    self.lag = 11 # Auto cancel frame 1-8 et 26+, 11 frames de landing lag
+
+        if attack == "BackAir":
+            if self.frame < 13 :
+                self.animation = "bair"
+                self.animeframe = self.frame
+            if self.frame < 12 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 12 :
+                self.active_hitboxes.append(Hitbox(-50,42,60,48,-3*pi/4,16,18,1/200,15,3,self,False,sound="hits/punch2"))
+
+            if self.frame > 30: # 17 frames de lag
+                self.cancelable = False
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 28 and self.frame > 10 :
+                    self.lag = 16 # Auto cancel frame 1-10 et 28+, 16 frames de landing lag
+
+        if attack == "DownAir":
+            if self.frame < 16 :
+                self.animation = "dair"
+                self.animeframe = self.frame
+            if self.frame < 16 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 16 :
+                self.active_hitboxes.append(Hitbox(-2,64,52,64,-pi/2,25,19,1/150,10,3,self,False,sound="hits/cool hit"))
+
+            if self.frame > 44: # 28 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 30 and self.frame > 16 :
+                    self.lag = 19 # Auto cancel frame 1-16 et 30+, 19 frames de landing lag
+
+        if attack == "NeutralAir":
+            if self.frame < 11 :
+                self.animation = "nair"
+                self.animeframe = self.frame
+            if self.frame < 10 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False,sound="hits/hit"))
+            if self.frame > 10 :
+                if self.active_hitboxes :
+                    x,y = resize(signe(self.direction)*sin(pi*self.frame/10)*176/11,-cos(pi*self.frame/10)*30,width,height)
+                    self.active_hitboxes[-1].relativex += x
+                    self.active_hitboxes[-1].relativey += y
+            if self.frame > 40: # 10 frames de lag
+                self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 38 and self.frame > 2 :
+                    self.lag = 10 # Auto cancel frame 1-2 et 38+, 10 frames de landing lag
+
+        if attack == "ForwardSmash":
+            if self.frame < 9 :
+                self.animation = "fsmash"
+                self.animeframe = self.frame
+            if self.frame < 8 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 14 and self.frame < 16 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 14
+                self.animeframe -= 1
+                self.charge = self.charge+1
+            if self.frame == 20:
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(32,42,64,32,pi/4,19+8*(self.charge/100),19,1/200,20+7*(self.charge/100),4,self,False,sound="hits/punch"))
+            if self.frame > 45: # 21 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "UpSmash":
+            if self.frame < 9 :
+                self.animation = "usmash"
+                self.animeframe = self.frame
+            if self.frame < 8 :
+                if left :
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+                self.cancelable = True
+            else :
+                self.cancelable = False
+            if self.frame > 7 and self.frame < 10 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.frame = 8
+                self.animeframe -= 1
+                self.charge = self.charge+1
+            if self.frame == 14:
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(42,-15,42,98,pi/2,19+5*(self.charge/100),19.5,1/160,18+7*(self.charge/100),4,self,False,sound="hits/punch1"))
+            if self.frame > 45: # 27 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "DownSmash":
+            if self.frame < 9 :
+                self.animation = "dsmash"
+                self.animeframe = self.frame
+            if self.frame < 3 :
+                self.cancelable = True
+            else :
+                self.cancelable = False
+
+            if self.frame < 3 :
+                if left : # peut reverse netre les frames 1 et 2
+                    self.look_right = False
+                if right :
+                    self.look_right = True
+            if self.frame > 3 and self.frame < 6  and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+                self.animeframe -= 1
+                self.frame = 4
+                self.charge = self.charge+1
+            if self.frame == 15 :
+                self.charge = min(self.charge,100)
+                self.active_hitboxes.append(Hitbox(35,52,64,64,pi/6,15+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False,sound="hits/punch2"))
+                self.active_hitboxes.append(Hitbox(change_left(35,64),52,64,64,5*pi/6,21+8*(self.charge/100),13,1/200,20+5*(self.charge/100),13,self,False,sound="hits/punch2"))
+            if self.frame == 18:
+                if self.active_hitboxes :
+                    self.active_hitboxes[-1].knockback *= 0.75
+                    self.active_hitboxes[-1].damages = 7
+            if self.frame > 54: # 23 frames de lag
+                self.attack = None
+                self.charge = 0
+
+        if attack == "DashAttack":
+            if self.frame < 10 :
+                self.animation = "dashattack"
+            if self.frame == 10 :
+                self.active_hitboxes.append(Hitbox(20,-5,40,125,pi/4,12,13,1/250,14,20,self,False))
+            if self.frame > 5 and self.frame < 40 :
+                self.vy = 0
+                if self.grounded :
+                    self.vx += self.dashspeed*signe(self.direction)/(self.frame-2)*12
+                else :
+                    self.vx -= self.dashspeed*signe(self.direction)
+            if self.frame > 40: # 24 frames de lag
+                self.attack = None
+
+        if attack == "UpTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "DownTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "LeftTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+        if attack == "RightTaunt":
+            
+            if self.frame > 30: # Durée de 30 frames
+                self.attack = None
+
+
+    def collide(self,other, inputs): # Gestion du contre
+        self.parrying = False
+        left,right,up,down = inputs[:4]
+        if self.intangibility > 0:
+            self.intangibility -= 1
+            if self.intangibility <= 0:
+                self.intangibility = False
+        
+        # Détection des hitboxes
+        for i, hitbox in enumerate(other.active_hitboxes):  
+            hit = pygame.Rect(hitbox.x, hitbox.y, hitbox.sizex, hitbox.sizey)
+            if pygame.Rect(self.rect).colliderect(hit):
+                if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
+                    if self.truecombo == 0:
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += hitbox.damages
+                    self.truecombo += 1
+                    if hitbox.position_relative:  # Reverse hit
+                        if self.x > hit.x + hit.w // 2 and hitbox.own.direction < 0:
+                            hitbox.angle = pi - hitbox.angle
+                        if self.x < hit.x - hit.w // 2 and hitbox.own.direction > 0:
+                            hitbox.angle = pi - hitbox.angle
+                    knockback = hitbox.knockback * (self.damages * hitbox.damages_stacking + 1)
+                    if self.superarmor < knockback and not (self.superarmor == -1):
+
+                        angle = calculate_angle(hitbox.angle,left,right,up,down) # Calcul de DI
+                        self.BOUM = hitbox.boum + 4
+                        self.vx = (hitbox.knockback) * cos(angle) * (
+                                self.damages * hitbox.damages_stacking + 1)  # éjection x
+                        self.vy = -(hitbox.knockback) * sin(angle) * (
+                                self.damages * hitbox.damages_stacking + 1)  # éjection y
+                        self.hitstun = hitbox.stun * (self.damages * hitbox.damages_stacking + 2) - (
+                                self.superarmor / 5)  # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += hitbox.damages  # dommages
+                        self.rect[1] -= 1
+                        self.attack = None  # cancel l'attaque en cours
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5:
+                            self.tumble = True
+                    else:
+                        if self.superarmor != -1:
+                            self.superarmor = max(self.superarmor - hitbox.damages, 0)
+                        self.damages += hitbox.damages
+                else:
+                    if self.parry:
+                        other.BOUM = 8
+                        self.parried = True
+                        other.attack = None
+                        other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
+                    if self.counter :
+                        self.animation = "Counter"
+                        self.animeframe = 0
+                        self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
+ 
+                path = hitbox.sound
+                del other.active_hitboxes[i]  # Supprime la hitbox
+                return
+
+
+        # Détection des projectiles
+        for i, projectile in enumerate(other.projectiles):
+            rect = pygame.Rect(projectile.rect)
+            for h in self.active_hitboxes:
+                hit = pygame.Rect(h.x, h.y, h.sizex, h.sizey)
+                if h.deflect and hit.colliderect(rect):
+                    self.projectiles.append(projectile)
+                    projectile.deflect(h.modifier)
+                    del other.projectiles[i]  # Supprime la hitbox
+                    return
+
+            if pygame.Rect(self.rect).colliderect(rect) and projectile not in self.immune_to_projectiles:
+                if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
+                    self.immune_to_projectiles.append(projectile)
+                    if self.truecombo == 0:
+                        self.combo = 0
+                        self.combodamages = 0
+                    self.combo += 1
+                    self.combodamages += projectile.damages
+                    self.truecombo += 1
+                    knockback = projectile.knockback * (self.damages * projectile.damages_stacking + 1)
+
+                    if self.superarmor < knockback and not (self.superarmor == -1):
+                        angle = calculate_angle(projectile.angle,left,right,up,down) # Calcul de DI
+                        self.vx = projectile.knockback * cos(angle) * (
+                                self.damages * projectile.damages_stacking + 1)  # éjection x
+                        self.vy = -projectile.knockback * sin(angle) * (
+                                self.damages * projectile.damages_stacking + 1)  # éjection y
+                        self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
+                        self.totalhitstun = self.hitstun
+                        self.damages += projectile.damages  # dommages
+                        self.rect[1] -= 1
+                        self.attack = None
+                        self.upB = False
+                        self.can_act = True
+                        self.can_airdodge = True
+                        self.fastfall = False
+                        if abs(self.vx) + abs(self.vy) > 5:
+                            self.tumble = True
+                    else:
+                        if self.superarmor != -1:
+                            self.superarmor = max(self.superarmor - projectile.damages, 0)
+                        self.damages += projectile.damages
+                else:
+                    if self.parry:
+                        other.BOUM = 8
+                        self.projectiles.append(projectile)  # Renvoie le projectile
+                        projectile.deflect(1)
+                        del other.projectiles[i]
+                        self.parried = True
+                        other.attack = None
+                        other.lag = min(projectile.damages * projectile.knockback / 10, 9)
+                    if self.counter :
+                        self.immune_to_projectiles.append(projectile)
+                        self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,projectile.knockback,projectile.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else projectile.damages,1/250,projectile.stun,3,self,False))
+ 
+                return
+                
+###################          
+""" Projectiles """
+###################
+
+##### Autres skins

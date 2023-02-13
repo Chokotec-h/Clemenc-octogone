@@ -10,13 +10,14 @@ class EnglishTeacher(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=13, shorthop=10,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "EnglishTeacher"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.prof = 0 # 0 = Lentsch ; 1 = Chevalier ; 2 = Leclerc ; 3 = Mauvieux
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "English Teacher"
@@ -289,8 +290,9 @@ etoile = pygame.transform.scale(etoile,resize(round(etoile.get_width()),round(et
 
 class Etoile():
     def __init__(self, x, y, angle, own: EnglishTeacher) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
+        self.id = 0
+        self.sound = 'hits/8bit hit'
+        self.rect = [x, y] + list(resize(5, 5,width,height))
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 25
@@ -300,10 +302,11 @@ class Etoile():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect = etoile.get_rect(topleft=(self.x,self.y))
+        rect = etoile.get_rect(topleft=(self.x,self.y))
         self.vx += 2
-        self.rect.x += resize(self.v,0,width,height)[0]
+        rect.x += resize(self.v,0,width,height)[0]
         self.duration -= 1
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def draw(self, window):
         window.blit(etoile, (self.x+width/2,self.y+height/2)) # on dessine le sprite
@@ -319,8 +322,9 @@ fleche = pygame.transform.scale(fleche,resize(fleche.get_width(),fleche.get_heig
 
 class Fleche():
     def __init__(self, x, y, charge, own: EnglishTeacher) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
+        self.id = 0
+        self.sound = 'hits/hit'
+        self.rect = [x, y] + list(resize(5, 5,width,height))
         self.vx = charge/15 * signe(own.direction)
         self.vy = -charge/25
         self.x = x
@@ -333,9 +337,9 @@ class Fleche():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect = etoile.get_rect(topleft=(self.x,self.y))
         self.vy += 2
-        self.rect.x += resize(self.v,0,width,height)[0]
+        self.rect[0] += resize(self.vx,0,width,height)[0]
+        self.rect[1] += resize(self.vy,0,width,height)[1]
         self.duration -= 1
 
     def deflect(self,modifier):
@@ -350,9 +354,10 @@ class Fleche():
             sprite = pygame.transform.rotate(fleche,degrees(pi-atan(self.vy/self.vx)))
         else :
             sprite = pygame.transform.rotate(fleche,degrees(pi-atan(self.vy/self.vx))+180)
-        self.rect = sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        if rect.colliderect(self.stage.mainplat.rect):
             sprite = pygame.transform.rotate(fleche,90)
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
 ##### Autres skins

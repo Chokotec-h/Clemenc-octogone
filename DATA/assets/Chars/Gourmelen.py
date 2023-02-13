@@ -10,15 +10,16 @@ class Gourmelen(Char):
         super().__init__(speed=2.2, dashspeed=3.2, airspeed=1.1, deceleration=0.7, fallspeed=0.8, fastfallspeed=1.3, fullhop=14, shorthop=12,
                          doublejumpheight=15,airdodgespeed=7,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100, 0, 48, 120) # Crée le rectangle de perso
+        self.rect = [100, 0, 48, 120] # Crée le rectangle de perso
 
         self.name = "Gourmelen"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.temoin = False
         self.jab = 0
         self.grab = False
+        self.resize_rect()
         
     def __str__(self) -> str:
         return "Gourmelen"
@@ -42,9 +43,9 @@ class Gourmelen(Char):
         if attack == "UpB":
             if self.temoin :
 
-                self.vx = -(self.rect.x - other.rect.x)/max(12-self.frame,1)
-                self.vy = -(self.rect.y - other.rect.y)/max(12-self.frame,1)
-                if self.rect.colliderect(other.rect) :
+                self.vx = -(self.rect[0] - other.rect[0])/max(12-self.frame,1)
+                self.vy = -(self.rect[1] - other.rect[1])/max(12-self.frame,1)
+                if pygame.Rect(self.rect).colliderect(pygame.Rect(other.rect)) :
                     self.attack = None
                     self.deleteTemoin()
             else :
@@ -66,7 +67,7 @@ class Gourmelen(Char):
 
         if attack == "NeutralB":
 
-            if self.grab and not self.rect.colliderect(other.rect) :
+            if self.grab and not pygame.Rect(self.rect).colliderect(pygame.Rect(other.rect)) :
                 self.attack = None
 
             if self.frame < 5 : # Reverse frames 1-5
@@ -98,8 +99,8 @@ class Gourmelen(Char):
                         other.hitstun = 10
                         other.damages += 0.4
                         self.vx += 5*signe(self.direction)
-                        other.rect.y = self.rect.y - resize(0,32,width,height)[1]
-                        other.x = self.x + (self.rect.w-2)*signe(self.direction)
+                        other.rect[1] = self.rect[1] - resize(0,32,width,height)[1]
+                        other.x = self.x + (self.rect[2]-2)*signe(self.direction)
                         other.vy = -1
                         other.vx = self.vx
             else :
@@ -367,18 +368,19 @@ temoin = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projecti
 
 class Temoin:
     def __init__(self, opponent, own: Gourmelen) -> None:
+        self.id = 0
         self.opponent = opponent
         self.duration = 5
         self.own = own
-        self.rect = pygame.Rect(-1000, 1000, 0, 0)
+        self.rect = [-1000, 1000, 0, 0]
 
     def update(self):
-        if self.opponent.rect.y > 750 or self.opponent.rect.y < -750 or self.opponent.rect.x > 750 or self.opponent.rect.x < -750:
+        if self.opponent.rect[1] > 750 or self.opponent.rect[1] < -750 or self.opponent.rect[0] > 750 or self.opponent.rect[0] < -750:
             self.duration = 0
 
     def draw(self, window):
-        x = self.opponent.rect.x
-        y = self.opponent.rect.y - resize(0,50,width,height)[1]
+        x = self.opponent.rect[0]
+        y = self.opponent.rect[1] - resize(0,50,width,height)[1]
         window.blit(temoin, (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
 
 
@@ -387,16 +389,17 @@ biere = pygame.transform.scale(biere,resize(biere.get_width(),biere.get_height()
 
 class Biere():
     def __init__(self,own:Gourmelen,other,speed,stage) -> None:
+        self.id = 0
         self.vx = 8*signe(own.direction)
         self.vy = speed
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect.y + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + resize(0,48,width,height)[1]
         self.own = own
         self.other = other
         self.duration = 80
         self.stage = stage
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.rotate = 0
         self.angle = 0
         self.damages = 4.3
@@ -414,16 +417,17 @@ class Biere():
     
     def update(self):
         dx = (self.x - self.other.x)
-        dy = (self.y - self.other.rect.y)
+        dy = (self.y - self.other.rect[1])
         if dx == 0 :
             dx = 0.001
         self.angle = atan(dy/dx)
-        self.rect = biere.get_rect(topleft=(self.x,self.y))
+        rect = biere.get_rect(topleft=(self.x,self.y))
         self.x += resize(self.vx,0,width,height)[0]
         self.y += resize(0,self.vy,width,height)[1]
         self.vy += 0.8
-        if self.touch_stage(self.stage,self.rect):
+        if self.touch_stage(self.stage,rect):
             self.duration = 0
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.duration -= 1
         
     def deflect(self,modifier):

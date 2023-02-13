@@ -10,11 +10,11 @@ class Renault(Char):
         super().__init__(speed=1.7, dashspeed=5, airspeed=0.9, deceleration=0.7, fallspeed=0.5, fastfallspeed=1, fullhop=14, shorthop=11,
                          doublejumpheight=16,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,56,144) # Crée le rectangle de perso
+        self.rect = [100,0,56,144] # Crée le rectangle de perso
 
         self.name = "Renault"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.daccord = 0
         self.cling = False
@@ -379,8 +379,12 @@ class Renault(Char):
 """ Projectiles """
 ###################
 
+drill = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
+drill = pygame.transform.scale(drill,resize(drill.get_size()[0],drill.get_size()[1],width,height))
+
 class Drill():
     def __init__(self,vx,own:Char) -> None:
+        self.id = 0
         self.basevx = vx
         self.vx = vx
         self.direction = signe(own.direction)
@@ -390,16 +394,15 @@ class Drill():
         else :
             self.x = own.x + resize(change_left(48,64)-48,0,width,height)[0]
             self.angle = 3*pi/4
-        self.y = own.rect.y + resize(0,42,width,height)[1]
+        self.y = own.rect[1] + resize(0,42,width,height)[1]
 
         self.duration = 120
         self.damages = 4
         self.stun = 12
         self.knockback = 10
         self.damages_stacking = 1/200
-        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
-        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        rect = drill.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
     
     def update(self):
         self.duration -= 1
@@ -415,11 +418,17 @@ class Drill():
         self.knockback *= modifier
 
     def draw(self,window):
-        window.blit(pygame.transform.flip(self.sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        window.blit(pygame.transform.flip(drill,self.direction<0,False),(self.x+width/2,self.y+height/2))
+        rect = drill.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+
+
+gear = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
+gear = pygame.transform.scale(gear,resize(gear.get_size()[0],gear.get_size()[1],width,height))
 
 class Gear():
     def __init__(self,vx,own:Char) -> None:
+        self.id = 0
         self.vx = vx
         self.direction = signe(own.direction)
 
@@ -429,17 +438,16 @@ class Gear():
         else :
             self.x = own.x+resize(change_left(48,64)-12,0,width,height)[0]
             self.angle = 3*pi/4
-        self.y = own.rect.y + resize(0,42,width,height)[1]
+        self.y = own.rect[1] + resize(0,42,width,height)[1]
 
         self.duration = 120
         self.damages = 5
         self.stun = 11
         self.knockback = 10
         self.damages_stacking = 1/200
-        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
-        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = SFXDicoEvent['hits']["hitting metal"]
+        rect = gear.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.sound = 'hits/hitting metal'
     
     def update(self):
         self.duration -= 1
@@ -453,9 +461,10 @@ class Gear():
         self.knockback *= modifier
 
     def draw(self,window):        
-        sprite = pygame.transform.rotate(self.sprite,self.duration*self.vx/10)
+        sprite = pygame.transform.rotate(gear,self.duration*self.vx/10)
 
         window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        rect = gear.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
 ##### Autres skins

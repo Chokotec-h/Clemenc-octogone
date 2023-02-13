@@ -12,11 +12,11 @@ class Air_President(Char):
         super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.5, fastfallspeed=1.6, fullhop=15, shorthop=12,
                          doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Joueur de air-president"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.basefallspeed = 0.8
         self.blahaj = ["fatty","flat","flying","spiky"]
@@ -79,11 +79,11 @@ class Air_President(Char):
                     self.look_right = True
             if self.frame == 9 :
                 if randint(1,65) == 1:
-                    self.rect.y = 10000
+                    self.rect[1] = 10000
                 else :
                     if not self.look_right:
                         angle = 3*pi/4
-                        x = change_left(64,48) - self.rect.w/2
+                        x = change_left(64,48) - self.rect[2]/2
                     else:
                         angle = pi/4
                         x = 24
@@ -305,22 +305,25 @@ class Air_President(Char):
 """ Projectiles """
 ###################
 
+cartes = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/{i}.png") for i in range(1,14)]
+roulxs_kaard = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
+
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
+        self.id = 0
         if number == "R":
+            self.number = "R"
             SFXDicoEvent['mincelious']["Its-pronounced-rules"].play()
-            self.sound = SFXDicoEvent['hits']["cool hit"]
-            self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
+            self.sound = 'hits/cool hit'
             self.knockback = 1000
             self.damages = 999
             self.stun = 1000
             self.damages_stacking = 1
         else :
-            self.sound = SFXDicoEvent['wooshs']["woosh"]
+            self.sound = 'wooshs/woosh'
             self.number = number + 2
             if self.number > 13 :
                 self.number = self.number-13
-            self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/{self.number}.png"),(resize(48,64,width,height)))
             self.number = number
             self.angle = angle
             self.knockback = (self.number/2+1)*3
@@ -328,7 +331,8 @@ class Carte():
             self.stun = self.number+5
             self.damages_stacking = self.number*1/500
         self.duration = 6
-        self.rect = self.sprite.get_rect(topleft=(x+own.x,y+own.rect.y))
+        rect = roulxs_kaard.get_rect(topleft=(x+own.x,y+own.rect[1]))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.angle = angle
         self.x = x
         self.y = y
@@ -341,18 +345,24 @@ class Carte():
         self.duration = 0
     
     def draw(self,window):
-        window.blit(self.sprite,(self.x+self.own.x+resize(800,0,width,height)[0],self.y+self.own.rect.y+resize(0,450,width,height)[1]))
+        if self.number == "R":
+            sprite = roulxs_kaard
+        else :
+            sprite = pygame.transform.scale(cartes[self.number-1],(resize(48,64,width,height)))
+        window.blit(sprite,(self.x+self.own.x+resize(800,0,width,height)[0],self.y+self.own.rect[1]+resize(0,450,width,height)[1]))
+
 
 class Blahaj():
     def __init__(self,color,own:Air_President,stage):
+        self.id = 0
         # Blahaj
         SFXDicoEvent['wooshs']["encore un woosh"].play()
-        self.sound = SFXDicoEvent['boings']["boing"]
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+color+".png"),(resize(72,36,width,height)))
-        self.sprite = pygame.transform.flip(self.sprite,not own.look_right,False)
-        self.rect = self.sprite.get_rect()
-        self.x = own.rect.x
-        self.y = own.rect.y + own.rect.h//2
+        self.sound = 'boings/boing'
+        self.left = not own.look_right
+        self.color = color
+        self.rect = [0,0,0,0]
+        self.x = own.rect[0]
+        self.y = own.rect[1] + own.rect[3]//2
         self.color = color
         if self.color == "flying":
             self.vx = 15*signe(own.direction)
@@ -402,7 +412,8 @@ class Blahaj():
         return False
 
     def update(self):
-        if self.touch_stage(self.stage,self.rect):
+        rect = pygame.Rect(self.rect)
+        if self.touch_stage(self.stage,rect):
             self.duration = 0
         vx,vy = resize(self.vx,self.vy,width,height)
         self.x += round(vx)
@@ -411,7 +422,6 @@ class Blahaj():
             self.vy += 0.7
         else :
             self.vy += 0.4
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
 
@@ -423,13 +433,20 @@ class Blahaj():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+self.color+".png"),(resize(72,36,width,height)))
+        sprite = pygame.transform.flip(sprite,self.left,False)
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+
+
+poutre = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
 
 class Poutre():
     def __init__(self,vx,vy,stage,own:Air_President) -> None:
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
+        self.id = 0
         self.x = own.x
-        self.y = own.rect.y
+        self.y = own.rect[1]
         self.vx = vx
         self.vy = vy
         self.angle = -signe(vy)*pi/4
@@ -446,8 +463,9 @@ class Poutre():
         self.damages_stacking = 1/500
         self.duration = 10
         self.stage = stage
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
-        self.sound = SFXDicoEvent['hits']["hitting metal"]
+        rect = poutre.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.sound = 'hits/hitting metal'
 
     def update(self):
         self.knockback = sqrt(self.vx**2+self.vy**2)
@@ -467,10 +485,11 @@ class Poutre():
                 self.angle = -pi/2
             else :
                 self.angle = pi/2
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        rect = poutre.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        if rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
             self.vx = 0
             self.vy = 0
@@ -483,7 +502,7 @@ class Poutre():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(self.sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(poutre, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
 
 
 class Spamton(Air_President):

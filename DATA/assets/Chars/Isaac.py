@@ -10,15 +10,16 @@ class Isaac(Char):
         super().__init__(speed=1.3, dashspeed=2.6, airspeed=1.5, deceleration=0.8, fallspeed=0.3, fastfallspeed=2, fullhop=12, shorthop=8,
                          doublejumpheight=11,airdodgespeed=7,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Isaac"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.antigravity = False
         self.otherfallspeed = 0
         self.otherfastfallspeed = 0
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Isaac"

@@ -15,11 +15,11 @@ class Millet(Char):
         super().__init__(speed=1, dashspeed=2, airspeed=1.3, deceleration=0.92, fallspeed=0.55, fastfallspeed=1.34, fullhop=14, shorthop=11,
                          doublejumpheight=14,airdodgespeed=8,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,128) # Crée le rectangle de perso
+        self.rect = [100,0,48,128] # Crée le rectangle de perso
 
         self.name = "Millet"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.angle_rayon = -pi/300000
         self.rapidjab = False
@@ -50,7 +50,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame == 12 :
-                self.projectiles.append(Quantique(self.x,self.rect.y,self))
+                self.projectiles.append(Quantique(self.x,self.rect[1],self))
             if self.frame > 12 and self.frame < 25: # Saute frame 12
                 self.can_act = False # ne peut pas agir après un grounded up B
                 self.vx = (right-left)*20
@@ -85,7 +85,7 @@ class Millet(Char):
                 if self.frame == 26 :
                     SFXDicoEvent['lasers']["laser3"].play()
                 self.vy = 0
-                self.projectiles.append(Rayon(stage,self.x,self.rect.y+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
+                self.projectiles.append(Rayon(stage,self.x,self.rect[1]+24,-self.angle_rayon*signe(self.direction),self)) # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50: # 25 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -109,7 +109,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame%4 == 1 and self.frame > 15 and self.frame < 58:
-                self.projectiles.append(Fire(self.x+resize(24*signe(self.direction)-48,0,width,height)[0],self.rect.y+resize(0,24,width,height)[1],self))
+                self.projectiles.append(Fire(self.x+resize(24*signe(self.direction)-48,0,width,height)[0],self.rect[1]+resize(0,24,width,height)[1],self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
 
@@ -123,7 +123,7 @@ class Millet(Char):
                 else :
                     x = -29
                     angle = pi
-                self.projectiles.append(Sinusoide(self.x+resize(x,0,width,height)[0],self.rect.y+resize(0,50+20*sin(self.frame/2),width,height)[1],angle,self))
+                self.projectiles.append(Sinusoide(self.x+resize(x,0,width,height)[0],self.rect[1]+resize(0,50+20*sin(self.frame/2),width,height)[1],angle,self))
             if self.rapidjab and not attack_button :
                 self.rapidjab = False
                 self.frame = 0
@@ -351,13 +351,14 @@ class Millet(Char):
 
 class Rayon():
     def __init__(self,stage,x,y,angle_fwd,own:Millet) -> None:
-        self.sound = SFXDicoEvent['lasers']["cool lazer"]
+        self.id = 0
+        self.sound = 'lasers/cool lazer'
         self.stage = stage
         self.x = x
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 9*signe(own.direction)
-        self.rect = pygame.Rect(x-resize(20,0,width,height)[0],y-resize(0,20,width,height)[1],resize(25,0,width,height)[0],resize(0,25,width,height)[1])
+        self.rect = [x-resize(20,0,width,height)[0],y-resize(0,20,width,height)[1],resize(25,0,width,height)[0],resize(0,25,width,height)[1]]
         self.damages_stacking=1/300
         if own.look_right :
             self.angle = pi/4
@@ -385,7 +386,7 @@ class Rayon():
     def update(self):
         if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])):
             #self.g = -self.g*2
-            if self.rect.y < self.stage.mainplat.rect.y+10 :
+            if self.rect[1] < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd
             else :
                 self.angle_fwd = pi-self.angle_fwd
@@ -396,7 +397,7 @@ class Rayon():
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
-        self.rect = pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])
+        self.rect = [self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
         if self.x < -2000 or self.x > 2000:
             self.duration = 0
 
@@ -413,6 +414,7 @@ for i in range(len(firesprite)):
 
 class Fire():
     def __init__(self,x,y,own:Millet) -> None:
+        self.id = 0
         self.x = x
         self.y = y
         self.vx = 15*signe(own.direction)
@@ -426,10 +428,11 @@ class Fire():
             self.angle = pi/4
         else :
             self.angle = 3*pi/4
-        self.rect = pygame.Rect(x,y,2,2)
+        self.rect = [x,y,2,2]
     
     def update(self):
-        self.rect = firesprite[self.duration//2].get_rect(topleft=(self.x,self.y))
+        rect = firesprite[self.duration//2].get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.x = self.x + resize(self.vx,0,width,height)[0]
         self.y = self.y + resize(0,self.vy,width,height)[1]
         self.vx *= 0.8
@@ -445,8 +448,9 @@ class Fire():
 
 class Sinusoide():
     def __init__(self,x,y,angle,own:Millet) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect(x,y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])
+        self.id = 0
+        self.sound = 'hits/hit'
+        self.rect = [x,y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
         self.angle = angle
         self.v = 5*signe(own.direction)
         self.duration = 15
@@ -456,19 +460,20 @@ class Sinusoide():
         self.damages_stacking = 1/550
     
     def update(self):
-        self.rect.x += resize(self.v,0,width,height)[0]
+        self.rect[0] += resize(self.v,0,width,height)[0]
         self.duration -= 1
     
     def draw(self,window):
-        pygame.draw.rect(window,(20,130,100),(self.rect.x+width/2,self.rect.y+height/2,self.rect.w,self.rect.h))
+        pygame.draw.rect(window,(20,130,100),(self.rect[0]+width/2,self.rect[1]+height/2,self.rect[2],self.rect[3]))
 
     def deflect(self,modifier):
         self.duration = 0
 
 class Quantique():
     def __init__(self,x,y,own:Millet) -> None:
-        self.rect = pygame.Rect(own.rect.x,own.rect.y,own.rect.w,own.rect.h)
-        self.x,self.y = own.x,own.rect.y
+        self.id = 0
+        self.rect = own.rect
+        self.x,self.y = own.x,own.rect[1]
         self.own = own
         self.animeframe = self.own.animeframe
         self.duration = 60
@@ -500,7 +505,7 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect.y - size[3] + self.rect.h + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)
 

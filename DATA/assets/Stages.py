@@ -17,6 +17,16 @@ musics = [
     ("event:/BGM/let's_fight_!", "H010", True),
 ]
 
+class Rect():
+    def __init__ (self,x,y,w,h):
+        self.rect = [x,y,w,h]
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+
+    def collderect(self,other):
+        return pygame.Rect(self.rect).colliderect(other)
 
 class Stage:
     def __init__(self,name , sprite, mainx, mainy, platforms=[]) -> None:
@@ -37,24 +47,29 @@ class MainPlat:
     def __init__(self, sprite, x, y) -> None:
         # Sprite
         self.x, self.y = resize(x,y,width,height)
-        self.sprite = pygame.image.load(sprite).convert_alpha()
-        self.sprite = pygame.transform.scale(self.sprite,
-                                             (resize(self.sprite.get_size()[0] * 4,4,width,height)[0], resize(4,self.sprite.get_size()[1] * 4,width,height)[1]))
+        self.sprite = sprite
+        sprite = pygame.image.load(self.sprite).convert_alpha()
+        sprite = pygame.transform.scale(sprite,
+                                             (resize(sprite.get_size()[0] * 4,4,width,height)[0], resize(4,sprite.get_size()[1] * 4,width,height)[1]))
         
         # Recalcul de l'ordonnée
-        self.y = self.y + height - self.sprite.get_size()[1] - resize(0,450,width,height)[1]
+        self.y = self.y + height - sprite.get_size()[1] - resize(0,450,width,height)[1]
 
         # Rectangle
-        self.rect = self.sprite.get_rect(midtop=(x, self.y))
-        self.rect.height += resize(0,250,width,height)[1]
+        rect = sprite.get_rect(midtop=(x, self.y))
+        self.rect = Rect(rect.x,rect.y,rect.w,rect.h)
+        self.rect.h += resize(0,250,width,height)[1]
 
     def draw(self, window):
         # Position réelle
         pos = [self.rect.x + resize(800,0,width,height)[0], self.rect.y + resize(0,450,width,height)[1]]
 
+        sprite = pygame.image.load(self.sprite).convert_alpha()
+        sprite = pygame.transform.scale(sprite,
+                                             (resize(sprite.get_size()[0] * 4,4,width,height)[0], resize(4,sprite.get_size()[1] * 4,width,height)[1]))
         # Affichage du stage
         # self.rect.move(self.rect)
-        window.blit(self.sprite, pos)
+        window.blit(sprite, pos)
 
 
 class Platform():
@@ -62,7 +77,7 @@ class Platform():
         # Rectangle
         x,y = resize(x,y,width,height)
         l,h = resize(l,h,width,height)
-        self.rect = pygame.Rect(x - l // 2, y - h // 2, l, h)
+        self.rect = Rect(x - l // 2, y - h // 2, l, h)
         self.color = color
 
     def draw(self, window):

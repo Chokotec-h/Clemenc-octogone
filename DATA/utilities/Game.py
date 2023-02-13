@@ -13,7 +13,7 @@ basestock = 5
 
 
 class Game:
-    def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent) -> None:
+    def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent, online=False) -> None:
 
         # Gestion de la fumee de hitstun
         self.smoke = list()
@@ -64,7 +64,18 @@ class Game:
 
         self.select = 0
 
-    def play(self, controls, joysticks, stage, width, height, window, clock):
+        self.online = online
+
+    def play(self, controls, joysticks, stage, width, height, window, clock, server=[None,None,0], host=False):
+        if not isinstance(server,float):
+            if self.online :
+                inputs_2 = [False for _ in range(17)]
+            if host :
+                serverchar,char = server
+            else :
+                serverchar,char,servertime = server
+            if char :
+                self.Char_P1 = char
 
         Play = True
         musicplaying = True
@@ -80,44 +91,46 @@ class Game:
             click = True in pygame.mouse.get_pressed()
             if not click :
                 self.select = 0
-            if click and (self.select == 1 or mousex > self.Char_P1.rect.x+width/2 and mousex < self.Char_P1.rect.x + self.Char_P1.rect.w+width/2 and mousey > self.Char_P1.rect.y+height/2 and mousey < self.Char_P1.rect.y + self.Char_P1.rect.h+height/2) :
+            if click and (self.select == 1 or mousex > self.Char_P1.rect[0]+width/2 and mousex < self.Char_P1.rect[0] + self.Char_P1.rect[2]+width/2 and mousey > self.Char_P1.rect[1]+height/2 and mousey < self.Char_P1.rect[1] + self.Char_P1.rect[3]+height/2) :
                 self.Char_P1.x = mousex-width/2
-                self.Char_P1.rect.y = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P1.rect.h/2
+                self.Char_P1.rect[1] = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P1.rect[3]/2
                 self.Char_P1.boom = 2
                 self.Char_P1.vx = 0
                 self.Char_P1.vy = 0
                 self.select = 1
                 while self.Char_P1.touch_stage(stage, self.Char_P1.rect) :
-                    self.Char_P1.rect.y -= 2
-                self.Char_P1.basecoords = (self.Char_P1.x,self.Char_P1.rect.y)
-            if click and (self.select == 2 or mousex > self.Char_P2.rect.x+width/2 and mousex < self.Char_P2.rect.x + self.Char_P2.rect.w+width/2 and mousey > self.Char_P2.rect.y+height/2 and mousey < self.Char_P2.rect.y + self.Char_P2.rect.h+height/2) :
+                    self.Char_P1.rect[1] -= 2
+                self.Char_P1.basecoords = (self.Char_P1.x,self.Char_P1.rect[1])
+            if click and (self.select == 2 or mousex > self.Char_P2.rect[0]+width/2 and mousex < self.Char_P2.rect[0] + self.Char_P2.rect[2]+width/2 and mousey > self.Char_P2.rect[1]+height/2 and mousey < self.Char_P2.rect[1] + self.Char_P2.rect[3]+height/2) :
                 self.Char_P2.x = mousex-width/2
-                self.Char_P2.rect.y = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P2.rect.h/2
+                self.Char_P2.rect[1] = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P2.rect[3]/2
                 self.Char_P2.boom = 2
                 self.Char_P2.vx = 0
                 self.Char_P2.vy = 0
                 self.select = 2
                 while self.Char_P2.touch_stage(stage, self.Char_P2.rect) :
-                    self.Char_P2.rect.y -= 2
-                self.Char_P2.basecoords = (self.Char_P2.x,self.Char_P2.rect.y)
+                    self.Char_P2.rect[1] -= 2
+                self.Char_P2.basecoords = (self.Char_P2.x,self.Char_P2.rect[1])
                 
 
         # Recuperation des touches
-        if self.game_running < 0 and (
-                convert_inputs(controls[0], joysticks, 0)[-6] or convert_inputs(controls[1], joysticks, 1)[-6]):
-            if not self.hold_pause:
-                self.pause = not self.pause
-                if self.pause:
-                    self.UIDicoEvent["UI1 pause"].play()
-                else:
-                    self.UIDicoEvent["UI1 unpause"].play()
-                self.hold_pause = True
+        if not self.online :
+            if self.game_running < 0 and (
+                    convert_inputs(controls[0], joysticks, 0)[-6] or convert_inputs(controls[1], joysticks, 1)[-6]) :
+                if not self.hold_pause:
+                    self.pause = not self.pause
+                    if self.pause:
+                        self.UIDicoEvent["UI1 pause"].play()
+                    else:
+                        self.UIDicoEvent["UI1 unpause"].play()
+                    self.hold_pause = True
         else:
             self.hold_pause = False
 
         ################### Affichage des éléments ###################
 
         ### Debug
+        #if self.training:
         for h in self.Char_P1.active_hitboxes:
             h.draw(window)
         for h in self.Char_P2.active_hitboxes:
@@ -129,10 +142,10 @@ class Game:
         self.smokeframe = self.smokeframe % 4
         if self.Char_P1.hitstun and self.smokeframe == 0:
             self.smoke.append(
-                Smoke(self.Char_P1.rect.x + self.Char_P1.rect.w / 2, self.Char_P1.rect.y + self.Char_P1.rect.h / 2))
+                Smoke(self.Char_P1.rect[0] + self.Char_P1.rect[2] / 2, self.Char_P1.rect[1] + self.Char_P1.rect[3] / 2))
         if self.Char_P2.hitstun and self.smokeframe == 0:
             self.smoke.append(
-                Smoke(self.Char_P2.rect.x + self.Char_P2.rect.w / 2, self.Char_P2.rect.y + self.Char_P2.rect.h / 2))
+                Smoke(self.Char_P2.rect[0] + self.Char_P2.rect[2] / 2, self.Char_P2.rect[1] + self.Char_P2.rect[3] / 2))
         for i, s in enumerate(self.smoke):
             s.draw(window)
             if s.duration <= 0:
@@ -142,7 +155,7 @@ class Game:
         stage.draw(window)
 
         # Affichage des personnages
-        if self.Char_P1.rect.y > self.Char_P2.rect.y:
+        if self.Char_P1.rect[1] > self.Char_P2.rect[1]:
             self.Char_P2.draw(window)
             self.Char_P1.draw(window)
         else:
@@ -213,25 +226,25 @@ class Game:
                 self.stock[0] -= 1
 
             ####  récupération des inputs du joueur 2
-
-            inputs_2 = convert_inputs(controls[1], joysticks, 1)
-            if inputs_2[-5] :
-                inputs_2[4] = True
-            if inputs_2[-4] :
-                inputs_2[6] = True
-                inputs_2[0] = True
-            if inputs_2[-3] :
-                inputs_2[6] = True
-                inputs_2[1] = True
-            if inputs_2[-2] :
-                inputs_2[6] = True
-                inputs_2[2] = True
-            if inputs_2[-1] :
-                inputs_2[6] = True
-                inputs_2[3] = True
-            inputs_2 = inputs_2[0:-5][0:-1]
-            if not (inputs_2[4] or inputs_2[5]):  # gestion du saut
-                self.Char_P2.jumping = False
+            if not self.online :
+                inputs_2 = convert_inputs(controls[1], joysticks, 1)
+                if inputs_2[-5] :
+                    inputs_2[4] = True
+                if inputs_2[-4] :
+                    inputs_2[6] = True
+                    inputs_2[0] = True
+                if inputs_2[-3] :
+                    inputs_2[6] = True
+                    inputs_2[1] = True
+                if inputs_2[-2] :
+                    inputs_2[6] = True
+                    inputs_2[2] = True
+                if inputs_2[-1] :
+                    inputs_2[6] = True
+                    inputs_2[3] = True
+                inputs_2 = inputs_2[0:-5][0:-1]
+                if not (inputs_2[4] or inputs_2[5]):  # gestion du saut
+                    self.Char_P2.jumping = False
 
             if self.training:
 
@@ -286,9 +299,12 @@ class Game:
                                  not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
                 ######################################################################################
             else:
-                # Transmission des inputs à l'objet Palyer 2
-                self.Char_P2.act(inputs_2, stage, self.Char_P1,
-                                 not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
+                if not self.online :
+                    # Transmission des inputs à l'objet Palyer 2
+                    self.Char_P2.act(inputs_2, stage, self.Char_P1,
+                                    not (self.pause or self.Char_P1.BOUM or self.Char_P2.BOUM))
+                elif not serverchar.hasbeenhit and not self.Char_P2.hasbeenhit :
+                    self.Char_P2 = serverchar
             if self.Char_P2.die == 30 and not self.training:
                 self.stock[1] -= 1
             ########
@@ -296,6 +312,9 @@ class Game:
             # détection des collision
             self.Char_P2.collide(self.Char_P1, inputs_2)
             self.Char_P1.collide(self.Char_P2, inputs_1)
+
+        if self.online :
+            self.pause = False
 
         elif self.pause:
             self.pause_time += time.time() - self.pausefrom  # gestion du chrono en pause
@@ -305,7 +324,8 @@ class Game:
             if not self.training :
                 Texte(f"Attaque + Spécial + Bouclier pour quitter", ("Arial", resize(0,25,width,height)[1], False, False), (0, 0, 0), resize(40,0,width,height)[0], resize(0,40,width,height)[1], 800,format_="left").draw(window)
                 inputs_1 = convert_inputs(controls[0], joysticks, 0)[0:-1]
-                inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
+                if not self.online :
+                    inputs_2 = convert_inputs(controls[1], joysticks, 1)[0:-1]
                 if (inputs_1[6] and inputs_1[7] and inputs_1[8]) or (inputs_2[6] and inputs_2[7] and inputs_2[8]):
                     self.confirm = True
                     Menu = "to char"
@@ -321,7 +341,10 @@ class Game:
 
         ###################### Gestion de la fin de la partie ######################
         if not self.training:
-            s = self.time_game + (self.begin_game - time.time()) + self.pause_time  # calcul du temps restant
+            if (not self.online) or host :
+                s = self.time_game + (self.begin_game - time.time()) + self.pause_time  # calcul du temps restant
+            else :
+                s = servertime
             ms = str(round(s * 100) / 100).split(".")[1]
             if len(ms) == 1:
                 ms = ms + "0"
@@ -336,12 +359,12 @@ class Game:
                     if len(s) == 1:
                         s = "0" + str(s)
                     Texte(f"{str(m)}:{str(s)}'{str(ms)}", ("Arial", resize(0,60,width,height)[1], True, False), (255, 255, 255), width / 2,
-                          75).draw(window)
+                        75).draw(window)
                     s = int(s)
                 else:
                     Texte(f"{str(s)}", ("Arial", resize(0,180,width,height)[1], True, False), (100, 0, 0), width / 2, height / 2).draw(window)
 
-            # fin de la partie
+                # fin de la partie
             if (m * 60 + s < 1 or min(self.stock) <= 0) and self.game_running < 0:
                 self.game_running = 180  # attente de 3 secondes
                 self.UIDicoEvent["Voix"]["Autre"]["GAME"].play()  # Fin du match
@@ -616,7 +639,7 @@ class Game:
 
     def reset(self):
         self.confirm = True
-        self.Char_P1.x,self.Char_P1.rect.y = self.Char_P1.basecoords
+        self.Char_P1.x,self.Char_P1.rect[1] = self.Char_P1.basecoords
         basedamages = self.Char_P2.basedamages
         basecoords = self.Char_P2.basecoords
         self.Char_P2 = Training(basecoords[0], basecoords[1], 1)

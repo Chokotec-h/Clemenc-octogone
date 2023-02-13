@@ -12,7 +12,7 @@ from DATA.assets.Misc import Dash_Smoke, Double_Jump
 # À FAIRE QUE UNE FOIS
 SoundSystem.studio_init()
 SFXEvents.SFX_init()
-print("SFX inited")
+print("[LOG] SFX inited")
 
 SFXDicoEvent = SFXEvents.SFXDicoEvent
 
@@ -46,19 +46,17 @@ class Hitbox():
         self.modifier = modifier
         self.boum = boum
         self.linked = linked
-        path = sound.split("/")
+        self.sound = sound.split("/")
 
-        self.sound = SFXDicoEvent[path[0]][path[1] + ""]
 
         if not own.look_right:
-            self.relativex = change_left(x, sizex,own.rect.w)
+            self.relativex = change_left(x, sizex,own.rect[2])
             self.angle = pi - angle
         self.update()
 
     def update(self):
-        self.x = self.relativex + self.own.rect.x
-        self.y = self.relativey + self.own.rect.y
-        self.hit = pygame.Rect(self.x, self.y, self.sizex, self.sizey)
+        self.x = self.relativex + self.own.rect[0]
+        self.y = self.relativey + self.own.rect[1]
         self.duration -= 1
 
     def draw(self, window):  # debug
@@ -75,7 +73,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                  doublejumpheight, airdodgespeed, airdodgetime, dodgeduration):
         pygame.sprite.Sprite.__init__(self)
 
-        self.jumpsound = SFXDicoEvent['mincelious']["jump"]  # Son test
 
         self.x = 0
         self.damages = 0.0
@@ -98,7 +95,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.collidegroup = pygame.sprite.GroupSingle()  # Groupe de collision (spécial à pygame)
         self.collidegroup.add(self)
-        # self.jumpsound = SoundSysteme.instance("event:/SE/jump")  # Son test, peut être modifié via <Personnage>.py
 
         self.frame = 0  # Frames écoulées depuis le début de la précédente action
         self.attack = None  # Attaque en cours
@@ -156,8 +152,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         self.basecoords = (0,-200)
 
+        self.hasbeenhit = False
+
+        self.projectileid = 0
+        self.addeprojectiles = []
+
     def resize_rect(self):
-        self.rect.w, self.rect.h = resize(self.rect.w, self.rect.h,width,height)
+        self.rect[2], self.rect[3] = resize(self.rect[2], self.rect[3],width,height)
 
     def inputattack(self, attack):
         if self.attack != attack:
@@ -190,6 +191,11 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.active_hitboxes = list()
             return
         if continuer:
+            for i, projectile in enumerate(self.projectiles):
+                if projectile not in self.addeprojectiles :
+                    self.addeprojectiles.append(projectile)
+                    self.projectileid += 1
+                    projectile.id = self.projectileid
             if not (self.lag or self.hitstun):
                 self.truecombo = 0
             if self.attack is None:
@@ -289,8 +295,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             if self.grounded and self.attack is None and not self.lag and shield and self.lenght_parry < 5:
                 if right or left:
                     if not self.dash:
-                        self.smoke_dash.append(Dash_Smoke(self.rect.x + self.rect.w / 2 - (right - 0.5) * 70,
-                                                          self.rect.y + self.rect.h / 2, right))
+                        self.smoke_dash.append(Dash_Smoke(self.rect[0] + self.rect[2] / 2 - (right - 0.5) * 70,
+                                                          self.rect[1] + self.rect[3] / 2, right))
                     self.dash = True
                     self.parry = False
                     self.lenght_parry = 0
@@ -382,7 +388,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.vy = -self.fullhop  # il utilise son premier saut
                         else:
                             self.vy = -self.shorthop  # il utilise son premier saut
-                        self.jumpsound.play()  # joli son
 
                     else:  # Si le personnage est en l'air
                         self.fastfall = False  # il cesse de fastfall
@@ -390,10 +395,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.animeframe = 0
                             self.tumble = False
                             self.jumping = True
-                            self.jumpsound.play()  # joli son
                             self.vy = -self.doublejumpheight  # il saute
                             self.double_jump.append(
-                                Double_Jump(self.rect.x + self.rect.w / 2, self.rect.y + self.rect.h / 2))
+                                Double_Jump(self.rect[0] + self.rect[2] / 2, self.rect[1] + self.rect[3] / 2))
 
                             i = 0  # il montre qu'il utilise le premier saut disponible dans la liste
                             while self.doublejump[i]:  # cette boucle a une fin, qui est testée ligne 70
@@ -518,28 +522,29 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.vy *= 0.8
 
         # détection de collisions à la frame suivante
-        nextframe = self.rect.move(self.vx + signe(self.vx), -signe(self.vy))
+        rect = pygame.Rect(self.rect)
+        nextframe = rect.move(self.vx + signe(self.vx), -signe(self.vy))
         if nextframe.colliderect(stage.mainplat.rect):
             i = 0
-            previousrect = deepcopy(self.rect)
-            while (not self.rect.move(signe(self.vx), -signe(self.vy)).colliderect(stage.mainplat.rect)) and i <= (
+            previousrect = deepcopy(rect)
+            while (not rect.move(signe(self.vx), -signe(self.vy)).colliderect(stage.mainplat.rect)) and i <= (
                     abs(self.vx) + 1) * 3:
-                self.rect.x += signe(self.vx)
+                rect.x += signe(self.vx)
                 self.x += signe(self.vx)
                 i += 1
             if i > (abs(self.vx) + 1) * 3:
-                self.rect = previousrect
+                rect = previousrect
             self.x -= signe(self.vx)
             self.vx = 0
-        nextframe = self.rect.move(signe(self.vx), self.vy)
+        nextframe = rect.move(signe(self.vx), self.vy)
         if self.touch_stage(stage, nextframe):
             i = 0
-            previousrect = deepcopy(self.rect)
-            while (not self.touch_stage(stage, self.rect.move(0, signe(self.vy)))) and i <= (abs(self.vy) + 1) * 3:
-                self.rect.y += signe(self.vy)
+            previousrect = deepcopy(rect)
+            while (not self.touch_stage(stage, rect.move(0, signe(self.vy)))) and i <= (abs(self.vy) + 1) * 3:
+                rect.y += signe(self.vy)
                 i += 1
             if i > (abs(self.vy) + 1) * 3:
-                self.rect = previousrect
+                rect = previousrect
             if self.hitstun:
                 self.vy = -self.vy * 0.5
             else:
@@ -548,7 +553,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         # Déplacement
         vx,vy = resize(round(self.vx),self.vy,width,height)
         self.x += vx
-        self.rect.y += vy
+        rect.y += vy
 
         if self.airdodge:
             self.vx *= 0.8
@@ -564,7 +569,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vx = 0
 
         # Tech
-        if self.touch_stage(stage, self.rect.move(0, 3)):
+        if self.touch_stage(stage, rect.move(0, 3)):
             if self.tumble:
                 if self.airdodge:
                     self.vx = self.airdodgespeed
@@ -578,7 +583,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.lag = 20
                 self.tumble = False
         # Détection de si le personnage est au sol
-        if self.touch_stage(stage, self.rect.move(0, 1)):
+        if self.touch_stage(stage, rect.move(0, 1)):
             if self.hitstun:  # diminue la vitesse de hitstun
                 self.vx *= 0.8
             if not self.can_act:  # permet de jouer après un upb
@@ -596,20 +601,21 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         else:
             self.grounded = False
 
-        self.rect.x = self.x - self.rect.w / 2
+        rect.x = self.x - rect.w / 2
         # respawn
         self.die = max(0, self.die - 1)
-        if (not (self.name == "Le Berre" and self.attack == "ForwardSmash")) and (self.rect.y > resize(0,1000,width,height)[1] or self.rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]):
+        if (not (self.name == "Le Berre" and self.attack == "ForwardSmash")) and (rect.y > resize(0,1000,width,height)[1] or rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]):
             if self.die < 1:
                 self.die = 30
                 self.damages = 0.
                 SFXDicoEvent['hits']["8bit hit"].play() # Son décès
             if self.die == 1:
-                self.x,self.rect.y = self.basecoords
+                self.x,rect.y = self.basecoords
                 self.damages = 0.
                 self.vy = 0
                 self.vx = 0
                 self.hitstun = 0
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def draw(self, window):
         sizescalex,sizescaley = resize(self.sizescale,self.sizescale,width,height)
@@ -620,7 +626,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                                                  round(drawing_sprite.get_size()[1] * sizescaley)))  # Rescale
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect.y - size[3] + self.rect.h + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
         if self.show:
             window.blit(drawing_sprite, pos)  # on dessine le sprite
         # self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
@@ -637,7 +643,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         # debug
         if self.parry:
-            pygame.draw.rect(window, (200, 200, 200), (pos[0], pos[1], self.rect.w, self.rect.h))
+            pygame.draw.rect(window, (200, 200, 200), (pos[0], pos[1], self.rect[2], self.rect[3]))
 
         # draw projectiles
         for p in self.projectiles:
@@ -652,10 +658,13 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
             self.intangibility -= 1
             if self.intangibility <= 0:
                 self.intangibility = False
+        self.hasbeenhit = False
         
         # Détection des hitboxes
         for i, hitbox in enumerate(other.active_hitboxes):  
-            if self.rect.colliderect(hitbox.hit):
+            hit = pygame.Rect(hitbox.x, hitbox.y, hitbox.sizex, hitbox.sizey) 
+            if pygame.Rect(self.rect).colliderect(hit):
+                self.hasbeenhit = True
                 if (not self.parry) and (not self.intangibility):  # Parry
                     if self.truecombo == 0:
                         self.combo = 0
@@ -664,9 +673,9 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                     self.combodamages += hitbox.damages
                     self.truecombo += 1
                     if hitbox.position_relative:  # Reverse hit
-                        if self.x > hitbox.hit.x + hitbox.hit.w // 2 and hitbox.own.direction < 0:
+                        if self.x > hit.x + hit.w // 2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
-                        if self.x < hitbox.hit.x - hitbox.hit.w // 2 and hitbox.own.direction > 0:
+                        if self.x < hit.x - hit.w // 2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback * (self.damages * hitbox.damages_stacking + 1)
                     if self.superarmor < knockback and not (self.superarmor == -1):
@@ -681,7 +690,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                 self.superarmor / 5)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages  # dommages
-                        self.rect.y -= 1
+                        self.rect[1] -= 1
                         self.attack = None  # cancel l'attaque en cours
                         self.upB = False
                         self.can_act = True
@@ -699,7 +708,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.parried = True
                         other.attack = None
                         other.lag = min(hitbox.damages * hitbox.knockback / 10, 10)
-                hitbox.sound.play()
+                path = hitbox.sound
+                SFXDicoEvent[path[0]][path[1] + ""].play()
                 if other.active_hitboxes[i].linked :
                     other.active_hitboxes = list()
                 else :
@@ -709,16 +719,18 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         # Détection des projectiles
         for i, projectile in enumerate(other.projectiles):  
+            self.hasbeenhit = True
             for h in self.active_hitboxes:
-                if h.deflect and h.hit.colliderect(projectile.rect):
+                hit = pygame.Rect(h.x, h.y, h.sizex, h.sizey) 
+                if h.deflect and hit.colliderect(pygame.Rect(projectile.rect)):
                     self.projectiles.append(projectile)
                     projectile.deflect(h.modifier)
                     del other.projectiles[i]  # Supprime la hitbox
                     return
 
-            if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
+            if pygame.Rect(self.rect).colliderect(pygame.Rect(projectile.rect)) and projectile.id not in self.immune_to_projectiles:
                 if (not self.parry) and (not self.intangibility):  # Parry
-                    self.immune_to_projectiles.append(projectile)
+                    self.immune_to_projectiles.append(projectile.id)
                     if self.truecombo == 0:
                         self.combo = 0
                         self.combodamages = 0
@@ -736,7 +748,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                         self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += projectile.damages  # dommages
-                        self.rect.y -= 1
+                        self.rect[1] -= 1
                         self.attack = None
                         self.upB = False
                         self.can_act = True
@@ -749,7 +761,8 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                             self.superarmor = max(self.superarmor - projectile.damages, 0)
                         self.damages += projectile.damages
                     try:
-                        projectile.sound.play()
+                        path = projectile.sound.split("/")
+                        SFXDicoEvent[path[0]][path[1] + ""].play()
                     except:
                         SFXDicoEvent['hits']["8bit hit"].play()
                 else:

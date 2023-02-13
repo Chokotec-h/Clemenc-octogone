@@ -11,11 +11,11 @@ class Reignaud(Char):
         super().__init__(speed=2.2, dashspeed=4.1, airspeed=1, deceleration=0.5, fallspeed=1.15, fastfallspeed=1.9, fullhop=22, shorthop=17,
                          doublejumpheight=23,airdodgespeed=4,airdodgetime=2,dodgeduration=18)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Reignaud"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.cancelable = False
         self.counter = False
         self.duration_mot_invasif = 0
@@ -265,8 +265,9 @@ class Reignaud(Char):
                 self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False,sound="hits/hit"))
             if self.frame > 10 :
                 if self.active_hitboxes :
-                    self.active_hitboxes[-1].relativex += signe(self.direction)*sin(pi*self.frame/10)*176/11
-                    self.active_hitboxes[-1].relativey += -cos(pi*self.frame/10)*30
+                    x,y = resize(signe(self.direction)*sin(pi*self.frame/10)*176/11,-cos(pi*self.frame/10)*30,width,height)
+                    self.active_hitboxes[-1].relativex += x
+                    self.active_hitboxes[-1].relativey += y
             if self.frame > 40: # 10 frames de lag
                 self.attack = None
 
@@ -392,7 +393,8 @@ class Reignaud(Char):
         
         # Détection des hitboxes
         for i, hitbox in enumerate(other.active_hitboxes):  
-            if self.rect.colliderect(hitbox.hit):
+            hit = pygame.Rect(hitbox.x, hitbox.y, hitbox.sizex, hitbox.sizey)
+            if pygame.Rect(self.rect).colliderect(hit):
                 if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
                     if self.truecombo == 0:
                         self.combo = 0
@@ -401,9 +403,9 @@ class Reignaud(Char):
                     self.combodamages += hitbox.damages
                     self.truecombo += 1
                     if hitbox.position_relative:  # Reverse hit
-                        if self.x > hitbox.hit.x + hitbox.hit.w // 2 and hitbox.own.direction < 0:
+                        if self.x > hit.x + hit.w // 2 and hitbox.own.direction < 0:
                             hitbox.angle = pi - hitbox.angle
-                        if self.x < hitbox.hit.x - hitbox.hit.w // 2 and hitbox.own.direction > 0:
+                        if self.x < hit.x - hit.w // 2 and hitbox.own.direction > 0:
                             hitbox.angle = pi - hitbox.angle
                     knockback = hitbox.knockback * (self.damages * hitbox.damages_stacking + 1)
                     if self.superarmor < knockback and not (self.superarmor == -1):
@@ -418,7 +420,7 @@ class Reignaud(Char):
                                 self.superarmor / 5)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += hitbox.damages  # dommages
-                        self.rect.y -= 1
+                        self.rect[1] -= 1
                         self.attack = None  # cancel l'attaque en cours
                         self.upB = False
                         self.can_act = True
@@ -441,21 +443,24 @@ class Reignaud(Char):
                         self.animeframe = 0
                         self.active_hitboxes.append(Hitbox(-32,-32,112,164,pi-1,hitbox.knockback,hitbox.damages*2 if other.x*signe(self.direction) < self.x*signe(self.direction) else hitbox.damages,1/250,hitbox.stun,3,self,False))
  
-                hitbox.sound.play()
+                path = hitbox.sound
+                SFXDicoEvent[path[0]][path[1]+ ""].play()
                 del other.active_hitboxes[i]  # Supprime la hitbox
                 return
 
 
         # Détection des projectiles
-        for i, projectile in enumerate(other.projectiles):  
+        for i, projectile in enumerate(other.projectiles):
+            rect = pygame.Rect(projectile.rect)
             for h in self.active_hitboxes:
-                if h.deflect and h.hit.colliderect(projectile.rect):
+                hit = pygame.Rect(h.x, h.y, h.sizex, h.sizey)
+                if h.deflect and hit.colliderect(rect):
                     self.projectiles.append(projectile)
                     projectile.deflect(h.modifier)
                     del other.projectiles[i]  # Supprime la hitbox
                     return
 
-            if self.rect.colliderect(projectile.rect) and projectile not in self.immune_to_projectiles:
+            if pygame.Rect(self.rect).colliderect(rect) and projectile not in self.immune_to_projectiles:
                 if (not self.parry) and (not self.intangibility) and (not self.counter):  # Parry
                     self.immune_to_projectiles.append(projectile)
                     if self.truecombo == 0:
@@ -475,7 +480,7 @@ class Reignaud(Char):
                         self.hitstun = projectile.stun * (self.damages * projectile.damages_stacking / 2 + 1)  # hitstun
                         self.totalhitstun = self.hitstun
                         self.damages += projectile.damages  # dommages
-                        self.rect.y -= 1
+                        self.rect[1] -= 1
                         self.attack = None
                         self.upB = False
                         self.can_act = True
@@ -488,7 +493,8 @@ class Reignaud(Char):
                             self.superarmor = max(self.superarmor - projectile.damages, 0)
                         self.damages += projectile.damages
                     try:
-                        projectile.sound.play()
+                        path = projectile.sound
+                        SFXDicoEvent[path[0]][path[1]+ ""].play()
                     except:
                         SFXDicoEvent['hits']["8bit hit"].play()
                 else:
@@ -509,82 +515,5 @@ class Reignaud(Char):
 ###################          
 """ Projectiles """
 ###################
-
-class Mot_invasif():
-    # Mots invasifs à ajouter : Construction, Problématique, Prendre des notes,
-    def __init__(self,x,y,other,own:Reignaud,stage) -> None:
-        self.other = other
-        self.own = own
-        self.duration=5
-        Texte = choice(["Ressenti","Construction","Subjectif","Problematique"])
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Mot_invasif/{Texte}.png"),resize(32,128,width,height))
-        self.rect = self.sprite.get_rect()
-        self.rect.x = x
-        self.rect.y = y
-        self.vy = 0
-        self.stage = stage
-        self.damages = 0.4
-        self.stun = 0
-        self.knockback = 0
-        self.damages_stacking = 0
-        self.angle = 0
-        self.projectile_immune = []
-    
-    def touch_stage(self,stage,rect):
-        if rect.colliderect(stage.mainplat.rect):
-            return True
-        for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
-                return True
-        return False
-
-
-    def touch_stage(self,stage,rect):
-        if rect.colliderect(stage.mainplat.rect):
-            return True
-        for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+3:
-                return True
-        return False
-
-    def update(self):
-        self.duration=self.own.duration_mot_invasif
-        if self.touch_stage(self.stage,self.rect):
-            self.vy = -1
-        else :
-            self.vy += 1
-        self.rect.y += resize(0,self.vy,width,height)[1]
-        for hitbox in self.other.active_hitboxes :
-            if self.rect.colliderect(hitbox.hit):
-                self.other.vx = (hitbox.knockback)*cos(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.other.superarmor/5),1) # éjection x
-                self.other.vy = -(hitbox.knockback)*sin(hitbox.angle)*(self.damages*hitbox.damages_stacking+1)/max((self.other.superarmor/5),1) # éjection y
-                self.other.hitstun = hitbox.stun*(self.other.damages*hitbox.damages_stacking+2)-(self.other.superarmor/5) # hitstun
-                self.other.totalhitstun = self.other.hitstun
-                self.other.damages += hitbox.damages # dommages
-                self.other.rect.y -= 1
-                self.other.attack = None # cancel l'attaque en cours
-                self.other.upB = False
-                self.other.can_act = True
-                self.other.can_airdodge = True
-                self.other.fastfall = False
-                if abs(self.other.vx) + abs(self.other.vy) > 5 :
-                    self.other.tumble = True
-                self.own.duration_mot_invasif -= 1
-                self.own.projectiles.append(Mot_invasif(randint(-300,300),0,self.other,self.own,self.stage))
-                self.other.active_hitboxes = list()
-                return
-        for projectile in self.other.projectiles: # Détection des projectiles
-            if self.rect.colliderect(projectile.rect) and projectile not in self.projectile_immune:
-                self.projectile_immune.append(projectile)
-                self.own.duration_mot_invasif -= 1
-                self.own.projectiles.append(Mot_invasif(randint(-300,300),0,self.other,self.own,self.stage))
-                self.own.projectiles[-1].projectile_immune.append(projectile)
-
-
-    def deflect(self,modifier):
-        self.own.projectiles.append(self)
-        self.other.projectiles.pop(-1)
-    def draw(self,window):
-        window.blit(self.sprite, (self.rect.x+width/2,self.rect.y+height/2)) # on dessine le sprite
 
 ##### Autres skins

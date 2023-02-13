@@ -19,10 +19,14 @@ import DATA.assets.CharsLoader as Chars
 import DATA.assets.Stages as Stages
 import DATA.utilities.Game as GameObject
 from DATA.utilities.Interface import *
+from DATA.utilities.Entry import TextInput
 from DATA.utilities.Gamepad_gestion import *
 import DATA.utilities.functions as functions
 from DATA.utilities.commands import *
 from DATA.utilities.Voicename import *
+from DATA.utilities.network import Network
+from DATA.utilities.Menu_Stages_and_Chars_Online import *
+
 
 ############################################################################################################
 ############################################## Initialisation ##############################################
@@ -78,6 +82,8 @@ def main():
 
         """ Déclaration des variables """
 
+        get = ""
+
         # Noms des personnages et des stages
         chars = Chars.chars
         # Config des musiques
@@ -86,6 +92,7 @@ def main():
 
         # Variables de gestion du jeu et du menu
         Menu = "title"
+        ip = ""
         Play = False
         focusedbutton = 0  # numéro de bouton
         confirm = False  # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
@@ -93,6 +100,11 @@ def main():
         Menu_Settings = SettingsMenu(UIDicoEvent, width, height)
         Menu_Stages = StagesMenu(False, UIDicoEvent)
         Menu_Chars = CharsMenu(False, UIDicoEvent)
+        
+        online = False
+
+        MenucharsOnline = CharsMenuOnline(False,UIDicoEvent)
+        MenustagesOnline = StagesMenuOnline(False,UIDicoEvent)
 
         # Animation de l'ecran titre
         titleframe = 0
@@ -149,7 +161,7 @@ def main():
                 0, height - resize(0, 128, width, height)[1], width, resize(0, 128, width, height)[1]))
                 # Affichage de la version
 
-                Texte("1.3.0 MPI(*)", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
+                Texte("1.4.0 Online", ("Arial", resize(0,32,width,height)[1], True, True), (0, 0, 0), resize(100,0,width,height)[0], resize(0,64,width,height)[1], format_="left").draw(window)
 
                 key = "A" if len(joysticks) > 0 else "Espace"
                 if titleframe % 60 < 30:  # Clignotement toutes les demi-secondes
@@ -189,7 +201,7 @@ def main():
                     if Menu == "credits":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/intro")
-                    elif Menu != "game":
+                    elif Menu != "game" and Menu != "gameonline":
                         SoundSystem.stop_inst(embient.instance)
                         embient.instance = SoundSystem.play_event("event:/BGM/menu")
 
@@ -201,6 +213,7 @@ def main():
                 ##########################################  Menu Principal  ##########################################
 
                 if Menu == "main":
+                    online = False
                     # inputs haut et bas pour se déplacer dans le menu
                     if functions.input_but_no_repeat(3, controls, joysticks, 0):
                         focusedbutton += 1
@@ -219,10 +232,10 @@ def main():
                         focusedbutton -= 1
                         UIDicoEvent["UI1 selection"].play()
 
-                    focusedbutton = ((focusedbutton + 3) % 6) - 3
+                    focusedbutton = ((focusedbutton + 3) % 7) - 3
 
                     # Bouton "Combat"
-                    Bouton = Button("Combat", ("arial", resize(0, 50, width, height)[1], True, False),
+                    Bouton = Button("Octogone", ("arial", resize(0, 50, width, height)[1], True, False),
                                     "DATA/Images/Menu/Button.png", width / 2,
                                     height / 8, resize(250, 100, width, height))
                     if focusedbutton == 0:
@@ -258,11 +271,31 @@ def main():
                           width / 2, 2 * height / 8 + resize(0, 20, width, height)[1]).draw(
                         window)
 
+                    # Bouton "Multijoueur Local"
+                    Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
+                                    "DATA/Images/Menu/Button.png", width / 2,
+                                    3 * height / 8, resize(250, 100, width, height))
+                    if focusedbutton == 2:
+                        Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 validation"].play()
+                            Menu = "ipaddress"
+                            ip = ""
+                            online = True
+                            confirm = True
+                    Bouton.draw(window)
+                    Texte("Multijoueur", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
+                          3 * height / 8 - resize(0, 20, width, height)[1]).draw(
+                        window)
+                    Texte("Local", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0),
+                          width / 2, 3 * height / 8 + resize(0, 20, width, height)[1]).draw(
+                        window)
+
                     # Bouton "Paramètres"
                     Bouton = Button("Paramètres", ("arial", resize(0, 50, width, height)[1], True, False),
                                     "DATA/Images/Menu/Button.png",
-                                    width / 2, 3 * height / 8, resize(250, 100, width, height))
-                    if focusedbutton == 2:
+                                    width / 2, 4 * height / 8, resize(250, 100, width, height))
+                    if focusedbutton == 3:
                         Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 forward"].play()
@@ -443,8 +476,8 @@ def main():
                                 currentmusic = m[0]
 
                         # création du stage
-                        stage, [(Game.Char_P1.x, Game.Char_P1.rect.y),
-                                (Game.Char_P2.x, Game.Char_P2.rect.y)] = Stages.create_stage(
+                        stage, [(Game.Char_P1.x, Game.Char_P1.rect[1]),
+                                (Game.Char_P2.x, Game.Char_P2.rect[1])] = Stages.create_stage(
                             Menu_Stages.actualstages[stage])
 
                         gamecreated = True
@@ -517,9 +550,12 @@ def main():
                         UIDicoEvent["UI1 forward"].play()
                         # réinitialisation des contrôles
                         controls = functions.reset_commands(joysticks, commands)
-                        Menu = "char"
-                        Menu_Chars.confirm = True
-                        confirm = True
+                        if online :
+                            Menu = "online"
+                        else :
+                            Menu = "char"
+                            Menu_Chars.confirm = True
+                            confirm = True
 
             ######################################################################################################
             ############################################  En  combat  ############################################
@@ -532,15 +568,34 @@ def main():
                     embient.instance = SoundSystem.play_event(currentmusic)
                     musicplaying = True
 
-                if Game.game_running == 29:
-                    SoundSystem.stop_inst(currentmusic)
 
                 # Réinitialisation de l'écran à chaque frame
                 window.fill((255, 255, 255))
                 window.blit(background, (0, 0))
-
-                Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
-                confirm = Game.confirm
+                if online :
+                    try :
+                        if Game.Char_P2.hasbeenhit :
+                            sending = Game.Char_P2
+                        else :
+                            sending = False
+                        Game.online = True
+                        if myplayer :
+                            Play, musicplaying, Menu, controls = Game.play(controls,joysticks,stage,width,height,window,clock,get,False)
+                            get = network.send(["Game",Game.Char_P1,sending])[not myplayer]
+                        else :
+                            Play, musicplaying, Menu, controls = Game.play(controls,joysticks,stage,width,height,window,clock,get,True)
+                            get = network.send(["Game",Game.Char_P1, sending, Game.time_game + (Game.begin_game - time.time()) + Game.pause_time])[not myplayer]
+                    except :
+                        musicplaying = False
+                        traceback.print_exc()
+                        print("[NETWORK] Lost connection")
+                        Menu = "main"
+                        Play = False
+                        messagebox.showerror('Erreur Réseau',"Connection perdue avec le serveur")
+                else :
+                    Game.online = False
+                    Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
+                    confirm = Game.confirm
 
                 SoundSystem.changeGlobalParameter("pause", int(Game.pause))  # gestion du son de la pause
 
@@ -558,6 +613,202 @@ def main():
                     embient.changeParameter("tremolo", tremolo)
                 if Game.game_running > 0:
                     SoundSystem.stop_inst(embient.instance)
+
+            ######################################################################################################
+            ##############################################  Online  ##############################################
+            
+            try :
+                if not Play :
+                    if  Menu == "ipaddress":
+                        online = True
+                        Texte("Entrez l'adresse IP du serveur :",("arial", resize(0,25,width,height)[1], True, False),(0,0,0),width/2,height/2-resize(0,100,width,height)[1]).draw(window)
+                        if not ip :
+                            ipentry=TextInput(password=True,font_family="arial")
+                            ip = " "
+                        else :
+                            ip = ipentry.get_text()
+                            if not ip :
+                                ip = " "
+                            ipentry.update(events)
+                            surface = ipentry.get_surface()
+                            window.blit(surface,(width/2-surface.get_width()/2,height/2))
+                        if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            Menu = "connect"
+                            confirm = True
+                        
+
+                    if Menu == "connect" :
+                            network = Network(ip)
+                            Menu = "online"
+                            globalplayer = network.getP()
+                            if globalplayer is None :
+                                messagebox.showerror('Connection échouée',f"La connection au serveur {ip} a échoué")
+                                ip = ""
+                                Menu = "main"
+                            else :
+                                myplayer = (globalplayer-1)%2
+                                print("[NETWORK] Connected as player",globalplayer)
+                                print("[NETWORK] Local player :",myplayer+1)
+                    #print(Menu)
+                    if Menu == "online":
+                        get = network.send("Waiting")
+                        ready = get[not myplayer]
+                        if ready :
+                            Menu = "charonline"
+                            UIDicoEvent["Voix"]["Autre"]["Choix"].play()
+                            MenucharsOnline = CharsMenuOnline(False,UIDicoEvent)
+                            MenucharsOnline.confirm = True
+                            for _ in range(3):
+                                get = network.send("Waiting")
+                                clock.tick(20)
+                        else :
+                            Texte("En attente d'un adversaire...",("arial", resize(0,90,width,height)[1], False, False),(0,0,0),width/2,height/2).draw(window)
+                        if convert_inputs(controls[0], joysticks, 0)[7]:
+                            online = False
+                            Menu = "main"
+                            try :
+                                network.send(False)
+                            except :
+                                pass
+                            UIDicoEvent["UI1 back"].play()
+                    #print(Menu)
+                    if Menu == "charonline":
+                        get = network.send(["Chars",MenucharsOnline.selected_1,MenucharsOnline.selectchar_1,MenucharsOnline.namelist[MenucharsOnline.names[0]],MenucharsOnline.alt])
+                        get = get[not myplayer]
+                        if isinstance(get,list) and get[0] and MenucharsOnline.selected_1 :
+                            Menu = "stageonline"
+                            MenustagesOnline = StagesMenuOnline(False,UIDicoEvent)
+                            MenustagesOnline.confirm = True
+                            MenustagesOnline.stage = -1
+                            for _ in range(3):
+                                get = network.send(["Chars",MenucharsOnline.selected_1,MenucharsOnline.selectchar_1,MenucharsOnline.namelist[MenucharsOnline.names[0]],MenucharsOnline.alt])
+                                clock.tick(20)
+                        else :
+                            try :
+                                MenucharsOnline.update(window,width,height,controls,joysticks,get)
+                            except :
+                                traceback.print_exc()
+                    
+                    if Menu == "stageonline":
+                        get = network.send(["Stage",MenustagesOnline.stage])
+                        stage = get[0]
+                        if isinstance(stage,int) and stage > -1 :
+                            Menu = "gameonline"
+                            gamecreated = False
+                            for _ in range(3):
+                                get = network.send(["Stage",MenustagesOnline.stage])
+                                clock.tick(20)
+                        else :
+                            if myplayer == 0 :
+                                MenustagesOnline.update(window,controls,joysticks,width,height)
+                            else :
+                                MenustagesOnline.stage = stage
+                                Texte("L'hôte sélectionne le stage",("arial", resize(0,90,width,height)[1], False, False),(0,0,0),width/2,height/2).draw(window)
+
+                    if Menu == "gameonline":
+                        if not gamecreated:
+                            get = network.send(["Countdown",-10])
+                            SoundSystem.stop_inst(embient.instance)
+                            beep = 0
+
+                            names = MenucharsOnline.names
+
+                            MenucharsOnline.selected_1 = False
+                            # Jeu clavier
+                            if names[0] == 0 and controls[0] == commands["Keyboard"]:
+                                names[0] = 1
+
+                            # conversion des contrôles
+                            controls = [commands[MenucharsOnline.namelist[names[0]]], []]
+                            # Création des objets game et result
+                            Game = GameObject.Game(False, chars, MenucharsOnline.selectchar_1, MenucharsOnline.selectchar_2,
+                                                (MenucharsOnline.alt,MenucharsOnline.otheralt), UIDicoEvent)
+                            results = Results(Game, width, height, MenucharsOnline.namelist[names[0]], names[1])
+                            del names
+
+                            # importation de l'arrière-plan et de la musique
+                            background = pygame.transform.scale(pygame.image.load(
+                                f"DATA/Images/Stages/{MenustagesOnline.actualstages[stage]}/{MenustagesOnline.actualstages[stage]}.png"),
+                                (width, height))
+                            for m in musics:
+                                if m[1] == MenustagesOnline.actualstages[stage] and (
+                                        str(Game.Char_P1) == m[2] or str(Game.Char_P2) == m[2] or m[2] == True):
+                                    currentmusic = m[0]
+
+                            # création du stage
+                            if myplayer :
+                                stage, [(Game.Char_P2.x, Game.Char_P2.rect[1]),
+                                        (Game.Char_P1.x, Game.Char_P1.rect[1])] = Stages.create_stage(
+                                    MenustagesOnline.actualstages[stage])
+                                Game.Char_P1.look_right, Game.Char_P2.look_right = Game.Char_P2.look_right, Game.Char_P1.look_right
+                            else :
+                                stage, [(Game.Char_P1.x, Game.Char_P1.rect[1]),
+                                        (Game.Char_P2.x, Game.Char_P2.rect[1])] = Stages.create_stage(
+                                    MenustagesOnline.actualstages[stage])
+                                
+
+                            gamecreated = True
+
+                        if myplayer == 0 :
+                            countdown = "Countdown",time.time() - Game.begin_game
+                            countdown = network.send(["Countdown",time.time() - Game.begin_game])[1]
+                        else :
+                            countdown = network.send(["Countdown",-10])[1]
+                        if not isinstance(countdown,float):
+                            countdown = -10
+
+                        window.fill((255, 255, 255))
+                        window.blit(background, (0, 0))
+
+                        # Affichage du stage
+                        stage.draw(window)
+
+                        # Affichage des personnages
+                        Game.Char_P2.draw(window)
+                        Game.Char_P1.draw(window)
+
+                        # Compte à rebours
+                        if 3 - round(countdown - 0.2) < 1 and round(
+                                countdown) < 5 :
+                            if beep < 4:
+                                UIDicoEvent["UI1 ready"].play()
+                                beep += 1
+
+                            Texte(f"PARTEZ !", ("Arial", resize(0, 180, width, height)[1], True, False), (120, 0, 120),
+                                width / 2, height / 2).draw(
+                                window)
+
+                        elif 4 > countdown > 0.2 :
+                            if beep < round(countdown + 0.2):
+                                UIDicoEvent["UI1 selection 2"].play()
+                                beep += 1
+                            Texte(f"{str(3 - round(countdown - 0.2))}",
+                                ("Arial", resize(0, 180, width, height)[1], True, False),
+                                (0, 0, 100), width / 2, height / 2).draw(window)
+
+                        elif countdown > 5 :
+                            musicplaying = False
+                            Game.begin_game = time.time()
+                            Game.pausefrom = time.time()
+                            Play = True
+                            for _ in range(10):
+                                if myplayer :
+                                    get = network.send(["Game",Game.Char_P1,False])[not myplayer]
+                                else :
+                                    get = network.send(["Game",Game.Char_P1,False, Game.time_game + (Game.begin_game - time.time()) + Game.pause_time])[not myplayer]
+                                
+                                
+                                clock.tick(60)
+
+            except :
+                musicplaying = False
+                traceback.print_exc()
+                online = False
+                print("[NETWORK] Lost connection")
+                Menu = "main"
+                Play = False
+                messagebox.showerror('Erreur Réseau',"Connection perdue avec le serveur")
+
 
             ######################################################################################################
 

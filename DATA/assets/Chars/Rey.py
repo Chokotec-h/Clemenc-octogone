@@ -12,11 +12,11 @@ class Rey(Char):
         super().__init__(speed=2.3, dashspeed=3.4, airspeed=1.1, deceleration=0.68, fallspeed=0.9, fastfallspeed=1.7, fullhop=15, shorthop=12,
                          doublejumpheight=18,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Rey"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.foodvy = 0
         self.door = None
@@ -69,13 +69,13 @@ class Rey(Char):
         if attack == "DownB":
             if self.frame == 6 :
                 if self.door is None :
-                    self.door = Door(self.rect.x,self.rect.y,self)
+                    self.door = Door(self.rect[0],self.rect[1],self)
                     self.projectiles.append(self.door)
                 else :
                     SFXDicoEvent['mincelious']["Door-Slam"].play()
                     self.door.in_use = True
-                    self.x = self.door.x + self.rect.w/2
-                    self.rect.y = self.door.y
+                    self.x = self.door.x + self.rect[2]/2
+                    self.rect[1] = self.door.y
                     self.vx = 0
                     self.vy = 0
             if self.frame > 20 : # 14 frames de lag
@@ -155,7 +155,7 @@ class Rey(Char):
 
         if attack == "UpTilt":
             if self.frame == 6 :
-                self.rect.y -= 60
+                self.rect[1] -= 60
                 self.active_hitboxes.append(Hitbox(0,0,48,128,6*pi/13,17,14,1/200,18,8,self,False,sound="hits/punch"))
             if self.frame > 25: # 11 Frames de lag
                 self.attack = None
@@ -183,7 +183,7 @@ class Rey(Char):
                     self.active_hitboxes[-1].damages = 3
                     self.active_hitboxes[-1].stun = 8
                     self.active_hitboxes[-1].knockback = 7
-                    self.active_hitboxes[-1].sound = SFXDicoEvent['hits']["8bit hit"]
+                    self.active_hitboxes[-1].sound = 'hits/8bit hit'
 
             if self.frame > 45: # 15 frames de lag
                 self.attack = None
@@ -349,10 +349,13 @@ class Rey(Char):
 doorsprites = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
 for i in range(len(doorsprites)):
     doorsprites[i] = pygame.transform.scale(doorsprites[i],resize(doorsprites[i].get_width(),doorsprites[i].get_height(),width,height))
+doorclosed = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
+doorclosed = pygame.transform.scale(doorclosed,resize(doorclosed.get_size()[0],doorclosed.get_size()[1],width,height))
 
 class Door():
     def __init__(self,x,y,own:Rey) -> None:
-        self.sound = SFXDicoEvent['mincelious']["Door-Slam"]
+        self.id = 0
+        self.sound = 'mincelious/Door-Slam'
         self.x = x
         self.y = y
         self.own = own
@@ -362,35 +365,38 @@ class Door():
         self.knockback = 0
         self.damages_stacking = 0
         self.angle = 0
-        sprite = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
-        self.sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.duration = 7
-        self.rect = pygame.Rect(0,0,0,0)
+        self.rect = [0,0,0,0]
 
     def update(self):
         if self.in_use :
             self.duration -= 0.5
-            self.own.rect.x = self.x
-            self.own.rect.y = self.y
+            self.own.rect[0] = self.x
+            self.own.rect[1] = self.y
             self.own.vx = 0
             self.own.vy = 0
             self.own.door = None
 
     def draw(self,window):
-        sprite = self.sprite if self.duration > 6 else doorsprites[round(self.duration)-1] if self.duration > 2 else doorsprites[0]
+        sprite = doorclosed if self.duration > 6 else doorsprites[round(self.duration)-1] if self.duration > 2 else doorsprites[0]
         window.blit(sprite, (self.x+resize(800-8,0,width,height)[0],self.y+resize(0,450-8,width,height)[1])) # on dessine le sprite
 
     def deflect(self,modifier):
         return
 
+
+
 class Spectre_de_rey():
     def __init__(self,own:Rey,other) -> None:
-        self.sound = SFXDicoEvent['lasers']["cool lazer"]
-        self.x = own.rect.x
-        self.y = own.rect.y+own.rect.h/12
+        self.id = 0
+        self.sound = 'lasers/cool lazer'
+        self.x = own.rect[0]
+        self.y = own.rect[1]+own.rect[3]/12
         self.own = own
-        self.sprite = Animations.get_sprite(own.animation,own.name,own.animeframe+1,own.look_right)[0]
-        self.sprite = pygame.transform.scale(self.sprite,resize(self.sprite.get_size()[0]*3,self.sprite.get_size()[1]*3,width,height))
+        self.animation = own.animation
+        self.name = own.name
+        self.animeframe = own.animeframe
+        self.look_right = own.look_right
         self.vx = 20*signe(own.direction)
         self.other = other
         self.damages = 2
@@ -398,20 +404,25 @@ class Spectre_de_rey():
         self.knockback = 8
         self.damages_stacking = 0
         self.angle = random()*pi
-        self.rect = self.sprite.get_rect(topleft = (self.x,self.y))
+        self.rect = [0,0,0,0]
         self.duration = 2
 
     
     def update(self):
         self.x += resize(self.vx,0,width,height)[0]
-        self.rect = self.sprite.get_rect(topleft = (self.x,self.y))
-        if self.rect.colliderect(self.other.rect):
+        rect = pygame.Rect(self.rect)
+        if rect.colliderect(pygame.Rect(self.other.rect)):
             self.duration -= 1
         if self.duration < 1 :
-            self.own.x,self.own.rect.y,self.other.x,self.other.rect.y = self.other.x-abs(self.own.vx),self.other.rect.y-abs(self.own.vy),self.own.x-abs(self.other.vx),self.own.rect.y-abs(self.other.vy)
+            self.own.x,self.own.rect[1],self.other.x,self.other.rect[1] = self.other.x-abs(self.own.vx),self.other.rect[1]-abs(self.own.vy),self.own.x-abs(self.other.vx),self.own.rect[1]-abs(self.other.vy)
             # inverse les positions
     def draw(self,window):
-        window.blit(self.sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        sprite = Animations.get_sprite(self.animation,self.name,self.animeframe+1,self.look_right)[0]
+        sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0]*3,sprite.get_size()[1]*3,width,height))
+        rect = sprite.get_rect(topleft = (self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+
     def deflect(self,modifier):
         self.own, self.other = self.other,self.own
         self.vx *= -modifier

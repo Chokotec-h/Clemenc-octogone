@@ -10,16 +10,17 @@ class Journault(Char):
         super().__init__(speed=2.2, dashspeed=3.4, airspeed=0.9, deceleration=0.8, fallspeed=0.7, fastfallspeed=1.5, fullhop=15, shorthop=12,
                          doublejumpheight=17,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Journault"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.jab = 0
 
         self.cafe = 0
         self.direction_tuyau = 0
+        self.resize_rect()
     
     def __str__(self) -> str:
         return "Journault"
@@ -50,7 +51,7 @@ class Journault(Char):
         else :
             self.deceleration = 0.8
         if self.attack is None :
-            self.rect.w,self.rect.h = resize(48,120,width,height)
+            self.rect[2],self.rect[3] = resize(48,120,width,height)
             self.jab = 0
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -74,13 +75,13 @@ class Journault(Char):
                     self.active_hitboxes[0].angle = (pi/2,0,-pi/2,pi)[self.direction_tuyau]
                     self.active_hitboxes[0].relativex = (0,100,0,change_left(100,48,120))[self.direction_tuyau]
                     self.active_hitboxes[0].relativey = (-10,0,100,0)[self.direction_tuyau]
-                    self.rect.w,self.rect.h = (resize(48,120,width,height),resize(120,48,width,height))[self.direction_tuyau%2]
+                    self.rect[2],self.rect[3] = (resize(48,120,width,height),resize(120,48,width,height))[self.direction_tuyau%2]
 
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(0,0,48,48,pi/2,10,6.2,1/800,10,40,self))
             if self.frame > 45 :
                 if self.direction_tuyau%2 == 1 :
-                    self.rect.y -= 80
+                    self.rect[2] -= 80
                 self.attack = None
                 self.doublejump = [True for _ in self.doublejump] # Annule tout les sauts
                 self.can_act = False # ne peut pas agir après un grounded up B
@@ -102,7 +103,7 @@ class Journault(Char):
             if 19 > self.frame > 8 :
                 self.vy = 0
             if self.frame == 6 :
-                self.projectiles.append(Electroball(self.x + resize(20,0,width,height)[0]*signe(self.direction), self.rect.y + resize(0,40,width,height)[1],self,stage))
+                self.projectiles.append(Electroball(self.x + resize(20,0,width,height)[0]*signe(self.direction), self.rect[1] + resize(0,40,width,height)[1],self,stage))
             if self.frame > 22: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -124,7 +125,7 @@ class Journault(Char):
                 if right :
                     self.look_right = True
             if self.frame == 10 :
-                self.projectiles.append(Automate(self.x + 30*signe(self.direction),self.rect.y,self,other,stage))
+                self.projectiles.append(Automate(self.x + 30*signe(self.direction),self.rect[1],self,other,stage))
             if self.frame > 80 : # 20 frames de lag
                 self.attack = None
 
@@ -374,6 +375,7 @@ electroball = pygame.transform.scale(electroball,resize(32,32,width,height))
 
 class Electroball():
     def __init__(self,x,y,own,stage) -> None:
+        self.id = 0
         self.vx = 8*signe(own.direction)
         self.vy = 0
         self.duration = 50
@@ -383,7 +385,7 @@ class Electroball():
 
         self.rotate = 0
 
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
 
         self.damages = 3.6
         self.knockback = 2
@@ -396,15 +398,16 @@ class Electroball():
 
 
     def update(self):
-        self.rect = electroball.get_rect(topleft=(self.x,self.y))
+        rect = electroball.get_rect(topleft=(self.x,self.y))
 
         self.vy += 1.5
 
-        if self.touch_stage(self.stage,self.rect):
+        if self.touch_stage(self.stage,rect):
             self.vy = -15
         self.x += self.vx
         self.y += self.vy
         self.duration -= 1
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
 
     def touch_stage(self,stage,rect):
@@ -430,6 +433,7 @@ auto = pygame.transform.scale(auto,resize(96,48,width,height))
 
 class Automate():
     def __init__(self,x,y,own,other,stage) -> None:
+        self.id = 0
         self.x = x
         self.y = y
         self.duration = 200
@@ -443,7 +447,7 @@ class Automate():
         self.stage = stage
         self.vx = 5 * signe(own.direction)
         self.vy = 0
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.right = own.look_right
         self.explode = False
     
@@ -451,16 +455,17 @@ class Automate():
         self.own,self.other = self.other,self.own
     
     def update(self):
-        self.rect = auto.get_rect(topleft=(self.x,self.y))
-        self.rect.w /= 2
+        rect = auto.get_rect(topleft=(self.x,self.y))
+        rect.w /= 2
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.y += self.vy
         self.x += self.vx
-        if self.touch_stage(self.stage,self.rect) :
+        if self.touch_stage(self.stage,rect) :
             self.vy = -1
         else :
             self.vy += 1.5
         
-        if (self.rect.colliderect(self.other.rect) or self.duration < 3) and not self.explode:
+        if (rect.colliderect(pygame.Rect(self.other.rect)) or self.duration < 3) and not self.explode:
             self.duration = 5
             self.own.projectiles.append(Explosion(self.x,self.y,8.5,10,pi/3 if self.x < self.other.x else 2*pi/3,15,1/300,48))
             self.explode = True
@@ -487,6 +492,7 @@ class Automate():
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
+        self.id = 0
         SFXDicoEvent['explosions']["gun shot"].play()
         self.x = x
         self.y = y
@@ -496,8 +502,8 @@ class Explosion():
         self.stun = stun
         self.damages_stacking = damages_stacking
         self.size = size
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(size,size,width,height))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [0,0,0,0]
+        self.spritenumber = 1
         self.duration = 10
 
     def deflect(self,modifier):
@@ -506,13 +512,14 @@ class Explosion():
         self.stun = 0
 
     def update(self):
-        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
+        self.spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.duration -= 1
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{self.spritenumber}.png"),(self.size,self.size))
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 
 ##### Autres skins

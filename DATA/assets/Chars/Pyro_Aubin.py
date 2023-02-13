@@ -14,12 +14,12 @@ class Pyro_Aubin(Char):
         super().__init__(speed=2, dashspeed=3, airspeed=1.2, deceleration=0.8, fallspeed=0.6, fastfallspeed=1.2, fullhop=13, shorthop=10,
                          doublejumpheight=15,airdodgespeed=6,airdodgetime=3,dodgeduration=15)
 
-        self.rect = pygame.Rect(100,0,48,120) # Crée le rectangle de perso
+        self.rect = [100,0,48,120] # Crée le rectangle de perso
 
         self.name = "Pyro-Aubin"
         self.konamiadd = False
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.konami = []
         self.backspecial = []
         self.player = player
@@ -564,8 +564,9 @@ boulet = pygame.transform.scale(boulet,resize(boulet.get_width(),boulet.get_heig
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
+        self.id = 0
         self.x = own.x + resize(48,0,width,height)[0]*signe(own.direction)
-        self.y = own.rect.y + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + resize(0,48,width,height)[1]
         self.charge = charge
         self.vx = (10+charge)*signe(own.direction)*0.2
         self.vy = -5-charge*0.1
@@ -577,7 +578,7 @@ class Boulet():
             self.angle = 3*pi/4
         else :
             self.angle = pi/4
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.stage = stage
         self.duration = 80
 
@@ -585,13 +586,14 @@ class Boulet():
         self.knockback = (abs(self.vy)+abs(self.vx))/2
         self.x += resize(self.vx,0,width,height)[0]
         self.y += resize(0,self.vy,width,height)[1]
-        self.rect = boulet.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect) :
+        rect = boulet.get_rect(topleft=(self.x,self.y))
+        if rect.colliderect(self.stage.mainplat.rect) :
             self.vy = -1
             self.vx *= 0.9
         else :
             self.vy += 3
         self.duration -= 1
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -606,8 +608,9 @@ fusee = pygame.transform.scale(fusee,resize(fusee.get_width(),fusee.get_height()
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
+        self.id = 0
         self.x = own.x + signe(own.direction)*resize(48,0,width,height)[0]
-        self.y = own.rect.y + resize(0,86,width,height)[1]
+        self.y = own.rect[1] + resize(0,86,width,height)[1]
         self.vx = 0.5*signe(own.direction)
         self.vy = -10
         self.damages = 5
@@ -615,7 +618,7 @@ class Fusee():
         self.knockback = 6
         self.damages_stacking = 1/200
         self.angle = pi/2
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.stage = stage
         self.duration = 9
         self.frame = 1
@@ -641,7 +644,7 @@ class Fusee():
                 self.vy += 0.005*self.frame
             else :
                 dx = (self.x - self.other.x)
-                dy = (self.y - self.other.rect.y)
+                dy = (self.y - self.other.rect[1])
                 if dx == 0 :
                     dx = 0.001
                 angle = atan(dy/dx)
@@ -653,10 +656,11 @@ class Fusee():
             self.frame += 1
             self.vy += 0.005*self.frame
             self.duration -= 1
-        if self.touch_stage(self.stage,self.rect) or abs(self.y) > 1000 or abs(self.x) > 1000:
+        rect = pygame.Rect(self.rect)
+        if self.touch_stage(self.stage,rect) or abs(self.y) > 1000 or abs(self.x) > 1000:
             self.done = True
             self.vy = 0
-        if self.rect.colliderect(self.other.rect):
+        if rect.colliderect(pygame.Rect(self.other.rect)):
             self.done = True
             self.frame = 0
             self.homing = False
@@ -670,9 +674,10 @@ class Fusee():
             sprite = pygame.transform.rotate(fusee,degrees(pi-atan(self.vy/self.vx)))
         else :
             sprite = pygame.transform.rotate(fusee,degrees(pi-atan(self.vy/self.vx))+180)
-        self.rect = sprite.get_rect(topleft=(self.x,self.y))
-        if self.rect.colliderect(self.stage.mainplat.rect):
-            sprite = fusee
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        if rect.colliderect(self.stage.mainplat.rect):
+            sprite = pygame.transform.rotate(fusee,degrees(90))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
     def deflect(self,modifier):
@@ -689,16 +694,17 @@ grenade = pygame.transform.scale(grenade,resize(grenade.get_width(),grenade.get_
 
 class Grenade():
     def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
+        self.id = 0
         self.vx = speed
         self.vy = -15
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect.y + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + resize(0,48,width,height)[1]
         self.own = own
         self.other = other
         self.duration = 80
         self.stage = stage
-        self.rect = pygame.Rect((0,0,0,0))
+        self.rect = [0,0,0,0]
         self.rotate = 0
         self.angle = 0
         self.damages = 2
@@ -713,31 +719,24 @@ class Grenade():
             if rect.colliderect(p.rect) and rect.y + rect.h-4 < p.rect.y+self.vy+4:
                 return True
         return False
-
-    def touch_stage(self,stage,rect):
-        if rect.colliderect(stage.mainplat.rect):
-            return True
-        for p in stage.plats:
-            if rect.colliderect(p.rect) and rect.y + rect.h < p.rect.y+self.vy+3:
-                return True
-        return False
     
     def update(self):
         dx = (self.x - self.other.x)
-        dy = (self.y - self.other.rect.y)
+        dy = (self.y - self.other.rect[1])
         if dx == 0 :
             dx = 0.001
         self.angle = atan(dy/dx)
-        self.rect = grenade.get_rect(topleft=(self.x,self.y))
+        rect = grenade.get_rect(topleft=(self.x,self.y))
         self.x += resize(self.vx,0,width,height)[0]
         self.y += resize(0,self.vy,width,height)[1]
         self.vy += 0.8
-        if self.touch_stage(self.stage,self.rect):
+        if self.touch_stage(self.stage,rect):
             self.basevy *= 0.8
             self.vy = self.basevy
         self.duration -= 1
         if self.duration == 1 :
             self.own.projectiles.append(Explosion(self.x,self.y,19,16,self.angle,20,1/100,75))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
     
     def draw(self,window):
         self.rotate += self.vx
@@ -746,6 +745,7 @@ class Grenade():
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
+        self.id = 0
         SFXDicoEvent['explosions']["gun shot"].play()
         self.x = x
         self.y = y
@@ -755,8 +755,7 @@ class Explosion():
         self.stun = stun
         self.damages_stacking = damages_stacking
         self.size = size
-        self.sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png"),resize(size,size,width,height))
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [0,0,0,0]
         self.duration = 10
 
     def deflect(self,modifier):
@@ -765,13 +764,14 @@ class Explosion():
         self.stun = 0
 
     def update(self):
-        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        self.sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
         self.duration -= 1
-        self.rect = self.sprite.get_rect(topleft=(self.x,self.y))
         
     def draw(self,window):
-        window.blit(self.sprite,(self.x+width/2,self.y+height/2))
+        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
+        rect = sprite.get_rect(topleft=(self.x,self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 
 ##### Autres skins

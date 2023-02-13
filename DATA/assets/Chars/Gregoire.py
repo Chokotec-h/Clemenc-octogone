@@ -18,11 +18,11 @@ class Gregoire(Char):
                          fullhop=15, shorthop=13,
                          doublejumpheight=16, airdodgespeed=6, airdodgetime=3, dodgeduration=15)
 
-        self.rect = pygame.Rect(100, 0, 60, 144)  # Crée le rectangle de perso
+        self.rect = [100, 0, 60, 144]  # Crée le rectangle de perso
 
         self.name = "Gregoire"
         self.x = x
-        self.rect.y = y
+        self.rect[1] = y
         self.player = player
         self.angle_rayon = -pi / 300000
         self.rapidjab = False
@@ -90,7 +90,7 @@ class Gregoire(Char):
                     SFXDicoEvent['lasers']["laser2"].play()
                 self.vy = 0
                 self.projectiles.append(
-                    Rayon(stage, self.x, self.rect.y + 24, -self.angle_rayon * signe(self.direction),
+                    Rayon(stage, self.x, self.rect[1] + 24, -self.angle_rayon * signe(self.direction),
                           self))  # l'angle est chelou parce que j'ai géré la vitesse du rayon de façon merdique  # Mais on s'en fout ça marche
             if self.frame > 50:  # 25 frames de lag
                 self.attack = None
@@ -125,14 +125,14 @@ class Gregoire(Char):
                 if right:
                     self.look_right = True
             if 23 < self.frame < 48:
-                self.projectiles.append(Thunder(self.x + resize(24 * signe(self.direction) - 48,0,width,height)[0], self.rect.y + resize(0,24,width,height)[1], self))
+                self.projectiles.append(Thunder(self.x + resize(24 * signe(self.direction) - 48,0,width,height)[0], self.rect[1] + resize(0,24,width,height)[1], self))
             if self.frame == 49:
                 self.active_hitboxes.append(
                     Hitbox(32, 32, 32, 64, pi / 4, 14, incertitude(7), 1 / 150, 15, 3, self, False))
             if 50 < self.frame < 90:
                 if self.active_hitboxes:
                     self.active_hitboxes[-1].duration += 1
-                    self.active_hitboxes[-1].relativex += 32 * signe(self.direction)
+                    self.active_hitboxes[-1].relativex += 24 * signe(self.direction)
             if self.frame > 92:  # 44 frames de lag
                 self.attack = None
 
@@ -149,7 +149,7 @@ class Gregoire(Char):
                 else:
                     x = -29
                     angle = pi / 4
-                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect.y + resize(0,50 + 20 * cos(self.frame / 2),width,height)[1], angle, self))
+                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect[1] + resize(0,50 + 20 * cos(self.frame / 2),width,height)[1], angle, self))
             if self.rapidjab and not attack_button:
                 self.rapidjab = False
                 self.frame = 0
@@ -439,13 +439,13 @@ class Gregoire(Char):
 
 class Rayon():
     def __init__(self, stage, x, y, angle_fwd, own: Gregoire) -> None:
-        self.sound = SFXDicoEvent['lasers']["cool lazer"]
+        self.sound = 'lasers/cool lazer'
         self.stage = stage
         self.x = x
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 9 * signe(own.direction)
-        self.rect = pygame.Rect(x - resize(20,0,width,height)[0], y - 20, resize(25,0,width,height)[0], 25)
+        self.rect = [x, y] + list(resize(25, 25,width,height))
         self.damages_stacking = 1 / 300
         if own.look_right:
             self.angle = pi / 4
@@ -474,7 +474,7 @@ class Rayon():
         nexty = self.y + resize(0,sin(self.angle_fwd) * self.v + self.g,width,height)[1]
         if self.touch_stage(self.stage, pygame.Rect(self.x, nexty, 5, 5)):
             self.g = -6.74 / 4
-            if self.rect.y < self.stage.mainplat.rect.y - self.g + abs(self.v) + 5:
+            if self.rect[1] < self.stage.mainplat.rect.y - self.g + abs(self.v) + 5:
                 self.angle_fwd = -self.angle_fwd
             else:
                 self.angle_fwd = pi - self.angle_fwd
@@ -483,7 +483,7 @@ class Rayon():
         self.g += 0.0981 * 2
         self.x = nextx
         self.y = nexty
-        self.rect = pygame.Rect(self.x, self.y, 5, 5)
+        self.rect = [self.x, self.y, 5, 5]
         if self.x < -1000 or self.x > 1000 or self.y > 1000:
             self.duration = 0
 
@@ -500,10 +500,11 @@ thundersprite = pygame.transform.scale(
 
 class Thunder():
     def __init__(self, x, y, own: Gregoire) -> None:
+        self.id = 0
         self.size = 2
         self.x = x
         self.y = y + 8
-        self.vx = 32 * signe(own.direction)
+        self.vx = 24 * signe(own.direction)
         self.duration = 50
         self.knockback = 1
         self.damages = incertitude(0.2)
@@ -513,12 +514,13 @@ class Thunder():
             self.angle = pi / 4
         else:
             self.angle = 3 * pi / 4
-        self.rect = pygame.Rect(x, y, 2, 2)
+        self.rect = [x, y, 2, 2]
         if not own.look_right:
             self.x += 32
 
     def update(self):
-        self.rect = thundersprite.get_rect(topleft=(self.x, self.y))
+        rect = thundersprite.get_rect(topleft=(self.x, self.y))
+        self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.x += resize(self.vx,0,width,height)[0]
         self.duration -= 1
 
@@ -533,8 +535,9 @@ class Thunder():
 
 class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
-        self.sound = SFXDicoEvent['hits']["hit"]
-        self.rect = pygame.Rect([x, y] + list(resize(5, 5,width,height)))
+        self.id = 0
+        self.sound = 'hits/hit'
+        self.rect = [x, y] + list(resize(5, 5,width,height))
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 15
@@ -544,11 +547,11 @@ class Sinusoide():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect.x += resize(self.v,0,width,height)[0]
+        self.rect[0] += resize(self.v,0,width,height)[0]
         self.duration -= 1
 
     def draw(self, window):
-        pygame.draw.rect(window, (220, 200, 120), (self.rect.x + resize(800,0,width,height)[0], self.rect.y + resize(0,450,width,height)[1], self.rect.w, self.rect.h))
+        pygame.draw.rect(window, (220, 200, 120), (self.rect[0] + resize(800,0,width,height)[0], self.rect[1] + resize(0,450,width,height)[1], self.rect[2], self.rect[3]))
 
     def deflect(self, modifier):
         self.duration = 0
@@ -556,8 +559,9 @@ class Sinusoide():
 
 class Quantique():
     def __init__(self, own: Gregoire) -> None:
-        self.rect = pygame.Rect(own.rect.x, own.rect.y, own.rect.w, own.rect.h)
-        self.x,self.y = own.x,own.rect.y
+        self.id = 0
+        self.rect = own.rect
+        self.x,self.y = own.x,own.rect[1]
         self.own = own
         self.animeframe = self.own.animeframe
         self.duration = 120
@@ -589,6 +593,6 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect.y - size[3] + self.rect.h + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)
