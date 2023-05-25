@@ -13,8 +13,8 @@ musics = [
     ("event:/BGM/Lunch time !", "Table de self", True),
     ("event:/BGM/City night", "BDE", True),
     ("event:/BGM/optic'mind", "Salle de TP", True),
-    ("event:/BGM/Beijing de zhuren", "I211", True),
-    ("event:/BGM/let's_fight_!", "H010", True),
+    ("event:/BGM/within_octogone", "I211", True), ("event:/BGM/Beijing de zhuren", "I211", "Gourmelen"),
+    ("event:/BGM/let's_fight_!", "H010", True), ("event:/BGM/Logic_game", "H010", "Journault"),    
 ]
 
 class Rect():
