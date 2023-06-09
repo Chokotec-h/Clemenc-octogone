@@ -20,7 +20,6 @@ class Journault(Char):
 
         self.cafe = 0
         self.direction_tuyau = 0
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Journault"
@@ -51,7 +50,7 @@ class Journault(Char):
         else :
             self.deceleration = 0.8
         if self.attack is None :
-            self.rect[2],self.rect[3] = resize(48,120,width,height)
+            self.rect[2],self.rect[3] = 48,120
             self.jab = 0
 
     def animation_attack(self,attack,inputs,stage,other):
@@ -75,7 +74,7 @@ class Journault(Char):
                     self.active_hitboxes[0].angle = (pi/2,0,-pi/2,pi)[self.direction_tuyau]
                     self.active_hitboxes[0].relativex = (0,100,0,change_left(100,48,120))[self.direction_tuyau]
                     self.active_hitboxes[0].relativey = (-10,0,100,0)[self.direction_tuyau]
-                    self.rect[2],self.rect[3] = (resize(48,120,width,height),resize(120,48,width,height))[self.direction_tuyau%2]
+                    self.rect[2],self.rect[3] = ((48,120),(120,48))[self.direction_tuyau%2]
 
             if self.frame == 5 :
                 self.active_hitboxes.append(Hitbox(0,0,48,48,pi/2,10,6.2,1/800,10,40,self))
@@ -103,7 +102,7 @@ class Journault(Char):
             if 19 > self.frame > 8 :
                 self.vy = 0
             if self.frame == 6 :
-                self.projectiles.append(Electroball(self.x + resize(20,0,width,height)[0]*signe(self.direction), self.rect[1] + resize(0,40,width,height)[1],self,stage))
+                self.projectiles.append(Electroball(self.x + 20*signe(self.direction), self.rect[1] + 40,self,stage))
             if self.frame > 22: # 10 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -398,7 +397,7 @@ class Electroball():
 
 
     def update(self):
-        rect = electroball.get_rect(topleft=(self.x,self.y))
+        rect = pygame.Rect(self.x,self.y,32,32)
 
         self.vy += 1.5
 
@@ -455,7 +454,7 @@ class Automate():
         self.own,self.other = self.other,self.own
     
     def update(self):
-        rect = auto.get_rect(topleft=(self.x,self.y))
+        rect = pygame.Rect(self.x,self.y,48,48)
         rect.w /= 2
         self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.y += self.vy
@@ -467,7 +466,7 @@ class Automate():
         
         if (rect.colliderect(pygame.Rect(self.other.rect)) or self.duration < 3) and not self.explode:
             self.duration = 5
-            self.own.projectiles.append(Explosion(self.x,self.y,8.5,10,pi/3 if self.x < self.other.x else 2*pi/3,15,1/300,48))
+            self.own.projectiles.append(Explosion(self.x-2,self.y-2,8.5,10,pi/3 if self.x < self.other.x else 2*pi/3,15,1/300,52))
             self.explode = True
         self.duration -= 1
 
@@ -487,7 +486,7 @@ class Automate():
     def draw(self,window):
         sprite = pygame.transform.flip(auto,not self.right,False)
         x,y = resize(48,48,width,height)
-        window.blit(sprite, (self.x+width/2,self.y+height/2),((0,0,x,y),(x,0,x,y))[(self.duration//5)%2]) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height),((0,0,x,y),(x,0,x,y))[(self.duration//5)%2]) # on dessine le sprite
 
 
 class Explosion():
@@ -516,9 +515,9 @@ class Explosion():
         self.duration -= 1
         
     def draw(self,window):
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{self.spritenumber}.png"),(self.size,self.size))
-        rect = sprite.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
+        self.rect = [self.x,self.y,self.size,self.size]
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 

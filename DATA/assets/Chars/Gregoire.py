@@ -27,7 +27,6 @@ class Gregoire(Char):
         self.angle_rayon = -pi / 300000
         self.rapidjab = False
         self.strongfair = False
-        self.resize_rect()
 
     def __str__(self) -> str:
         return "Gregoire"
@@ -125,7 +124,7 @@ class Gregoire(Char):
                 if right:
                     self.look_right = True
             if 23 < self.frame < 48:
-                self.projectiles.append(Thunder(self.x + resize(24 * signe(self.direction) - 48,0,width,height)[0], self.rect[1] + resize(0,24,width,height)[1], self))
+                self.projectiles.append(Thunder(self.x + 24 * signe(self.direction) - 48, self.rect[1] + 24, self))
             if self.frame == 49:
                 self.active_hitboxes.append(
                     Hitbox(32, 32, 32, 64, pi / 4, 14, incertitude(7), 1 / 150, 15, 3, self, False))
@@ -149,7 +148,7 @@ class Gregoire(Char):
                 else:
                     x = -29
                     angle = pi / 4
-                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect[1] + resize(0,50 + 20 * cos(self.frame / 2),width,height)[1], angle, self))
+                self.projectiles.append(Sinusoide(self.x + x, self.rect[1] + 50 + 20 * cos(self.frame / 2), angle, self))
             if self.rapidjab and not attack_button:
                 self.rapidjab = False
                 self.frame = 0
@@ -445,7 +444,7 @@ class Rayon():
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 9 * signe(own.direction)
-        self.rect = [x, y] + list(resize(25, 25,width,height))
+        self.rect = [x, y,25,25]
         self.damages_stacking = 1 / 300
         if own.look_right:
             self.angle = pi / 4
@@ -456,8 +455,8 @@ class Rayon():
         self.stun = 4
         self.duration = 10
         self.g = -6.74 / 4
-        nextx = self.x + resize(cos(self.angle_fwd) * self.v,0,width,height)[0]
-        nexty = self.y + resize(0,sin(self.angle_fwd) * self.v + self.g,width,height)[1]
+        nextx = self.x + cos(self.angle_fwd) * self.v
+        nexty = self.y + sin(self.angle_fwd) * self.v + self.g
         self.g += 0.0981
         self.x = nextx
         self.y = nexty
@@ -471,7 +470,7 @@ class Rayon():
         return False
 
     def update(self):
-        nexty = self.y + resize(0,sin(self.angle_fwd) * self.v + self.g,width,height)[1]
+        nexty = self.y + sin(self.angle_fwd) * self.v + self.g
         if self.touch_stage(self.stage, pygame.Rect(self.x, nexty, 5, 5)):
             self.g = -6.74 / 4
             if self.rect[1] < self.stage.mainplat.rect.y - self.g + abs(self.v) + 5:
@@ -479,7 +478,7 @@ class Rayon():
             else:
                 self.angle_fwd = pi - self.angle_fwd
 
-        nextx = self.x + resize(cos(self.angle_fwd) * self.v,0,width,height)[0]
+        nextx = self.x + cos(self.angle_fwd) * self.v
         self.g += 0.0981 * 2
         self.x = nextx
         self.y = nexty
@@ -488,7 +487,7 @@ class Rayon():
             self.duration = 0
 
     def draw(self, window):
-        pygame.draw.rect(window, (250, 0, 0), (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1], resize(10,0,width,height)[0], resize(0,10,width,height)[1]))
+        pygame.draw.rect(window, (250, 0, 0), (resize(self.x + 800,0,width,height)[0], resize(0,self.y + 450,width,height)[1], resize(10,0,width,height)[0], resize(0,10,width,height)[1]))
 
     def deflect(self, modifier):
         self.v *= -modifier
@@ -519,13 +518,12 @@ class Thunder():
             self.x += 32
 
     def update(self):
-        rect = thundersprite.get_rect(topleft=(self.x, self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
-        self.x += resize(self.vx,0,width,height)[0]
+        self.rect = [self.x,self.y,48,48]
+        self.x += self.vx
         self.duration -= 1
 
     def draw(self, window):
-        window.blit(thundersprite, (self.x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1]))
+        window.blit(thundersprite, (resize(self.x + 800,0,width,height)[0], resize(0,self.y + 450,width,height)[1]))
 
     def deflect(self, modifier):
         self.vx = -self.vx
@@ -537,7 +535,7 @@ class Sinusoide():
     def __init__(self, x, y, angle, own: Gregoire) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x, y] + list(resize(5, 5,width,height))
+        self.rect = [x, y,5,5]
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 15
@@ -547,11 +545,11 @@ class Sinusoide():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect[0] += resize(self.v,0,width,height)[0]
+        self.rect[0] += self.v
         self.duration -= 1
 
     def draw(self, window):
-        pygame.draw.rect(window, (220, 200, 120), (self.rect[0] + resize(800,0,width,height)[0], self.rect[1] + resize(0,450,width,height)[1], self.rect[2], self.rect[3]))
+        pygame.draw.rect(window, (220, 200, 120), (resize(self.rect[0] + 800,0,width,height)[0], resize(0,self.rect[1] + 450,width,height)[1], self.rect[2], self.rect[3]))
 
     def deflect(self, modifier):
         self.duration = 0
@@ -577,7 +575,7 @@ class Quantique():
         self.duration -= 1
         if self.g:
             self.vy += 1
-        self.y = self.y + resize(0,self.vy,width,height)[1]
+        self.y = self.y + self.vy
 
     def deflect(self, modifier):
         self.vy = modifier * 10
@@ -593,6 +591,6 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [resize(self.x + 800 - size[2] / 2,0,width,height)[0], size[3] + resize(0,self.rect[1] + self.rect[3] - 450,width,height)[1] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)

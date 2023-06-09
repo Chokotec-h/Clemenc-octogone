@@ -32,7 +32,6 @@ class Kebab(Char):
         self.current_sauce = -1
 
         self.eatleft = 3
-        self.resize_rect()
 
     def __str__(self) -> str:
         return "Kebab du dimanche soir"
@@ -413,14 +412,16 @@ class Kebab(Char):
 
         modifier = resize(4,0,width,height)[0]
         sizescalex,sizescaley = resize(self.sizescale,self.sizescale,width,height)
-
-        drawing_sprite,size,self.animeframe = get_sprite(self.animation,self.name,self.animeframe,self.look_right)
-        drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0],size[1],size[2],size[3]),not self.look_right,False)
-        drawing_sprite = pygame.transform.scale(drawing_sprite,(round(drawing_sprite.get_size()[0]*sizescalex),round(drawing_sprite.get_size()[1]*sizescaley))) # Rescale
-        size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex, size[3] * sizescaley]  # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2]/2, self.rect[1]-size[3]+self.rect[3] + resize(0,450,width,height)[1]-1] # Position réelle du sprite
-        if self.show :
-            window.blit(drawing_sprite, pos) # on dessine le sprite
+        drawing_sprite, size, self.animeframe = get_sprite(self.animation, self.name, self.animeframe, self.look_right)
+        drawing_sprite = pygame.transform.flip(drawing_sprite.subsurface(size[0], size[1], size[2], size[3]),
+                                               not self.look_right, False)
+        drawing_sprite = pygame.transform.scale(drawing_sprite, (round(drawing_sprite.get_size()[0] * sizescalex),
+                                                                 round(drawing_sprite.get_size()[1] * sizescaley)))  # Rescale
+        size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
+                size[3] * sizescaley]  # Rescale
+        pos = [resize(self.x + 800 ,0,width,height)[0] - size[2] / 2 ,  resize(0,self.rect[1] + self.rect[3] +450,width,height)[1]  - size[3] - 1]  # Position réelle du sprite
+        if self.show:
+            window.blit(drawing_sprite, pos)  # on dessine le sprite
         
         if self.attack == "ForwardSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
@@ -430,8 +431,8 @@ class Kebab(Char):
             size = [size[0]*modifier,size[1]*modifier,size[2]*modifier,size[3]*modifier] # Rescale
             if not self.look_right :
                 pos[0] -= size[2] - resize(48,0,width,height)[0]
-            window.blit(drawing_smash, pos,size) # on dessine le sprite
             pos[0] += resize(15,0,width,height)[0]*signe(self.direction)
+            window.blit(drawing_smash, pos,size) # on dessine le sprite
         
         if self.attack == "UpSmash" and self.animeframe > 14:
             t = "" if self.look_right else "l"
@@ -497,6 +498,7 @@ class Kebab(Char):
                     if self.sauce == i :
                         pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(824,0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,474,width,height)[1]),resize(30,0,width,height)[0],width=2)
                     window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(800,0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,450,width,height)[1]))
+
 ###################          
 """ Projectiles """
 ###################
@@ -560,5 +562,5 @@ class Flaque():
             sprite = Sauce[self.sauce+"f"]
         rect = sprite.get_rect(topleft=(self.x,self.y))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
-        window.blit(sprite, (rect.x+800,rect.y+450)) # on dessine le sprite
+        window.blit(sprite, resize(rect.x+800,rect.y+450,width,height)) # on dessine le sprite
 ##### Autres skins

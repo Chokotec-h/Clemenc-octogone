@@ -18,7 +18,6 @@ class Renault(Char):
         self.player = player
         self.daccord = 0
         self.cling = False
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Renault"
@@ -380,7 +379,6 @@ class Renault(Char):
 ###################
 
 drill = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
-drill = pygame.transform.scale(drill,resize(drill.get_size()[0],drill.get_size()[1],width,height))
 
 class Drill():
     def __init__(self,vx,own:Char) -> None:
@@ -389,12 +387,12 @@ class Drill():
         self.vx = vx
         self.direction = signe(own.direction)
         if own.look_right :
-            self.x = own.x + resize(48,0,width,height)[0]
+            self.x = own.x + 48
             self.angle = pi/4
         else :
-            self.x = own.x + resize(change_left(48,64)-48,0,width,height)[0]
+            self.x = own.x + change_left(48,64)-48
             self.angle = 3*pi/4
-        self.y = own.rect[1] + resize(0,42,width,height)[1]
+        self.y = own.rect[1] + 42
 
         self.duration = 120
         self.damages = 4
@@ -407,7 +405,7 @@ class Drill():
     def update(self):
         self.duration -= 1
         self.vx = self.basevx + (120-self.duration)/5*self.direction
-        self.x += resize(self.vx,0,width,height)[0]
+        self.x += self.vx
     
     def deflect(self,modifier):
         self.basevx = -self.basevx*modifier
@@ -418,13 +416,13 @@ class Drill():
         self.knockback *= modifier
 
     def draw(self,window):
-        window.blit(pygame.transform.flip(drill,self.direction<0,False),(self.x+width/2,self.y+height/2))
         rect = drill.get_rect(topleft=(self.x,self.y))
+        sprite = pygame.transform.scale(drill,resize(drill.get_size()[0],drill.get_size()[1],width,height))
+        window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 
 
 gear = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
-gear = pygame.transform.scale(gear,resize(gear.get_size()[0],gear.get_size()[1],width,height))
 
 class Gear():
     def __init__(self,vx,own:Char) -> None:
@@ -433,12 +431,12 @@ class Gear():
         self.direction = signe(own.direction)
 
         if own.look_right :
-            self.x = own.x + resize(12,0,width,height)[0]
+            self.x = own.x + 12
             self.angle = pi/4
         else :
-            self.x = own.x+resize(change_left(48,64)-12,0,width,height)[0]
+            self.x = own.x+change_left(48,64)-12
             self.angle = 3*pi/4
-        self.y = own.rect[1] + resize(0,42,width,height)[1]
+        self.y = own.rect[1] + 42
 
         self.duration = 120
         self.damages = 5
@@ -451,7 +449,7 @@ class Gear():
     
     def update(self):
         self.duration -= 1
-        self.x += resize(self.vx,0,width,height)[0]
+        self.x += self.vx
     
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -461,7 +459,8 @@ class Gear():
         self.knockback *= modifier
 
     def draw(self,window):        
-        sprite = pygame.transform.rotate(gear,self.duration*self.vx/10)
+        sprite = pygame.transform.scale(gear,resize(gear.get_size()[0],gear.get_size()[1],width,height))
+        sprite = pygame.transform.rotate(sprite,self.duration*self.vx/10)
 
         window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
         rect = gear.get_rect(topleft=(self.x,self.y))

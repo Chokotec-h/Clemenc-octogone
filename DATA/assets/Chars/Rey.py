@@ -20,7 +20,6 @@ class Rey(Char):
         self.player = player
         self.foodvy = 0
         self.door = None
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Rey"
@@ -379,7 +378,7 @@ class Door():
 
     def draw(self,window):
         sprite = doorclosed if self.duration > 6 else doorsprites[round(self.duration)-1] if self.duration > 2 else doorsprites[0]
-        window.blit(sprite, (self.x+resize(800-8,0,width,height)[0],self.y+resize(0,450-8,width,height)[1])) # on dessine le sprite
+        window.blit(sprite, (resize(self.x+800-8,0,width,height)[0],resize(0,self.y+450-8,width,height)[1])) # on dessine le sprite
 
     def deflect(self,modifier):
         return
@@ -409,7 +408,7 @@ class Spectre_de_rey():
 
     
     def update(self):
-        self.x += resize(self.vx,0,width,height)[0]
+        self.x += self.vx
         rect = pygame.Rect(self.rect)
         if rect.colliderect(pygame.Rect(self.other.rect)):
             self.duration -= 1
@@ -418,10 +417,11 @@ class Spectre_de_rey():
             # inverse les positions
     def draw(self,window):
         sprite = Animations.get_sprite(self.animation,self.name,self.animeframe+1,self.look_right)[0]
-        sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0]*3,sprite.get_size()[1]*3,width,height))
+        sprite = pygame.transform.scale(sprite,(sprite.get_size()[0]*3,sprite.get_size()[1]*3))
         rect = sprite.get_rect(topleft = (self.x,self.y))
+        sprite = pygame.transform.scale(sprite,resize(sprite.get_size()[0],sprite.get_size()[1],width,height))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
     def deflect(self,modifier):
         self.own, self.other = self.other,self.own

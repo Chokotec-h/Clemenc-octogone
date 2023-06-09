@@ -25,15 +25,15 @@ def signe(val):
 
 
 def change_left(x, size, w=48):
-    return resize(-x -size,0,width,height)[0]+w
+    return -x -size+w
 
 
 class Hitbox():
     def __init__(self, x, y, sizex, sizey, angle, knockback, damages, damage_stacking, stun, duration, own,
                  position_relative=False, deflect=False, modifier=1, boum=0,
                  sound="hits/8bit hit",linked=False) -> None:
-        self.relativex,self.relativey = resize(x,y,width,height)
-        self.sizex,self.sizey = resize(sizex,sizey,width,height)
+        self.relativex,self.relativey = x,y
+        self.sizex,self.sizey = sizex,sizey
         self.angle = angle
         self.knockback = knockback
         self.damages = damages
@@ -65,7 +65,7 @@ class Hitbox():
         if sizex < 0:
             x = self.x + self.sizex
             sizex = abs(self.sizex)
-        pygame.draw.rect(window, (255, 0, 0), (x + resize(800,0,width,height)[0], self.y + resize(0,450,width,height)[1], sizex, self.sizey))
+        pygame.draw.rect(window, (255, 0, 0), (resize(x + 800,0,width,height)[0], resize(0,self.y + 450,width,height)[1], resize(sizex,0,width,height)[0], resize(0,self.sizey,width,height)[1]))
 
 
 class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caractéristiques communes à tous les persos
@@ -551,7 +551,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                 self.vy = 0
 
         # Déplacement
-        vx,vy = resize(round(self.vx),self.vy,width,height)
+        vx,vy = round(self.vx),self.vy
         self.x += vx
         rect.y += vy
 
@@ -604,7 +604,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         rect.x = self.x - rect.w / 2
         # respawn
         self.die = max(0, self.die - 1)
-        if (not (self.name == "Le Berre" and self.attack == "ForwardSmash")) and (rect.y > resize(0,1000,width,height)[1] or rect.y < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]):
+        if (not (self.name == "Le Berre" and self.attack == "ForwardSmash")) and rect.y > 1000 or rect.y < -1000 or self.x < -1000 or self.x > 1000:
             if self.die < 1:
                 self.die = 30
                 self.damages = 0.
@@ -626,7 +626,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
                                                                  round(drawing_sprite.get_size()[1] * sizescaley)))  # Rescale
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [resize(self.x + 800 ,0,width,height)[0] - size[2] / 2 ,  resize(0,self.rect[1] + self.rect[3] +450,width,height)[1]  - size[3] - 1]  # Position réelle du sprite
         if self.show:
             window.blit(drawing_sprite, pos)  # on dessine le sprite
         # self.rect.y -=  size[3] - self.rect.h # Reste à la surface du stage
@@ -643,7 +643,7 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
 
         # debug
         if self.parry:
-            pygame.draw.rect(window, (200, 200, 200), (pos[0], pos[1], self.rect[2], self.rect[3]))
+            pygame.draw.rect(window, (200, 200, 200), (pos[0], pos[1], resize(self.rect[2],0,width,height)[0], resize(0,self.rect[3],width,height)[1]))
 
         # draw projectiles
         for p in self.projectiles:

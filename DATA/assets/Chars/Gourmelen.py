@@ -19,7 +19,6 @@ class Gourmelen(Char):
         self.temoin = False
         self.jab = 0
         self.grab = False
-        self.resize_rect()
         
     def __str__(self) -> str:
         return "Gourmelen"
@@ -99,7 +98,7 @@ class Gourmelen(Char):
                         other.hitstun = 10
                         other.damages += 0.4
                         self.vx += 5*signe(self.direction)
-                        other.rect[1] = self.rect[1] - resize(0,32,width,height)[1]
+                        other.rect[1] = self.rect[1] - 32
                         other.x = self.x + (self.rect[2]-2)*signe(self.direction)
                         other.vy = -1
                         other.vx = self.vx
@@ -141,8 +140,8 @@ class Gourmelen(Char):
             if self.frame % 3 == 0 and self.frame > 5 and self.frame < 31 :
                 self.active_hitboxes.append(Hitbox(40, jab[self.jab], 24, 24, pi / 3, 3, 0.6, 0, 10, 6, self))
                 self.jab += 1
-            if not attack_button and self.frame > 6:
-                self.frame = 39
+            if not attack_button and self.frame > 6 and self.frame < 39:
+                self.frame = 40
             if self.frame == 38 :
                 self.active_hitboxes.append(Hitbox(40, 46, 48, 40, pi / 4, 8, 1.2, 0, 10, 8, self))
             if self.frame < 38 :
@@ -380,12 +379,11 @@ class Temoin:
 
     def draw(self, window):
         x = self.opponent.rect[0]
-        y = self.opponent.rect[1] - resize(0,50,width,height)[1]
-        window.blit(temoin, (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
+        y = self.opponent.rect[1] - 50
+        window.blit(temoin, (resize(x+800,y+450,width,height)))
 
 
 biere = pygame.image.load("DATA/Images/Sprites/Projectiles/Gourmelen/Biere.png")
-biere = pygame.transform.scale(biere,resize(biere.get_width(),biere.get_height(),width,height))
 
 class Biere():
     def __init__(self,own:Gourmelen,other,speed,stage) -> None:
@@ -394,7 +392,7 @@ class Biere():
         self.vy = speed
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect[1] + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + 48
         self.own = own
         self.other = other
         self.duration = 80
@@ -422,8 +420,8 @@ class Biere():
             dx = 0.001
         self.angle = atan(dy/dx)
         rect = biere.get_rect(topleft=(self.x,self.y))
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         self.vy += 0.8
         if self.touch_stage(self.stage,rect):
             self.duration = 0
@@ -437,8 +435,9 @@ class Biere():
 
     def draw(self,window):
         self.rotate += self.vx
-        sprite = pygame.transform.rotate(biere,degrees(self.rotate))
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        sprite = pygame.transform.scale(biere,resize(biere.get_width(),biere.get_height(),width,height))
+        sprite = pygame.transform.rotate(sprite,degrees(self.rotate))
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 
 ##### Autres skins

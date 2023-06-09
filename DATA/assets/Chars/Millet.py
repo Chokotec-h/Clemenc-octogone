@@ -24,7 +24,6 @@ class Millet(Char):
         self.angle_rayon = -pi/300000
         self.rapidjab = False
         self.strongfair = False
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Millet"
@@ -109,7 +108,7 @@ class Millet(Char):
                 if right :
                     self.look_right = True
             if self.frame%4 == 1 and self.frame > 15 and self.frame < 58:
-                self.projectiles.append(Fire(self.x+resize(24*signe(self.direction)-48,0,width,height)[0],self.rect[1]+resize(0,24,width,height)[1],self))
+                self.projectiles.append(Fire(self.x+24*signe(self.direction)-48,self.rect[1]+24,self))
             if self.frame > 84 : #  frames de lag
                 self.attack = None
 
@@ -123,7 +122,7 @@ class Millet(Char):
                 else :
                     x = -29
                     angle = pi
-                self.projectiles.append(Sinusoide(self.x+resize(x,0,width,height)[0],self.rect[1]+resize(0,50+20*sin(self.frame/2),width,height)[1],angle,self))
+                self.projectiles.append(Sinusoide(self.x+x,self.rect[1]+50+20*sin(self.frame/2),angle,self))
             if self.rapidjab and not attack_button :
                 self.rapidjab = False
                 self.frame = 0
@@ -358,7 +357,7 @@ class Rayon():
         self.y = y
         self.angle_fwd = angle_fwd
         self.v = 9*signe(own.direction)
-        self.rect = [x-resize(20,0,width,height)[0],y-resize(0,20,width,height)[1],resize(25,0,width,height)[0],resize(0,25,width,height)[1]]
+        self.rect = [x-20,y-20,25,25]
         self.damages_stacking=1/300
         if own.look_right :
             self.angle = pi/4
@@ -369,8 +368,8 @@ class Rayon():
         self.stun = 5
         self.duration = 10
         #self.g = -6.74/4
-        nextx = self.x + resize(cos(self.angle_fwd)*self.v,0,width,height)[0]
-        nexty = self.y + resize(0,sin(self.angle_fwd)*self.v,width,height)[1]
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
@@ -384,7 +383,7 @@ class Rayon():
         return False
 
     def update(self):
-        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])):
+        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,5,5)):
             #self.g = -self.g*2
             if self.rect[1] < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd
@@ -392,25 +391,23 @@ class Rayon():
                 self.angle_fwd = pi-self.angle_fwd
 
 
-        nextx = self.x + resize(cos(self.angle_fwd)*self.v,0,width,height)[0]
-        nexty = self.y + resize(0,sin(self.angle_fwd)*self.v,width,height)[1]
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
-        self.rect = [self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
+        self.rect = [self.x,self.y,5,5]
         if self.x < -2000 or self.x > 2000:
             self.duration = 0
 
     def draw(self,window):
-        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,resize(10,0,width,height)[0],resize(0,10,width,height)[1]))
+        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,10,10))
         
     def deflect(self,modifier):
         self.v *= -modifier
 
 
 firesprite = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
-for i in range(len(firesprite)):
-    firesprite[i] = pygame.transform.scale(firesprite[i],(resize(3*firesprite[i].get_size()[0],0,width,height)[0],resize(0,3*firesprite[i].get_size()[1],width,height)[1]))
 
 class Fire():
     def __init__(self,x,y,own:Millet) -> None:
@@ -433,13 +430,17 @@ class Fire():
     def update(self):
         rect = firesprite[self.duration//2].get_rect(topleft=(self.x,self.y))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
-        self.x = self.x + resize(self.vx,0,width,height)[0]
-        self.y = self.y + resize(0,self.vy,width,height)[1]
+        self.x = self.x + self.vx
+        self.y = self.y + self.vy
         self.vx *= 0.8
         self.duration -= 1
 
     def draw(self,window):
-        window.blit(firesprite[self.duration//2],(self.x+width/2,self.y+height/2))
+        
+        window.blit(pygame.transform.scale(firesprite[self.duration//2],
+                                           (resize(3*firesprite[self.duration//2].get_size()[0],0,width,height)[0],
+                                            resize(0,3*firesprite[self.duration//2].get_size()[1],width,height)[1])),
+                                           (self.x+width/2,self.y+height/2))
     
     def deflect(self,modifier):
         self.vx = -self.vx
@@ -450,7 +451,7 @@ class Sinusoide():
     def __init__(self,x,y,angle,own:Millet) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x,y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
+        self.rect = [x,y,5,5]
         self.angle = angle
         self.v = 5*signe(own.direction)
         self.duration = 15
@@ -460,7 +461,7 @@ class Sinusoide():
         self.damages_stacking = 1/550
     
     def update(self):
-        self.rect[0] += resize(self.v,0,width,height)[0]
+        self.rect[0] += self.v
         self.duration -= 1
     
     def draw(self,window):
@@ -489,7 +490,7 @@ class Quantique():
         self.duration -= 1
         if self.g :
             self.vy += 1
-        self.y = self.y + resize(0,self.vy,width,height)[1]
+        self.y = self.y + self.vy
     
     def deflect(self,modifier):
         self.vy = modifier*10
@@ -505,7 +506,7 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [self.x + resize(800,0,width,height)[0] - size[2] / 2, self.rect[1] - size[3] + self.rect[3] + resize(0,450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [resize(self.x + 800,0,width,height)[0] - size[2] / 2, size[3] + self.rect[3] + resize(0,self.rect[1] - 450,width,height)[1] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)
 

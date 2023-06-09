@@ -17,7 +17,6 @@ class EnglishTeacher(Char):
         self.rect[1] = y
         self.player = player
         self.prof = 0 # 0 = Lentsch ; 1 = Chevalier ; 2 = Leclerc ; 3 = Mauvieux
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "English Teacher"
@@ -285,16 +284,16 @@ class EnglishTeacher(Char):
 ###################
 
 etoile = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
-etoile = pygame.transform.scale(etoile,resize(round(etoile.get_width()),round(etoile.get_height()),width,height))
 
 
 class Etoile():
     def __init__(self, x, y, angle, own: EnglishTeacher) -> None:
         self.id = 0
         self.sound = 'hits/8bit hit'
-        self.rect = [x, y] + list(resize(5, 5,width,height))
+        self.rect = [x+5, y+5]
         self.angle = angle
-        self.v = 5 * signe(own.direction)
+        self.x,self.y = x,y
+        self.vx = 5 * signe(own.direction)
         self.duration = 25
         self.knockback = 0.5
         self.damages = 0.8
@@ -304,12 +303,13 @@ class Etoile():
     def update(self):
         rect = etoile.get_rect(topleft=(self.x,self.y))
         self.vx += 2
-        rect.x += resize(self.v,0,width,height)[0]
+        self.x += self.v
         self.duration -= 1
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 
     def draw(self, window):
-        window.blit(etoile, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        sprite = pygame.transform.scale(etoile,resize(round(etoile.get_width()),round(etoile.get_height()),width,height))
+        window.blit(sprite, (resize(self.x+800,self.y+450,width,height))) # on dessine le sprite
 
     def deflect(self, modifier):
         self.vx *= -modifier
@@ -324,7 +324,7 @@ class Fleche():
     def __init__(self, x, y, charge, own: EnglishTeacher) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x, y] + list(resize(5, 5,width,height))
+        self.rect = [x+5, y+5]
         self.vx = charge/15 * signe(own.direction)
         self.vy = -charge/25
         self.x = x
@@ -338,8 +338,8 @@ class Fleche():
 
     def update(self):
         self.vy += 2
-        self.rect[0] += resize(self.vx,0,width,height)[0]
-        self.rect[1] += resize(self.vy,0,width,height)[1]
+        self.rect[0] += self.vx
+        self.rect[1] += self.vy
         self.duration -= 1
 
     def deflect(self,modifier):
@@ -357,7 +357,8 @@ class Fleche():
         rect = sprite.get_rect(topleft=(self.x,self.y))
         if rect.colliderect(self.stage.mainplat.rect):
             sprite = pygame.transform.rotate(fleche,90)
+        sprite = pygame.transform.scale(sprite,(resize(sprite.get_width(),0,width,height),resize(0,sprite.get_height(),width,height),))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 ##### Autres skins

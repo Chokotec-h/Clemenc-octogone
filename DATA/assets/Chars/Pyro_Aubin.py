@@ -28,7 +28,6 @@ class Pyro_Aubin(Char):
         self.hold = 0
         self.turnaround = 0
         self.sizescale = 2.5
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Pyro-Aubin"
@@ -560,13 +559,12 @@ class Pyro_Aubin(Char):
 ###################
 
 boulet = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
-boulet = pygame.transform.scale(boulet,resize(boulet.get_width(),boulet.get_height(),width,height))
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
         self.id = 0
-        self.x = own.x + resize(48,0,width,height)[0]*signe(own.direction)
-        self.y = own.rect[1] + resize(0,48,width,height)[1]
+        self.x = own.x + 48*signe(own.direction)
+        self.y = own.rect[1] + 48
         self.charge = charge
         self.vx = (10+charge)*signe(own.direction)*0.2
         self.vy = -5-charge*0.1
@@ -584,8 +582,8 @@ class Boulet():
 
     def update(self):
         self.knockback = (abs(self.vy)+abs(self.vx))/2
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         rect = boulet.get_rect(topleft=(self.x,self.y))
         if rect.colliderect(self.stage.mainplat.rect) :
             self.vy = -1
@@ -601,16 +599,16 @@ class Boulet():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(boulet, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        sprite = pygame.transform.scale(boulet,resize(boulet.get_width(),boulet.get_height(),width,height))
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 fusee = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
-fusee = pygame.transform.scale(fusee,resize(fusee.get_width(),fusee.get_height(),width,height))
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
         self.id = 0
-        self.x = own.x + signe(own.direction)*resize(48,0,width,height)[0]
-        self.y = own.rect[1] + resize(0,86,width,height)[1]
+        self.x = own.x + signe(own.direction)*48
+        self.y = own.rect[1] + 86
         self.vx = 0.5*signe(own.direction)
         self.vy = -10
         self.damages = 5
@@ -636,8 +634,8 @@ class Fusee():
         return False
     
     def update(self):
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         self.frame += 1
         if not self.done :
             if not self.homing :
@@ -675,10 +673,11 @@ class Fusee():
         else :
             sprite = pygame.transform.rotate(fusee,degrees(pi-atan(self.vy/self.vx))+180)
         rect = sprite.get_rect(topleft=(self.x,self.y))
+        sprite = pygame.transform.scale(sprite,resize(sprite.get_width(),sprite.get_height(),width,height))
         if rect.colliderect(self.stage.mainplat.rect):
             sprite = pygame.transform.rotate(fusee,degrees(90))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
     def deflect(self,modifier):
         self.vx = -self.vx*modifier
@@ -690,7 +689,6 @@ class Fusee():
         self.frame = 0
 
 grenade = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
-grenade = pygame.transform.scale(grenade,resize(grenade.get_width(),grenade.get_height(),width,height))
 
 class Grenade():
     def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
@@ -699,7 +697,7 @@ class Grenade():
         self.vy = -15
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect[1] + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + 48
         self.own = own
         self.other = other
         self.duration = 80
@@ -727,8 +725,8 @@ class Grenade():
             dx = 0.001
         self.angle = atan(dy/dx)
         rect = grenade.get_rect(topleft=(self.x,self.y))
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         self.vy += 0.8
         if self.touch_stage(self.stage,rect):
             self.basevy *= 0.8
@@ -740,8 +738,9 @@ class Grenade():
     
     def draw(self,window):
         self.rotate += self.vx
-        sprite = pygame.transform.rotate(grenade,degrees(self.rotate))
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        sprite = pygame.transform.scale(grenade,resize(grenade.get_width(),grenade.get_height(),width,height))
+        sprite = pygame.transform.rotate(sprite,degrees(self.rotate))
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
@@ -768,9 +767,8 @@ class Explosion():
         
     def draw(self,window):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
-        rect = sprite.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.rect = [self.x,self.y,self.size,self.size]
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 

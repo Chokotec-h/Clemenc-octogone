@@ -21,7 +21,6 @@ class Balan(Char):
         self.x = x
         self.rect[1] = y
         self.player = player
-        self.resize_rect()
 
     def __str__(self) -> str:
         return "Balan"
@@ -73,7 +72,7 @@ class Balan(Char):
                 other.vy = -1
                 other.vx = 0
             if self.frame == 30 and self.grab:
-                other.rect[1] = self.rect[1] - resize(0,32,width,height)[1]
+                other.rect[1] = self.rect[1] - 32
                 other.vy = 0
                 other.vx = 0
                 self.active_hitboxes.append(Hitbox(40,32,32,32,pi/3,20,16,1/200,18,3,self))
@@ -171,7 +170,7 @@ class Balan(Char):
 
             # Dessin du cercle
             if self.active_hitboxes:
-                x,y = resize(12 * signe(self.direction),10,width,height)
+                x,y = 12 * signe(self.direction),10
                 self.active_hitboxes[-1].y -= y
                 if self.frame < 9:  # Frames 7-8
                     self.active_hitboxes[-1].sizey += y
@@ -422,8 +421,8 @@ class Exposant:
 
     def draw(self, window):
         x = self.opponent.rect[0] + self.opponent.rect[2]
-        y = self.opponent.rect[1] - resize(0,50,width,height)[1]
-        window.blit(exposant_sprite[self.duration // 120], (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
+        y = self.opponent.rect[1] - 50
+        window.blit(exposant_sprite[self.duration // 120], (resize(x + 800,0,width,height)[0], resize(0,y + 450,width,height)[1]))
 
 
 ##### Autres skins

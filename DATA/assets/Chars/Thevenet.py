@@ -18,7 +18,6 @@ class Thevenet(Char):
         self.player = player
         self.navet = False
         self.holdb = False
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Thévenet"
@@ -319,7 +318,6 @@ class Thevenet(Char):
 
 
 radis = pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Radis.png")
-radis = pygame.transform.scale(radis,resize(radis.get_width()*3,radis.get_height()*3,width,height))
 
 class Radis():
     def __init__(self,x,y,own:Thevenet,other,vx,vy,stage,g=0.8) -> None:
@@ -327,8 +325,8 @@ class Radis():
         self.vx = vx*signe(own.direction)
         self.vy = vy
         self.basevy = self.vy
-        self.x = own.x + resize(x,0,width,height)[0]
-        self.y = own.rect[1] + resize(0,y,width,height)[1]
+        self.x = own.x + x
+        self.y = own.rect[1] + y
         self.dir = signe(own.direction)
         self.own = own
         self.other = other
@@ -358,8 +356,8 @@ class Radis():
             dx = 0.001
         self.angle = atan(dy/dx)
         rect = radis.get_rect(topleft=(self.x,self.y))
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         self.vy += self.g
         if self.touch_stage(self.stage,rect):
             self.vy = -abs(self.vy)/2
@@ -379,6 +377,7 @@ class Radis():
     def draw(self,window):
         self.rotate += sqrt(self.vx**2 + self.vy**2)
         sprite = pygame.transform.rotate(radis,degrees(self.rotate))
+        sprite = pygame.transform.scale(radis,resize(radis.get_width()*3,radis.get_height()*3,width,height))
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
 pq = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
@@ -406,7 +405,7 @@ class PQ():
         self.x += vx
         self.y += vy
         self.vy += 1.4
-        rect = pq.get_rect(topleft=(self.x,self.y))
+        rect = pygame.Rect(self.x,self.y,36,36)
         if self.y > resize(800,0,width,height)[0] :
             self.duration = 0
         if rect.colliderect(self.stage.mainplat.rect) :
@@ -423,7 +422,7 @@ class PQ():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(pq, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(pq, (resize(self.x+800,0,width,height)[0],resize(0,self.y+450,width,height)[1])) # on dessine le sprite
 
 machine = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Machine.png"),(resize(52,52,width,height)))
 
@@ -448,11 +447,11 @@ class Machine():
         self.sound = 'hits/hitting metal'
 
     def update(self):
-        vy = resize(0,self.vy,width,height)[1]
+        vy = self.vy
         self.y += vy
         self.vy += 4
-        rect = machine.get_rect(topleft=(self.x,self.y))
-        if self.y > resize(800,0,width,height)[0] :
+        rect = pygame.Rect(self.x,self.y,52,52)
+        if self.y > 800 :
             self.duration = 0
         if rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
@@ -467,7 +466,7 @@ class Machine():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(machine, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(machine, (resize(self.x+800,0,width,height)[0],resize(0,self.y+450,width,height)[1])) # on dessine le sprite
 
 
 ##### Autres skins

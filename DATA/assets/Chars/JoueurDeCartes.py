@@ -22,7 +22,6 @@ class Air_President(Char):
         self.blahaj = ["fatty","flat","flying","spiky"]
         self.currentblahaj = 0
         self.stage = Stage
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Joueur de Air-President"
@@ -331,7 +330,7 @@ class Carte():
             self.stun = self.number+5
             self.damages_stacking = self.number*1/500
         self.duration = 6
-        rect = roulxs_kaard.get_rect(topleft=(x+own.x,y+own.rect[1]))
+        rect = pygame.Rect(x+own.x,y+own.rect[1],48,64)
         self.rect = [rect.x,rect.y,rect.w,rect.h]
         self.angle = angle
         self.x = x
@@ -349,7 +348,7 @@ class Carte():
             sprite = roulxs_kaard
         else :
             sprite = pygame.transform.scale(cartes[self.number-1],(resize(48,64,width,height)))
-        window.blit(sprite,(self.x+self.own.x+resize(800,0,width,height)[0],self.y+self.own.rect[1]+resize(0,450,width,height)[1]))
+        window.blit(sprite,(resize(self.x+self.own.x+800,0,width,height)[0],resize(0,self.y+self.own.rect[1]+450,width,height)[1]))
 
 
 class Blahaj():
@@ -415,14 +414,14 @@ class Blahaj():
         rect = pygame.Rect(self.rect)
         if self.touch_stage(self.stage,rect):
             self.duration = 0
-        vx,vy = resize(self.vx,self.vy,width,height)
+        vx,vy = self.vx,self.vy
         self.x += round(vx)
         self.y += vy
         if self.color == "fatty":
             self.vy += 0.7
         else :
             self.vy += 0.4
-        if self.y > resize(800,0,width,height)[0] :
+        if self.y > 800 :
             self.duration = 0
 
     def deflect(self,modifier):
@@ -435,9 +434,8 @@ class Blahaj():
     def draw(self,window):
         sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+self.color+".png"),(resize(72,36,width,height)))
         sprite = pygame.transform.flip(sprite,self.left,False)
-        rect = sprite.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
-        window.blit(sprite, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        self.rect = [self.x,self.y,72,32]
+        window.blit(sprite, (resize(self.x+800,0,width,height)[0],resize(0,self.y+450,width,height)[1])) # on dessine le sprite
 
 
 poutre = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
@@ -463,8 +461,7 @@ class Poutre():
         self.damages_stacking = 1/500
         self.duration = 10
         self.stage = stage
-        rect = poutre.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.rect = [self.x,self.y,48,48]
         self.sound = 'hits/hitting metal'
 
     def update(self):
@@ -472,7 +469,7 @@ class Poutre():
         self.damages = 24
         self.stun = sqrt(self.vx**2+self.vy**2)/3
         self.damages_stacking = 1/500
-        vx,vy = resize(self.vx,self.vy,width,height)
+        vx,vy = self.vx,self.vy
         self.x += round(vx)
         self.y += vy
         self.vy += 1.8
@@ -485,9 +482,9 @@ class Poutre():
                 self.angle = -pi/2
             else :
                 self.angle = pi/2
-        rect = poutre.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
-        if self.y > resize(800,0,width,height)[0] :
+        self.rect = [self.x,self.y,48,48]
+        rect = pygame.Rect(self.x,self.y,48,48)
+        if self.y > 800 :
             self.duration = 0
         if rect.colliderect(self.stage.mainplat.rect) :
             self.duration -= 1
@@ -502,7 +499,7 @@ class Poutre():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        window.blit(poutre, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
+        window.blit(poutre, (resize(self.x+800,0,width,height)[0],resize(0,self.y+450,width,height)[1])) # on dessine le sprite
 
 
 class Spamton(Air_President):

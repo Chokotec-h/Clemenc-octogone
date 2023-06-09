@@ -20,7 +20,6 @@ class Reignaud(Char):
         self.counter = False
         self.duration_mot_invasif = 0
         self.player = player
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Reignaud"
@@ -265,7 +264,7 @@ class Reignaud(Char):
                 self.active_hitboxes.append(Hitbox(64,32,24,24,pi/2,12,7.5,1/250,12,20,self,False,sound="hits/hit"))
             if self.frame > 10 :
                 if self.active_hitboxes :
-                    x,y = resize(signe(self.direction)*sin(pi*self.frame/10)*176/11,-cos(pi*self.frame/10)*30,width,height)
+                    x,y = signe(self.direction)*sin(pi*self.frame/10)*176/11,-cos(pi*self.frame/10)*30
                     self.active_hitboxes[-1].relativex += x
                     self.active_hitboxes[-1].relativey += y
             if self.frame > 40: # 10 frames de lag

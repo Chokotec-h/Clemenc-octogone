@@ -19,7 +19,6 @@ class LeBerre(Char):
 
         self.oldx = self.x
         self.oldy = self.rect[1] - 1
-        self.resize_rect()
     
     def __str__(self) -> str:
         return "Le Berre"
@@ -86,7 +85,7 @@ class LeBerre(Char):
                 else:
                     x = -29
                     angle = pi / 4
-                self.projectiles.append(Sinusoide(self.x + resize(x,0,width,height)[0], self.rect[1] + resize(0,50 + 20 * (1 if cos(self.frame/2) > 0 else -1),width,height)[1], angle, self))
+                self.projectiles.append(Sinusoide(self.x + x, self.rect[1] + 50 + 20 * (1 if cos(self.frame/2) > 0 else -1), angle, self))
             if self.rapidjab and not attack_button:
                 self.rapidjab = False
                 self.frame = 0
@@ -211,7 +210,7 @@ class LeBerre(Char):
             if self.frame == 1 :
                 self.oldx = self.x
                 self.oldy = self.rect[1] - 5
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 and not (self.rect[1] > resize(0,1000,width,height)[1] or self.rect[1] < resize(0,-1000,width,height)[1] or self.x < resize(-1000,0,width,height)[0] or self.x > resize(1000,0,width,height)[0]): # Chargement jusqu'à 200 frames
+            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 and not (self.rect[1] > 1000 or self.rect[1] < -1000 or self.x < -1000 or self.x > 1000): # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge+1
@@ -321,8 +320,8 @@ class Rayon():
         self.stun = 5
         self.duration = 10
         #self.g = -6.74/4
-        nextx = self.x + resize(cos(self.angle_fwd)*self.v,0,width,height)[0]
-        nexty = self.y + resize(0,sin(self.angle_fwd)*self.v,width,height)[1]
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
@@ -337,7 +336,7 @@ class Rayon():
 
     def update(self):
         rect = pygame.Rect(self.rect)
-        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1])):
+        if self.touch_stage(self.stage,pygame.Rect(self.x,self.y,5,5)):
             #self.g = -self.g*2
             if rect.y < self.stage.mainplat.rect.y+10 :
                 self.angle_fwd = -self.angle_fwd
@@ -345,17 +344,17 @@ class Rayon():
                 self.angle_fwd = pi-self.angle_fwd
 
 
-        nextx = self.x + resize(cos(self.angle_fwd)*self.v,0,width,height)[0]
-        nexty = self.y + resize(0,sin(self.angle_fwd)*self.v,width,height)[1]
+        nextx = self.x + cos(self.angle_fwd)*self.v
+        nexty = self.y + sin(self.angle_fwd)*self.v
         #self.g += 0.0981
         self.x = nextx
         self.y = nexty
-        self.rect = [self.x,self.y,resize(5,0,width,height)[0],resize(0,5,width,height)[1]]
+        self.rect = [self.x,self.y,5,5]
         if self.x < -2000 or self.x > 2000:
             self.duration = 0
 
     def draw(self,window):
-        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,resize(10,0,width,height)[0],resize(0,10,width,height)[1]))
+        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,10,10))
         
     def deflect(self,modifier):
         self.v *= -modifier
@@ -364,7 +363,7 @@ class Sinusoide():
     def __init__(self, x, y, angle, own: LeBerre) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x, y] + list(resize(5, 5,width,height))
+        self.rect = [x, y, 5, 5]
         self.angle = angle
         self.v = 5 * signe(own.direction)
         self.duration = 15
@@ -374,11 +373,11 @@ class Sinusoide():
         self.damages_stacking = 1 / 550
 
     def update(self):
-        self.rect[0] += resize(self.v,0,width,height)[0]
+        self.rect[0] += self.v
         self.duration -= 1
 
     def draw(self, window):
-        pygame.draw.rect(window, (220, 200, 120), (self.rect[0] + resize(800,0,width,height)[0], self.rect[1] + resize(0,450,width,height)[1], self.rect[2], self.rect[3]))
+        pygame.draw.rect(window, (220, 200, 120), (resize(self.rect[0] + 800,0,width,height)[0], resize(0,self.rect[1] + 450,width,height)[1], self.rect[2], self.rect[3]))
 
     def deflect(self, modifier):
         self.duration = 0
@@ -394,7 +393,7 @@ class Eprouvette():
         self.vy = speed
         self.basevy = self.vy
         self.x = own.x
-        self.y = own.rect[1] + resize(0,48,width,height)[1]
+        self.y = own.rect[1] + 48
         self.own = own
         self.other = other
         self.duration = 80
@@ -422,8 +421,8 @@ class Eprouvette():
             dx = 0.001
         self.angle = atan(dy/dx)
         rect = eprouvette.get_rect(topleft=(self.x,self.y))
-        self.x += resize(self.vx,0,width,height)[0]
-        self.y += resize(0,self.vy,width,height)[1]
+        self.x += self.vx
+        self.y += self.vy
         self.vy += 0.8
         if self.touch_stage(self.stage,rect):
             self.duration = 0
@@ -468,21 +467,19 @@ class Explosion():
         
     def draw(self,window):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
-        rect = sprite.get_rect(topleft=(self.x,self.y))
-        self.rect = [rect.x,rect.y,rect.w,rect.h]
+        self.rect = [self.x,self.y,self.size,self.size]
+        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 
 tornado = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Tornade.png")
-tornado = pygame.transform.scale(tornado,resize(round(tornado.get_width()*2),round(tornado.get_height()*2),width,height))
 
 
 class Tornade():
     def __init__(self, x, y, own: LeBerre, other) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x, y] + list(resize(5, 5,width,height))
+        self.rect = [x, y,5, 5]
         self.own = own
         self.other = other
         self.angle = pi/2
@@ -504,7 +501,8 @@ class Tornade():
         self.duration -= 1
 
     def draw(self, window):
-        window.blit(tornado,(self.x+width/2,self.y+height/2))
+        window.blit(pygame.transform.scale(tornado,resize(round(tornado.get_width()*2),round(tornado.get_height()*2),width,height)),
+                    (self.x+width/2,self.y+height/2))
 
     def deflect(self, modifier):
         self.v *= -modifier
