@@ -157,9 +157,6 @@ class Char(pygame.sprite.Sprite):  # Personnage de base, possédant les caracté
         self.projectileid = 0
         self.addeprojectiles = []
 
-    def resize_rect(self):
-        self.rect[2], self.rect[3] = resize(self.rect[2], self.rect[3],width,height)
-
     def inputattack(self, attack):
         if self.attack != attack:
             self.animeframe = 0

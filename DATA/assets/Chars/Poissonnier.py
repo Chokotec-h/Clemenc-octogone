@@ -409,7 +409,7 @@ class Smokeball():
     def draw(self,window):
         sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/0.png"),resize(30,30,width,height))
         self.rect = [self.x,self.y,30,30]
-        window.blit(sprite,(self.x+width/2,self.y+height/2))
+        window.blit(sprite,resize(self.x+800,self.y+450,width,height))
 
 class Surchauffe():
     def __init__(self,x,y,own:Poissonnier):
@@ -439,7 +439,7 @@ class Surchauffe():
         spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
         sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(300,300,width,height))
         self.rect = [self.x,self.y,300,300]
-        window.blit(sprite,(self.x+width/2,self.y+height/2))
+        window.blit(sprite,resize(self.x+800,self.y+450,width,height))
 
 cerveau = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
 

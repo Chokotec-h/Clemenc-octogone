@@ -419,7 +419,7 @@ class Drill():
     def draw(self,window):
         rect = drill.get_rect(topleft=(self.x,self.y))
         sprite = pygame.transform.scale(drill,resize(drill.get_size()[0],drill.get_size()[1],width,height))
-        window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
+        window.blit(pygame.transform.flip(sprite,self.direction<0,False),resize(self.x+800,self.y+450,width,height))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 
 
@@ -463,7 +463,7 @@ class Gear():
         sprite = pygame.transform.scale(gear,resize(gear.get_size()[0],gear.get_size()[1],width,height))
         sprite = pygame.transform.rotate(sprite,self.duration*self.vx/10)
 
-        window.blit(pygame.transform.flip(sprite,self.direction<0,False),(self.x+width/2,self.y+height/2))
+        window.blit(pygame.transform.flip(sprite,self.direction<0,False),resize(self.x+800,self.y+450,width,height))
         rect = gear.get_rect(topleft=(self.x,self.y))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 

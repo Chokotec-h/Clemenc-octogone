@@ -592,6 +592,6 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [resize(self.x + 800 - size[2] / 2,0,width,height)[0], size[3] + resize(0,self.rect[1] + self.rect[3] - 450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [resize(self.x + 800 ,0,width,height)[0] - size[2] / 2 ,  resize(0,self.rect[1] + self.rect[3] +450,width,height)[1]  - size[3] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)

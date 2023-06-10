@@ -14,7 +14,6 @@ class Training(Char):
         self.rect[1] = y
         self.player = player
         self.basedamages = 0
-        self.resize_rect()
 
     def __str__(self) -> str:
         return ""

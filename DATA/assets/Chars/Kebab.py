@@ -497,8 +497,8 @@ class Kebab(Char):
             for i in range(8):
                 if self.sauces[i] >= 599 :
                     if self.sauce == i :
-                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(824,0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,474,width,height)[1]),resize(30,0,width,height)[0],width=2)
-                    window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+self.rect[0]+resize(800,0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+self.rect[1]+resize(0,450,width,height)[1]))
+                        pygame.draw.circle(window,(100,250,100),(cos(i*2*pi/8)*resize(75,0,width,height)[0]+resize(824+self.rect[0],0,width,height)[0],sin(i*2*pi/8)*resize(0,75,width,height)[1]+resize(0,474+self.rect[1],width,height)[1]),resize(30,0,width,height)[0],width=2)
+                    window.blit(saucesprites[i],(cos(i*2*pi/8)*resize(75,0,width,height)[0]+resize(800+self.rect[0],0,width,height)[0], sin(i*2*pi/8)*resize(0,75,width,height)[1]+resize(0,450+self.rect[1],width,height)[1]))
 
 ###################          
 """ Projectiles """

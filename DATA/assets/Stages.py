@@ -54,7 +54,7 @@ class MainPlat:
                                              (sprite.get_size()[0] * 4,sprite.get_size()[1] * 4))
         
         # Recalcul de l'ordonnée
-        self.y = self.y + height - sprite.get_size()[1]
+        self.y = self.y + 450 - sprite.get_size()[1]
 
         # Rectangle
         rect = sprite.get_rect(midtop=(x, self.y))
@@ -67,7 +67,7 @@ class MainPlat:
         sprite = pygame.image.load(self.sprite).convert_alpha()
         sprite = pygame.transform.scale(sprite,
                                              (resize(sprite.get_size()[0] * 4,sprite.get_size()[1] * 4,width,height)))
-        pos = [resize(self.rect.x + 800,0,width,height)[0] ,resize(0,self.rect.y + 450,width,height)[1]]
+        pos = [resize(self.rect.x + 800,0,width,height)[0] ,resize(0,self.y + 450,width,height)[1]]
         # Affichage du stage
         # self.rect.move(self.rect)
         window.blit(sprite, pos)

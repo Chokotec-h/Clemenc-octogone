@@ -355,7 +355,7 @@ class Rayon():
             self.duration = 0
 
     def draw(self,window):
-        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,10,10))
+        pygame.draw.rect(window,(250,0,0),list(resize(self.x+800,self.y+450,width,height)) + list(resize(10,10,width,height)))
         
     def deflect(self,modifier):
         self.v *= -modifier
@@ -441,7 +441,7 @@ class Eprouvette():
     def draw(self,window):
         self.rotate += self.vx
         sprite = pygame.transform.rotate(eprouvette,degrees(self.rotate))
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 class Explosion():
     def __init__(self,x,y,damages,knockback,angle,stun,damages_stacking,size) -> None:
@@ -470,16 +470,17 @@ class Explosion():
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.rect = [self.x,self.y,self.size,self.size]
         sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
-        window.blit(sprite,(self.x+width/2,self.y+height/2))
+        window.blit(sprite,resize(self.x+800,self.y+450,width,height))
 
 
 tornado = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/LeBerre/Tornade.png")
+tornado = pygame.transform.scale(tornado,(round(tornado.get_width()*2),round(tornado.get_height()*2)))
 
 
 class Tornade():
     def __init__(self, x, y, own: LeBerre, other) -> None:
         self.id = 0
-        self.sound = 'hits/hit'
+        self.sound = 'wooshs/mini woosh'
         self.rect = [x, y,5, 5]
         self.own = own
         self.other = other
@@ -502,8 +503,8 @@ class Tornade():
         self.duration -= 1
 
     def draw(self, window):
-        window.blit(pygame.transform.scale(tornado,resize(round(tornado.get_width()*2),round(tornado.get_height()*2),width,height)),
-                    (self.x+width/2,self.y+height/2))
+        window.blit(pygame.transform.scale(tornado,resize(round(tornado.get_width()),round(tornado.get_height()),width,height)),
+                    resize(self.x+800,self.y+450,width,height))
 
     def deflect(self, modifier):
         self.v *= -modifier

@@ -426,7 +426,7 @@ class Electroball():
     def draw(self,window):
         self.rotate += self.vx
         sprite = pygame.transform.rotate(electroball,degrees(self.rotate))
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 auto = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Journault/Auto.png")
 auto = pygame.transform.scale(auto,resize(96,48,width,height))
@@ -519,7 +519,7 @@ class Explosion():
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.rect = [self.x,self.y,self.size,self.size]
         sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
-        window.blit(sprite,(self.x+width/2,self.y+height/2))
+        window.blit(sprite,resize(self.x+800,self.y+450,width,height))
 
 
 ##### Autres skins

@@ -56,12 +56,12 @@ class EnglishTeacher(Char):
 
         if attack == "DownB":
             self.prof = 1
-            if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
+            if self.frame > 6 and self.frame < 9 and special and self.charge < 200 : # Chargement jusqu'à 200 frames
                 self.frame = 7
                 self.animeframe -= 1
-                self.charge = self.charge+1
-            if self.frame == 10 :
-                self.active_hitboxes.append(Fleche(self.x+24,self.y+60,self.charge,self))
+                self.charge = self.charge + 1
+            if self.frame == 11 :
+                self.projectiles.append(Fleche(self.x+24,self.rect[1]+60,self.charge,self,stage))
 
             if self.frame > 20 : # 15 frames de lag
                 self.attack = None
@@ -70,7 +70,7 @@ class EnglishTeacher(Char):
         if attack == "SideB":
             self.prof = 0
             if self.frame == 6 :
-                self.projectiles.append(Etoile(self.x,self.y+60,pi/4,self))
+                self.projectiles.append(Etoile(self.x,self.rect[1]+60,pi/4,self))
             if self.frame > 12 : # 10 frames de lag
                 self.attack = None
 
@@ -284,17 +284,18 @@ class EnglishTeacher(Char):
 """ Projectiles """
 ###################
 
-etoile = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
+etoile = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/English/Etoile.png")
 
 
 class Etoile():
     def __init__(self, x, y, angle, own: EnglishTeacher) -> None:
         self.id = 0
         self.sound = 'hits/8bit hit'
-        self.rect = [x+5, y+5]
+        self.rect = [x, y, 5, 5]
         self.angle = angle
         self.x,self.y = x,y
         self.vx = 5 * signe(own.direction)
+        self.direction = signe(own.direction)
         self.duration = 25
         self.knockback = 0.5
         self.damages = 0.8
@@ -303,8 +304,8 @@ class Etoile():
 
     def update(self):
         rect = etoile.get_rect(topleft=(self.x,self.y))
-        self.vx += 2
-        self.x += self.v
+        self.vx += 2*self.direction
+        self.x += self.vx
         self.duration -= 1
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 
@@ -319,15 +320,14 @@ class Etoile():
 
 
 fleche = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/English/Fleche.png")
-fleche = pygame.transform.scale(fleche,resize(fleche.get_width(),fleche.get_height(),width,height))
 
 class Fleche():
-    def __init__(self, x, y, charge, own: EnglishTeacher) -> None:
+    def __init__(self, x, y, charge, own: EnglishTeacher,stage) -> None:
         self.id = 0
         self.sound = 'hits/hit'
-        self.rect = [x+5, y+5]
+        self.rect = [x, y,10,10]
         self.vx = charge/15 * signe(own.direction)
-        self.vy = -charge/25
+        self.vy = -charge/10
         self.x = x
         self.y = y
         self.duration = 90
@@ -336,11 +336,13 @@ class Fleche():
         self.stun = 8
         self.charge = charge
         self.damages_stacking = 1 / 550
+        self.stage = stage
+        self.angle = 0
 
     def update(self):
-        self.vy += 2
-        self.rect[0] += self.vx
-        self.rect[1] += self.vy
+        self.vy += 0.5
+        self.x += self.vx
+        self.y += self.vy
         self.duration -= 1
 
     def deflect(self,modifier):
@@ -349,16 +351,17 @@ class Fleche():
         self.damages *= modifier
 
     def draw(self, window):
-        if self.vy == 0 :
+        if self.vx == 0 :
             self.vx = 0.000001
         if self.vx < 0 :
-            sprite = pygame.transform.rotate(fleche,degrees(pi-atan(self.vy/self.vx)))
+            self.angle = pi - atan(self.vy/self.vx)
         else :
-            sprite = pygame.transform.rotate(fleche,degrees(pi-atan(self.vy/self.vx))+180)
+            self.angle = 2*pi - atan(self.vy/self.vx)
+        sprite = pygame.transform.rotate(fleche,degrees(self.angle))
         rect = sprite.get_rect(topleft=(self.x,self.y))
         if rect.colliderect(self.stage.mainplat.rect):
             sprite = pygame.transform.rotate(fleche,90)
-        sprite = pygame.transform.scale(sprite,(resize(sprite.get_width(),0,width,height),resize(0,sprite.get_height(),width,height),))
+        sprite = pygame.transform.scale(sprite,(resize(sprite.get_width(),sprite.get_height(),width,height)))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
         window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 

@@ -374,7 +374,7 @@ def main():
                     Texte("Musics & Sounds", ("arial", resize(0, 28, width, height)[1], True, False), (0, 0, 0),
                           width / 3, 3 * height / 8).draw(
                         window)
-                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0xBC, 0x10),
+                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (217, 168, 20),
                           2 * width / 3, 3 * height / 8).draw(
                         window)
 
@@ -382,10 +382,13 @@ def main():
                           4 * height / 8).draw(window)
                     Texte("Nicolas", ("arial", resize(0, 28, width, height)[1], False, False), (120, 120, 120),
                           2 * width / 3,
-                          4 * height / 8 - 20).draw(window)
-                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (0xBC, 0xBC, 0x10),
+                          4 * height / 8 - 25).draw(window)
+                    Texte("Iwan", ("arial", resize(0, 28, width, height)[1], False, False), (217, 168, 20),
                           2 * width / 3,
-                          4 * height / 8 + 20).draw(window)
+                          4 * height / 8).draw(window)
+                    Texte("Hugo", ("arial", resize(0, 28, width, height)[1], False, False), (255, 141, 84),
+                          2 * width / 3,
+                          4 * height / 8 + 25).draw(window)
 
                     # retour
                     Bouton = Button("<--", ("arial", resize(0, 50, width, height)[1], True, False),

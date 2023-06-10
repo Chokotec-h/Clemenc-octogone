@@ -770,7 +770,7 @@ class Explosion():
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.rect = [self.x,self.y,self.size,self.size]
         sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
-        window.blit(sprite,(self.x+width/2,self.y+height/2))
+        window.blit(sprite,resize(self.x+800,self.y+450,width,height))
 
 
 ##### Autres skins

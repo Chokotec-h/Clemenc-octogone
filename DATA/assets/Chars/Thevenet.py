@@ -379,14 +379,14 @@ class Radis():
         self.rotate += sqrt(self.vx**2 + self.vy**2)
         sprite = pygame.transform.rotate(radis,degrees(self.rotate))
         sprite = pygame.transform.scale(radis,resize(radis.get_width()*3,radis.get_height()*3,width,height))
-        window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
+        window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
 pq = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
 
 class PQ():
     def __init__(self,stage,own:Thevenet) -> None:
         self.id = 0
-        self.x = own.x+24
+        self.x = own.x+24*signe(own.direction)
         self.y = own.rect[1]+50
         self.vx = 6*signe(own.direction)
         self.vy = -8

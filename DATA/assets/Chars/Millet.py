@@ -402,7 +402,7 @@ class Rayon():
             self.duration = 0
 
     def draw(self,window):
-        pygame.draw.rect(window,(250,0,0),(self.x+width/2,self.y+height/2,10,10))
+        pygame.draw.rect(window,(250,0,0),list(resize(self.x+800,self.y+450,width,height)) + list(resize(10,10,width,height)))
         
     def deflect(self,modifier):
         self.v *= -modifier
@@ -441,7 +441,7 @@ class Fire():
         window.blit(pygame.transform.scale(firesprite[self.duration//2],
                                            (resize(3*firesprite[self.duration//2].get_size()[0],0,width,height)[0],
                                             resize(0,3*firesprite[self.duration//2].get_size()[1],width,height)[1])),
-                                           (self.x+width/2,self.y+height/2))
+                                           resize(self.x+800,self.y+450,width,height))
     
     def deflect(self,modifier):
         self.vx = -self.vx
@@ -466,7 +466,7 @@ class Sinusoide():
         self.duration -= 1
     
     def draw(self,window):
-        pygame.draw.rect(window,(20,130,100),(self.rect[0]+width/2,self.rect[1]+height/2,self.rect[2],self.rect[3]))
+        pygame.draw.rect(window,(20,130,100),list(resize(self.x+800,self.y+450,width,height)) + list(resize(5,5,width,height)))
 
     def deflect(self,modifier):
         self.duration = 0
@@ -507,7 +507,7 @@ class Quantique():
         size = [size[0] * sizescalex, size[1] * sizescaley, size[2] * sizescalex,
                 size[3] * sizescaley]  # Rescale
 
-        pos = [resize(self.x + 800,0,width,height)[0] - size[2] / 2, size[3] + self.rect[3] + resize(0,self.rect[1] - 450,width,height)[1] - 1]  # Position réelle du sprite
+        pos = [resize(self.x + 800 ,0,width,height)[0] - size[2] / 2 ,  resize(0,self.rect[1] + self.rect[3] +450,width,height)[1]  - size[3] - 1]  # Position réelle du sprite
 
         window.blit(drawing_sprite, pos)
 
