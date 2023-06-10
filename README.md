@@ -15,7 +15,7 @@ Jeu de combat (style smash bros) regroupant les personalités marquantes de la M
  
 ### Build (optionel)
  - installez pyinstaller : `pip install pyinstaller`
- - puis enfin de le repertoire du jeu executez
+ - puis enfin dans le repertoire du jeu executez
  `make`
  - le jeu apparaitra dans le répértoire dist
 
