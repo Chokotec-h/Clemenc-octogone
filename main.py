@@ -5,8 +5,7 @@
 import pygame
 import traceback
 import time
-import tkinter as tk
-from tkinter import messagebox
+#import tkinter as tk
 import sys
 
 from DATA.assets.Chars.Gregoire import Rayon
@@ -26,7 +25,7 @@ from DATA.utilities.commands import *
 from DATA.utilities.Voicename import *
 from DATA.utilities.network import Network
 from DATA.utilities.Menu_Stages_and_Chars_Online import *
-from DATA.utilities.build import rootDir
+from DATA.utilities.build import rootDir, showerror
 
 
 ############################################################################################################
@@ -406,9 +405,9 @@ def main():
                 if Menu == "settings":
                     Menu, changescreen = Menu_Settings.update(window, width, height, events, controls, joysticks, 0, 0)
                     if changescreen:
-                        root = tk.Tk()
-                        root.withdraw()
-                        messagebox.showerror('Avertissement',
+                        #root = tk.Tk()
+                        #root.withdraw()
+                        showerror('Avertissement',
                                              "Certaines modifications ne prendront effet qu'au redémarrrage")
                     confirm = Menu_Settings.confirm
 
@@ -591,7 +590,7 @@ def main():
                         print("[NETWORK] Lost connection")
                         Menu = "main"
                         Play = False
-                        messagebox.showerror('Erreur Réseau',"Connection perdue avec le serveur")
+                        showerror('Erreur Réseau',"Connection perdue avec le serveur")
                 else :
                     Game.online = False
                     Play, musicplaying, Menu, controls = Game.play(controls, joysticks, stage, width, height, window, clock)
@@ -642,7 +641,7 @@ def main():
                             Menu = "online"
                             globalplayer = network.getP()
                             if globalplayer is None :
-                                messagebox.showerror('Connection échouée',f"La connection au serveur {ip} a échoué")
+                                showerror('Connection échouée',f"La connection au serveur {ip} a échoué")
                                 ip = ""
                                 Menu = "main"
                             else :
@@ -807,7 +806,7 @@ def main():
                 print("[NETWORK] Lost connection")
                 Menu = "main"
                 Play = False
-                messagebox.showerror('Erreur Réseau',"Connection perdue avec le serveur")
+                showerror('Erreur Réseau',"Connection perdue avec le serveur")
 
 
             ######################################################################################################
@@ -821,7 +820,7 @@ def main():
         tb = traceback.TracebackException(exc_type, exc_value, exc_tb)
 
         traceback.print_exc()
-        messagebox.showerror('Erreur Critique',
+        showerror('Erreur Critique',
                              f"""Une erreur critique est survenue :
 
 {tb.stack}
