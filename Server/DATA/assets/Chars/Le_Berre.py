@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi, cos, sin, atan, degrees
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -380,7 +381,7 @@ class Sinusoide():
         self.duration = 0
 
 
-eprouvette = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
+eprouvette = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
 eprouvette = pygame.transform.scale(eprouvette,resize(round(eprouvette.get_width()*1.5),round(eprouvette.get_height()*1.5),width,height))
 
 class Eprouvette():
@@ -461,13 +462,13 @@ class Explosion():
         
     def draw(self,window):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),(self.size,self.size))
         rect = sprite.get_rect(topleft=(self.x,self.y))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 
-tornado = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Tornade.png")
+tornado = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/LeBerre/Tornade.png")
 tornado = pygame.transform.scale(tornado,resize(round(tornado.get_width()*2),round(tornado.get_height()*2),width,height))
 
 

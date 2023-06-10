@@ -4,3 +4,4 @@ main.spec
 main.exe
 /build
 /dist
+.DS_Store

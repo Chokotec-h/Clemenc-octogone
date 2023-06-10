@@ -2,9 +2,10 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 exposant_sprite = [
-    pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"), resize(36, 36, width, height)) for
+    pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Balan/Exposants/{i}.png"), resize(36, 36, width, height)) for
     i in range(5)]
 
 

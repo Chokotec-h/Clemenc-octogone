@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent, change_l
 import pygame
 from math import pi, degrees
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -369,7 +370,7 @@ class Journault(Char):
 """ Projectiles """
 ###################
 
-electroball = pygame.image.load("DATA/Images/Sprites/Projectiles/Journault/Thunder.png")
+electroball = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Journault/Thunder.png")
 electroball = pygame.transform.scale(electroball,resize(32,32,width,height))
 
 class Electroball():
@@ -427,7 +428,7 @@ class Electroball():
         sprite = pygame.transform.rotate(electroball,degrees(self.rotate))
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
-auto = pygame.image.load("DATA/Images/Sprites/Projectiles/Journault/Auto.png")
+auto = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Journault/Auto.png")
 auto = pygame.transform.scale(auto,resize(96,48,width,height))
 
 class Automate():
@@ -517,7 +518,7 @@ class Explosion():
     def draw(self,window):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.rect = [self.x,self.y,self.size,self.size]
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 

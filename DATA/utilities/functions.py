@@ -1,11 +1,12 @@
 from copy import deepcopy
 from DATA.utilities.Gamepad_gestion import *
 from DATA.utilities.Interface import *
+from DATA.utilities.build import rootDir
 import pygame
 
 
 def savesettings(musicvolume,soundvolume,width,heigth):
-    with open("DATA/utilities/Settings.txt","w") as settings :
+    with open(f"{rootDir()}/utilities/Settings.txt","w") as settings :
         settings.write(f"Music :\n"+ 
         f"musicvolume={musicvolume}\n"+
         f"soundvolume={soundvolume}\n"+
@@ -14,7 +15,7 @@ def savesettings(musicvolume,soundvolume,width,heigth):
 
 def loadsettings():
     #try :
-        with open("DATA/utilities/Settings.txt","r") as settings :
+        with open(f"{rootDir()}/utilities/Settings.txt","r") as settings :
             text = str(settings.read())
             text = text.split("\n")
             musicvolume = text[1].split("=")[1]
@@ -117,20 +118,20 @@ musicvolume,soundvolume,size = loadsettings()
 width,height = size
 
 
-bouton = pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Button.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Button.png").get_size(),width,height))
+bouton = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Button.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Button.png").get_size(),width,height))
 
 dpad = {
-    (0,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-R.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-R.png").get_size(),width,height)),
-    (0,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-L.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-L.png").get_size(),width,height)),
-    (1,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-U.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-U.png").get_size(),width,height)),
-    (1,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-D.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/D_Pad-D.png").get_size(),width,height)),
+    (0,1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-R.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-R.png").get_size(),width,height)),
+    (0,-1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-L.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-L.png").get_size(),width,height)),
+    (1,1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-U.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-U.png").get_size(),width,height)),
+    (1,-1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-D.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/D_Pad-D.png").get_size(),width,height)),
 }
 
 joy = {
-    (0,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Right.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Right.png").get_size(),width,height)),
-    (0,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Left.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Left.png").get_size(),width,height)),
-    (1,-1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Up.png").get_size(),width,height)),
-    (1,1):pygame.transform.scale(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png"),resize_t(pygame.image.load("DATA/Images/Menu/Controls/Joy-Down.png").get_size(),width,height)),
+    (0,1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Right.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Right.png").get_size(),width,height)),
+    (0,-1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Left.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Left.png").get_size(),width,height)),
+    (1,-1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Up.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Up.png").get_size(),width,height)),
+    (1,1):pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Down.png"),resize_t(pygame.image.load(f"{rootDir()}/Images/Menu/Controls/Joy-Down.png").get_size(),width,height)),
 }
 text = ["Gauche","Droite","Haut","Bas","Fullhop","Shorthop","Attaque","Special","Garde","Smash (G)","Smash (D)","Smash (H)","Smash (B)","Taunt (G)","Taunt (D)","Taunt (H)","Taunt (B)","Pause","Fulhop 2","Tilt (G)","Tilt (D)","Tilt (H)","Tilt (B)"]
 
@@ -226,15 +227,15 @@ def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n,widt
         Texte(text[-5+number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x-resize(120,0,width,height)[0],y,format_="right").draw(window)
         if select==-5+number :
             sec = str(round(frames/60))
-            Bouton = Button("[input] ("+sec+"s)",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            Bouton = Button("[input] ("+sec+"s)",("arial",resize(0,24,width,height)[1],True,False),f"{rootDir()}/Images/Menu/Button.png",x,y,resize(200,70,width,height))
             if focusedbutton == line:
-                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
 
             Bouton.draw(window)
         else :
-            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),f"{rootDir()}/Images/Menu/Button.png",x,y,resize(200,70,width,height))
             if focusedbutton == line:
-                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
             Bouton.draw(window)
             if input_ :
                 for j,i in enumerate(input_) :
@@ -266,15 +267,15 @@ def draw_input(window,x,y,number,input_,select,line,focusedbutton,row,row_n,widt
         if row_n%2 == 1 :
             Texte(text[number],("arial",resize(0,24,width,height)[1],True,False),(0,0,0),x+resize(120,0,width,height)[0],y,format_="left").draw(window)
         if select==number :
-            Bouton = Button("[input]",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            Bouton = Button("[input]",("arial",resize(0,24,width,height)[1],True,False),f"{rootDir()}/Images/Menu/Button.png",x,y,resize(200,70,width,height))
             if focusedbutton == line and row == row_n:
-                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
 
             Bouton.draw(window)
         else :
-            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),"DATA/Images/Menu/Button.png",x,y,resize(200,70,width,height))
+            Bouton = Button("",("arial",resize(0,24,width,height)[1],True,False),f"{rootDir()}/Images/Menu/Button.png",x,y,resize(200,70,width,height))
             if focusedbutton == line and row == row_n:
-                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
 
             Bouton.draw(window)
             for j,i in enumerate(input_) :

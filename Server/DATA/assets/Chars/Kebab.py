@@ -5,10 +5,11 @@ import pygame
 from math import pi,cos,sin
 from DATA.assets.Chars.Kebab_aux import *
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Kebab
-image = pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/Algerienne.png")
-saucesprites = [pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Misc/Sauces/{s}.png"),resize(image.get_size()[0],image.get_size()[1],width,height)) for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
+image = pygame.image.load(f"{rootDir()}/Images/Sprites/Misc/Sauces/Algerienne.png")
+saucesprites = [pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Misc/Sauces/{s}.png"),resize(image.get_size()[0],image.get_size()[1],width,height)) for s in ("Algerienne","Samourai","Blanche","Moutarde","Americaine","Harissa","BBQ","Tabasco")]
 del image
 
 

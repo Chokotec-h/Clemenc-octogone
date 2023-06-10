@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi, atan, degrees
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -363,7 +364,7 @@ class Gourmelen(Char):
 ###################
 
 
-temoin = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Gourmelen/Temoin.png"), resize(36, 36, width, height))
+temoin = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Gourmelen/Temoin.png"), resize(36, 36, width, height))
 
 class Temoin:
     def __init__(self, opponent, own: Gourmelen) -> None:
@@ -382,7 +383,7 @@ class Temoin:
         window.blit(temoin, (x + resize(800,0,width,height)[0], y + resize(0,450,width,height)[1]))
 
 
-biere = pygame.image.load("DATA/Images/Sprites/Projectiles/Gourmelen/Biere.png")
+biere = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Gourmelen/Biere.png")
 biere = pygame.transform.scale(biere,resize(biere.get_width(),biere.get_height(),width,height))
 
 class Biere():

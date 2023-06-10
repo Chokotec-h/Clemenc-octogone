@@ -4,6 +4,7 @@ from DATA.utilities.commands import commands
 from DATA.assets.Stages import stages
 import DATA.assets.CharsLoader as Chars
 from DATA.assets.animations import icons64
+from DATA.utilities.build import rootDir
 
 from DATA.utilities.Voicename import voicename
 
@@ -68,9 +69,9 @@ class StagesMenu:
         self.focused_button = ((self.focused_button + 1) % (len(self.actualstages) + 1)) - 1
 
         # retour
-        Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], resize(100,60,width,height))
+        Bouton = Button("<--", ("arial", resize(0,50,width,height)[1], True, False), f"{rootDir()}/Images/Menu/Button.png", 100, height-resize(0,50,width,height)[1], resize(100,60,width,height))
         if self.focused_button == -1:
-            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
             if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
                 self.UIDicoEvent["UI1 back"].play()
                 Menu = "to char"
@@ -83,10 +84,10 @@ class StagesMenu:
 
         # Boutons de sélection du stage
         for i in range(len(self.actualstages)):
-            Bouton = Button("", ("arial", 50, True, False), "DATA/Images/Menu/Button.png",
+            Bouton = Button("", ("arial", 50, True, False), f"{rootDir()}/Images/Menu/Button.png",
                             ((i % 5) * resize(250,0,width,height)[0]) + resize(450,0,width,height)[0], (i // 5 * resize(0,250,width,height)[1]) + resize(0,200,width,height)[1], resize(225,225,width,height))
             if self.focused_button == i:
-                Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
 
                 # setup du mennu personnage
                 if convert_inputs(controls[0], joysticks, 0)[6] and not self.confirm:
@@ -97,14 +98,14 @@ class StagesMenu:
             Bouton.draw(window)
             # image du stage
             window.blit(pygame.transform.scale(
-                pygame.image.load(f"DATA/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), resize(216,216,width,height)),
+                pygame.image.load(f"{rootDir()}/Images/Stages/{self.actualstages[i]}/{self.actualstages[i]}.png"), resize(216,216,width,height)),
                 ((i % 5 * resize(250,0,width,height)[0]) - resize(108,0,width,height)[0] + resize(450,0,width,height)[0], (i // 5 * resize(0,250,width,height)[1]) - resize(0,108,width,height)[1] + resize(0,200,width,height)[1]))
         
         if self.focused_button == -1 :
-            stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
+            stage_sprite = pygame.image.load(f"{rootDir()}/Images/Stages/{self.actualstages[0]}/{self.actualstages[0]}.png")
             pygame.draw.rect(window,(0,0,0),(resize(50,0,width,height)[0],height//4,resize(stage_sprite.get_size()[0]*0.66,0,width,height)[0], resize(0,stage_sprite.get_size()[1]*0.66,width,height)[1]))
         else:
-            stage_sprite = pygame.image.load(f"DATA/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
+            stage_sprite = pygame.image.load(f"{rootDir()}/Images/Stages/{self.actualstages[self.focused_button]}/{self.actualstages[self.focused_button]}.png")
             window.blit(pygame.transform.scale(stage_sprite, (resize(stage_sprite.get_size()[0]*0.66,0,width,height)[0], resize(0,stage_sprite.get_size()[1]*0.66,width,height)[1])),
                 (resize(50,0,width,height)[0], height//4))
         return Menu
@@ -142,14 +143,14 @@ class CharsMenu:
             self.confirm = False
 
         # retour
-        Bouton = Button("", ("arial", 30, True, False), "DATA/Images/Menu/Button.png", width / 2, resize(0,40,width,height)[1], resize(100,75,width,height))
+        Bouton = Button("", ("arial", 30, True, False), f"{rootDir()}/Images/Menu/Button.png", width / 2, resize(0,40,width,height)[1], resize(100,75,width,height))
         # le retour se fait en maintenant le bouton B
         if not convert_inputs(controls[0], joysticks, 0)[7]:
             self.b = 0
         else:
             self.b += 1
         if self.b > 0:
-            Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+            Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
         if self.b >= 10:
             self.UIDicoEvent["UI1 back"].play()
             Menu = "main"
@@ -213,7 +214,7 @@ class CharsMenu:
                     Bouton.draw(window)
                 Bouton = Button("", ("arial", 50, True, False), standard, 0, resize(0,105,width,height)[1] * (i - self.scroll1 + 4), resize(384,100,width,height))
                 if self.selectchar_1 == i:
-                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                     Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
             for i in range(len(chars)):
@@ -232,7 +233,7 @@ class CharsMenu:
             Bouton = Button("", ("arial", 50, True, False), standard, width, height / 2, resize(384,100,width,height))
             Bouton.draw(window)
             window.blit(
-                pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Misc/Training/Training_icon.png"),
+                pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Misc/Training/Training_icon.png"),
                                         resize(64,64,width,height)), (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], height / 2 - resize(0,32,width,height)[1]))
 
         else:
@@ -250,7 +251,7 @@ class CharsMenu:
                     Bouton.draw(window)
                 Bouton = Button("", ("arial", 50, True, False), standard, 0, resize(0,105,width,height)[1] * (i - self.scroll1 + 4), resize(384,100,width,height))
                 if self.selectchar_1 == i:
-                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                     Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
 
@@ -266,7 +267,7 @@ class CharsMenu:
                     Bouton.draw(window)
                 Bouton = Button("", ("arial", 50, True, False), standard, width, resize(0,105,width,height)[1] * (i - self.scroll2 + 4), resize(384,100,width,height))
                 if self.selectchar_2 == i:
-                    Bouton.changeImage("DATA/Images/Menu/Button_focused.png")
+                    Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                     Bouton.resize(resize(400,100,width,height)[0], resize(400,100,width,height)[1])
                 Bouton.draw(window)
 
@@ -336,7 +337,7 @@ class CharsMenu:
             name = "Player 1"
         else:
             name = self.namelist[self.names[0]]
-        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 3 * width / 10, height - resize(0,200,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), f"{rootDir()}/Images/Menu/Button.png", 3 * width / 10, height - resize(0,200,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette
@@ -369,7 +370,7 @@ class CharsMenu:
             name = "Player 2"
         else:
             name = self.namelist[self.names[1]]
-        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), "DATA/Images/Menu/Button.png", 7 * width / 10, height - resize(0,200,width,height)[1],
+        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), f"{rootDir()}/Images/Menu/Button.png", 7 * width / 10, height - resize(0,200,width,height)[1],
                         resize(200,32,width,height))
         Bouton.draw(window)
         # Test de compatibilité entre le nom et la manette

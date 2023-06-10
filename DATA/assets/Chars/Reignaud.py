@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEv
 import pygame
 from math import pi,cos,sin
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Reignaud
 

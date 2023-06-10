@@ -3,6 +3,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEv
 import pygame
 from math import atan, degrees, floor, pi, sqrt, sin, cos
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 from DATA.utilities.Interface import Texte
 
@@ -549,7 +550,7 @@ class Pyro_Aubin(Char):
             x = 1066
         
         for i,key in enumerate(self.konami) :
-            sprite = pygame.image.load(f"DATA/Images/Sprites/Misc/Konami_Code/{key}.png")
+            sprite = pygame.image.load(f"{rootDir()}/Images/Sprites/Misc/Konami_Code/{key}.png")
             window.blit(pygame.transform.scale(sprite,resize(sprite.get_width(),sprite.get_height(),width,height)),resize(i*20+x,800,width,height))
         pygame.draw.rect(window,(0,0,0),(resize(x,0,width,height)[0],resize(0,770,width,height)[1],resize(100,0,width,height)[0],resize(0,20,width,height)[1]))
         pygame.draw.rect(window,(100,100,0),(resize(x,0,width,height)[0],resize(0,770,width,height)[1],resize(self.explosifs*2,0,width,height)[0],resize(0,20,width,height)[1]))
@@ -558,7 +559,7 @@ class Pyro_Aubin(Char):
 """ Projectiles """
 ###################
 
-boulet = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Boulet.png")
+boulet = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Aubin/Boulet.png")
 
 class Boulet():
     def __init__(self,charge,stage,own:Pyro_Aubin) -> None:
@@ -602,7 +603,7 @@ class Boulet():
         sprite = pygame.transform.scale(boulet,resize(boulet.get_width(),boulet.get_height(),width,height))
         window.blit(sprite, resize(self.x+800,self.y+450,width,height)) # on dessine le sprite
 
-fusee = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Fusee.png")
+fusee = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Aubin/Fusee.png")
 
 class Fusee():
     def __init__(self,stage,own:Pyro_Aubin,other:Char) -> None:
@@ -688,7 +689,7 @@ class Fusee():
         self.done = True
         self.frame = 0
 
-grenade = pygame.image.load("DATA/Images/Sprites/Projectiles/Aubin/Grenade.png")
+grenade = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Aubin/Grenade.png")
 
 class Grenade():
     def __init__(self,own:Pyro_Aubin,other,speed,stage) -> None:
@@ -768,7 +769,7 @@ class Explosion():
     def draw(self,window):
         spritenumber = (self.duration-6) if self.duration > 6 else (6-self.duration)
         self.rect = [self.x,self.y,self.size,self.size]
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(self.size,self.size,width,height))
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
 

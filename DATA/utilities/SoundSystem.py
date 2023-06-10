@@ -2,6 +2,7 @@ import os
 import platform
 from ctypes import *
 import signal
+from DATA.utilities.build import rootDir
 signal.signal(signal.SIGSEGV, signal.SIG_IGN)
 
 # initialisation value
@@ -9,7 +10,7 @@ PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
 VERSION = 0x00020206
 BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.bank", "VT.bank", "Voix.bank"]
 
-BANK_PATH = "DATA/FMOD/Desktop/"  # the path from game files
+BANK_PATH = f"{rootDir()}/FMOD/Desktop/"  # the path from game files
 
 studio_sys = c_void_p()
 
@@ -18,14 +19,14 @@ string_buffer = create_string_buffer(100)
 bufferSize = 100
 
 if os.name == 'nt':  # windows
-    core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
-    studio_dll = WinDLL("DATA/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
+    core_dll = WinDLL(f"{rootDir()}/FMOD/windows/api/core/lib/x64/fmodL.dll")
+    studio_dll = WinDLL(f"{rootDir()}/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
 elif os.name == 'posix': # macos
-    core_dll = CDLL("main.app/Contents/MacOS/DATA/FMOD/macos/api/core/lib/libfmodL.dylib")
-    studio_dll = CDLL("main.app/Contents/MacOS/DATA/FMOD/macos/api/studio/lib/libfmodstudioL.dylib")
+    core_dll = CDLL(f"{rootDir()}/FMOD/macos/api/core/lib/libfmodL.dylib")
+    studio_dll = CDLL(f"{rootDir()}/FMOD/macos/api/studio/lib/libfmodstudioL.dylib")
 else:  # pas windows
-    core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
-    studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
+    core_dll = CDLL(f"{rootDir()}/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
+    studio_dll = CDLL(f"{rootDir()}/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
 
 studio_sys = c_void_p()
 

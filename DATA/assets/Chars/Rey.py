@@ -4,6 +4,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEv
 import pygame
 from math import pi
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Rey
 
@@ -345,10 +346,10 @@ class Rey(Char):
 """ Projectiles """
 ###################
 
-doorsprites = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
+doorsprites = [pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Rey/Porte/Open{6-i}.png") for i in range(6)]
 for i in range(len(doorsprites)):
     doorsprites[i] = pygame.transform.scale(doorsprites[i],resize(doorsprites[i].get_width(),doorsprites[i].get_height(),width,height))
-doorclosed = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Rey/Porte/Close.png")
+doorclosed = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Rey/Porte/Close.png")
 doorclosed = pygame.transform.scale(doorclosed,resize(doorclosed.get_size()[0],doorclosed.get_size()[1],width,height))
 
 class Door():
