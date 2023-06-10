@@ -1,4 +1,5 @@
 import os
+import sys
 import platform
 from ctypes import *
 import signal
@@ -21,7 +22,7 @@ bufferSize = 100
 if os.name == 'nt':  # windows
     core_dll = WinDLL(f"{rootDir()}/FMOD/windows/api/core/lib/x64/fmodL.dll")
     studio_dll = WinDLL(f"{rootDir()}/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
-elif os.name == 'posix': # macos
+elif sys.platform == 'darwin': # macos
     core_dll = CDLL(f"{rootDir()}/FMOD/macos/api/core/lib/libfmodL.dylib")
     studio_dll = CDLL(f"{rootDir()}/FMOD/macos/api/studio/lib/libfmodstudioL.dylib")
 else:  # pas windows
