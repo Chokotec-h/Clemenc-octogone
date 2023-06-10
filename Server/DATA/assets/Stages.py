@@ -1,5 +1,6 @@
 import pygame
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 # Nom des stages
 stages = ["Cour d'honneur", "K201", "Chapelle", "Salle d'info", "Salle de TP","Table de self","BDE","I211","H010"]
@@ -31,7 +32,7 @@ class Rect():
 class Stage:
     def __init__(self,name , sprite, mainx, mainy, platforms=[]) -> None:
         self.name = name
-        self.mainplat = MainPlat(f"DATA/Images/Stages/{sprite}.png", mainx, mainy)
+        self.mainplat = MainPlat(f"{rootDir()}/Images/Stages/{sprite}.png", mainx, mainy)
         # Platforms : [(x,y,l,h,color),...]
         self.plats = []
         for p in platforms:

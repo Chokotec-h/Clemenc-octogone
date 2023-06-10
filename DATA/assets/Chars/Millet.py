@@ -4,6 +4,7 @@ import pygame
 from math import pi,cos,sin,asin, sqrt
 import DATA.utilities.Animations as Animations
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 def incertitude(x):
     return x + randint(round(-x/(2*sqrt(3)))*10,round(x/(2*sqrt(3)))*10)/10
@@ -407,7 +408,7 @@ class Rayon():
         self.v *= -modifier
 
 
-firesprite = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
+firesprite = [pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{i}.png") for i in range(6)]
 
 class Fire():
     def __init__(self,x,y,own:Millet) -> None:

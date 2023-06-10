@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe
 import pygame
 from math import pi, atan, degrees, sqrt
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -317,7 +318,7 @@ class Thevenet(Char):
 ###################
 
 
-radis = pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Radis.png")
+radis = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Thevenet/Radis.png")
 radis = pygame.transform.scale(radis,resize(radis.get_width()*3,radis.get_height()*3,width,height))
 
 class Radis():
@@ -379,7 +380,7 @@ class Radis():
         sprite = pygame.transform.rotate(radis,degrees(self.rotate))
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
-pq = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
+pq = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Thevenet/PQ.png"),(resize(36,36,width,height)))
 
 class PQ():
     def __init__(self,stage,own:Thevenet) -> None:
@@ -422,7 +423,7 @@ class PQ():
     def draw(self,window):
         window.blit(pq, (self.x+resize(800,0,width,height)[0],self.y+resize(0,450,width,height)[1])) # on dessine le sprite
 
-machine = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Thevenet/Machine.png"),(resize(52,52,width,height)))
+machine = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Thevenet/Machine.png"),(resize(52,52,width,height)))
 
 class Machine():
     def __init__(self,stage,own:Thevenet) -> None:

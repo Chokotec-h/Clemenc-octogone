@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe, change_left
 import pygame
 from math import pi, degrees
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -370,7 +371,7 @@ class Journault(Char):
 """ Projectiles """
 ###################
 
-electroball = pygame.image.load("DATA/Images/Sprites/Projectiles/Journault/Thunder.png")
+electroball = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Journault/Thunder.png")
 electroball = pygame.transform.scale(electroball,resize(32,32,width,height))
 
 class Electroball():
@@ -427,7 +428,7 @@ class Electroball():
         sprite = pygame.transform.rotate(electroball,degrees(self.rotate))
         window.blit(sprite, (self.x+width/2,self.y+height/2)) # on dessine le sprite
 
-auto = pygame.image.load("DATA/Images/Sprites/Projectiles/Journault/Auto.png")
+auto = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Journault/Auto.png")
 auto = pygame.transform.scale(auto,resize(96,48,width,height))
 
 class Automate():
@@ -512,7 +513,7 @@ class Explosion():
         self.duration -= 1
         
     def draw(self,window):
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{self.spritenumber}.png"),(self.size,self.size))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{self.spritenumber}.png"),(self.size,self.size))
         rect = sprite.get_rect(topleft=(self.x,self.y))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
         window.blit(sprite,(self.x+width/2,self.y+height/2))

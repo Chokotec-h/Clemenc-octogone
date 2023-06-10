@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, change_left, signe, SFXDicoEv
 import pygame
 from math import exp, pi
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -378,7 +379,7 @@ class Renault(Char):
 """ Projectiles """
 ###################
 
-drill = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Drill.png")
+drill = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Renault/Drill.png")
 
 class Drill():
     def __init__(self,vx,own:Char) -> None:
@@ -422,7 +423,7 @@ class Drill():
         self.rect = [rect.x,rect.y,rect.w,rect.h]
 
 
-gear = pygame.image.load(f"DATA/Images/Sprites/Projectiles/Renault/Gear.png")
+gear = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Renault/Gear.png")
 
 class Gear():
     def __init__(self,vx,own:Char) -> None:

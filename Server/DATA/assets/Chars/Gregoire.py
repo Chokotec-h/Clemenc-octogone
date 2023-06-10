@@ -4,6 +4,7 @@ import pygame
 from math import pi, cos, sin, asin, sqrt
 import DATA.utilities.Animations as Animations
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 
 def incertitude(x):
@@ -493,7 +494,7 @@ class Rayon():
 
 
 thundersprite = pygame.transform.scale(
-    pygame.image.load(f"DATA/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), resize(48, 48,width,height))
+    pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Millet_Gregoire/Thunder.png"), resize(48, 48,width,height))
 
 
 class Thunder():

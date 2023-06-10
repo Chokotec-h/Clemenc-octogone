@@ -2,6 +2,7 @@ from DATA.utilities.Base_Char import Char, Hitbox, signe, SFXDicoEvent
 import pygame
 from math import pi, degrees, atan
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Copier
 
@@ -283,7 +284,7 @@ class EnglishTeacher(Char):
 """ Projectiles """
 ###################
 
-etoile = pygame.image.load("DATA/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
+etoile = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/LeBerre/Eprouvette.png")
 
 
 class Etoile():
@@ -317,7 +318,7 @@ class Etoile():
 
 
 
-fleche = pygame.image.load("DATA/Images/Sprites/Projectiles/English/Fleche.png")
+fleche = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/English/Fleche.png")
 fleche = pygame.transform.scale(fleche,resize(fleche.get_width(),fleche.get_height(),width,height))
 
 class Fleche():

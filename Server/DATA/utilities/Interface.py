@@ -1,7 +1,8 @@
 from typing import Text
 import pygame
+from DATA.utilities.build import rootDir
 
-standard = pygame.image.load("DATA/Images/Menu/Button.png")
+standard = pygame.image.load(f"{rootDir()}/Images/Menu/Button.png")
 
 def resize(w,h,width,height,basewidth=1600,baseheight=900):
     return (round(w*width/basewidth),round(h*height/baseheight))

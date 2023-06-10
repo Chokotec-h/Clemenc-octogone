@@ -4,6 +4,7 @@ from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, sin
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 from DATA.utilities.Interface import Texte
 
@@ -368,7 +369,7 @@ class Fireball():
         self.angle = pi-self.angle
         
     def draw(self,window):
-        sprite = pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/1.png")
+        sprite = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/1.png")
         rect = sprite.get_rect(topleft=(self.x,self.y))
         sprite = pygame.transform.scale(sprite,resize(round(self.charge),round(self.charge),width,height))
         self.rect = [rect.x,rect.y,rect.w,rect.h]
@@ -406,7 +407,7 @@ class Smokeball():
         self.angle = pi-self.angle
         
     def draw(self,window):
-        sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Fire/0.png"),resize(30,30,width,height))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/0.png"),resize(30,30,width,height))
         self.rect = [self.x,self.y,30,30]
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
@@ -436,11 +437,11 @@ class Surchauffe():
         
     def draw(self,window):
         spritenumber = (self.duration-8)//2 if self.duration > 8 else (8-self.duration)//2
-        sprite = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(300,300,width,height))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Fire/{spritenumber}.png"),resize(300,300,width,height))
         self.rect = [self.x,self.y,300,300]
         window.blit(sprite,(self.x+width/2,self.y+height/2))
 
-cerveau = pygame.image.load("DATA/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
+cerveau = pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Poissonnier/Cerveau.png")
 
 class Cerveau():
     def __init__(self,own:Poissonnier,other:Char,stage) -> None:

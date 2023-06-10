@@ -4,6 +4,7 @@ import pygame
 from math import pi, cos, sin, sqrt
 from random import randint
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 ##### Joueur de Air-Président
 
@@ -304,8 +305,8 @@ class Air_President(Char):
 """ Projectiles """
 ###################
 
-cartes = [pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/{i}.png") for i in range(1,14)]
-roulxs_kaard = pygame.transform.scale(pygame.image.load(f"DATA/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
+cartes = [pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Cartes/{i}.png") for i in range(1,14)]
+roulxs_kaard = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
 
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
@@ -432,13 +433,13 @@ class Blahaj():
         self.angle = pi-self.angle
 
     def draw(self,window):
-        sprite = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+self.color+".png"),(resize(72,36,width,height)))
+        sprite = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Blahaj/Blahaj_"+self.color+".png"),(resize(72,36,width,height)))
         sprite = pygame.transform.flip(sprite,self.left,False)
         self.rect = [self.x,self.y,72,32]
         window.blit(sprite, (resize(self.x+800,0,width,height)[0],resize(0,self.y+450,width,height)[1])) # on dessine le sprite
 
 
-poutre = pygame.transform.scale(pygame.image.load("DATA/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
+poutre = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Poutre.png"),(resize(48,48,width,height)))
 
 class Poutre():
     def __init__(self,vx,vy,stage,own:Air_President) -> None:

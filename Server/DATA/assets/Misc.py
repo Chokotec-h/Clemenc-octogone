@@ -1,5 +1,6 @@
 import pygame
 from DATA.utilities.functions import *
+from DATA.utilities.build import rootDir
 
 def get_sprite(animation,newframe,right):
     positions = animation[1]
@@ -25,7 +26,7 @@ def get_sprite(animation,newframe,right):
 
 
 
-smokesprite = [pygame.image.load(f"DATA/Images/Sprites/Misc/Smoke/{i}.png") for i in range(1,6)]
+smokesprite = [pygame.image.load(f"{rootDir()}/Images/Sprites/Misc/Smoke/{i}.png") for i in range(1,6)]
 
 class Smoke():
     def __init__(self,x,y) -> None:
@@ -49,7 +50,7 @@ class Dash_Smoke():
         self.y = y
         self.life_time = 0
         self.right = right
-        self.animation = ("DATA/Images/Sprites/Misc/dash_smoke.png", ((0 * 32,0,32,32), (1 * 32,0,32,32), (2 * 32,0,32,32), (3 * 32,0,32,32), (4 * 32,0,32,32), (5 * 32,0,32,32), (6 * 32,0,32,32), (7 * 32,0,32,32), (8 * 32,0,32,32)), 30, False)
+        self.animation = (f"{rootDir()}/Images/Sprites/Misc/dash_smoke.png", ((0 * 32,0,32,32), (1 * 32,0,32,32), (2 * 32,0,32,32), (3 * 32,0,32,32), (4 * 32,0,32,32), (5 * 32,0,32,32), (6 * 32,0,32,32), (7 * 32,0,32,32), (8 * 32,0,32,32)), 30, False)
     
     def draw(self,window):
         drawing_sprite,size,self.life_time = get_sprite(self.animation,self.life_time,self.right)
@@ -72,7 +73,7 @@ class Double_Jump():
         self.y = y
         self.life_time = 0
         self.right = True
-        self.animation = ("DATA/Images/Sprites/Misc/double_jump.png", ((0 * 48, 0, 48, 32), (1  * 48, 0, 48, 32), (2 * 48, 0, 48, 32), (3 * 48, 0, 48, 32)), 20, False)
+        self.animation = (f"{rootDir()}/Images/Sprites/Misc/double_jump.png", ((0 * 48, 0, 48, 32), (1  * 48, 0, 48, 32), (2 * 48, 0, 48, 32), (3 * 48, 0, 48, 32)), 20, False)
     
     def draw(self,window):
         drawing_sprite,size,self.life_time = get_sprite(self.animation,self.life_time,self.right)
