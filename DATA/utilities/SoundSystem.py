@@ -1,7 +1,6 @@
 import os
 import platform
 from ctypes import *
-import os
 import signal
 signal.signal(signal.SIGSEGV, signal.SIG_IGN)
 
@@ -21,6 +20,9 @@ bufferSize = 100
 if os.name == 'nt':  # windows
     core_dll = WinDLL("DATA/FMOD/windows/api/core/lib/x64/fmodL.dll")
     studio_dll = WinDLL("DATA/FMOD/windows/api/studio/lib/x64/fmodstudioL.dll")
+elif os.name == 'posix': # macos
+    core_dll = CDLL("main.app/Contents/MacOS/DATA/FMOD/macos/api/core/lib/libfmodL.dylib")
+    studio_dll = CDLL("main.app/Contents/MacOS/DATA/FMOD/macos/api/studio/lib/libfmodstudioL.dylib")
 else:  # pas windows
     core_dll = CDLL("DATA/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
     studio_dll = CDLL("DATA/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
