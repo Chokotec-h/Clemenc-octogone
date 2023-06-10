@@ -2,6 +2,7 @@
 
 ![tests](https://badgen.net/badge/windows/passing/green?icon=windows)
 ![tests](https://badgen.net/badge/linux/passing/green?icon=github)
+![tests](https://badgen.net/badge/macos/passing/green?icon=github)
 
 
 Jeu de combat (style smash bros) regroupant les personalités marquantes de la MP2I
