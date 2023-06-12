@@ -57,11 +57,11 @@ class Air_President(Char):
                 if right :
                     self.look_right = True
             if self.frame == 7 :
-                self.active_hitboxes.append(Hitbox(0,-32,24,32,pi/2,4,5.5,1/10,10,6,self))
-                self.active_hitboxes.append(Hitbox(40,40,24,32,pi/2,4,5.5,1/10,10,6,self))
-                self.active_hitboxes.append(Hitbox(-40,40,24,32,pi/2,4,5.5,1/10,10,6,self))
-                self.active_hitboxes.append(Hitbox(32,100,24,32,pi/2,4,5.5,1/10,10,6,self))
-                self.active_hitboxes.append(Hitbox(-32,100,24,32,pi/2,4,5.5,1/10,10,6,self))
+                self.active_hitboxes.append(Hitbox(0,-32,24,32,pi/2,4,5.5,1/100,6,6,self))
+                self.active_hitboxes.append(Hitbox(40,40,24,32,pi/2,4,5.5,1/100,6,6,self))
+                self.active_hitboxes.append(Hitbox(-40,40,24,32,pi/2,4,5.5,1/100,6,6,self))
+                self.active_hitboxes.append(Hitbox(32,100,24,32,pi/2,4,5.5,1/100,6,6,self))
+                self.active_hitboxes.append(Hitbox(-32,100,24,32,pi/2,4,5.5,1/100,6,6,self))
             if self.frame > 33: # 3 frames de lag
                 self.attack = None
 

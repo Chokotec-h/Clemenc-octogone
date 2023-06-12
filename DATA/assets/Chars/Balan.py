@@ -297,11 +297,13 @@ class Balan(Char):
                 self.frame = 7
                 self.animeframe -= 1
                 self.charge = self.charge + 1
-            elif self.frame == 24:  # Active on 24-30
+            elif 30 > self.frame > 24:  # Active on 24-30
                 self.charge = min(self.charge, 100)
-                self.active_hitboxes.append(Hitbox(60, 30, 52, 34, pi/2, 2 + 3 * (self.charge / 150), 16, 1 / 120,
-                                                   28 + 4 * (self.charge / 100), 6, self, False, True, 1.4,
-                                                   sound="lasers/laser3"))
+                self.active_hitboxes.append(Hitbox(50, 30, 52, 52, pi, 1, 1.3, 1 / 1000,
+                                                   4 + 4 * (self.charge / 100), 2, self, sound="lasers/laser3"))
+            if self.frame == 30 :
+                self.active_hitboxes.append(Hitbox(50, 30, 52, 52, pi/6, 10 + 8 * (self.charge / 150), 2.5, 1 / 80,
+                                                   8 + 8 * (self.charge / 100), 2, self, sound="lasers/laser3"))
             if self.frame > 42:  # 12 frames de lag
                 self.attack = None
                 self.charge = 0
@@ -331,8 +333,8 @@ class Balan(Char):
             elif self.frame == 10:  # Active on 10-15
                 self.charge = min(self.charge, 100)
                 self.active_hitboxes.append(
-                    Hitbox(30, 10, 32, 32, 2 * pi / 3, 18 + 10 * (self.charge / 100), 13, 1 / 100,
-                           22 + 6 * (self.charge / 100), 6, self, False, sound="hits/mini hit"))
+                    Hitbox(30, 10, 32, 32, 2 * pi / 3, 10 + 10 * (self.charge / 100), 13, 1 / 100,
+                           20 + 6 * (self.charge / 100), 6, self, False, sound="hits/mini hit"))
 
             if self.frame > 40:  # 25 frames de lag
                 self.attack = None

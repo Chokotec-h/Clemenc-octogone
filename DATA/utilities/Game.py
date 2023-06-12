@@ -125,8 +125,8 @@ class Game:
                     else:
                         self.UIDicoEvent["UI1 unpause"].play()
                     self.hold_pause = True
-        else:
-            self.hold_pause = False
+            else:
+                self.hold_pause = False
 
         ################### Affichage des éléments ###################
 
