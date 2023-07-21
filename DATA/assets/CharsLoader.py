@@ -32,7 +32,6 @@ chars = [["Balan","BalanM"],
          ["EnglishTeacher"],
          ["Thevenet"]]
 
-pygame.mixer.init()
 
 charobjects = {
     "Balan": Balan, "BalanM": Balan2,
