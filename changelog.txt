@@ -11,3 +11,9 @@ v1.3.0 -MPI(*)- :
         - Refonte de Balan
         - Le joueur de Air-Président ne peut désormais plus porter de poutre ; nouveau neutral B
         - Suppression des mots invasifs au profit de la destruction de table
+
+v 1.4.0 -Online- : (incoming)
+    Content :
+        - Ajout d'un mode multijoueur local, hébergé sur la machine (lancez le programme Server.py au préalable)
+    Update :
+        - Un brin d'équilibrage
