@@ -13,7 +13,6 @@ BANK_FILES = ["Master.bank", "Master.strings.bank", "BGM.bank", "SFX.bank", "UI.
 
 BANK_PATH = f"{rootDir()}/FMOD/Desktop/"  # the path from game files
 
-studio_sys = c_void_p()
 
 BankList = []  # a list of all bank
 string_buffer = create_string_buffer(100)
@@ -25,7 +24,7 @@ if os.name == 'nt':  # windows
 elif sys.platform == 'darwin': # macos
     core_dll = CDLL(f"{rootDir()}/FMOD/macos/api/core/lib/libfmodL.dylib")
     studio_dll = CDLL(f"{rootDir()}/FMOD/macos/api/studio/lib/libfmodstudioL.dylib")
-else:  # pas windows
+else:  # linux
     core_dll = CDLL(f"{rootDir()}/FMOD/linux/api/core/lib/x86_64/libfmodL.so")
     studio_dll = CDLL(f"{rootDir()}/FMOD/linux/api/studio/lib/x86_64/libfmodstudioL.so")
 
@@ -42,7 +41,22 @@ def studio_init():
     # Write debug log to file
     check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
     # Call System init
-    check_result(studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0x00010000, c_void_p()))
+    check = studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0x00010000, c_void_p())
+
+    # if no audio device found we disable audio
+    if check != 0 :
+        print("lyl")
+        # if no audio device found we disable audio
+        check_result(studio_dll.FMOD_Studio_System_Release(studio_sys))
+        check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
+
+        core_sys = c_void_p()
+        check_result(studio_dll.FMOD_Studio_System_GetLowLevelSystem(byref(core_sys)))
+        check_result(core_dll.FMOD_System_SetOutput(byref(core_sys), FMOD_OUTPUTTYPE_NOSOUND))
+
+        studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0x00010000, c_void_p())
+
+
     # Load banks
     for bankname in BANK_FILES:
         print("Loading bank: " + bankname)
