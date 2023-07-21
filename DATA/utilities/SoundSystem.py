@@ -2,9 +2,8 @@ import os
 import sys
 import platform
 from ctypes import *
-import signal
 from DATA.utilities.build import rootDir
-signal.signal(signal.SIGSEGV, signal.SIG_IGN)
+from DATA.utilities.SoundSystemErrors import *
 
 # initialisation value
 PLATFORM_SUFFIX = "64" if sizeof(c_void_p) == 8 else ""
@@ -33,8 +32,7 @@ studio_sys = c_void_p()
 
 def check_result(r):
     if r != 0:
-        print("ERROR: Got FMOD_RESULT {0}".format(r))
-
+        print(f"ERROR: Got FMOD_RESULT {r} ({get_error_msg(r)})")
 
 def studio_init():
     print("Initializing FMOD Studio")
