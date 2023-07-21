@@ -17,7 +17,7 @@ Jeu de combat (style smash bros) regroupant les personalités marquantes de la M
  - installez pyinstaller : `pip install pyinstaller`
  - puis enfin dans le repertoire du jeu executez
  `make`
- - le jeu apparaitra dans le répértoire dist
+ - le jeu apparaitra dans le répértoire dist, déplacez le dans le dossier parent.
 
 ## Dépendences
  - [FMOD](https://www.fmod.com) - Made for games : FMOD is the solution for adaptive audio.
