@@ -45,7 +45,6 @@ def studio_init():
 
     # if no audio device found we disable audio
     if check != 0 :
-        print("lyl")
         # if no audio device found we disable audio
         check_result(studio_dll.FMOD_Studio_System_Release(studio_sys))
         check_result(studio_dll.FMOD_Studio_System_Create(byref(studio_sys), VERSION))
