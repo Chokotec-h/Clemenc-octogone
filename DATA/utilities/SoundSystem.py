@@ -34,6 +34,10 @@ def check_result(r):
     if r != 0:
         print(f"ERROR: Got FMOD_RESULT {r} ({get_error_msg(r)})")
 
+def global_value(variable):
+    return c_int.in_dll(studio_dll, variable)
+
+
 def studio_init():
     print("Initializing FMOD Studio")
     # Write debug log to file
@@ -49,7 +53,7 @@ def studio_init():
 
         core_sys = c_void_p()
         check_result(studio_dll.FMOD_Studio_System_GetLowLevelSystem(byref(core_sys)))
-        check_result(core_dll.FMOD_System_SetOutput(byref(core_sys), FMOD_OUTPUTTYPE_NOSOUND))
+        check_result(core_dll.FMOD_System_SetOutput(byref(core_sys), global_value("FMOD_OUTPUTTYPE_NOSOUND")))
 
         studio_dll.FMOD_Studio_System_Initialize(studio_sys, 256, 0x00000001, 0x00010000, c_void_p())
 
