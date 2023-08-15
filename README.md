@@ -42,11 +42,9 @@ Jeu de combat (style smash bros) regroupant les personalités marquantes de la M
 
 ## SreenShots :
 
-<p align="center">
-  <img src="https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%204.png" width="350" title="hover text">
-  <img src="https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%202.png" width="350" alt="accessibility text">
-  <img src="https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%203.png" width="350" title="hover text">
-</p>
+![image1]( https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%204.png)
+![image2]( https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%202.png)
+![image2] ( https://github.com/Chokotec-h/Clemenc-octogone/blob/main/DATA/Images/Examples/image%203.png) 
 
 ## Contactez nous !
 Rejoindre/contacter l'équipe de développement :
