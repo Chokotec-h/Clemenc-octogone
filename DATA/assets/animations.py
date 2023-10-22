@@ -156,10 +156,10 @@ Air_President = {
     "walk":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-walk.png",((3,1,13,31),(18,0,14,32),(35,0,13,32),(52,0,12,32),(67,1,13,31),(82,0,14,32),(99,0,13,32),(116,0,12,32)),8,True),
     "run":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),10,True),
     "jump":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-jumpt.png",((0,1,12,31),(32,2,13,30),(64,0,13,31),),8,False),
-    "fall":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-jumpt.png",((97,0,12,31),(129,1,13,31),),8,True),
+    "fall":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-jumpt.png",((97,0,12,31),(129,1,13,31),),8,False),
     "airdodge":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-idle.png",((4,1,12,31),(20,1,12,31)),1,True),
     "dtilt":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-dtilt.png",((0,1,12,31),(16,1,13,31),(32,2,13,30),(48,1,13,31)),10,False),
-    "utilt":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-utilt.png",((2,9,12,31),(33,9,14,31),(65,10,15,30),(98,8,17,32),(125,1,12,39),(149,5,21,35),(173,5,20,35),(199,8,10,32),(231,8,12,32)),18,False),
+    "utilt":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-utilt.png",((2,9,12,31),(33,9,14,31),(65,10,15,30),(98,8,17,32),(125,1,12,39),(149,5,21,35),(173,5,20,35),(199,8,10,32),(231,8,12,32)),20,False),
     "uair":(f"{rootDir()}/Images/Sprites/Chars/Joueur_de_Air_President/Default/air_president-uair.png",((11,16,13,31),(46,13,24,34),(86,9,24,38),(123,7,27,40),(163,7,27,40),(204,9,25,38)),10,False),
 
 }

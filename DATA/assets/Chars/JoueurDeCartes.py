@@ -7,7 +7,7 @@ from DATA.utilities.functions import *
 from DATA.utilities.build import rootDir
 
 ##### Joueur de Air-Président
-numbers = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,11,12,12,12,12,13,13,13,13,"R","D","J","J","J","J","J"]
+numbers = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,11,12,12,12,12,13,13,13,13,"R","D","J","J","J","J","J","J","J"]
 
 class Air_President(Char):
     def __init__(self,x,y,player) -> None:
