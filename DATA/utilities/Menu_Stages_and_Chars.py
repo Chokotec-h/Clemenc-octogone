@@ -9,12 +9,13 @@ from DATA.utilities.build import rootDir
 from DATA.utilities.Voicename import voicename
 
 class StagesMenu:
-    def __init__(self, training, UIDicoEvent) -> None:
+    def __init__(self, training, ia, UIDicoEvent) -> None:
         self.actualstages = None
         self.training = training
         self.focused_button = 0
         self.confirm = True
         self.stage = 0
+        self.ia = ia
 
         self.basicstages = stages
 
@@ -130,6 +131,7 @@ class CharsMenu:
         self.confirm = True
 
         self.training = training
+        self.ia = False
 
         self.alt = [0, 0]
 
@@ -291,8 +293,14 @@ class CharsMenu:
                     window.blit(icons64[chars[i][0]], (width - resize(64,0,width,height)[0] - resize(0,64,width,height)[1], resize(0,105,width,height)[1] * (i - self.scroll2 + 4 + len(chars)) - resize(0,32,width,height)[1]))
 
             # Haut/Bas pour choisir un personnage
-            if convert_inputs(controls[1], joysticks, 1)[
-                3] and not self.selected_2 and self.scroll2 == self.selectchar_2:
+            if self.ia :
+                up = convert_inputs(controls[0], joysticks, 0)[1]
+                down = convert_inputs(controls[0], joysticks, 0)[0]
+            else :
+                up = convert_inputs(controls[1], joysticks, 1)[3]
+                down = convert_inputs(controls[1], joysticks, 1)[2]
+
+            if up and not self.selected_2 and self.scroll2 == self.selectchar_2:
                 self.UIDicoEvent["UI1 selection 2"].play()
                 self.alt[1] = 0
                 self.selectchar_2 += 1
@@ -301,8 +309,7 @@ class CharsMenu:
                 self.scroll2 -= 1
                 if self.selectchar_2 >= len(chars):
                     self.selectchar_2 = 0
-            if convert_inputs(controls[1], joysticks, 1)[
-                2] and not self.selected_2 and self.scroll2 == self.selectchar_2:
+            if down and not self.selected_2 and self.scroll2 == self.selectchar_2:
                 self.UIDicoEvent["UI1 selection 2"].play()
                 self.alt[1] = 0
                 self.selectchar_2 -= 1
@@ -322,12 +329,18 @@ class CharsMenu:
                 self.scroll2 = self.selectchar_2
 
             # Confirmation / Annulation
-            if convert_inputs(controls[1], joysticks, 1)[6] and not self.confirm:
+            if self.ia :
+                a = convert_inputs(controls[0], joysticks, 0)[6]
+                b = convert_inputs(controls[0], joysticks, 0)[7]
+            else :
+                a = convert_inputs(controls[1], joysticks, 1)[6]
+                b = convert_inputs(controls[1], joysticks, 1)[7]
+            if a and not self.confirm:
                 if not self.selected_2:
                     self.UIDicoEvent["UI1 validation"].play()
                     self.UIDicoEvent["Voix"]["Personnages"][voicename[str(Chars.charobjects[chars[self.selectchar_2][self.alt[1]]](0, 0, 0))]].play()
                 self.selected_2 = True
-            if convert_inputs(controls[1], joysticks, 1)[7]:
+            if b:
                 if self.selected_2:
                     self.UIDicoEvent["UI1 error"].play()
                 self.selected_2 = False
@@ -365,38 +378,39 @@ class CharsMenu:
             if self.names[0] < 0:
                 self.names[0] = len(self.namelist) - 1
 
-        # Choix du nom
-        if self.names[1] == 0:
-            name = "Player 2"
-        else:
-            name = self.namelist[self.names[1]]
-        Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), f"{rootDir()}/Images/Menu/Button.png", 7 * width / 10, height - resize(0,200,width,height)[1],
-                        resize(200,32,width,height))
-        Bouton.draw(window)
-        # Test de compatibilité entre le nom et la manette
-        try:
-            convert_inputs(commands[self.namelist[self.names[1]]], joysticks, 1)
-            if self.names[1] == 1:
+        # Choix du nom (pas de nom si l'adversaire est un ia)
+        if not self.ia :
+            if self.names[1] == 0:
+                name = "Player 2"
+            else:
+                name = self.namelist[self.names[1]]
+            Bouton = Button(name, ("arial", resize(0,24,width,height)[1], True, False), f"{rootDir()}/Images/Menu/Button.png", 7 * width / 10, height - resize(0,200,width,height)[1],
+                            resize(200,32,width,height))
+            Bouton.draw(window)
+            # Test de compatibilité entre le nom et la manette
+            try:
+                convert_inputs(commands[self.namelist[self.names[1]]], joysticks, 1)
+                if self.names[1] == 1:
+                    self.names[1] += self.movename2
+            except:
                 self.names[1] += self.movename2
-        except:
-            self.names[1] += self.movename2
-            if self.names[1] >= len(self.namelist):
-                self.names[1] = 0
-        # Choix du nom avec les gâchettes
-        if input_but_no_repeat(10, controls, joysticks, 1):
-            self.names[1] += 1
-            self.movename2 = 1
-            if self.names[1] == 1:  # Configuration du menu
+                if self.names[1] >= len(self.namelist):
+                    self.names[1] = 0
+            # Choix du nom avec les gâchettes
+            if input_but_no_repeat(10, controls, joysticks, 1):
                 self.names[1] += 1
-            if self.names[1] >= len(self.namelist):
-                self.names[1] = 0
-        if input_but_no_repeat(9, controls, joysticks, 1):
-            self.names[1] -= 1
-            self.movename2 = -1
-            if self.names[1] == 1:  # Configuration du menu
+                self.movename2 = 1
+                if self.names[1] == 1:  # Configuration du menu
+                    self.names[1] += 1
+                if self.names[1] >= len(self.namelist):
+                    self.names[1] = 0
+            if input_but_no_repeat(9, controls, joysticks, 1):
                 self.names[1] -= 1
-            if self.names[1] < 0:
-                self.names[1] = len(self.namelist) - 1
+                self.movename2 = -1
+                if self.names[1] == 1:  # Configuration du menu
+                    self.names[1] -= 1
+                if self.names[1] < 0:
+                    self.names[1] = len(self.namelist) - 1
 
         # Changement de costume
         if input_but_no_repeat(4, controls, joysticks, 0):

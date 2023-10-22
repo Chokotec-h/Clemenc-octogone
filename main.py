@@ -25,6 +25,7 @@ from DATA.utilities.commands import *
 from DATA.utilities.Voicename import *
 from DATA.utilities.network import Network
 from DATA.utilities.Menu_Stages_and_Chars_Online import *
+from DATA.utilities.IA.IA import IA
 from DATA.utilities.build import rootDir, showerror
 
 
@@ -97,7 +98,7 @@ def main():
         confirm = False  # permet de ne pas détecter la confirmation du menu plusieurs frames à la suite
 
         Menu_Settings = SettingsMenu(UIDicoEvent, width, height)
-        Menu_Stages = StagesMenu(False, UIDicoEvent)
+        Menu_Stages = StagesMenu(False, False, UIDicoEvent)
         Menu_Chars = CharsMenu(False, UIDicoEvent)
         
         online = False
@@ -231,7 +232,7 @@ def main():
                         focusedbutton -= 1
                         UIDicoEvent["UI1 selection"].play()
 
-                    focusedbutton = ((focusedbutton + 3) % 7) - 3
+                    focusedbutton = ((focusedbutton + 3) % 8) - 3
 
                     # Bouton "Combat"
                     Bouton = Button("Octogone", ("arial", resize(0, 50, width, height)[1], True, False),
@@ -244,37 +245,65 @@ def main():
                             UIDicoEvent["Voix"]["Autre"]["Choix"].play()
                             Menu = "to char"
                             Menu_Stages.training = False
+                            Menu_Stages.ia = False
                             Menu_Chars.training = False
+                            Menu_Chars.ia = False
                             training = False
                             confirm = True
                     Bouton.draw(window)
 
-                    # Bouton "Pandaball"
+                    # Bouton "VS IA"
                     Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
                                     f"{rootDir()}/Images/Menu/Button.png", width / 2,
                                     2 * height / 8, resize(250, 100, width, height))
                     if focusedbutton == 1:
                         Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
+                            UIDicoEvent["UI1 validation"].play()
+                            UIDicoEvent["Voix"]["Autre"]["Choix"].play()
+                            Menu = "to char"
+                            Menu_Stages.training = False
+                            Menu_Stages.ia = True
+                            Menu_Chars.training = False
+                            Menu_Chars.ia = True
+                            training = False
+                            confirm = True
+                    Bouton.draw(window)
+                    Texte("Octogone", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
+                          2 * height / 8 - resize(0, 20, width, height)[1]).draw(
+                        window)
+                    Texte("(vs. IA)", ("arial", resize(0, 30, width, height)[1], True, False), (0, 0, 0),
+                          width / 2, 2 * height / 8 + resize(0, 20, width, height)[1]).draw(
+                        window)
+
+                    # Bouton "Pandaball"
+                    Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
+                                    f"{rootDir()}/Images/Menu/Button.png", width / 2,
+                                    3 * height / 8, resize(250, 100, width, height))
+                    if focusedbutton == 2:
+                        Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
+                        if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 forward"].play()
                             Menu = "to char"
                             Menu_Stages.training = True
+                            Menu_Stages.ia = False
                             Menu_Chars.training = True
+                            Menu_Chars.ia = False
                             training = True
                             confirm = True
                     Bouton.draw(window)
                     Texte("Pandaball", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
-                          2 * height / 8 - resize(0, 20, width, height)[1]).draw(
+                          3 * height / 8 - resize(0, 20, width, height)[1]).draw(
                         window)
                     Texte("(Entraînement)", ("arial", resize(0, 30, width, height)[1], True, False), (0, 0, 0),
-                          width / 2, 2 * height / 8 + resize(0, 20, width, height)[1]).draw(
+                          width / 2, 3 * height / 8 + resize(0, 20, width, height)[1]).draw(
                         window)
 
                     # Bouton "En ligne Local"
                     Bouton = Button("", ("arial", resize(0, 45, width, height)[1], True, False),
                                     f"{rootDir()}/Images/Menu/Button.png", width / 2,
-                                    3 * height / 8, resize(250, 100, width, height))
-                    if focusedbutton == 2:
+                                    4 * height / 8, resize(250, 100, width, height))
+                    if focusedbutton == 3:
                         Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 validation"].play()
@@ -284,17 +313,17 @@ def main():
                             confirm = True
                     Bouton.draw(window)
                     Texte("En ligne", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0), width / 2,
-                          3 * height / 8 - resize(0, 20, width, height)[1]).draw(
+                          4 * height / 8 - resize(0, 20, width, height)[1]).draw(
                         window)
                     Texte("Local", ("arial", resize(0, 45, width, height)[1], True, False), (0, 0, 0),
-                          width / 2, 3 * height / 8 + resize(0, 20, width, height)[1]).draw(
+                          width / 2, 4 * height / 8 + resize(0, 20, width, height)[1]).draw(
                         window)
 
                     # Bouton "Paramètres"
                     Bouton = Button("Paramètres", ("arial", resize(0, 50, width, height)[1], True, False),
                                     f"{rootDir()}/Images/Menu/Button.png",
-                                    width / 2, 4 * height / 8, resize(250, 100, width, height))
-                    if focusedbutton == 3:
+                                    width / 2, 5 * height / 8, resize(250, 100, width, height))
+                    if focusedbutton == 4:
                         Bouton.changeImage(f"{rootDir()}/Images/Menu/Button_focused.png")
                         if convert_inputs(controls[0], joysticks, 0)[6] and not confirm:
                             UIDicoEvent["UI1 forward"].play()
@@ -464,6 +493,10 @@ def main():
                         # Création des objets game et result
                         Game = GameObject.Game(training, chars, Menu_Chars.selectchar_1, Menu_Chars.selectchar_2,
                                                Menu_Chars.alt, UIDicoEvent)
+                        if Menu_Chars.ia :
+                            Game.IA = IA(Menu_Chars.selectchar_2)
+                        if Menu_Chars.namelist[names[0]] == "debug_Bot-test" :
+                            Game.debug_p1_is_bot = True
                         results = Results(Game, width, height, Menu_Chars.namelist[names[0]],
                                           Menu_Chars.namelist[names[1]])
                         del names

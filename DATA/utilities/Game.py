@@ -7,6 +7,7 @@ from random import randint
 from DATA.assets.Misc import *
 from DATA.assets.Chars.Training_Mob import Training
 from DATA.utilities.build import rootDir
+from DATA.utilities.IA.IA import IA
 import time
 
 basetime = 7*60 #/ 60
@@ -14,11 +15,13 @@ basestock = 5
 
 
 class Game:
-    def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent, online=False) -> None:
+    def __init__(self, training, chars, selectchar_1, selectchar_2, alt, UIDicoEvent, online=False, IA=None) -> None:
 
         # Gestion de la fumee de hitstun
         self.smoke = list()
         self.smokeframe = 0
+        self.IA = IA
+        self.debug_p1_is_bot = False
 
         # gestion de la pause
         self.pause = False
@@ -202,8 +205,10 @@ class Game:
             self.pausefrom = time.time()  # gestion du chrono en pause
 
             #### récupération des inputs du joueur 1
-
-            inputs_1 = convert_inputs(controls[0], joysticks, 0)
+            if self.debug_p1_is_bot :
+                inputs_1 = IA(self.Char_P1).inputs(self)
+            else :
+                inputs_1 = convert_inputs(controls[0], joysticks, 0)
             if inputs_1[-5] :
                 inputs_1[4] = True
             if inputs_1[-4] :
@@ -229,7 +234,10 @@ class Game:
 
             ####  récupération des inputs du joueur 2
             if not self.online :
-                inputs_2 = convert_inputs(controls[1], joysticks, 1)
+                if self.IA :
+                    inputs_2 = self.IA.inputs(self)
+                else :
+                    inputs_2 = convert_inputs(controls[1], joysticks, 1)
                 if inputs_2[-5] :
                     inputs_2[4] = True
                 if inputs_2[-4] :
