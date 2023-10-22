@@ -7,7 +7,6 @@ from random import randint
 from DATA.assets.Misc import *
 from DATA.assets.Chars.Training_Mob import Training
 from DATA.utilities.build import rootDir
-from DATA.utilities.IA.IA import IA
 from DATA.utilities.IA.IA_test import IAtest
 import time
 
