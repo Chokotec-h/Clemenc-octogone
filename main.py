@@ -579,7 +579,7 @@ def main():
                     window.fill((200, 120, 200))
                     results.draw(window, width, height)
 
-                    if results.frame > 300 and convert_inputs(controls[0], joysticks, 0)[6]:
+                    if results.frame > 300 and (convert_inputs(controls[0], joysticks, 0)[6] or Game.IA):
                         # retour au menu
                         SoundSystem.stop_inst(embient.instance)
                         UIDicoEvent["UI1 forward"].play()
