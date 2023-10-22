@@ -58,8 +58,8 @@ class MainPlat:
 
         # Rectangle
         rect = sprite.get_rect(midtop=(x, self.y))
-        self.rect = Rect(rect.x,rect.y,rect.w,rect.h)
-        self.rect.h += 250
+        self.rect = Rect(rect.x,rect.y,rect.w,rect.h+4500)
+        self.rect.h += 1200
 
     def draw(self, window):
         # Position réelle
