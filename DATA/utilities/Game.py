@@ -89,27 +89,28 @@ class Game:
             self.Char_P2.fastfallspeed = self.fastfallspeed
             self.Char_P2.fallspeed = self.fallspeed
             mousex,mousey = pygame.mouse.get_pos()
+            mousex,mousey = mousex*1600/width - 800,mousey*900/height - 450
             click = True in pygame.mouse.get_pressed()
             if not click :
                 self.select = 0
-            if click and (self.select == 1 or mousex > self.Char_P1.rect[0]+width/2 and mousex < self.Char_P1.rect[0] + self.Char_P1.rect[2]+width/2 and mousey > self.Char_P1.rect[1]+height/2 and mousey < self.Char_P1.rect[1] + self.Char_P1.rect[3]+height/2) :
-                self.Char_P1.x = mousex-width/2
-                self.Char_P1.rect[1] = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P1.rect[3]/2
+            if click and (self.select == 1 or mousex > self.Char_P1.rect[0] and mousex < self.Char_P1.rect[0] + self.Char_P1.rect[2] and mousey > self.Char_P1.rect[1] and mousey < self.Char_P1.rect[1] + self.Char_P1.rect[3]) :
+                self.Char_P1.x = mousex
+                self.Char_P1.rect[1] = min(mousey,height-100)-self.Char_P1.rect[3]/2
                 self.Char_P1.boom = 2
                 self.Char_P1.vx = 0
                 self.Char_P1.vy = 0
                 self.select = 1
-                while self.Char_P1.touch_stage(stage, self.Char_P1.rect) :
+                while self.Char_P1.touch_stage(stage, pygame.Rect(self.Char_P1.rect)) :
                     self.Char_P1.rect[1] -= 2
                 self.Char_P1.basecoords = (self.Char_P1.x,self.Char_P1.rect[1])
-            if click and (self.select == 2 or mousex > self.Char_P2.rect[0]+width/2 and mousex < self.Char_P2.rect[0] + self.Char_P2.rect[2]+width/2 and mousey > self.Char_P2.rect[1]+height/2 and mousey < self.Char_P2.rect[1] + self.Char_P2.rect[3]+height/2) :
-                self.Char_P2.x = mousex-width/2
-                self.Char_P2.rect[1] = min(mousey,height-resize(0,100,width,height)[1])-height/2-self.Char_P2.rect[3]/2
+            if click and (self.select == 2 or mousex > self.Char_P2.rect[0] and mousex < self.Char_P2.rect[0] + self.Char_P2.rect[2] and mousey > self.Char_P2.rect[1] and mousey < self.Char_P2.rect[1] + self.Char_P2.rect[3]) :
+                self.Char_P2.x = mousex
+                self.Char_P2.rect[1] = min(mousey,height-100)-self.Char_P2.rect[3]/2
                 self.Char_P2.boom = 2
                 self.Char_P2.vx = 0
                 self.Char_P2.vy = 0
                 self.select = 2
-                while self.Char_P2.touch_stage(stage, self.Char_P2.rect) :
+                while self.Char_P2.touch_stage(stage, pygame.Rect(self.Char_P2.rect)) :
                     self.Char_P2.rect[1] -= 2
                 self.Char_P2.basecoords = (self.Char_P2.x,self.Char_P2.rect[1])
                 
