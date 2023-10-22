@@ -2,16 +2,17 @@ from DATA.assets.Stages import Stage
 from DATA.utilities.Base_Char import *
 import pygame
 from math import pi, cos, sin, sqrt
-from random import randint
+from random import randint, choice
 from DATA.utilities.functions import *
 from DATA.utilities.build import rootDir
 
 ##### Joueur de Air-Président
+numbers = [1,1,1,1,2,2,2,2,3,3,3,3,4,4,4,4,5,5,5,5,6,6,6,7,7,7,8,8,8,8,9,9,9,9,10,10,10,10,11,11,11,11,11,12,12,12,12,13,13,13,13,"R","D","J","J","J","J","J"]
 
 class Air_President(Char):
     def __init__(self,x,y,player) -> None:
-        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.5, fastfallspeed=1.6, fullhop=15, shorthop=12,
-                         doublejumpheight=18,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
+        super().__init__(speed=1.9, dashspeed=3.6, airspeed=1.4, deceleration=0.6, fallspeed=0.5, fastfallspeed=1.6, fullhop=15, shorthop=9,
+                         doublejumpheight=13,airdodgespeed=5,airdodgetime=3,dodgeduration=15)
 
         self.rect = [100,0,48,120] # Crée le rectangle de perso
 
@@ -23,6 +24,8 @@ class Air_President(Char):
         self.blahaj = ["fatty","flat","flying","spiky"]
         self.currentblahaj = 0
         self.stage = Stage
+        self.numbers = deepcopy(numbers)
+        self.lastplayed = 3
     
     def __str__(self) -> str:
         return "Joueur de Air-President"
@@ -50,7 +53,7 @@ class Air_President(Char):
             if self.frame > 6 and self.active_hitboxes :
                 self.active_hitboxes[-1].sizey -= self.vy
 
-        if attack == "NeutralB":
+        if attack == "NeutralAir":
             if self.frame < 5 :
                 if left :
                     self.look_right = False
@@ -62,8 +65,13 @@ class Air_President(Char):
                 self.active_hitboxes.append(Hitbox(-40,40,24,32,pi/2,4,5.5,1/100,6,6,self))
                 self.active_hitboxes.append(Hitbox(32,100,24,32,pi/2,4,5.5,1/100,6,6,self))
                 self.active_hitboxes.append(Hitbox(-32,100,24,32,pi/2,4,5.5,1/100,6,6,self))
-            if self.frame > 33: # 3 frames de lag
+            if self.frame > 33: # 20 frames de lag
                 self.attack = None
+
+            if self.grounded :
+                self.attack = None
+                if self.frame < 16 and self.frame > 2 :
+                    self.lag = 3 # Auto cancel frame 1-2 et 20+, 3 frames de landing lag
 
         if attack == "DownB":
             if self.frame == 25 :
@@ -78,20 +86,31 @@ class Air_President(Char):
                 if right :
                     self.look_right = True
             if self.frame == 9 :
-                if randint(1,65) == 1:
+                if not self.look_right:
+                    angle = 3*pi/4
+                    x = change_left(64,48) - self.rect[2]/2
+                else:
+                    angle = pi/4
+                    x = 24
+                n = choice(self.numbers)
+                dead = False
+                if n == "R" :
+                    self.BOUM = 30
+                if n == "D" :
                     self.rect[1] = 10000
-                else :
-                    if not self.look_right:
-                        angle = 3*pi/4
-                        x = change_left(64,48) - self.rect[2]/2
-                    else:
-                        angle = pi/4
-                        x = 24
-                    if randint(1,65) == 1:
-                        self.projectiles.append(Carte(x,20,pi/42,"R",self))
-                        self.BOUM = 30
-                    else :
-                        self.projectiles.append(Carte(x,20,angle,randint(1,13),self))
+                    dead = True
+                if n != "J" :
+                    self.lastplayed = n
+                elif self.lastplayed == "R" :
+                    self.BOUM = 30
+                elif self.lastplayed == "D" :
+                    self.rect[1] = 10000
+                    dead = True
+                if not dead :
+                    self.projectiles.append(Carte(x,20,angle,n,self))
+                self.numbers.pop(self.numbers.index(n))
+                if self.numbers == [] :
+                    self.numbers = deepcopy(numbers)
 
             if self.frame > 30 : # 21 frames de lag
                 self.attack = None
@@ -106,9 +125,9 @@ class Air_President(Char):
             if self.frame == 1:
                 self.animation = "dtilt"
                 self.animeframe = 0
-            if self.frame == 5 : # Frames 5-10
-                self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/750,9,2,self,False,sound="hits/mini hit"))
-            if self.frame > 15: # 5 frames de lag
+            if self.frame == 5 : # Frames 5-7
+                self.active_hitboxes.append(Hitbox(24,64,64,64,pi/3,3,1.2,1/520,11,2,self,False,sound="hits/mini hit"))
+            if self.frame > 12: # 5 frames de lag
                 self.attack = None
 
         if attack == "ForwardTilt":
@@ -124,6 +143,9 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "UpTilt":
+            if self.frame == 1:
+                self.animation = "utilt"
+                self.animeframe = 0
             if self.frame > 8 and self.frame < 16 :
                 if self.active_hitboxes :
                     if self.frame > 12 :
@@ -137,6 +159,9 @@ class Air_President(Char):
                 self.attack = None
 
         if attack == "UpAir":
+            if self.frame == 1:
+                self.animation = "uair"
+                self.animeframe = 0
             if self.frame == 5 : #frames 5-11
                 self.active_hitboxes.append(Hitbox(-8,-20,12,30,pi/4,5,4,1/300,12,7,self,True,sound="wooshs/mini woosh"))
                 if not self.look_right :
@@ -201,17 +226,12 @@ class Air_President(Char):
                 if self.frame < 45 and self.frame > 2 :
                     self.lag = 13 # Auto cancel frame 1-2 et 45+, 13 frames de landing lag
 
-        if attack == "NeutralAir":
+        if attack == "NeutralB":
             if self.frame == 9:
                 self.projectiles.append(Blahaj(self.blahaj[self.currentblahaj],self,stage))
                 self.currentblahaj = (self.currentblahaj+1)%4
             if self.frame > 24: # 15 frames de lag
                 self.attack = None
-
-            if self.grounded :
-                self.attack = None
-                if self.frame < 20 and self.frame > 2 :
-                    self.lag = 3 # Auto cancel frame 1-2 et 20+, 3 frames de landing lag
 
         if attack == "ForwardSmash":
             if self.frame > 6 and self.frame < 9 and smash and self.charge < 200 : # Chargement jusqu'à 200 frames
@@ -307,10 +327,16 @@ class Air_President(Char):
 
 cartes = [pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Cartes/{i}.png") for i in range(1,14)]
 roulxs_kaard = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Cartes/RulesCard.png"),(resize(48,64,width,height)))
+jevil = pygame.transform.scale(pygame.image.load(f"{rootDir()}/Images/Sprites/Projectiles/Air_President/Cartes/Joker.png"),(resize(48,64,width,height)))
 
 class Carte():
     def __init__(self,x,y,angle,number,own:Air_President) -> None:
         self.id = 0
+        if number == "J" :
+            self.joker = True
+            number = own.lastplayed
+        else :
+            self.joker = False
         if number == "R":
             self.number = "R"
             SFXDicoEvent['mincelious']["Its-pronounced-rules"].play()
@@ -321,15 +347,15 @@ class Carte():
             self.damages_stacking = 1
         else :
             self.sound = 'wooshs/woosh'
-            self.number = number + 2
-            if self.number > 13 :
-                self.number = self.number-13
-            self.number = number
+            self.spritenumber = number
+            self.number = number - 2
+            if self.number < 1 :
+                self.number = self.number+13
             self.angle = angle
-            self.knockback = (self.number/2+1)*3
+            self.knockback = (self.number/2+1)*2.4
             self.damages = 1.5*self.number
             self.stun = self.number+5
-            self.damages_stacking = self.number*1/500
+            self.damages_stacking = 1/300
         self.duration = 6
         rect = pygame.Rect(x+own.x,y+own.rect[1],48,64)
         self.rect = [rect.x,rect.y,rect.w,rect.h]
@@ -345,10 +371,12 @@ class Carte():
         self.duration = 0
     
     def draw(self,window):
-        if self.number == "R":
+        if self.joker :
+            sprite = jevil
+        elif self.number == "R":
             sprite = roulxs_kaard
         else :
-            sprite = pygame.transform.scale(cartes[self.number-1],(resize(48,64,width,height)))
+            sprite = pygame.transform.scale(cartes[self.spritenumber-1],(resize(48,64,width,height)))
         window.blit(sprite,(resize(self.x+self.own.x+800,0,width,height)[0],resize(0,self.y+self.own.rect[1]+450,width,height)[1]))
 
 
