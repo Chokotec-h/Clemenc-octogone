@@ -206,7 +206,7 @@ class Game:
 
             #### récupération des inputs du joueur 1
             if self.debug_p1_is_bot :
-                inputs_1 = IA(self.Char_P1).inputs(self)
+                inputs_1 = IAtest(self.Char_P1).inputs(self)
             else :
                 inputs_1 = convert_inputs(controls[0], joysticks, 0)
             if inputs_1[-5] :
