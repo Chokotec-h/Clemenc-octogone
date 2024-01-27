@@ -1,4 +1,4 @@
-I# Clemenc-octogone
+# Clemenc-octogone
 
 ![tests](https://badgen.net/badge/windows/passing/green?icon=windows)
 ![tests](https://badgen.net/badge/linux/passing/green?icon=github)
